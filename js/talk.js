@@ -19,8 +19,8 @@ const SCRIPT = {
 const SCRIPT2 = {
   grandpa:{ intro:[t("หลาน! แบตลุงจะหมดแล้ว หมอจะโทรมาอีกสิบนาที","Dear! My battery's dying and the doctor calls in ten minutes."),t("ตรงนั้นมีตู้ชาร์จฟรี มีสายให้เสียบเลย แต่มันขึ้นถามอะไรไม่รู้","There's a free charging station with cables, but it's asking me something odd.")],
     after:{safe:t("ชาร์จกับปลั๊กไฟธรรมดาก็ได้นี่ ลุงไม่รู้มาก่อนเลยว่าสายชาร์จขโมยข้อมูลได้","A normal wall socket works fine. I never knew a cable could steal data."),warn:t("ลุงต้องเปลี่ยนรหัสหลายอย่างเลย แต่เงินไม่หาย","I had to change a lot of passwords, but no money's gone."),danger:t("ลุงแค่อยากชาร์จแบต…","I only wanted to charge my battery…")} },
-  grandma:{ intro:[t("ยายต่อเน็ตไม่ติดจ้ะ","I can't get online, dear."),t("มีหนุ่มห้อยบัตรบอกว่าเป็นไอทีของห้องสมุด จะช่วยตั้งค่าให้ ดีจังเลยนะ","A young man with a badge says he's library IT and will set it up. How kind.")],
-    after:{safe:t("รหัส Wi-Fi อยู่บนบัตรห้องสมุดของยายมาตลอดเลย","The Wi-Fi password was on my library card all along."),warn:t("ยายต้องเปลี่ยนรหัสเครื่องใหม่ ไม่ให้ใครเห็นแล้ว","I've changed my phone code. Nobody's watching me type now."),danger:t("เขาดูใจดีมากเลยนะ ยายไม่น่าเชื่อเลย","He seemed so kind. I shouldn't have trusted him.")} },
+  grandma:{ intro:[t("ป้าต่อเน็ตไม่ติดจ้ะ","I can't get online, dear."),t("มีหนุ่มห้อยบัตรบอกว่าเป็นไอทีของห้องสมุด จะช่วยตั้งค่าให้ ดีจังเลยนะ","A young man with a badge says he's library IT and will set it up. How kind.")],
+    after:{safe:t("รหัส Wi-Fi อยู่บนบัตรห้องสมุดของป้ามาตลอดเลย","The Wi-Fi password was on my library card all along."),warn:t("ป้าต้องเปลี่ยนรหัสเครื่องใหม่ ไม่ให้ใครเห็นแล้ว","I've changed my phone code. Nobody's watching me type now."),danger:t("เขาดูใจดีมากเลยนะ ป้าไม่น่าเชื่อเลย","He seemed so kind. I shouldn't have trusted him.")} },
   tips:{ intro:[t("มือถือแบตหมด เลยมายืมคอมห้องสมุด","My phone died, so I'm using a library computer."),t("ต้องโอนค่าหอผ่านเว็บธนาคารวันนี้ด่วนเลย","I have to pay rent through web banking today.")],
     after:{safe:t("ห้องสมุดเจอตัวดักแป้นพิมพ์ตั้งสามตัว!","The library found three keyloggers!"),warn:t("เปลี่ยนรหัสทัน แต่ใจหายเลย","Changed the password in time. Scary."),danger:t("เงินค่าหอหายหมดแล้ว…","My rent money's gone…")} },
   friend:{ intro:[t("เดี๋ยวเราต้องพรีเซนต์งาน ขอซ้อมแป๊บ","I have to pitch soon, let me rehearse."),t("เมื่อกี้มีไฟล์เด้งมาจาก LIB-Printer น่าจะเป็นเทมเพลตของห้องสมุดนะ","A file just popped up from LIB-Printer. Probably the library's template.")],
@@ -42,20 +42,21 @@ const SCRIPT0 = {
   grandpa:{ intro:[t("หลาน มีคนโทรมาว่าจะช่วยตามเงินที่ตาเสียไปคืน","Dear, someone called offering to recover the money I lost."),t("เขารู้วันที่ รู้ยอดเงิน ตาว่าน่าจะของจริงนะ","They know the date and the amount. I think it's real."),t("ตาควรทำยังไง","What should I do?")],
     after:{safe:t("ตาไม่จ่ายแล้ว ไปตามเรื่องที่โรงพักดีกว่า","I won't pay. I'll follow up at the police station."),warn:t("เกือบไปแล้ว ตาไม่ส่งอะไรเพิ่มแล้ว","Close one. I won't send anything else."),danger:t("ตาโดนซ้ำอีกแล้ว…","I've been fooled again…")} }
 };
-function thanksLine(role){
+function thanksLine(role,id){
+  if(id && id!=="grandma" && id!=="grandpa") return t("ขอบใจที่ช่วยไว้นะ","Thanks for looking out for me.");
   const saved=(VICTIM_CASES[role]||[]).filter(k=>S.best[k]==="safe").length;
   if(role==="grandma") return saved?t("ยายเล่าให้เพื่อนในชมรมฟังหมดแล้ว ว่าหลานช่วยยายไว้","I told everyone at my club how you saved me."):t("วันนี้อากาศดีนะหลาน","Lovely weather today, dear.");
   return saved?t("ตาติดเบอร์ 1441 ไว้ข้างโทรศัพท์บ้านแล้วนะ","I've stuck 1441 next to the home phone now."):t("ตามานั่งรับลมแถวนี้ทุกเย็น","I come here for the breeze every evening.");
 }
 const SCRIPT4 = {
   friend:{ intro:[t("พี่! มาพอดีเลย","Hey! Perfect timing."),t("มีพี่เลเวล 98 ขายเพชรถูกกว่าในเกมครึ่งนึง รอบแรกได้จริงด้วย รอบนี้แพ็ก VIP","A level-98 player sells diamonds at half price. The first one really came. This time it's a VIP pack."),t("ผมจะโอนแล้วนะ พี่ว่าไง","I'm about to pay. What do you think?")],
-    after:{safe:t("ผมเล่าให้ยายฟังแล้ว ยายไม่ดุด้วย ขอบคุณครับพี่","I told Grandma. She didn't even scold me. Thanks."),warn:t("หยุดแล้วครับ แต่เงินยายหายไปแล้วบางส่วน","I stopped, but some of Grandma's money is gone."),danger:t("ผมไม่กล้าบอกใครเลย…","I'm too scared to tell anyone…")} },
+    after:{safe:t("ผมเล่าให้แม่ฟังแล้ว แม่ไม่ดุด้วย ขอบคุณครับพี่","I told Mum. She didn't even scold me. Thanks."),warn:t("หยุดแล้วครับ แต่เงินยายหายไปแล้วบางส่วน","I stopped, but some of Grandma's money is gone."),danger:t("ผมไม่กล้าบอกใครเลย…","I'm too scared to tell anyone…")} },
   tips:{ intro:[t("ดูนี่! สกินตำนานแลกกับของแค่ 3 ชิ้น","Look! A legendary skin for just 3 items."),t("เขาให้ล็อกอินเว็บเทรด มีโลโก้เกมด้วยนะ","He wants me to log in on a trade site. It even has the game logo."),t("ช่วยดูหน่อย","Can you check?")],
     after:{safe:t("เตือนกิลด์แล้ว มีเพื่อนเกือบโดนสองคน","I warned the guild. Two friends nearly fell for it."),warn:t("เปลี่ยนรหัสกับเปิด 2FA แล้ว","Changed my password and turned on 2FA."),danger:t("บัญชีหายแล้ว… ของสะสมสามปี","My account's gone… three years of items.")} },
   grandpa:{ intro:[t("น้อง มาคุยกับพี่แป๊บ","Come and talk with me a moment."),t("เด็กชื่อภูมิคุยกับผู้ใหญ่ในเกมทุกวัน พี่เห็นข้อความบนจอแล้วไม่สบายใจเลย","Phum chats with an adult in his game every day. I saw some messages on his screen and I don't like it."),t("พี่ควรทำยังไงดี","What should I do?")],
     after:{safe:t("ดีแล้วที่ไม่ดุเด็ก เขาเลยกล้าเล่า","Good thing nobody scolded him. He felt safe to tell."),warn:t("พี่จะคอยดูเด็กๆ ในร้านให้มากขึ้น","I'll keep a closer eye on the kids here."),danger:t("พี่น่าจะทำอะไรเร็วกว่านี้","I should have acted sooner.")} },
-  grandma:{ intro:[t("หลานจ๋า ช่วยยายด้วย","Dear, please help me."),t("ยายเพิ่งเห็นในแอป มีรายการเติมเกม 14 รายการ เกือบหมื่น ยายไม่เคยเติมเลยนะ","I just saw 14 game top-ups in my app, nearly ten thousand. I never topped up anything!"),t("ยายจะไปยึดมือถือภูมิเดี๋ยวนี้!","I'm going to take Phum's phone right now!")],
-    after:{safe:t("ยายกับภูมิตั้งกติกาด้วยกันแล้ว ขอบใจนะหลาน","Phum and I made rules together. Thank you, dear."),warn:t("ยายเปลี่ยนรหัสแล้ว แต่ยังต้องคุยกับภูมิอีกเยอะ","I changed my PIN, but Phum and I need to talk more."),danger:t("ยายรีบเกินไป…","I rushed it…")} }
+  grandma:{ intro:[t("น้องจ๋า ช่วยพี่ด้วย","Please, can you help me?"),t("พี่เพิ่งเห็นในแอป มีรายการเติมเกม 14 รายการ เกือบหมื่น พี่ไม่เคยเติมเลยนะ","I just saw 14 game top-ups in my app, nearly ten thousand. I never topped up anything!"),t("พี่จะไปยึดมือถือภูมิเดี๋ยวนี้!","I'm going to take Phum's phone right now!")],
+    after:{safe:t("พี่กับภูมิตั้งกติกาด้วยกันแล้ว ขอบใจนะน้อง","Phum and I made rules together. Thank you."),warn:t("พี่เปลี่ยนรหัสแล้ว แต่ยังต้องคุยกับภูมิอีกเยอะ","I changed my PIN, but Phum and I need to talk more."),danger:t("พี่รีบเกินไป…","I rushed it…")} }
 };
 const SCRIPT5 = {
   grandma:{ intro:[t("หลาน… หลานมองเห็นแม่ด้วยหรือ","Child… you can see me?"),t("ลูกสาวแม่ทำบุญส่งมาให้ทุกคืน แต่บุญไม่เคยมาถึงเลย แม่เลยไปไหนไม่ได้","My daughter sends me merit every night, but it never arrives. So I can't move on."),t("ช่วยดูให้แม่หน่อยนะ","Please look into it for me.")],

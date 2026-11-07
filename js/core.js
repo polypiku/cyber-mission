@@ -124,13 +124,21 @@ Object.assign(PEOPLE,{ghostChoy:{name:{th:"ผีแม่ช้อย",en:"Mae 
   uncleYoon:{name:{th:"ลุงประยูร",en:"Uncle Prayoon"}, role:{th:"ครูเกษียณ มาห้องสมุดทุกวัน",en:"Retired teacher, library regular"}},
   pTai:{name:{th:"พี่ต่าย",en:"Tai"}, role:{th:"แม่ค้าออนไลน์",en:"Online seller"}},
   praeGirl:{name:{th:"น้องแพร",en:"Prae"}, role:{th:"นักเรียน ม.ปลาย",en:"High-school student"}},
+  pBoss:{name:{th:"พี่บอส",en:"Boss"}, role:{th:"นักศึกษา ป.โท · ฟรีแลนซ์",en:"Grad student · freelancer"}},
+  auntDaeng:{name:{th:"ป้าแดง",en:"Auntie Daeng"}, role:{th:"ชมรมถักไหมพรมห้องสมุด",en:"Library knitting club"}},
+  jayFresh:{name:{th:"น้องเจ",en:"Jay"}, role:{th:"นักศึกษาปี 1",en:"First-year student"}},
+  pMay:{name:{th:"พี่เมย์",en:"May"}, role:{th:"พนักงานเงินเดือนปีแรก",en:"First-jobber"}},
+  maePu:{name:{th:"แม่ปู",en:"Pu (Phum's mum)"}, role:{th:"แม่ของต้นกับภูมิ",en:"Ton and Phum's mum"}},
+  ton:{name:{th:"ต้น",en:"Ton"}, role:{th:"นักศึกษาปี 3 · พี่ชายภูมิ",en:"Third-year · Phum's brother"}},
+  mew:{name:{th:"น้องมิว",en:"Mew"}, role:{th:"นักศึกษาปี 1",en:"First-year student"}},
+  rider:{name:{th:"พี่ไรเดอร์",en:"The rider"}, role:{th:"ไรเดอร์ส่งอาหาร",en:"Food delivery rider"}},
   ghostTong:{name:{th:"ผีพี่โต้ง",en:"Tong (ghost)"}, role:{th:"ผีเจ้าของบ้าน",en:"The house's own ghost"}}
 });
 const PLACEHOLDER_ART={paweena:"studentGirl", prof:"workMom", visitor:"workMom", phum:"kidBoy", baitoey:"kidGirl", chai:"workMan", fon:"workMom", ghostChoy:"grandma", ghostHem:"grandpa", ghostPaeng:"studentGirl", ghostTong:"studentBoy"};
 for(const [k,v] of Object.entries(PLACEHOLDER_ART)) if(!SPRITES[k]) SPRITES[k]=SPRITES[v];
 /* filler people: ordinary customers and passers-by the Wi-Fi hacker hides among */
-SPRITES.police=SPRITES.guardBoy; PEOPLE.police={name:{th:"พี่ภพ",en:"Phop"}, role:{th:"ตำรวจไซเบอร์",en:"Cyber police"}};
-const FILL_NAMES={workMan:["หนุ่มออฟฟิศ","Office guy"],workMom:["สาวออฟฟิศ","Office woman"],studentGirl:["นักศึกษาสาว","Student"],studentBoy:["นักศึกษาหนุ่ม","Student"],kidGirl:["เด็กหญิง","Girl"],kidBoy:["เด็กชาย","Boy"],grandpa:["คุณลุง","Older man"],grandma:["คุณป้า","Older woman"],guardGirl:["พี่ผู้หญิงเสื้อน้ำเงิน","Woman in blue"],guardBoy:["พี่ผู้ชายเสื้อน้ำเงิน","Man in blue"]};
+SPRITES.police=SPRITES.policePhop; PEOPLE.police={name:{th:"พี่ภพ",en:"Phop"}, role:{th:"ตำรวจไซเบอร์",en:"Cyber police"}};
+const FILL_NAMES={"crowd01":["ผู้ชายเสื้อเทา","Man in grey"],"crowd02":["ผู้หญิงเสื้อฟ้า","Woman in blue"],"crowd03":["วัยรุ่นฮู้ดดำ","Teen in a hoodie"],"crowd04":["วัยรุ่นเสื้อลาย","Teen in stripes"],"crowd05":["คุณลุง","Older man"],"crowd06":["คุณป้า","Older woman"],"crowd07":["ผู้ชายเสื้อโปโล","Man in a polo"],"crowd08":["ผู้หญิงชุดกระโปรง","Woman in a dress"],"crowd09":["หนุ่มเสื้อขาว","Young man"],"crowd10":["สาวเสื้อครีม","Young woman"],"crowd11":["ผู้ชายเสื้อลายสก็อต","Man in plaid"],"crowd12":["ผู้หญิงเสื้อส้ม","Woman in orange"],"crowd13":["ผู้ชายเสื้อเทา","Man in grey"],"crowd14":["ผู้หญิงเสื้อฟ้า","Woman in blue"],"crowd15":["วัยรุ่นฮู้ดดำ","Teen in a hoodie"],"crowd16":["วัยรุ่นเสื้อลาย","Teen in stripes"],"crowd17":["คุณลุง","Older man"],"crowd18":["คุณป้า","Older woman"],"crowd19":["ผู้ชายเสื้อโปโล","Man in a polo"],"crowd20":["ผู้หญิงชุดกระโปรง","Woman in a dress"],"crowd21":["หนุ่มเสื้อขาว","Young man"],"crowd22":["สาวเสื้อครีม","Young woman"],"crowd23":["ผู้ชายเสื้อลายสก็อต","Man in plaid"],"crowd24":["ผู้หญิงเสื้อส้ม","Woman in orange"],"workMan":["หนุ่มออฟฟิศ","Office guy"],"workMom":["สาวออฟฟิศ","Office woman"],"kidGirl":["เด็กหญิง","Girl"],"kidBoy":["เด็กชาย","Boy"]};
 for(const [b,nmz] of Object.entries(FILL_NAMES)){ SPRITES["j_"+b]=SPRITES[b]; PEOPLE["j_"+b]={name:{th:"ผู้ต้องหา",en:"Suspect"}, role:{th:"ปล่อย Wi-Fi ปลอมดักข้อมูล",en:"Ran a fake Wi-Fi hotspot"}}; SPRITES["f_"+b]=SPRITES[b]; PEOPLE["f_"+b]={name:{th:nmz[0],en:nmz[1]}, role:{th:"ลูกค้า",en:"Customer"}}; }
 const PLAYABLE=["studentGirl","studentBoy","guardGirl","guardBoy"];
 const nm = (id)=>PEOPLE[id].name[S.lang];
@@ -147,7 +155,7 @@ const ZONES = {
 const MAINZ = ()=>Object.keys(ZONES).map(Number).filter(z=>!ZONES[z].bonus);
 const zno = (z)=>{ const i=MAINZ().indexOf(+z); return i<0?z:i+1; };
 const OUTZ={name:{th:"ถนนหน้าร้าน",en:"The street"}, cases:[], roleCase:{}};
-const VICTIM_CASES={grandma:["qr","helper","rush"], grandpa:["bank","charge","video"]};
+const VICTIM_CASES={grandma:["qr","rush"], grandpa:["bank","video"]};
 function recoverRole(){
   if(S.best.recover==="safe") return null;
   for(const r of ["grandma","grandpa"]) if(VICTIM_CASES[r].some(k=>S.best[k]==="danger")) return r;

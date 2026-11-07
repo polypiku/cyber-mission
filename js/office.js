@@ -18,9 +18,10 @@ function offFloorName(f){
   if(isScam(S.bld) && raided()) return f===1?L("ล็อบบี้","Lobby"):f===2?L("ห้องคอลเซ็นเตอร์","Call-centre room"):L("ห้องพักพนักงาน","Staff dorm");
   return tenantOf(S.bld,f)[S.lang];
 }
+const OFF_BODY={workMan:"crowd07",workMom:"crowd02",studentBoy:"crowd09",studentGirl:"crowd10"}, TRAP_BODY={workMan:"crowd19",workMom:"crowd24",studentBoy:"crowd21",studentGirl:"crowd22"};
 for(const b of ["workMan","workMom","studentBoy","studentGirl"]){
-  SPRITES["o_s_"+b]=SPRITES[b]; PEOPLE["o_s_"+b]={name:{th:"พนักงานออฟฟิศ",en:"Office worker"}, role:{th:"ทำงานในตึกนี้",en:"Works in this building"}};
-  SPRITES["o_t_"+b]=SPRITES[b]; PEOPLE["o_t_"+b]={name:{th:"คนที่ถูกขังไว้",en:"Trapped worker"}, role:{th:"ถูกหลอกมาทำงาน",en:"Lured here by a fake job"}};
+  SPRITES["o_s_"+b]=SPRITES[OFF_BODY[b]]; PEOPLE["o_s_"+b]={name:{th:"พนักงานออฟฟิศ",en:"Office worker"}, role:{th:"ทำงานในตึกนี้",en:"Works in this building"}};
+  SPRITES["o_t_"+b]=SPRITES[TRAP_BODY[b]]; PEOPLE["o_t_"+b]={name:{th:"คนที่ถูกขังไว้",en:"Trapped worker"}, role:{th:"ถูกหลอกมาทำงาน",en:"Lured here by a fake job"}};
 }
 SPRITES.o_recep=SPRITES.workMom; PEOPLE.o_recep={name:{th:"พนักงานต้อนรับ",en:"Receptionist"}, role:{th:"เคาน์เตอร์ล็อบบี้",en:"Lobby desk"}};
 SPRITES.o_guard=SPRITES.workMan; PEOPLE.o_guard={name:{th:"รปภ. หน้าลิฟต์",en:"Lift guard"}, role:{th:"ไม่ให้ใครขึ้นชั้นบน",en:"Lets nobody upstairs"}};

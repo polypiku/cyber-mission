@@ -97,7 +97,7 @@ function libCast(mentor, friend, tips){
   const all=[
     {id:mentor, role:"mentor", x:620, y:850, dir:"up", f:1},
     {id:"uncleYoon", role:"grandpa", x:250, y:206, dir:"left", f:1},
-    {id:"grandma", role:"grandma", x:1140, y:600, dir:"up", f:1},
+    {id:"auntDaeng", role:"grandma", x:1140, y:600, dir:"up", f:1},
     {id:tips, role:"tips", x:930, y:560, dir:"left", f:2},
     {id:"praeGirl", role:"friend", x:1100, y:700, dir:"right", f:2}
   ];
@@ -247,8 +247,9 @@ function buildCast0(){
   const others=PLAYABLE.filter(c=>c!==S.char);
   const mentor = "volOat";
   const rest = others;
-  const friend = rest.find(c=>c.startsWith("student"));
-  const tips = rest.find(c=>c!==friend && c!=="guardBoy") || rest.find(c=>c!==friend);
+  const friend0 = rest.find(c=>c.startsWith("student"));
+  const friend = ({1:"pBoss",3:"pMay",6:"ton"})[S.zone] || friend0;
+  const tips = ({0:"rider",1:"rider",2:"jayFresh",6:"mew"})[S.zone] || rest.find(c=>c!==friend0 && c!=="guardBoy") || rest.find(c=>c!==friend0);
   if(S.zone===0){
     npcs=[{id:mentor, role:"mentor", x:600, y:360, dir:"down"},{id:tips, role:"tips", x:1060, y:470, dir:"left"},
       {id:"grandma", role:"grandma", x:236, y:520, dir:"right"},{id:"grandpa", role:"grandpa", x:1200, y:380, dir:"left"},{id:"fon", role:"fon", x:400, y:420, dir:"down"},{id:"techTon", role:"repairman", x:REPAIR.x+56, y:REPAIR.y+6, dir:"left"}].map(n=>({...n, home:n.dir}));
@@ -287,7 +288,7 @@ function buildCast0(){
       {id:"phum", role:"friend", x:268, y:514, dir:"left"},
       {id:"baitoey", role:"tips", x:716, y:500, dir:"left"},
       {id:"chai", role:"grandpa", x:620, y:236, dir:"down"},
-      {id:"grandma", role:"grandma", x:132, y:322, dir:"right"},
+      {id:"maePu", role:"grandma", x:132, y:322, dir:"right"},
       ...((S.bustTier||0)>=3?[]:[{id:"itGuy", role:"clue_it", x:440, y:330, dir:"down"}])
     ].map(n=>({...n, home:n.dir}));
     player.id=S.char; return;

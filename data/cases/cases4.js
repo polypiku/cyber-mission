@@ -80,31 +80,31 @@ secret:{id:"secret",level:"ยาก",start:"s1",title:"\"พี่บอส\" �
   E4:{type:"danger",label:"เสียหาย",title:"ปล่อยไปจนสาย",story:"ภูมิส่งรหัสแอปธนาคารของยายไปให้พี่บอส เงินในบัญชียายถูกโอนออกในคืนเดียว",lessons:["สัญญาณเตือนในเกมต้องรีบจัดการ","ทุกคนรอบตัวเด็กช่วยได้ รวมถึงเจ้าของร้าน","บอกผู้ปกครองทันที"]}
  }},
 
-parent:{id:"parent",level:"ยาก",start:"s1",title:"ยายเห็นรายการเงิน",
+parent:{id:"parent",level:"ยาก",start:"s1",title:"แม่เห็นรายการเงิน",
  learn:["ผู้ปกครองรับมือเมื่อลูกหลานโดนหลอก","ขอเงินคืนผ่านช่องทางที่ถูก","ตั้งค่าควบคุมโดยผู้ปกครอง","ระวังมิจฉาชีพอ้างช่วยคืนเงิน"],
  scenes:{
   s1:{title:"14 รายการ",
-   body:`${notif(["เติมเกม 300 · 300 · 99 · 1,500 · 300 · 500 …","รวม 14 รายการ 9,800 บาท ใน 2 สัปดาห์"])}<p>ยายศรีมือสั่น \"ยายจะไปยึดมือถือมันให้หมด แล้วห้ามเล่นเกมไปเลย!\"</p>`,
-   clues:["ยายกำลังโกรธ ถ้ารีบลงโทษ เด็กจะซ่อนมากขึ้น","ต้องแยกให้ออกว่ารายการไหนเป็นการซื้อในเกมจริง รายการไหนโอนให้คนแปลกหน้า","รหัสแอปยายต้องเปลี่ยน"],
-   choices:[{t:"ชวนยายใจเย็นก่อน แล้วโทรธนาคารเบอร์หลังบัตรเพื่อดูว่ารายการไหนโอนไปไหน",to:"s2a",v:"good"},{t:"ไปเอามือถือภูมิมาดูทันที ก่อนที่จะมีรายการเพิ่ม",to:"s2b",v:"risky"},{t:"โทรเบอร์ \"ฝ่ายคืนเงินเกม\" ที่ค้นเจออันดับแรกใน Google",to:"s3",v:"bad"}]},
+   body:`${notif(["เติมเกม 300 · 300 · 99 · 1,500 · 300 · 500 …","รวม 14 รายการ 9,800 บาท ใน 2 สัปดาห์"])}<p>แม่ปูมือสั่น \"แม่จะไปยึดมือถือมันให้หมด แล้วห้ามเล่นเกมไปเลย!\"</p>`,
+   clues:["แม่กำลังโกรธ ถ้ารีบลงโทษ เด็กจะซ่อนมากขึ้น","ต้องแยกให้ออกว่ารายการไหนเป็นการซื้อในเกมจริง รายการไหนโอนให้คนแปลกหน้า","รหัสแอปแม่ต้องเปลี่ยน"],
+   choices:[{t:"ชวนแม่ใจเย็นก่อน แล้วโทรธนาคารเบอร์หลังบัตรเพื่อดูว่ารายการไหนโอนไปไหน",to:"s2a",v:"good"},{t:"ไปเอามือถือภูมิมาดูทันที ก่อนที่จะมีรายการเพิ่ม",to:"s2b",v:"risky"},{t:"โทรเบอร์ \"ฝ่ายคืนเงินเกม\" ที่ค้นเจออันดับแรกใน Google",to:"s3",v:"bad"}]},
   s2a:{title:"แยกรายการ",
    body:`<p>ธนาคารบอกว่า 9 รายการเป็นการซื้อในแอปเกม ส่วน 5 รายการโอนเข้าบัญชีบุคคล ภูมิเดินมาพอดี ตาแดงๆ</p>`,
    clues:["ซื้อในแอป ขอคืนผ่านร้านแอปหรือเกมได้","โอนเข้าบัญชีบุคคล ต้องแจ้งความเพื่ออายัด","คุยกับภูมิแบบไม่ดุ แล้วตั้งค่าควบคุมด้วยกัน"],
    choices:[{t:"ขอคืนเงินรายการในแอป แจ้งความรายการบัญชีบุคคล เปลี่ยนรหัส ตั้งค่าควบคุมโดยผู้ปกครอง แล้วคุยกับภูมิแบบไม่ดุ",to:"E1",v:"good"},{t:"เปลี่ยนรหัสทุกบัญชีให้หมดก็พอ คนร้ายจะเข้าไม่ได้อีก",to:"E2",v:"risky"},{t:"ห้ามภูมิเล่นเกมทั้งปี จะได้ไม่มีเรื่องแบบนี้อีก",to:"E3",v:"risky"}]},
   s2b:{title:"ภูมิวิ่งหนี",
-   body:`<p>ยายตะโกนเรียก ภูมิร้องไห้แล้ววิ่งออกจากร้าน มือถือยังอยู่ในมือ</p>`,
+   body:`<p>แม่ตะโกนเรียก ภูมิร้องไห้แล้ววิ่งออกจากร้าน มือถือยังอยู่ในมือ</p>`,
    clues:["เด็กกลัวจะตัดการสื่อสาร","บอกว่าโกรธคนหลอก ไม่ได้โกรธภูมิ","ปัญหาเงินยังต้องจัดการ"],
-   choices:[{t:"ตามไปคุย บอกว่ายายไม่ได้โกรธภูมิ แต่โกรธคนที่หลอก",to:"s2a",v:"good"},{t:"ปล่อยให้ภูมิอยู่คนเดียวก่อน ใจเย็นแล้วค่อยคุยกันพรุ่งนี้",to:"E3",v:"risky"},{t:"ให้ภูมิสัญญาว่าจะไม่ทำอีก แล้วจบเรื่องไม่ต้องพูดถึงอีก",to:"E2",v:"risky"}]},
+   choices:[{t:"ตามไปคุย บอกว่าแม่ไม่ได้โกรธภูมิ แต่โกรธคนที่หลอก",to:"s2a",v:"good"},{t:"ปล่อยให้ภูมิอยู่คนเดียวก่อน ใจเย็นแล้วค่อยคุยกันพรุ่งนี้",to:"E3",v:"risky"},{t:"ให้ภูมิสัญญาว่าจะไม่ทำอีก แล้วจบเรื่องไม่ต้องพูดถึงอีก",to:"E2",v:"risky"}]},
   s3:{title:"ฝ่ายคืนเงิน",
-   body:`<p>ยายโทรเบอร์ที่ค้นเจอ ปลายสายบอกว่าเป็นฝ่ายคืนเงินของเกม</p>${chat("G","GameRefund Support","บัญชีทางการ ✓",["คืนได้ทั้ง 9,800 บาทค่ะ","ติดตั้งแอปนี้เพื่อยืนยันบัญชีธนาคาร แล้วกรอกเลขบัตรนะคะ"])}`,
+   body:`<p>แม่โทรเบอร์ที่ค้นเจอ ปลายสายบอกว่าเป็นฝ่ายคืนเงินของเกม</p>${chat("G","GameRefund Support","บัญชีทางการ ✓",["คืนได้ทั้ง 9,800 บาทค่ะ","ติดตั้งแอปนี้เพื่อยืนยันบัญชีธนาคาร แล้วกรอกเลขบัตรนะคะ"])}`,
    clues:["ผลค้นหาบางอันคือโฆษณาของมิจฉาชีพ","คืนเงินจริงทำผ่านร้านแอปหรือในเกม ไม่ต้องติดตั้งแอปอื่น","ไม่ให้เลขบัตร"],
    choices:[{t:"วางสาย แล้วใช้ช่องทางคืนเงินในร้านแอปและธนาคารจริง",to:"s2a",v:"good"},{t:"ติดตั้งแอปที่เจ้าหน้าที่ส่งมา จะได้ตรวจรายการคืนเงินอัตโนมัติ",to:"E4",v:"bad"},{t:"ให้เลขบัตรเพื่อให้ระบบโอนเงินคืนเข้าบัตรใบเดิม",to:"E4",v:"bad"}]}
  },
  endings:{
-  E1:{type:"safe",label:"ปลอดภัย",title:"ครอบครัวเดียวกัน",story:"รายการซื้อในแอปได้เงินคืนเกือบครบ ส่วนบัญชีที่รับเงินถูกอายัด ภูมิกับยายตั้งกติกาเติมเกมด้วยกัน และรหัสแอปใหม่ไม่ใช่วันเกิดใครอีกแล้ว",lessons:["แยกรายการ: ซื้อในแอปขอคืนได้ โอนบุคคลต้องแจ้งความ","ตั้งค่าควบคุมโดยผู้ปกครองและรหัสที่เดายาก","คุยกันแบบไม่ดุ เด็กจะกล้าบอกครั้งหน้า"]},
+  E1:{type:"safe",label:"ปลอดภัย",title:"ครอบครัวเดียวกัน",story:"รายการซื้อในแอปได้เงินคืนเกือบครบ ส่วนบัญชีที่รับเงินถูกอายัด ภูมิกับแม่ตั้งกติกาเติมเกมด้วยกัน และรหัสแอปใหม่ไม่ใช่วันเกิดใครอีกแล้ว",lessons:["แยกรายการ: ซื้อในแอปขอคืนได้ โอนบุคคลต้องแจ้งความ","ตั้งค่าควบคุมโดยผู้ปกครองและรหัสที่เดายาก","คุยกันแบบไม่ดุ เด็กจะกล้าบอกครั้งหน้า"]},
   E2:{type:"warn",label:"เฉียดฉิว",title:"แก้ได้ครึ่งเดียว",story:"เงินบางส่วนไม่ได้คืนเพราะไม่ได้ขอ และภูมิยังไม่ได้เล่าว่าใครหลอก ช่องโหว่บางอย่างยังอยู่",lessons:["เปลี่ยนรหัสอย่างเดียวไม่พอ","ขอคืนเงินให้ครบทุกช่องทาง","ให้เด็กเล่าเรื่องทั้งหมด"]},
   E3:{type:"danger",label:"เสียหาย",title:"ภูมิซ่อนหนักกว่าเดิม",story:"ภูมิกลัวจนเลิกเล่าทุกอย่าง แล้วไปเล่นเกมด้วยมือถือเพื่อนแทน คนหลอกยังติดต่อภูมิอยู่",lessons:["ลงโทษหนักทำให้เด็กหนีไปซ่อน","ความไว้ใจในบ้านคือเกราะที่ดีที่สุด","จัดการปัญหาเงินและคุยกันไปพร้อมกัน"]},
-  E4:{type:"danger",label:"เสียหาย",title:"หลอกซ้ำตอนขอคืนเงิน",story:"แอปที่ติดตั้งคือแอปควบคุมเครื่อง เงินที่เหลือในบัญชียายหายไปอีก 23,000 บาท",lessons:["อย่าโทรเบอร์คืนเงินจากผลค้นหา","คืนเงินจริงไม่ต้องติดตั้งแอปหรือให้เลขบัตร","ใช้ช่องทางในร้านแอป เกม หรือธนาคารเท่านั้น"]}
+  E4:{type:"danger",label:"เสียหาย",title:"หลอกซ้ำตอนขอคืนเงิน",story:"แอปที่ติดตั้งคือแอปควบคุมเครื่อง เงินที่เหลือในบัญชีแม่หายไปอีก 23,000 บาท",lessons:["อย่าโทรเบอร์คืนเงินจากผลค้นหา","คืนเงินจริงไม่ต้องติดตั้งแอปหรือให้เลขบัตร","ใช้ช่องทางในร้านแอป เกม หรือธนาคารเท่านั้น"]}
  }}
 };
 
@@ -182,31 +182,31 @@ secret:{id:"secret",level:"ยาก",start:"s1",title:"\"Big Bro Boss\" in the 
   E4:{type:"danger",label:"Harmed",title:"Too late",story:"Phum sent Grandma's banking PIN to Boss. Her account was emptied overnight.",lessons:["Act fast on warning signs in games","Everyone around a child can help, café owners too","Tell the guardian immediately"]}
  }},
 
-parent:{id:"parent",level:"ยาก",start:"s1",title:"Grandma sees the statement",
+parent:{id:"parent",level:"ยาก",start:"s1",title:"Mum sees the statement",
  learn:["How guardians respond when a child is scammed","Getting refunds the right way","Parental controls","Beware of fake refund helpers"],
  scenes:{
   s1:{title:"14 transactions",
-   body:`${notif(["Game top-ups 300 · 300 · 99 · 1,500 · 300 · 500 …","14 transactions, 9,800 baht in 2 weeks"])}<p>Grandma Sri's hands shake. \"I'll take his phone away and ban games for good!\"</p>`,
+   body:`${notif(["Game top-ups 300 · 300 · 99 · 1,500 · 300 · 500 …","14 transactions, 9,800 baht in 2 weeks"])}<p>Phum's mum's hands shake. \"I'll take his phone away and ban games for good!\"</p>`,
    clues:["She's angry; punishing in a rush makes kids hide","Separate real in-game purchases from transfers to strangers","Her app PIN must change"],
-   choices:[{t:"Help Grandma calm down, then call the bank on the card's number to see where each payment went",to:"s2a",v:"good"},{t:"Grab Phum's phone right now before more charges go through",to:"s2b",v:"risky"},{t:"Call the \"game refunds\" number that comes up first on Google",to:"s3",v:"bad"}]},
+   choices:[{t:"Help Mum calm down, then call the bank on the card's number to see where each payment went",to:"s2a",v:"good"},{t:"Grab Phum's phone right now before more charges go through",to:"s2b",v:"risky"},{t:"Call the \"game refunds\" number that comes up first on Google",to:"s3",v:"bad"}]},
   s2a:{title:"Sorting the transactions",
    body:`<p>The bank says 9 were in-app purchases and 5 went to a personal account. Phum walks over, eyes red.</p>`,
    clues:["In-app purchases can be refunded via the app store or game","Transfers to personal accounts need a police report to freeze","Talk with Phum without scolding, then set controls together"],
    choices:[{t:"Request in-app refunds, report the personal-account transfers, change PINs, set parental controls, and talk to Phum without scolding",to:"E1",v:"good"},{t:"Changing every password is enough, they can't get in again",to:"E2",v:"risky"},{t:"Ban Phum from games for a year so it never happens again",to:"E3",v:"risky"}]},
   s2b:{title:"Phum runs off",
-   body:`<p>Grandma shouts. Phum bursts into tears and runs out of the café, phone still in hand.</p>`,
+   body:`<p>Mum shouts. Phum bursts into tears and runs out of the café, phone still in hand.</p>`,
    clues:["Frightened kids cut off communication","Say she's angry at the scammer, not at Phum","The money still needs sorting"],
-   choices:[{t:"Go after him: Grandma isn't angry at Phum, she's angry at the scammer",to:"s2a",v:"good"},{t:"Give Phum space for now, talk tomorrow once everyone's calm",to:"E3",v:"risky"},{t:"Have Phum promise not to do it again and never bring it up",to:"E2",v:"risky"}]},
+   choices:[{t:"Go after him: Mum isn't angry at Phum, she's angry at the scammer",to:"s2a",v:"good"},{t:"Give Phum space for now, talk tomorrow once everyone's calm",to:"E3",v:"risky"},{t:"Have Phum promise not to do it again and never bring it up",to:"E2",v:"risky"}]},
   s3:{title:"The refund team",
-   body:`<p>Grandma calls a number from a search. The voice says it's the game's refund team.</p>${chat("G","GameRefund Support","official ✓",["We can refund all 9,800 baht","Install this app to verify your bank account, then enter your card number"])}`,
+   body:`<p>Mum calls a number from a search. The voice says it's the game's refund team.</p>${chat("G","GameRefund Support","official ✓",["We can refund all 9,800 baht","Install this app to verify your bank account, then enter your card number"])}`,
    clues:["Some search results are scam ads","Real refunds go through the app store or game, no extra apps","Never give card details"],
    choices:[{t:"Hang up, and use the real app-store refund and the bank",to:"s2a",v:"good"},{t:"Install the app the agent sent, it checks refunds automatically",to:"E4",v:"bad"},{t:"Give the card number so the refund goes back to the same card",to:"E4",v:"bad"}]}
  },
  endings:{
-  E1:{type:"safe",label:"Safe",title:"One family",story:"Most in-app purchases were refunded and the receiving account was frozen. Phum and Grandma set top-up rules together, and the new PIN isn't anyone's birthday.",lessons:["Sort it: in-app purchases can be refunded, personal transfers need a police report","Parental controls and a hard-to-guess PIN","Talk without scolding so kids tell you next time"]},
+  E1:{type:"safe",label:"Safe",title:"One family",story:"Most in-app purchases were refunded and the receiving account was frozen. Phum and Mum set top-up rules together, and the new PIN isn't anyone's birthday.",lessons:["Sort it: in-app purchases can be refunded, personal transfers need a police report","Parental controls and a hard-to-guess PIN","Talk without scolding so kids tell you next time"]},
   E2:{type:"warn",label:"Close call",title:"Only half fixed",story:"Some money wasn't recovered because nobody asked, and Phum never said who scammed him. Some gaps remain.",lessons:["Changing the PIN alone isn't enough","Request refunds through every channel","Let the child tell the whole story"]},
   E3:{type:"danger",label:"Harmed",title:"Phum hides even more",story:"Phum was too scared to say anything and started gaming on a friend's phone instead. The scammer is still in touch with him.",lessons:["Harsh punishment drives kids into hiding","Trust at home is the best shield","Fix the money and talk at the same time"]},
-  E4:{type:"danger",label:"Harmed",title:"Scammed again while seeking a refund",story:"The app was a remote-control app. Another 23,000 baht left Grandma's account.",lessons:["Never call refund numbers from search results","Real refunds need no extra app or card number","Use the app store, game or bank only"]}
+  E4:{type:"danger",label:"Harmed",title:"Scammed again while seeking a refund",story:"The app was a remote-control app. Another 23,000 baht left Mum's account.",lessons:["Never call refund numbers from search results","Real refunds need no extra app or card number","Use the app store, game or bank only"]}
  }}
 };
 Object.assign(CASES.th, TH); Object.assign(CASES.en, EN);

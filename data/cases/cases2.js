@@ -44,27 +44,27 @@ helper:{id:"helper",level:"ยาก",start:"s1",title:"“เจ้าหน้
  learn:["เจ้าหน้าที่ปลอมในที่สาธารณะ","โปรไฟล์ / VPN ที่ดักข้อมูลทั้งเครื่อง","การแอบดูรหัส (shoulder surfing)","อย่าให้คนแปลกหน้าจับมือถือ"],
  scenes:{
   s1:{title:"มีคนมาช่วย",
-   body:`<p>ยายศรีต่อเน็ตไม่ได้ ชายเสื้อโปโลมีบัตรห้อยคอเดินมา “ผมเป็นทีมไอทีของห้องสมุดครับ ส่งมือถือมา เดี๋ยวตั้งค่าให้”</p><p>บัตรเขียนว่า “CITY LIBRARY · IT SUPPORT” แต่ไม่มีรูป</p>`,
+   body:`<p>ป้าแดงต่อเน็ตไม่ได้ ชายเสื้อโปโลมีบัตรห้อยคอเดินมา “ผมเป็นทีมไอทีของห้องสมุดครับ ส่งมือถือมา เดี๋ยวตั้งค่าให้”</p><p>บัตรเขียนว่า “CITY LIBRARY · IT SUPPORT” แต่ไม่มีรูป</p>`,
    clues:["ใครก็พิมพ์บัตรห้อยคอได้","เจ้าหน้าที่จริงยืนยันได้ที่เคาน์เตอร์","มือถือที่ปลดล็อกอยู่ในมือคนอื่น = ทุกอย่างในเครื่อง"],
-   choices:[{t:"ขอบคุณ แล้วพายายไปถามที่เคาน์เตอร์ว่าเขาเป็นเจ้าหน้าที่จริงไหม",to:"s2a",v:"good"},{t:"ให้เขาตั้งค่า แต่เรายืนดูอยู่ข้างๆ ตลอด จะได้เห็นว่าเขาทำอะไร",to:"s2b",v:"bad"},{t:"ขอให้เขาบอกขั้นตอน แล้วให้ยายกดเองทีละขั้น ยายจะได้ไม่ต้องส่งมือถือ",to:"s2c",v:"risky"}]},
+   choices:[{t:"ขอบคุณ แล้วพาป้าไปถามที่เคาน์เตอร์ว่าเขาเป็นเจ้าหน้าที่จริงไหม",to:"s2a",v:"good"},{t:"ให้เขาตั้งค่า แต่เรายืนดูอยู่ข้างๆ ตลอด จะได้เห็นว่าเขาทำอะไร",to:"s2b",v:"bad"},{t:"ขอให้เขาบอกขั้นตอน แล้วให้ป้ากดเองทีละขั้น ป้าจะได้ไม่ต้องส่งมือถือ",to:"s2c",v:"risky"}]},
   s2a:{title:"เคาน์เตอร์ไม่รู้จักเขา",
    body:`${staff("พนักงาน","“ที่นี่ไม่มีทีมไอทีเดินตามโต๊ะค่ะ รหัส Wi-Fi อยู่บนบัตรห้องสมุดเลย”")}<p>ชายคนนั้นเดินตามมา “ถ้าอยากเร็วกว่านี้ มีแพ็ก VIP 199 บาท โอนมาบัญชีนี้ได้เลยครับ”</p>`,
    clues:["ขายแพ็กเน็ตด้วยการให้โอนเข้าบัญชีส่วนตัว = สัญญาณหลอก","เคาน์เตอร์ยืนยันแล้วว่าไม่มีเจ้าหน้าที่คนนี้","เก็บข้อมูลบัญชีไว้เป็นหลักฐาน"],
-   choices:[{t:"ไม่โอน จำเลขบัญชีไว้ แล้วให้พนักงานแจ้ง รปภ. ดูกล้อง",to:"E1",v:"good"},{t:"199 บาทเอง ยายอยากได้เน็ตเร็ว โอนให้จบๆ",to:"E3",v:"bad"},{t:"เดินหนีเงียบๆ ไม่ต้องยุ่ง",to:"E2",v:"risky"}]},
+   choices:[{t:"ไม่โอน จำเลขบัญชีไว้ แล้วให้พนักงานแจ้ง รปภ. ดูกล้อง",to:"E1",v:"good"},{t:"199 บาทเอง ป้าอยากได้เน็ตเร็ว โอนให้จบๆ",to:"E3",v:"bad"},{t:"เดินหนีเงียบๆ ไม่ต้องยุ่ง",to:"E2",v:"risky"}]},
   s2b:{title:"“ติดตั้งโปรไฟล์”",
-   body:`${perm("ติดตั้งโปรไฟล์ “CityLib Secure VPN”","โปรไฟล์นี้จะส่งทราฟฟิกเครือข่ายทั้งหมดผ่านเซิร์ฟเวอร์ VPN และติดตั้งใบรับรอง","ยกเลิก","ติดตั้ง")}<p>เขาพูดเร็ว “ใส่รหัสปลดล็อกเครื่องตรงนี้ครับยาย” แล้วยื่นจอให้ยายพิมพ์ต่อหน้าเขา</p>`,
-   clues:["โปรไฟล์ + ใบรับรอง = ดักอ่านเว็บที่เข้ารหัสได้","เขาเห็นรหัสปลดล็อกที่ยายพิมพ์","Wi-Fi ร้านไม่ต้องติดตั้ง VPN ของคนแปลกหน้า"],
-   choices:[{t:"กดยกเลิก เอามือถือคืน แล้วเปลี่ยนรหัสปลดล็อกทันที",to:"E2",v:"good"},{t:"ให้ยายติดตั้ง VPN ช่วยเข้ารหัสข้อมูล ปลอดภัยกว่าไม่ใช้",to:"E4",v:"bad"},{t:"ให้ยายเอามือบังตอนพิมพ์รหัส แล้วติดตั้งต่อ",to:"E4",v:"bad"}]},
+   body:`${perm("ติดตั้งโปรไฟล์ “CityLib Secure VPN”","โปรไฟล์นี้จะส่งทราฟฟิกเครือข่ายทั้งหมดผ่านเซิร์ฟเวอร์ VPN และติดตั้งใบรับรอง","ยกเลิก","ติดตั้ง")}<p>เขาพูดเร็ว “ใส่รหัสปลดล็อกเครื่องตรงนี้ครับป้า” แล้วยื่นจอให้ป้าพิมพ์ต่อหน้าเขา</p>`,
+   clues:["โปรไฟล์ + ใบรับรอง = ดักอ่านเว็บที่เข้ารหัสได้","เขาเห็นรหัสปลดล็อกที่ป้าพิมพ์","Wi-Fi ร้านไม่ต้องติดตั้ง VPN ของคนแปลกหน้า"],
+   choices:[{t:"กดยกเลิก เอามือถือคืน แล้วเปลี่ยนรหัสปลดล็อกทันที",to:"E2",v:"good"},{t:"ให้ป้าติดตั้ง VPN ช่วยเข้ารหัสข้อมูล ปลอดภัยกว่าไม่ใช้",to:"E4",v:"bad"},{t:"ให้ป้าเอามือบังตอนพิมพ์รหัส แล้วติดตั้งต่อ",to:"E4",v:"bad"}]},
   s2c:{title:"ขั้นตอนแปลกๆ",
    body:`<p>เขาบอก “เข้าลิงก์นี้ แล้วกดดาวน์โหลดโปรไฟล์ครับ”</p>${http("192.168.4.1/setup","CityLib Wi-Fi Setup",["ขั้นที่ 1: ดาวน์โหลดโปรไฟล์ความปลอดภัย","ขั้นที่ 2: ใส่รหัสปลดล็อกเครื่อง"],"ดาวน์โหลด")}`,
    clues:["หน้าเว็บเป็น http และใช้เลข IP","ไม่มี Wi-Fi ไหนต้องใส่รหัสปลดล็อกเครื่อง","กดเองก็อันตรายเท่ากับให้เขากด"],
-   choices:[{t:"หยุด ไม่ดาวน์โหลด แล้วไปถามรหัส Wi-Fi ที่เคาน์เตอร์",to:"E1",v:"good"},{t:"ดาวน์โหลดได้ เพราะยายเป็นคนกดเอง เขาไม่ได้แตะเครื่อง",to:"E4",v:"bad"},{t:"ดาวน์โหลดแต่ข้ามขั้นที่ 2 ไม่ใส่รหัสปลดล็อก",to:"E2",v:"risky"}]}
+   choices:[{t:"หยุด ไม่ดาวน์โหลด แล้วไปถามรหัส Wi-Fi ที่เคาน์เตอร์",to:"E1",v:"good"},{t:"ดาวน์โหลดได้ เพราะป้าเป็นคนกดเอง เขาไม่ได้แตะเครื่อง",to:"E4",v:"bad"},{t:"ดาวน์โหลดแต่ข้ามขั้นที่ 2 ไม่ใส่รหัสปลดล็อก",to:"E2",v:"risky"}]}
  },
  endings:{
-  E1:{type:"safe",label:"ปลอดภัย",title:"เจ้าหน้าที่ปลอมถูกจับได้",story:"รปภ. ดูกล้องแล้วพบว่าชายคนนี้เดินหลอกลูกค้าหลายโต๊ะ ยายศรีได้รหัส Wi-Fi จริงจากบัตรห้องสมุด",lessons:["ยืนยันตัวเจ้าหน้าที่ที่เคาน์เตอร์","อย่าส่งมือถือที่ปลดล็อกให้คนแปลกหน้า","Wi-Fi จริงไม่ต้องติดตั้งโปรไฟล์หรือ VPN"]},
-  E2:{type:"warn",label:"เฉียดฉิว",title:"ต้องเปลี่ยนรหัสทั้งหมด",story:"ยายไม่เสียเงิน แต่รหัสปลดล็อกหลุดไปแล้ว ต้องเปลี่ยนรหัสเครื่องและรหัสแอปธนาคาร ส่วนชายคนนั้นยังหลอกคนอื่นต่อ",lessons:["คนที่เห็นรหัสเรา = รหัสหลุดแล้ว","ลบโปรไฟล์แปลกในการตั้งค่าทันที","แจ้งเจ้าของสถานที่ คนอื่นจะได้ไม่โดน"]},
-  E3:{type:"danger",label:"เสียหาย",title:"โอนแล้วโดนขอเพิ่ม",story:"หลังโอน 199 บาท เขาบอกว่าต้อง “ยืนยันบัญชี” อีก 2,000 บาท ยายเสียไปเกือบสามพันก่อนรู้ตัว",lessons:["อย่าโอนเงินให้คนแปลกหน้าเพื่อซื้อเน็ต","โอนครั้งแรกมักตามด้วยค่าโน่นนี่","ถามที่เคาน์เตอร์เสมอ"]},
-  E4:{type:"danger",label:"เสียหาย",title:"ทุกอย่างในเครื่องถูกดัก",story:"โปรไฟล์ทำให้ทุกเว็บที่ยายเข้าผ่านเซิร์ฟเวอร์คนร้าย เมื่อยายเปิดแอปธนาคารในคืนนั้น รหัสก็หลุดไปทันที",lessons:["VPN ของคนแปลกหน้า = ให้เขาเห็นทุกอย่าง","อย่าติดตั้งโปรไฟล์หรือใบรับรองที่ไม่รู้ที่มา","บังรหัสไม่พอ ถ้าเครื่องถูกยึดไปแล้ว"]}
+  E1:{type:"safe",label:"ปลอดภัย",title:"เจ้าหน้าที่ปลอมถูกจับได้",story:"รปภ. ดูกล้องแล้วพบว่าชายคนนี้เดินหลอกลูกค้าหลายโต๊ะ ป้าแดงได้รหัส Wi-Fi จริงจากบัตรห้องสมุด",lessons:["ยืนยันตัวเจ้าหน้าที่ที่เคาน์เตอร์","อย่าส่งมือถือที่ปลดล็อกให้คนแปลกหน้า","Wi-Fi จริงไม่ต้องติดตั้งโปรไฟล์หรือ VPN"]},
+  E2:{type:"warn",label:"เฉียดฉิว",title:"ต้องเปลี่ยนรหัสทั้งหมด",story:"ป้าไม่เสียเงิน แต่รหัสปลดล็อกหลุดไปแล้ว ต้องเปลี่ยนรหัสเครื่องและรหัสแอปธนาคาร ส่วนชายคนนั้นยังหลอกคนอื่นต่อ",lessons:["คนที่เห็นรหัสเรา = รหัสหลุดแล้ว","ลบโปรไฟล์แปลกในการตั้งค่าทันที","แจ้งเจ้าของสถานที่ คนอื่นจะได้ไม่โดน"]},
+  E3:{type:"danger",label:"เสียหาย",title:"โอนแล้วโดนขอเพิ่ม",story:"หลังโอน 199 บาท เขาบอกว่าต้อง “ยืนยันบัญชี” อีก 2,000 บาท ป้าเสียไปเกือบสามพันก่อนรู้ตัว",lessons:["อย่าโอนเงินให้คนแปลกหน้าเพื่อซื้อเน็ต","โอนครั้งแรกมักตามด้วยค่าโน่นนี่","ถามที่เคาน์เตอร์เสมอ"]},
+  E4:{type:"danger",label:"เสียหาย",title:"ทุกอย่างในเครื่องถูกดัก",story:"โปรไฟล์ทำให้ทุกเว็บที่ป้าเข้าผ่านเซิร์ฟเวอร์คนร้าย เมื่อป้าเปิดแอปธนาคารในคืนนั้น รหัสก็หลุดไปทันที",lessons:["VPN ของคนแปลกหน้า = ให้เขาเห็นทุกอย่าง","อย่าติดตั้งโปรไฟล์หรือใบรับรองที่ไม่รู้ที่มา","บังรหัสไม่พอ ถ้าเครื่องถูกยึดไปแล้ว"]}
  }},
 
 update:{id:"update",level:"กลาง",start:"s1",title:"Wi-Fi บอกให้อัปเดตเบราว์เซอร์",
@@ -158,27 +158,27 @@ helper:{id:"helper",level:"Hard",start:"s1",title:"The kind “Wi-Fi staff membe
  learn:["Fake staff in public places","Profiles / VPNs that intercept the whole phone","Shoulder surfing your passcode","Never hand your phone to a stranger"],
  scenes:{
   s1:{title:"Someone offers help",
-   body:`<p>Grandma Sri can't get online. A man in a polo shirt with a lanyard walks over: “I'm IT for the library. Hand me your phone and I'll set it up.”</p><p>The badge says “CITY LIBRARY · IT SUPPORT” but has no photo.</p>`,
+   body:`<p>Auntie Daeng can't get online. A man in a polo shirt with a lanyard walks over: “I'm IT for the library. Hand me your phone and I'll set it up.”</p><p>The badge says “CITY LIBRARY · IT SUPPORT” but has no photo.</p>`,
    clues:["Anyone can print a lanyard badge","Real staff can be confirmed at the counter","An unlocked phone in a stranger's hand = everything on it"],
-   choices:[{t:"Thank him, then walk Grandma to the counter to ask whether he's really staff",to:"s2a",v:"good"},{t:"Let him set it up while you stand right next to him and watch what he does",to:"s2b",v:"bad"},{t:"Ask him to tell Grandma the steps and let her tap each one herself, so the phone never leaves her",to:"s2c",v:"risky"}]},
+   choices:[{t:"Thank him, then walk Auntie to the counter to ask whether he's really staff",to:"s2a",v:"good"},{t:"Let him set it up while you stand right next to him and watch what he does",to:"s2b",v:"bad"},{t:"Ask him to tell Auntie the steps and let her tap each one herself, so the phone never leaves her",to:"s2c",v:"risky"}]},
   s2a:{title:"The counter doesn't know him",
    body:`${staff("Staff","“We don't have IT going round the desks. The Wi-Fi password is on your library card.”")}<p>The man follows you: “If you want it faster, there's a 199-baht VIP pass. Just transfer to this account.”</p>`,
    clues:["Selling Wi-Fi via transfer to a personal account = scam sign","The counter just confirmed he isn't staff","Keep the account details as evidence"],
-   choices:[{t:"Don't pay, note the account number, and have the staff get security to check the cameras",to:"E1",v:"good"},{t:"It's only 199 and Grandma wants fast internet, pay and be done",to:"E3",v:"bad"},{t:"Walk away quietly and stay out of it",to:"E2",v:"risky"}]},
+   choices:[{t:"Don't pay, note the account number, and have the staff get security to check the cameras",to:"E1",v:"good"},{t:"It's only 199 and Auntie wants fast internet, pay and be done",to:"E3",v:"bad"},{t:"Walk away quietly and stay out of it",to:"E2",v:"risky"}]},
   s2b:{title:"“Install the profile”",
-   body:`${perm("Install profile “CityLib Secure VPN”","This profile will route all network traffic through a VPN server and install a certificate.","Cancel","Install")}<p>He talks fast: “Type your phone passcode here, Grandma,” and holds the screen up for her to type in front of him.</p>`,
-   clues:["Profile + certificate = can read even encrypted sites","He saw the passcode Grandma typed","Venue Wi-Fi never needs a stranger's VPN"],
-   choices:[{t:"Tap cancel, take the phone back, and change the passcode right away",to:"E2",v:"good"},{t:"Let Grandma install the VPN, it encrypts her data, safer than none",to:"E4",v:"bad"},{t:"Have Grandma cover the screen while typing the passcode, then carry on",to:"E4",v:"bad"}]},
+   body:`${perm("Install profile “CityLib Secure VPN”","This profile will route all network traffic through a VPN server and install a certificate.","Cancel","Install")}<p>He talks fast: “Type your phone passcode here, Auntie,” and holds the screen up for her to type in front of him.</p>`,
+   clues:["Profile + certificate = can read even encrypted sites","He saw the passcode Auntie typed","Venue Wi-Fi never needs a stranger's VPN"],
+   choices:[{t:"Tap cancel, take the phone back, and change the passcode right away",to:"E2",v:"good"},{t:"Let Auntie install the VPN, it encrypts her data, safer than none",to:"E4",v:"bad"},{t:"Have Auntie cover the screen while typing the passcode, then carry on",to:"E4",v:"bad"}]},
   s2c:{title:"Odd instructions",
    body:`<p>He says: “Open this link and download the profile.”</p>${http("192.168.4.1/setup","CityLib Wi-Fi Setup",["Step 1: Download the security profile","Step 2: Enter your phone passcode"],"Download")}`,
    clues:["The page is http and uses an IP address","No Wi-Fi needs your phone passcode","Tapping it yourself is as risky as him tapping it"],
-   choices:[{t:"Stop, don't download, and ask the counter for the Wi-Fi password",to:"E1",v:"good"},{t:"Download it, Grandma is tapping herself, he never touches the phone",to:"E4",v:"bad"},{t:"Download it but skip step 2, no passcode",to:"E2",v:"risky"}]}
+   choices:[{t:"Stop, don't download, and ask the counter for the Wi-Fi password",to:"E1",v:"good"},{t:"Download it, Auntie is tapping herself, he never touches the phone",to:"E4",v:"bad"},{t:"Download it but skip step 2, no passcode",to:"E2",v:"risky"}]}
  },
  endings:{
-  E1:{type:"safe",label:"Safe",title:"The fake staffer is caught",story:"Security checks the cameras and finds he's been working several tables. Grandma Sri gets the real Wi-Fi password from her library card.",lessons:["Confirm staff at the counter","Never hand an unlocked phone to a stranger","Real Wi-Fi needs no profile or VPN"]},
-  E2:{type:"warn",label:"Close call",title:"Every passcode has to change",story:"Grandma loses no money, but her passcode is out. She has to change it and her banking PIN, while the man moves on to someone else.",lessons:["If someone saw your code, it's leaked","Delete odd profiles in settings at once","Tell the venue so others aren't caught"]},
-  E3:{type:"danger",label:"Harmed",title:"Paid, then asked for more",story:"After the 199 baht he says the account needs “verifying” for another 2,000. Grandma loses nearly three thousand before she realises.",lessons:["Never pay a stranger for internet access","A first payment is followed by more fees","Always ask at the counter"]},
-  E4:{type:"danger",label:"Harmed",title:"Everything on the phone is intercepted",story:"The profile routes every site Grandma visits through the scammer's server. When she opens her bank app that night, her login leaks instantly.",lessons:["A stranger's VPN = they see everything","Never install profiles or certificates of unknown origin","Covering the code doesn't help once the phone is taken over"]}
+  E1:{type:"safe",label:"Safe",title:"The fake staffer is caught",story:"Security checks the cameras and finds he's been working several tables. Auntie Daeng gets the real Wi-Fi password from her library card.",lessons:["Confirm staff at the counter","Never hand an unlocked phone to a stranger","Real Wi-Fi needs no profile or VPN"]},
+  E2:{type:"warn",label:"Close call",title:"Every passcode has to change",story:"Auntie loses no money, but her passcode is out. She has to change it and her banking PIN, while the man moves on to someone else.",lessons:["If someone saw your code, it's leaked","Delete odd profiles in settings at once","Tell the venue so others aren't caught"]},
+  E3:{type:"danger",label:"Harmed",title:"Paid, then asked for more",story:"After the 199 baht he says the account needs “verifying” for another 2,000. Auntie loses nearly three thousand before she realises.",lessons:["Never pay a stranger for internet access","A first payment is followed by more fees","Always ask at the counter"]},
+  E4:{type:"danger",label:"Harmed",title:"Everything on the phone is intercepted",story:"The profile routes every site Auntie visits through the scammer's server. When she opens her bank app that night, her login leaks instantly.",lessons:["A stranger's VPN = they see everything","Never install profiles or certificates of unknown origin","Covering the code doesn't help once the phone is taken over"]}
  }},
 
 update:{id:"update",level:"Medium",start:"s1",title:"The Wi-Fi says update your browser",

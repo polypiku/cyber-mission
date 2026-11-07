@@ -3,7 +3,7 @@
 for(const k of ["cin_cop1","cin_cop2"]){ SPRITES[k]=SPRITES.police; PEOPLE[k]={name:{th:"ตำรวจชุดบุก",en:"Raid officer"}, role:{th:"ตำรวจไซเบอร์",en:"Cyber police"}}; }
 SPRITES.cin_thug=SPRITES.workMan; PEOPLE.cin_thug={name:{th:"ชายชุดดำ",en:"Man in black"}, role:{th:"ลูกน้องแก๊งเงา",en:"Shadow gang"}};
 SPRITES.cin_boss=SPRITES.shadowBoss; PEOPLE.cin_boss={name:{th:"เฮียเงา",en:"Boss Shadow"}, role:{th:"หัวหน้าแก๊งเงา",en:"Shadow gang leader"}};
-for(const b of ["workMan","workMom","studentBoy","studentGirl"]){ SPRITES["cin_sc_"+b]=SPRITES[b]; PEOPLE["cin_sc_"+b]={name:{th:"คนโทรหลอก",en:"Scam caller"}, role:{th:"แก๊งคอลเซ็นเตอร์",en:"Call-centre gang"}}; }
+for(const b of ["workMan","workMom","studentBoy","studentGirl"]){ SPRITES["cin_sc_"+b]=SPRITES[{workMan:"crowd11",workMom:"crowd12",studentBoy:"crowd03",studentGirl:"crowd16"}[b]]; PEOPLE["cin_sc_"+b]={name:{th:"คนโทรหลอก",en:"Scam caller"}, role:{th:"แก๊งคอลเซ็นเตอร์",en:"Call-centre gang"}}; }
 let CIN=null;
 setTimeout(()=>{ const b=$("cinSkip"); if(b) b.onclick=()=>{ if(CIN) endCinema(true); }; },0);
 function mk(id,extra={}){ return {id,role:"cin",cin:true,on:false,x:-999,y:-999,dir:"down",home:"down",t:0,...extra}; }
@@ -206,7 +206,7 @@ function talkTo(n){
   }
   if(n.role==="tips" && !caseOf(n)){ const tip=SCRIPT.tips[S.tip%SCRIPT.tips.length]; S.tip++; save(); say(n.id, lines([tip])); return; }
   const cid=caseOf(n), sc=scriptFor(n.role);
-  if(!cid){ say(n.id, lines([thanksLine(n.role)])); return; }
+  if(!cid){ say(n.id, lines([thanksLine(n.role,n.id)])); return; }
   const r=S.best[cid];
   if(!r){ say(n.id, lines(sc.intro), {choices:[{...CH.help[0],fn:()=>openCase(cid,n)},CH.help[1]]}); return; }
   const more = r!=="safe" ? [t(`(เคสนี้ได้ ${starStr(r)} ลองใหม่ให้ได้ ★★★ เพื่อเก็บคะแนนเต็ม)`,`(This case is at ${starStr(r)}. Replay for ★★★ to get full points.)`)] : [];
