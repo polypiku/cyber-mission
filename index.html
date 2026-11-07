@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ภารกิจร้านกาแฟ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Noto+Sans+Thai:wght@400;500;600;700;800&display=swap">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div id="stage"><canvas id="cv" aria-label="ร้านกาแฟ Bean House"></canvas></div>
+
+<div class="virus" id="virus" hidden aria-live="polite"><div class="vscan"></div><i class="vbar b1"></i><i class="vbar b2"></i>
+  <div class="vclock" id="vclock"><span class="vsk">☠</span><div><small>VIRUS · <span id="vwhere"></span></small><b id="vtime">0:30</b></div><span class="vsk">🔧</span></div></div>
+<div class="glitch" id="glitch" hidden aria-hidden="true"><div class="gscan"></div><i class="gbar"></i></div>
+<div class="hud" id="hud">
+  <div class="bars" id="bars"></div>
+  <div class="hud-r">
+    <button class="chip zchip" id="prog" type="button"></button>
+    <button class="hbtn" id="boardBtn" aria-label="Evidence board"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="15" rx="1"/><path d="M7 9h4M7 13h6M14.5 8.5l3 3"/><circle cx="16" cy="14" r="1.6"/></svg><span class="badge-dot" id="boardDot" hidden>1</span></button>
+    <button class="hbtn" id="menuBtn" aria-label="Menu"><svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+  </div>
+</div>
+<button class="phonepeek" id="phoneBtn" aria-label="Phone"><span class="pp-scr"><span class="pp-time" id="ppTime">9:41</span><span class="pp-ic">💬</span><span class="pp-sw">︿</span></span><span class="badge-dot" id="phoneDot" hidden>1</span></button>
+<div class="prompt" id="prompt" hidden></div>
+<div class="joy" id="joy" aria-hidden="true"><i id="knob"></i></div>
+<button class="act" id="act" disabled></button>
+<div class="keys" id="keys"></div>
+<div id="cinNight"></div><div id="cin" hidden><div class="cin-bar top"></div><div class="cin-bar bot"></div><div class="cin-cap" id="cinCap" hidden></div><button class="cin-skip" id="cinSkip" type="button">ข้าม ⏭</button></div><div id="cinFade"></div>
+<div class="dlg" id="dlg" hidden role="dialog" aria-live="polite"><div class="face"><img id="dlgFace" alt=""></div><div class="body"><div class="who" id="dlgWho"></div><div class="txt" id="dlgTxt"></div><div class="ch" id="dlgCh"></div><div class="nx" id="dlgNx"></div></div></div>
+<div class="veil" id="veil" hidden><div class="sheet" id="sheet" role="dialog" aria-modal="true"></div></div>
+<div class="toast" id="toast" role="status" hidden></div>
+<div class="peek" id="peek" hidden role="dialog" aria-live="assertive"></div>
+
+<script src="data/sprites.js"></script>
+<script src="data/heroes.js"></script>
+<script src="data/cases/cases.js"></script>
+<script src="data/cases/cases1.js"></script>
+<script src="data/cases/cases2.js"></script>
+<script src="data/cases/cases3.js"></script>
+<script src="data/cases/cases4.js"></script>
+<script src="data/cases/cases5.js"></script>
+<script src="data/cases/cases6.js"></script>
+<script src="data/cases/cases8.js"></script>
+<script src="data/cases/cases-story.js"></script>
+<script src="data/minigames.js"></script>
+<script src="js/core.js"></script>
+<script src="js/world.js"></script>
+<script src="js/render.js"></script>
+<script src="js/crowd.js"></script>
+<script src="js/story.js"></script>
+<script src="js/engine.js"></script>
+<script src="js/talk.js"></script>
+<script src="js/office.js"></script>
+<script src="js/cinema.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/phone.js"></script>
+<script src="js/arcade.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
