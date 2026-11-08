@@ -107,26 +107,34 @@ function gameTour(){
     const c=npcs.filter(x=>x.role!=="mentor"&&caseOf(x)).sort((a,b)=>Math.hypot(a.x-player.x,a.y-player.y)-Math.hypot(b.x-player.x,b.y-player.y));
     const n=c.find(inView)||c[0]; return n?{x:n.x-46,y:n.y-CHAR_H-30,w:92,h:CHAR_H+46}:null; };
   return [
-    {who:M, t:["ยินดีต้อนรับ","Welcome"], d:["สวัสดี! พี่ชื่อ"+PEOPLE[M].name.th+" จากทีมการ์ดไซเบอร์ ช่วงนี้ในเมืองมีคนโดนมิจฉาชีพหลอกเยอะมาก พี่จะพาดูก่อนว่าเล่นยังไง","Hi! I'm "+PEOPLE[M].name.en+" from the Cyber Guard team. Lots of people in town are being scammed lately. Let me show you how this works."]},
-    {who:M, world:vic, t:["คนที่ต้องการความช่วยเหลือ","People who need help"], d:["คนที่มีเครื่องหมาย ! บนหัว กำลังเจอเรื่องแปลกๆ เดินไปใกล้แล้วคุย จะเข้าสู่เคส ช่วยเขาตัดสินใจให้ถูก","Anyone with a ! over their head is facing something fishy. Walk up and talk to start a case, then help them choose well."]},
+    {who:M, t:["ยินดีต้อนรับ","Welcome"], d:["สวัสดี "+nm(S.char)+"! พี่ชื่อ"+PEOPLE[M].name.th+" อาสาสมัครไซเบอร์ ก่อนไปห้องสมุด พี่จะพาดูก่อนว่าเล่นยังไง","Hi "+nm(S.char)+"! I'm "+PEOPLE[M].name.en+", a cyber volunteer. Before you head to the library, let me show you how this works."]},
+    {who:M, t:["คนที่ต้องการความช่วยเหลือ","People who need help"], d:["คนที่มีเครื่องหมาย ! บนหัว กำลังเจอเรื่องแปลกๆ เดินไปใกล้แล้วคุย จะเข้าสู่เคส ช่วยเขาตัดสินใจให้ถูก","Anyone with a ! over their head is facing something fishy. Walk up and talk to start a case, then help them choose well."]},
     TOUCH?{who:M, sel:"#joy", t:["การเดิน","Moving"], d:["แตะค้างตรงไหนก็ได้ทางซ้ายของจอแล้วลาก จอยจะโผล่ใต้นิ้ว หรือแตะที่พื้นเพื่อเดินไปตรงนั้น","Press and drag anywhere on the left of the screen and the joystick appears under your thumb. Or tap the floor to walk there."]}
          :{who:M, sel:"#keys", t:["การเดิน","Moving"], d:["เดินด้วย WASD หรือปุ่มลูกศร หรือคลิกที่พื้น พอเข้าใกล้ใครหรืออะไรก็ตาม กด E เพื่อคุยหรือใช้งาน","Walk with WASD or the arrow keys, or click the floor. Near someone or something? Press E to talk or use it."]},
     TOUCH?{who:M, sel:"#act", t:["ปุ่มทำงาน","Action button"], d:["ปุ่มขวาล่างจะเปลี่ยนตามสิ่งที่อยู่ใกล้ คุย เข้าร้าน ให้อาหารแมว หรือเล่นมินิเกม","The bottom-right button changes with what's nearby: talk, enter, feed the cat, play a mini-game."]}:null,
     {who:M, sel:"#bars", t:["หลอดสถานะและเงิน","Status bars & money"], d:["เงิน ความเป็นส่วนตัว และความไว้ใจ ขึ้นลงตามการตัดสินใจ เงิน 💵 ได้จากการช่วยคน เอาไปซื้อของที่ร้านหมอโฟน แต่ถ้าโดนหลอกเงินจะหายจริง","Money, privacy and trust rise and fall with your choices. Money 💵 comes from helping people and buy upgrades at Phone Dr., but scams really take it."]},
-    {who:M, sel:"#prog", t:["คะแนนและแผนที่","Score & map"], d:["ดาวที่เก็บได้ในร้านนี้ แตะเพื่อเปิดแผนที่ภารกิจ ดูว่าแต่ละที่ยังเหลือใครต้องช่วย","Stars collected here. Tap it for the mission map and see who still needs help in each place."]},
+    {who:M, sel:"#prog", t:["คะแนนและแผนที่","Score & map"], d:["ดาวที่เก็บได้ในที่นี้ แตะเพื่อเปิดแผนที่ภารกิจ ดูว่าบทไหนเปิดแล้ว และยังเหลือใครต้องช่วย","Stars collected here. Tap it for the mission map: see which chapters are open and who still needs help."]},
     {who:M, sel:"#phoneBtn", t:["มือถือของคุณ","Your phone"], d:["จะมี SMS เด้งเข้ามาระหว่างเล่น ตัดสินว่าจริงหรือหลอก และระวัง Wi-Fi ฟรีในร้าน ถ้าต่อผิด มือถือจะโดนแฮก!","Messages arrive as you play: decide real or scam. And beware free Wi-Fi in the shops. Join the wrong one and your phone gets hacked!"]},
-    {who:M, sel:"#boardBtn", t:["บอร์ดหลักฐาน","Evidence board"], d:["ทุกเคสที่ช่วยได้จะให้หลักฐานชิ้นหนึ่ง ทุกเรื่องเป็นฝีมือ “แก๊งเงา” ที่ตึกฝั่งตรงข้ามถนน เก็บให้ครบแล้วส่งตำรวจ","Every case you solve adds a clue. It's all the Shadow gang in the building across the road. Collect everything and hand it to the police."]},
-    {who:M, world:{x:372,y:560,w:120,h:70}, t:["ออกไปข้างนอก","Going outside"], d:["ประตูด้านล่างพาออกไปที่ถนน มีห้องสมุด ธนาคาร ร้านเน็ต และสองซอย: ซอย 1 ไปมหาวิทยาลัย ซอย 2 ไปสถานีตำรวจของพี่ภพ","The door at the bottom leads to the street: the library, the bank, the net café, and two sois: Soi 1 to the university, Soi 2 to Phop's police station."]},
+    {who:M, sel:"#boardBtn", t:["บอร์ดหลักฐาน","Evidence board"], d:["ทุกเคสที่ช่วยจนจบและลงมือแก้ในมือถือสำเร็จ จะได้เบาะแสหนึ่งชิ้น ยังมีเบาะแสซ่อนอยู่อีก ต้องใช้แว่นนักสืบหา","Every case you finish, including the hands-on fix on the phone, gives a clue. More clues are hidden around; the detective lens finds them."]},
+    {who:M, world:{x:372,y:560,w:120,h:70}, t:["ออกไปข้างนอก","Going outside"], d:["ประตูด้านล่างพาลงไปที่ถนน เดินลงไปจนถึงสี่แยก ห้องสมุดอยู่ทางซ้าย ซอย 2 ทางขวาไปสถานีตำรวจของพี่ภพ ที่อื่นจะเปิดเมื่อได้เบาะแสชี้ไป","The bottom door leads down to the street. Walk to the crossroads: the library is on the left, Soi 2 on the right goes to Phop's police station. Other places open as leads point to them."]},
     {who:M, sel:"#menuBtn", t:["เมนู","Menu"], d:["เปลี่ยนภาษา เปิดปิดเสียง เปิดสมุดกลโกง และดูทัวร์นี้ซ้ำได้ที่นี่","Change language, toggle sound, open the scam book, or replay this tour here."]},
-    {who:M, t:["เป้าหมาย","The goal"], d:["ช่วยให้ครบทุกคน แล้วเอาหลักฐานไปให้พี่ภพที่สถานีตำรวจเพื่อบุกตึกแก๊งเงา ยิ่งได้ ★ มาก ฉากจบยิ่งดี (มี 5 แบบ) จำสามคำ: หยุด คิด ตรวจสอบ","Help everyone, then take the evidence to Phop at the police station to raid the Shadow gang. More ★ means a better ending (there are 5). Remember: stop, think, check."]}
+    {who:M, t:["เป้าหมาย","The goal"], d:["ตามเบาะแสไปทีละที่ แล้วเอาไปส่งพี่ภพ ยิ่งมีเบาะแสมาก ตอนบุกยิ่งจับได้ครบ ฉากจบมี 5 แบบ จำสามคำ: หยุด คิด ตรวจสอบ","Follow the leads place by place and hand them to Phop. The more clues, the more of the gang gets caught. There are 5 endings. Remember: stop, think, check."]}
   ].filter(Boolean);
 }
 function startTour(){
   if(!S.prologue){ closeDlg(); openCutscene(L("บทนำ · แก๊งเงา","Prologue · The Shadow gang"), PROLOGUE(), ()=>{ S.prologue=true; save(); startTour(); }); return; }
+  if(!S.briefed){ briefing(); return; }
   closeDlg(); closeSheet(); keys.clear(); target=null;
   startCoach(gameTour(), ()=>{ if(!S.intro){ S.intro=true; save(); setTimeout(zoneEvent,300); } hudKey=""; });
   // skipping still counts as having seen it
   const sk=coach&&coach.el.querySelector(".co-skip"); if(sk) sk.onclick=()=>{ const d=coach.done; endCoach(false); d&&d(); };
+}
+function briefing(){
+  const p=npcs.find(n=>n.id==="police"); if(p) face(player,p);
+  say("police", lines([t(`ยินดีที่ได้รู้จักนะ ${nm(S.char)} นี่โอ๊ต อาสาสมัครไซเบอร์ เขาจะคอยช่วยน้องตลอดทาง`,`Nice to meet you, ${nm(S.char)}. This is Oat, a cyber volunteer. He'll back you up the whole way.`),
+    t("ทุกครั้งที่ช่วยคนได้ จะได้เบาะแสหนึ่งชิ้น เปิดดูได้ที่บอร์ดหลักฐานในมือถือ","Each person you help gives you a clue. You can see them on the evidence board on your phone."),
+    t("เริ่มที่ห้องสมุดเมืองก่อนเลย ออกประตูด้านล่างแล้วเดินลงไปที่สี่แยก ห้องสมุดอยู่ทางซ้าย","Start with the City Library. Go out the bottom door, walk down to the crossroads, and the library is on the left.")]),
+    {onEnd:()=>{ S.briefed=true; save(); buildCast(); startTour(); }});
 }
 function mentorIntro(){
   const n=npcs.find(x=>x.role==="mentor");
@@ -149,12 +157,11 @@ function nearDoor(){ if(S.zone!==0||!S.char) return null; return BUILDINGS.find(
 let lockToastT=0;
 function tryEnter(b){
   if(b.closed){ player.y=Math.max(player.y,282); target=null; targetNpc=null; keys.clear(); if(performance.now()-lockToastT<1500) return; lockToastT=performance.now(); toast(L("ร้านนี้ปิดปรับปรุงอยู่","This shop is closed for renovation")); return; }
-  if(b.alley ? (b.soi || allDone()) : (!b.soon && S.unlocked>=b.zone)){ enterZone(b.zone); return; }
-  if(b.alley){ player.y=Math.max(player.y,282); target=null; targetNpc=null; keys.clear(); if(performance.now()-lockToastT<1500) return; lockToastT=performance.now(); toast(L(`ตรอกถูกกั้นไว้… ช่วยคนในเมืองให้ครบก่อน (ตอนนี้ ${ALLCASES().filter(k=>S.best[k]).length}/${ALLCASES().length})`,`The alley is taped off… help everyone in town first (${ALLCASES().filter(k=>S.best[k]).length}/${ALLCASES().length})`)); return; }
+  if(b.alley ? (b.soi || ghostOpen()) : (!b.soon && zoneOpen(b.zone))){ enterZone(b.zone); return; }
+  if(b.alley){ player.y=Math.max(player.y,282); target=null; targetNpc=null; keys.clear(); if(performance.now()-lockToastT<1500) return; lockToastT=performance.now(); toast(lockMsg(5)); return; }
   player.y=Math.max(player.y,282); target=null; targetNpc=null; keys.clear();
   if(performance.now()-lockToastT<1500) return; lockToastT=performance.now();
-  toast(b.soon ? L("ห้องสมุดยังไม่เปิด จะมาในอัปเดตถัดไป","The library isn't open yet. Coming in a later update.")
-    : L(`ยังเข้าไม่ได้ ต้องช่วยให้ครบทุกคนในโซน ${b.zone-1} ก่อน (ตอนนี้ ${ZONES[b.zone-1].cases.filter(k=>S.best[k]).length}/${ZONES[b.zone-1].cases.length})`,`Locked: finish every case in Zone ${b.zone-1} first (now ${ZONES[b.zone-1].cases.filter(k=>S.best[k]).length}/${ZONES[b.zone-1].cases.length})`));
+  toast(b.soon ? L("ยังไม่เปิด","Not open yet") : lockMsg(b.zone));
 }
 /* the university front, drawn as an SVG scene (no image files) */
 function hcuSVG(){

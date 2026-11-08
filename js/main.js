@@ -10,7 +10,7 @@ function frame(now){
 document.documentElement.lang=S.lang;
 resize();
 setWorld();
-if(S.char) buildCast();
+if(S.char){ migrateChapter(); buildCast(); }
 Promise.all([loadImages(), document.fonts?document.fonts.ready:Promise.resolve()]).then(()=>{ drawStatic(); });
 /* canvas text uses the same Thai webfont as the measuring span; once it arrives, redraw so centred text lines up */
 if(document.fonts&&document.fonts.load){ Promise.all(["600","700","800"].map(w=>document.fonts.load(`${w} 16px 'Noto Sans Thai'`,"ก"))).then(()=>{ drawStatic(); }).catch(()=>{}); document.fonts.addEventListener&&document.fonts.addEventListener("loadingdone",()=>drawStatic()); }

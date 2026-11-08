@@ -61,21 +61,20 @@ const btn = (label, attrs, cls="")=>`<button class="btn ${cls}" ${attrs}><span>$
 /* start / character select */
 let pickChar=null;
 function openStart(){
-  pickChar = S.char || pickChar || "studentGirl";
+  pickChar = PICKS.includes(S.char) ? S.char : (PICKS.includes(pickChar) ? pickChar : "studentGirl");
   const resume = S.char && (S.intro || doneCount());
-  openSheet("start", `<div class="hero-s">${langSw()}<span class="eyebrow">${L("รู้ทันไซเบอร์ · โซน 1 (ต้นแบบ)","Cyber Savvy · Zone 1 (prototype)")}</span>
-    <div class="big">${L("ภารกิจร้านกาแฟ","Café Mission")}</div>
-    <p>${L("เดินสำรวจร้าน Bean House คุยกับคนที่ต้องการความช่วยเหลือ แล้วตัดสินใจเองในแต่ละสถานการณ์ ผลของการเลือกจะส่งต่อถึงหลอดสถานะของคุณ","Explore Bean House café, talk to people who need help, and make your own call in each situation. Your choices carry over to your status bars.")}</p></div>
+  openSheet("start", `<div class="hero-s">${langSw()}<span class="eyebrow">${L("รู้ทันไซเบอร์ · ภารกิจแก๊งเงา","Cyber Savvy · The Shadow gang")}</span>
+    <div class="big">${L("ภารกิจรู้ทันไซเบอร์","Cyber Mission")}</div>
+    <p>${L("คุณเป็นนักศึกษามหาวิทยาลัยหัวเฉียวฯ ตำรวจไซเบอร์ขอให้ช่วยสืบแก๊งมิจฉาชีพที่อยู่แถวมหาลัย ช่วยคนที่กำลังจะโดนหลอก เก็บเบาะแส แล้วพาตำรวจไปจับแก๊งให้ได้","You're a student at Huachiew Chalermprakiet University. Cyber police ask you to help track a scam gang near campus: help people about to be scammed, collect clues, and lead the police to the gang.")}</p></div>
     <div class="sh-body">
-      <span class="sect">${L("เลือกตัวละคร","Choose your character")}</span>
-      <div class="picks">${PLAYABLE.map(id=>`<button class="pick" data-pick="${id}" aria-pressed="${pickChar===id}"><img src="${SPRITES[id].down.src}" alt=""><b>${esc(nm(id))}</b><small>${esc(PEOPLE[id].role[S.lang])}</small></button>`).join("")}</div>
-      <span class="sect">${L("คนที่จะได้เจอในร้าน","Who you'll meet")}</span>
-      <div class="cast" id="castList"></div>
-      <div class="btns">${resume?btn(L("เล่นต่อ","Continue"),"data-go=\"resume\"","y"):""}${btn(resume?L("เริ่มใหม่ด้วยตัวละครนี้","Restart with this character"):L("เริ่มเกม","Start game"),"data-go=\"new\"")}</div>
+      <span class="sect">${L("ตัวละครของคุณ","Your character")}</span>
+      <div class="picks two">${PICKS.map(id=>`<button class="pick" data-pick="${id}" aria-pressed="${pickChar===id}"><img src="${SPRITES[id].down.src}" alt=""><b>${id==="studentGirl"?L("ผู้หญิง","Female"):L("ผู้ชาย","Male")}</b><small>${L("นักศึกษา","Student")}</small></button>`).join("")}</div>
+      <label class="namefield"><span>${L("ชื่อของคุณ","Your name")}</span><input id="pname" maxlength="16" autocomplete="off" placeholder="${L("พิมพ์ชื่อเล่น","Type a nickname")}" value="${esc(S.name||"")}"></label>
+      <div class="btns">${resume?btn(L("เล่นต่อ","Continue"),"data-go=\"resume\"","y"):""}${btn(resume?L("เริ่มใหม่","Start over"):L("เริ่มเกม","Start game"),"data-go=\"new\"")}</div>
       <p class="note">${L("ธนาคาร ร้าน ชื่อคน และเว็บไซต์ในเกมเป็นเรื่องสมมติทั้งหมด ความคืบหน้าเก็บในเบราว์เซอร์เครื่องนี้","All banks, shops, names and websites in the game are fictional. Progress is saved in this browser.")}</p>
     </div>`);
-  castList();
 }
+const PICKS=["studentGirl","studentBoy"];
 function castList(){
   const prev=S.char, pz=S.zone; S.char=pickChar; S.zone=1; buildCast(); S.char=prev; S.zone=pz;
   const roleTxt={teller:L("พนักงานธนาคาร","Bank teller"),repairman:L("ซ่อมมือถือ","Fixes phones"),clue_admin:L("ชวนลงทุน","Pitching investments"),clue_it:L("ช่างซ่อมเน็ต?","Wi-Fi technician?"),mentor:L("พี่เลี้ยง ให้คำแนะนำ","Mentor, shows you around"),grandma:L("อยากสแกน QR ส่วนลด","Wants to scan a discount QR"),grandpa:L("ได้ SMS จากธนาคาร","Got an SMS from the bank"),friend:L("เน็ตหมด ต้องใช้ Wi-Fi","Out of data, needs Wi-Fi"),tips:L("ให้เคล็ดลับ","Shares tips")};
@@ -255,6 +254,7 @@ function renderEnding(c){
     if(C.id==="chat") S.chatSeen=true;
     if(S.zone===1 && doneCount()>=2 && !S.chat){ S.chat=true; S.chatPending=true; }
     const nz=S.zone+1;
+    advanceChapter();
     if(zoneDone(S.zone) && !S.zoneDoneSeen?.[S.zone]){ S.zoneDoneSeen={...(S.zoneDoneSeen||{}),[S.zone]:true}; }
     save();
   }
@@ -285,7 +285,7 @@ function finishCase(){
   hud();
 }
 function afterCaseCheck(){
-  if(allDone() && !S.alleyHint){ S.alleyHint=true; save(); setTimeout(()=>toast(L("เสียงแปลกๆ ดังมาจากตรอกมืดข้างร้านกาแฟ… 👻","Strange noises from the dark alley by the café… 👻")),2800); }
+  if(ghostOpen() && !S.alleyHint){ S.alleyHint=true; save(); setTimeout(()=>toast(L("เสียงแปลกๆ ดังมาจากตรอกมืดข้างร้านกาแฟ… 👻","Strange noises from the dark alley by the café… 👻")),2800); }
   if(S.bustPending){ S.bustPending=false; save(); setTimeout(playEnding,350); hud(); return; }
   if(S.unlockPending){ const z=S.unlockPending; S.unlockPending=0; save(); setTimeout(()=>openUnlock(z), 350); hud(); return; }
   if(S.chatPending){ S.chatPending=false; save(); setTimeout(showPeek, 450); hud(); return; }

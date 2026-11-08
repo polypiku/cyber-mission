@@ -259,7 +259,8 @@ function buildCast0(){
   if(S.zone===8){ npcs=officeCast().map(n=>({...n, home:n.dir})); player.id=S.char; return; }
   if(S.zone===6){
     npcs=[{id:mentor, role:"mentor", x:528, y:548, dir:"up"},{id:friend, role:"friend", x:268, y:514, dir:"right"},{id:tips, role:"tips", x:690, y:232, dir:"down"},
-      {id:"paweena", role:"paweena", x:132, y:322, dir:"right"},{id:"prof", role:"prof", x:308, y:190, dir:"down"}].map(n=>({...n, home:n.dir}));
+      {id:"paweena", role:"paweena", x:132, y:322, dir:"right"},{id:"prof", role:"prof", x:308, y:190, dir:"down"},
+      ...(S.briefed?[]:[{id:"police", role:"briefing", x:470, y:430, dir:"down"},{id:"cin_cop1", role:"briefing", x:400, y:410, dir:"down"}])].map(n=>({...n, home:n.dir}));
     player.id=S.char; return;
   }
   if(S.zone===7){
@@ -314,5 +315,5 @@ function buildCast0(){
   ].map(n=>({...n, home:n.dir}));
   player.id=S.char;
 }
-const caseOf = (n)=>ZN().roleCase[n.role];
+const caseOf = (n)=>casesOpen(S.zone)?ZN().roleCase[n.role]:undefined;
 const doneCount = ()=>ZN().cases.filter(k=>S.best[k]).length;

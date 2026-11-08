@@ -21,7 +21,7 @@ def serve():
     http.server.ThreadingHTTPServer(("127.0.0.1", PORT), handler).serve_forever()
 
 SKIP_INTRO = ("closeSheet(); endCoach(); S.prologue=true; S.intro=true;"
-              "S.tut={case:1,end:1,vil:1}; closeDlg(); urgent=null; S.unlocked=9;"
+              "S.tut={case:1,end:1,vil:1}; closeDlg(); urgent=null; S.unlocked=9; S.chapter=5; S.briefed=true;"
               "[1,2,3,4,6,7].forEach(z=>S.seen[z]=true)")
 
 async def check(browser, name, viewport):

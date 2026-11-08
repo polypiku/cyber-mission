@@ -164,25 +164,33 @@ function openFinale(){
 /* mission map: all zones, scores, locks */
 const LOCK_I='<svg viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="10" rx="1"/><path d="M8 10V7a4 4 0 018 0v3"/></svg>';
 function openZones(){
-  const cards=Object.keys(ZONES).map(Number).filter(z=>!ZONES[z].bonus || allDone()).map(z=>{
-    const open=ZONES[z].bonus?allDone():S.unlocked>=z, cur=S.zone===z, sc=zoneScore(z), mx=zoneMax(z);
+  const cards=[...CHAPTERS,7,5].filter(z=>ZONES[z]).map(z=>{
+    const open=zoneOpen(z), cur=S.zone===z, sc=zoneScore(z), mx=zoneMax(z);
     return `<div class="zcard ${open?"":"locked"} ${cur?"cur":""}">
-      <div class="zh"><span class="zno">${ZONES[z].bonus?"👻":zno(z)}</span><div><b>${esc(ZONES[z].name[S.lang])}</b><small>${open?`${L("คะแนน","Score")} ${sc}/${mx}${zoneFull(z)?" · "+L("เต็ม!","Perfect!"):""}`:L(`ล็อก: ช่วยให้ครบทุกคนในโซน ${z-1} ก่อน`,`Locked: finish every case in Zone ${z-1}`)}</small></div>${open?(cur?`<span class="here">${L("อยู่ที่นี่","You're here")}</span>`:""):`<span class="lk">${LOCK_I}</span>`}</div>
+      <div class="zh"><span class="zno">${ZONES[z].bonus?"👻":zno(z)}</span><div><b>${esc(ZONES[z].name[S.lang])}</b><small>${open?`${L("คะแนน","Score")} ${sc}/${mx}${zoneFull(z)?" · "+L("เต็ม!","Perfect!"):""}`:esc(lockMsg(z))}</small></div>${open?(cur?`<span class="here">${L("อยู่ที่นี่","You're here")}</span>`:""):`<span class="lk">${LOCK_I}</span>`}</div>
       ${open?`<div class="meter"><i style="width:${sc/mx*100}%"></i></div><div class="res">${caseRows(z)}</div>${cur?"":btn(L("ไปที่นี่","Go here"),`data-zone="${z}"`,"y")}`
-            :`<div class="meter"><i style="width:${ZONES[z-1].cases.filter(k=>S.best[k]).length/ZONES[z-1].cases.length*100}%"></i></div><p class="note">${L(`ช่วยในโซน ${z-1} แล้ว ${ZONES[z-1].cases.filter(k=>S.best[k]).length}/${ZONES[z-1].cases.length} คน`,`Zone ${z-1}: ${ZONES[z-1].cases.filter(k=>S.best[k]).length}/${ZONES[z-1].cases.length} helped`)}</p>`}
+            :`<p class="note">🔒 ${esc(lockMsg(z))}</p>`}
     </div>`; }).join("");
   openSheet("zones", `${top_(L("แผนที่ภารกิจ","Mission map"))}<div class="sh-body">
     <p class="note" style="font-size:.86rem">${L("แต่ละเคสได้ ★★★ = 100 · ★★ = 50 · ★ = 0 คะแนน นับผลที่ดีที่สุด เล่นซ้ำได้เรื่อยๆ","Each case: ★★★ = 100 · ★★ = 50 · ★ = 0 points. Your best result counts, replay any time.")}</p>
     ${cards}${S.zone>0?`<div class="btns"><button class="btn g" data-out><span>${L("ออกไปที่ถนนหน้าร้าน","Go out to the street")}</span></button></div>`:""}</div>`);
 }
 function openUnlock(z){
-  openSheet("unlock", `<div class="unlockhero"><span class="eyebrow">${L("ช่วยครบทุกคนแล้ว!","Everyone helped!")}</span><div class="ubig">${L(`ปลดล็อกโซน ${z}`,`Zone ${z} unlocked`)}</div><p>${esc(ZONES[z].name[S.lang])}</p></div>
-    <div class="sh-body"><p>${L(`โซน ${z-1} ได้ ${zoneScore(z-1)}/${zoneMax(z-1)} คะแนน ดาวที่เก็บได้จะมีผลตอนจับแก๊งเงา อยากได้เพิ่มก็กลับมาเล่นซ้ำได้`,`Zone ${z-1}: ${zoneScore(z-1)}/${zoneMax(z-1)}. Your stars decide how much of the Shadow gang gets caught; come back to replay for more.`)}</p>
-    <p class="note">${L(`เดินออกประตูร้าน แล้วเข้า${esc(ZONES[z].name.th)}ที่อยู่ข้างๆ ได้เลย`,`Walk out the door and into ${esc(ZONES[z].name.en)} next door.`)}</p>
+  if(z===-1){
+    openSheet("unlock", `<div class="unlockhero"><span class="eyebrow">${L("เบาะแสชี้ไปที่ตึกแก๊ง","The leads point to the gang's building")}</span><div class="ubig">${L("บทสุดท้าย","Final chapter")}</div><p>${L("ตึกออฟฟิศฝั่งตรงข้ามถนน","The office buildings across the road")}</p></div>
+      <div class="sh-body"><p>${L("ปวีณาบอกว่าพี่บอสสั่งงานจากตึกออฟฟิศฝั่งตรงข้ามถนน ไปสำรวจทั้งสามตึกให้รู้ว่าตึกไหนคือรัง แล้วเอาหลักฐานไปส่งพี่ภพที่สถานีตำรวจ","Paweena says Boss runs everything from an office building across the road. Check all three buildings to find the den, then hand your evidence to Phop at the police station.")}</p>
+      <p class="note">${L(`หลักฐานตอนนี้ ${evCount()}/${clueTotal()} ชิ้น ยิ่งมาก ยิ่งจับได้ครบ`,`Evidence so far: ${evCount()}/${clueTotal()}. The more you have, the more of the gang gets caught.`)}</p>
+      <div class="btns">${btn(L("ออกไปข้างนอก","Head outside"),`data-out`,"y")}<button class="btn g" data-close><span>${L("อยู่ที่นี่ก่อน","Stay here for now")}</span></button></div></div>`);
+    return;
+  }
+  const lead=(LEADS[z]||[[L("มีเบาะแสใหม่","A new lead"),L("มีเบาะแสใหม่","A new lead")]])[0];
+  openSheet("unlock", `<div class="unlockhero"><span class="eyebrow">${L("ได้เบาะแสใหม่!","New lead!")}</span><div class="ubig">${L(`บทที่ ${chapterOf(z)+1}`,`Chapter ${chapterOf(z)+1}`)}</div><p>${esc(ZONES[z].name[S.lang])}</p></div>
+    <div class="sh-body"><p>${lead[EN()?1:0]}</p>
+    ${chapterOf(z)===1?`<p class="note">${L("ตั้งแต่ตอนนี้ไปส่งหลักฐานให้พี่ภพที่สถานีตำรวจได้ และที่นั่นก็มีคนรอความช่วยเหลืออยู่ด้วย","From now on you can hand evidence to Phop at the police station, and people there need help too.")}</p>`:""}
     <div class="btns">${btn(L("ออกไปข้างนอก","Head outside"),`data-out`,"y")}<button class="btn g" data-close><span>${L("อยู่ที่นี่ก่อน","Stay here for now")}</span></button></div></div>`);
 }
 function goZone(z){
-  if(!ZONES[z] || (ZONES[z].bonus ? !allDone() : S.unlocked<z)) return;
+  if(!ZONES[z] || !zoneOpen(z)) return;
   S.zone=z; if(z===2||z===7) S.floor=1; save(); setWorld(); buildCast(); drawStatic();
   if(z===7){ const jl=jailList().length; if(jl>(S.jailSeen||0)){ S.jailSeen=jl; save(); setTimeout(()=>toast(L(`🔒 คนร้ายที่คุณจับได้ถูกขังอยู่ในห้องขังแล้ว (${jl} คน) เดินเข้าประตูขวามือไปดูได้`,`🔒 The suspects you caught are in the cell block (${jl}). Walk through the door on the right`)),1200); } }
   player.x=z===2?720:432; player.y=z===2?LH-90:560; player.dir="up"; keys.clear(); target=null; targetNpc=null;
@@ -211,10 +219,10 @@ function wireSheet(){
   on("[data-lang]",(b)=>{ S.lang=b.dataset.lang; save(); document.documentElement.lang=S.lang; drawStatic(); if(sheetMode==="start") openStart(); else if(sheetMode==="menu") openMenu(); hud(); });
   on("[data-pick]",(b)=>{ pickChar=b.dataset.pick; sh.querySelectorAll("[data-pick]").forEach(x=>x.setAttribute("aria-pressed",String(x===b))); castList(); });
   on("[data-go]",(b)=>{
-    if(b.dataset.go==="new"){ const lang=S.lang; S=fresh(); S.lang=lang; S.char=pickChar; player.x=432; player.y=500; player.dir="up"; }
+    if(b.dataset.go==="new"){ const lang=S.lang, nmIn=($("pname")&&$("pname").value||"").trim().slice(0,16); S=fresh(); S.lang=lang; S.char=pickChar; S.name=nmIn; S.zone=6; S.seen={6:true}; player.x=432; player.y=520; player.dir="up"; }
     else if(S.char!==pickChar){ S.char=pickChar; }
     save(); setWorld(); buildCast(); drawStatic(); closeSheet(); hudKey=""; if(S.zone===2){ player.x=720; player.y=LH-90; } if(cbFloor()){ player.x=70; player.y=(CB_TOP+CB_BOT)/2; }
-    if(S.zone===1 && !S.intro){ const m=npcs.find(n=>n.role==="mentor"); setTimeout(()=>{ face(player,m); talkTo(m); },250); }
+    if(!S.intro){ setTimeout(startTour,250); }
     else setTimeout(zoneEvent,400);
   });
   on("[data-hint]",(b)=>{ const h=$("hint"); h.hidden=!h.hidden; b.setAttribute("aria-expanded",String(!h.hidden)); });

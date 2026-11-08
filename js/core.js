@@ -35,7 +35,7 @@ const RM = matchMedia("(prefers-reduced-motion: reduce)").matches;
 document.body.classList.toggle("desk", !TOUCH);
 
 /* ---------- save ---------- */
-const fresh = ()=>({lang:"th", char:null, intro:false, results:{}, best:{}, late:{}, ev:{}, evNew:0, busted:false, inbox:[], msgSeen:[], msgStats:{ok:0,bad:0}, mg:{sms:0,url:0}, rank:0, sound:true, seenCases:[], fed:{cat:0,birds:0}, wifi:{}, phoneBroken:null, coins:100, items:{shield:0,lens:0,ins:0,data:false,shoes:false}, zone:1, unlocked:1, seen:{}, bars:{money:70,privacy:70,trust:70}, chat:false, chatSeen:false, tip:0});
+const fresh = ()=>({lang:"th", char:null, name:"", chapter:0, intro:false, results:{}, best:{}, late:{}, ev:{}, evNew:0, busted:false, inbox:[], msgSeen:[], msgStats:{ok:0,bad:0}, mg:{sms:0,url:0}, rank:0, sound:true, seenCases:[], fed:{cat:0,birds:0}, wifi:{}, phoneBroken:null, coins:100, items:{shield:0,lens:0,ins:0,data:false,shoes:false}, zone:1, unlocked:1, seen:{}, bars:{money:70,privacy:70,trust:70}, chat:false, chatSeen:false, tip:0});
 let S = fresh();
 try{ const v=JSON.parse(localStorage.getItem(SAVE_KEY)||"null"); if(v&&v.bars) S=Object.assign(fresh(),v); }catch(e){}
 for(const [k,r] of Object.entries(S.results)) if(!S.best[k]) S.best[k]=r.type;
@@ -141,7 +141,7 @@ SPRITES.police=SPRITES.policePhop; PEOPLE.police={name:{th:"พี่ภพ",en:
 const FILL_NAMES={"crowd01":["ผู้ชายเสื้อเทา","Man in grey"],"crowd02":["ผู้หญิงเสื้อฟ้า","Woman in blue"],"crowd03":["วัยรุ่นฮู้ดดำ","Teen in a hoodie"],"crowd04":["วัยรุ่นเสื้อลาย","Teen in stripes"],"crowd05":["คุณลุง","Older man"],"crowd06":["คุณป้า","Older woman"],"crowd07":["ผู้ชายเสื้อโปโล","Man in a polo"],"crowd08":["ผู้หญิงชุดกระโปรง","Woman in a dress"],"crowd09":["หนุ่มเสื้อขาว","Young man"],"crowd10":["สาวเสื้อครีม","Young woman"],"crowd11":["ผู้ชายเสื้อลายสก็อต","Man in plaid"],"crowd12":["ผู้หญิงเสื้อส้ม","Woman in orange"],"crowd13":["ผู้ชายเสื้อเทา","Man in grey"],"crowd14":["ผู้หญิงเสื้อฟ้า","Woman in blue"],"crowd15":["วัยรุ่นฮู้ดดำ","Teen in a hoodie"],"crowd16":["วัยรุ่นเสื้อลาย","Teen in stripes"],"crowd17":["คุณลุง","Older man"],"crowd18":["คุณป้า","Older woman"],"crowd19":["ผู้ชายเสื้อโปโล","Man in a polo"],"crowd20":["ผู้หญิงชุดกระโปรง","Woman in a dress"],"crowd21":["หนุ่มเสื้อขาว","Young man"],"crowd22":["สาวเสื้อครีม","Young woman"],"crowd23":["ผู้ชายเสื้อลายสก็อต","Man in plaid"],"crowd24":["ผู้หญิงเสื้อส้ม","Woman in orange"],"workMan":["หนุ่มออฟฟิศ","Office guy"],"workMom":["สาวออฟฟิศ","Office woman"],"kidGirl":["เด็กหญิง","Girl"],"kidBoy":["เด็กชาย","Boy"]};
 for(const [b,nmz] of Object.entries(FILL_NAMES)){ SPRITES["j_"+b]=SPRITES[b]; PEOPLE["j_"+b]={name:{th:"ผู้ต้องหา",en:"Suspect"}, role:{th:"ปล่อย Wi-Fi ปลอมดักข้อมูล",en:"Ran a fake Wi-Fi hotspot"}}; SPRITES["f_"+b]=SPRITES[b]; PEOPLE["f_"+b]={name:{th:nmz[0],en:nmz[1]}, role:{th:"ลูกค้า",en:"Customer"}}; }
 const PLAYABLE=["studentGirl","studentBoy","guardGirl","guardBoy"];
-const nm = (id)=>PEOPLE[id].name[S.lang];
+const nm = (id)=>(id===S.char && S.name) ? S.name : PEOPLE[id].name[S.lang];
 /* ---------- zones + scoring ---------- */
 const ZONES = {
   1:{name:{th:"ร้านกาแฟ Bean House",en:"Bean House café"}, cases:["qr","bank","wifi","chat"], roleCase:{grandma:"qr", grandpa:"bank", friend:"wifi", phone:"chat"}},
@@ -199,7 +199,7 @@ function xp(){ return totalScore() + evCount()*20 + (S.msgStats?S.msgStats.ok*5:
 function rankIdx(){ const x=xp(); let r=0; RANKS.forEach((k,i)=>{ if(x>=k[0]) r=i; }); return r; }
 const rankName=(i)=>RANKS[i][EN()?2:1];
 const MAXZ = Math.max(...MAINZ());
-function syncUnlocks(){ if(S.unlocked<MAXZ){ S.unlocked=MAXZ; save(); } }
+function syncUnlocks(){ /* zones now open chapter by chapter, see progress.js */ }
 function checkRank(){ syncUnlocks(); const r=rankIdx(); if(r>S.rank){ S.rank=r; save(); setTimeout(()=>{ toast(L(`เลื่อนยศเป็น "${rankName(r)}"!`,`Promoted to "${rankName(r)}"!`)); sfx("rank"); },700); } }
 const evCount = ()=>Object.keys(EVID).filter(k=>S.ev[k]).length;
 const isZoneCase = (id)=>Object.values(ZONES).some(z=>z.cases.includes(id));

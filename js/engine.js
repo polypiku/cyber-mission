@@ -193,7 +193,7 @@ function hud(){
   if(feed) $("prompt").innerHTML=`${fc?L("ให้อาหารแมว 🐟","Feed the cat 🐟"):L("ให้อาหารนก 🌾","Feed the pigeons 🌾")}${TOUCH?"":"<kbd>E</kbd>"}`;
   if(kk) $("prompt").innerHTML=`${L("เล่นมินิเกม","Play mini-games")}${TOUCH?"":"<kbd>E</kbd>"}`;
   if(show) $("prompt").innerHTML=`${L("คุยกับ","Talk to")} ${esc(nm(n.id))}${TOUCH?"":"<kbd>E</kbd>"}`;
-  else if(showDoor) $("prompt").innerHTML=`${(dn.alley?(dn.soi||allDone()):(!dn.soon&&S.unlocked>=dn.zone))?L("เข้า ","Enter ")+esc(dn.name[S.lang]):L("ล็อกอยู่: ","Locked: ")+esc(dn.name[S.lang])}${TOUCH?"":"<kbd>E</kbd>"}`;
+  else if(showDoor) $("prompt").innerHTML=`${(dn.alley?(dn.soi||ghostOpen()):(!dn.soon&&zoneOpen(dn.zone)))?L("เข้า ","Enter ")+esc(dn.name[S.lang]):L("ล็อกอยู่: ","Locked: ")+esc(dn.name[S.lang])}${TOUCH?"":"<kbd>E</kbd>"}`;
   const act=$("act"); act.disabled=!(show||showDoor||kk||feed||hq||rp||vl); act.textContent=kk?L("เล่น","Play"):feed?L("ให้อาหาร","Feed"):hq?L("เข้า","Enter"):vl?L("สำรวจ","Look"):rp?L("ซ่อม","Repair"):showDoor?L("เข้า","Enter"):L("คุย","Talk");
   $("keys").innerHTML=L(`<kbd>WASD</kbd>/<kbd>←↑→↓</kbd> เดิน · <kbd>E</kbd> คุย · คลิกพื้นเพื่อเดินไปตรงนั้น`,`<kbd>WASD</kbd>/<kbd>←↑→↓</kbd> walk · <kbd>E</kbd> talk · click the floor to walk there`);
   const hide = sheetMode==="start";

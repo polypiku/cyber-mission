@@ -17,12 +17,14 @@ function openCutscene(title, panels, onDone){
   show();
 }
 const mentorId=()=>"volOat";
-function PROLOGUE(){ const M=mentorId(); return [
-  P("#2A231C","📺🚨📱💸",["ข่าวด่วน: ย่านตลาดนี้มีคนโดนหลอกออนไลน์ติดกันหลายสิบราย ทั้ง QR ปลอม SMS ปลอม ตำรวจปลอม","Breaking news: dozens of online scams in this market district: fake QR codes, fake SMS, fake police."]),
-  P("#22344A","👮📞👩‍✈️",["เบาะแสทั้งหมดชี้ไปที่ “แก๊งเงา” ที่ซ่อนตัวอยู่แถวนี้","Every clue points to the “Shadow gang”, hiding somewhere nearby."],[["police","แก๊งนี้หลอกคนธรรมดาทุกวัน ตำรวจอยู่ทุกที่ไม่ได้ ผมอยากให้ชมรมการ์ดไซเบอร์ช่วย","This gang scams ordinary people every day. Police can't be everywhere. I need the Cyber Guard club's help."],[M,"ได้เลยพี่ภพ เราจะส่งคนไปสืบ","Leave it to us, Phop. We'll send someone in."]]),
-  P("#173E3C","🕵️☕🏦📚🎮",["ภารกิจของเรา: ปลอมตัวเป็นคนธรรมดา ช่วยคนที่กำลังจะโดนหลอก เก็บหลักฐาน แล้วหาว่าแก๊งเงาอยู่ที่ไหน","Our mission: blend in, help people about to be scammed, collect evidence, and find where the Shadow gang hides."],[["me","เริ่มจากร้านกาแฟก่อนเลย","Let's start at the café."]]),
-  P("#5B3A24","🎓🚓🏢",["ถนนเส้นนี้มีสี่แยกตรงกลาง เลี้ยวขึ้นไปคือมหาวิทยาลัย ซอย 2 ไปสถานีตำรวจ และตึกออฟฟิศสามตึกฝั่งตรงข้ามถนน ได้ข่าวว่าแก๊งเงาซ่อนอยู่ในตึกหนึ่ง","This street has a crossroads in the middle; the road north goes to the university, Soi 2 to the police station, and three office buildings across the road. Word is the gang hides in one of them."],[[M,"ช่วยให้ครบทุกคน แล้วเอาหลักฐานไปให้พี่ภพ นั่นแหละคือวิธีจับแก๊งเงา","Help everyone, then take the evidence to Phop. That's how we catch the Shadow gang."]])
+function PROLOGUE(){ return [
+  P("#5B1A20","🎓📚☀️",["มหาวิทยาลัยหัวเฉียวเฉลิมพระเกียรติ วันธรรมดาอีกวันของนักศึกษาอย่างเรา","Huachiew Chalermprakiet University. Just another ordinary day for a student like you."],[["me","วันนี้เรียนเสร็จเร็ว ไปนั่งห้องสมุดดีกว่า","Classes finished early. Maybe I'll go sit in the library."]]),
+  P("#2A231C","📱💸😨",["แต่ช่วงนี้เพื่อนในคณะโดนหลอกติดกันหลายคน ทั้งทุนปลอม งานพาร์ทไทม์ปลอม Wi-Fi ปลอม","But lately friends in your faculty keep getting scammed: fake scholarships, fake part-time jobs, fake Wi-Fi."]),
+  P("#22344A","🚓👮👮",["รถตำรวจจอดหน้าตึกกิจการนักศึกษา ทีมตำรวจไซเบอร์เดินตรงมาหาเรา","A police car stops outside Student Affairs. The cyber police team walks straight towards you."],[["police","สวัสดีครับ ผมภพ ตำรวจไซเบอร์ แถวมหาลัยตอนนี้มีแก๊งมิจฉาชีพใหญ่ เราเรียกมันว่า “แก๊งเงา”","Hello, I'm Phop, cyber police. There's a big scam gang around campus right now. We call it the “Shadow gang”."]]),
+  P("#173E3C","🕵️🎓🤝",["ตำรวจเดินเข้าไปถามใครก็มีแต่คนระแวง แต่นักศึกษาอย่างเราเข้าได้ทุกที่โดยไม่มีใครสงสัย","When police ask around, people clam up. A student can go anywhere without raising suspicion."],[["police","ผมอยากให้น้องช่วย คอยช่วยคนที่กำลังจะโดนหลอก แล้วเก็บเบาะแสมาให้ผม","I'd like your help: look out for people about to be scammed, and bring me every clue you find."],["me","ได้ครับ/ค่ะ เริ่มจากตรงไหนดี","Count me in. Where do I start?"]]),
+  P("#4A3B6B","📚👥🔍",["จุดแรกคือห้องสมุดเมือง คนเยอะที่สุดแถวนี้ และมีคนแปลกหน้ามาวนเวียนบ่อย","First stop: the City Library. It's the busiest place around, and strangers keep hanging about."],[["police","เบาะแสยิ่งเยอะ ตอนบุกยิ่งจับได้ครบ เจอแล้วเอามาส่งผมที่สถานีตำรวจนะ","The more clues you bring, the more of the gang we catch. Bring them to me at the police station."]])
 ];}
+
 function endingNo(){
   const pct=starTotal()/starMax(), caughtAll=[1,2,3,4].every(z=>S.caught&&S.caught[z]), witness=S.best.parttime==="safe";
   if(pct>=.9 && witness && caughtAll) return 5;
@@ -350,7 +352,7 @@ function drawCar(g,c){
 function drawDoorBadges(g,now){
   for(const b of BUILDINGS){
     if(b.alley){ drawAlleyBadge(g,b,now); continue; }
-    const open=!b.soon && S.unlocked>=b.zone, y=40+(RM?0:Math.sin(now/300+b.zone)*3);
+    const open=!b.soon && zoneOpen(b.zone), y=40+(RM?0:Math.sin(now/300+b.zone)*3);
     g.font="800 13px 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', Tahoma, sans-serif"; g.textAlign="center"; g.textBaseline="middle";
     let label;
     if(b.closed){ label=L("🚧 ปิดปรับปรุง","🚧 Closed for renovation"); const tw=g.measureText(label).width+22, by=y+108; rr(g,b.door-tw/2,by-14,tw,28,14); g.fillStyle="#FFFFFF"; g.fill(); g.lineWidth=2.5; g.strokeStyle=INK; g.stroke(); g.fillStyle=INK; g.fillText(label,b.door,by+1);

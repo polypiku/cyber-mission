@@ -154,6 +154,7 @@ function talkTo(n){
   if(busy()) return;
   target=null; targetNpc=null; talking=n; face(n,player);
   if(n.filler){ talkFiller(n); return; }
+  if(n.role==="briefing"){ if(!S.briefed) briefing(); return; }
   if(n.role && n.role.startsWith("o_")){ talkOffice(n); return; }
   if(n.role==="repairman"){ openRepair(); return; }
   if(n.role==="teller"){ say(n.id, lines([t("สวัสดีค่ะ ถ้ามีใครโทรมาอ้างว่าเป็นธนาคาร ให้วางสายแล้วโทรกลับเบอร์หลังบัตรเองนะคะ","Hello! If anyone calls claiming to be the bank, hang up and call the number on the back of your card yourself."),
@@ -183,10 +184,11 @@ function talkTo(n){
     n.pi=((n.pi||0)+1)%P_.length; say(n.id, lines(P_[n.pi])); return;
   }
   if(n.role==="mentor" && S.zone===0){
-    const open=Object.keys(ZONES).map(Number).filter(z=>S.unlocked>=z);
-    const nextZ=Object.keys(ZONES).map(Number).find(z=>S.unlocked<z);
+    const open=Object.keys(ZONES).map(Number).filter(z=>zoneOpen(z));
+    const nextZ=CHAPTERS.find(z=>!zoneOpen(z));
     const ls=[t(`ข้างนอกนี่คือถนนที่เชื่อมทุกโซน ตอนนี้เข้าได้ ${open.length} ที่ คะแนนรวม ${totalScore()}/${totalMax()}`,`This street links every zone. ${open.length} open so far. Total score ${totalScore()}/${totalMax()}.`)];
-    if(nextZ) ls.push(t(`อยากเข้า${ZONES[nextZ].name.th} ต้องช่วยคนในโซน ${nextZ-1} ให้ครบก่อนนะ`,`To get into ${ZONES[nextZ].name.en}, finish every case in Zone ${nextZ-1} first.`));
+    if(nextZ) ls.push(t(lockMsg(nextZ),lockMsg(nextZ)));
+    else if(chapter()<CHAPTERS.length) ls.push(t(`ตอนนี้ไปช่วยคนที่${ZONES[CHAPTERS[chapter()]].name.th}ก่อนนะ`,`Head to ${ZONES[CHAPTERS[chapter()]].name.en} next.`));
     ls.push(allDone()&&!S.busted ? t("ช่วยครบทุกที่แล้ว! เอาหลักฐานไปให้พี่ภพที่สถานีตำรวจ ซอย 2 ได้เลย","You've helped everywhere! Take the evidence to Phop at the police station, Soi 2.")
       : S.busted ? t("แก๊งเงาถูกทลายแล้ว แต่มิจฉาชีพยังมีอีกเยอะ ระวังตัวด้วยนะ","The Shadow gang is down, but there are plenty more scammers. Stay sharp.")
       : t(`ทุกเรื่องที่เจอเป็นฝีมือแก๊งเดียวกัน ตอนนี้มีหลักฐาน ${evCount()}/${Object.keys(EVID).length} ชิ้น ช่วยให้ครบทุกที่ รวมทั้งมหาวิทยาลัยกับสถานีตำรวจในซอย`,`It's all one gang. You have ${evCount()}/${Object.keys(EVID).length} clues. Help everywhere, including the university and police station down the sois.`));
