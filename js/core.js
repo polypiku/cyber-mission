@@ -39,7 +39,7 @@ const fresh = ()=>({lang:"th", char:null, name:"", chapter:0, intro:false, resul
 let S = fresh();
 try{ const v=JSON.parse(localStorage.getItem(SAVE_KEY)||"null"); if(v&&v.bars) S=Object.assign(fresh(),v); }catch(e){}
 for(const [k,r] of Object.entries(S.results)) if(!S.best[k]) S.best[k]=r.type;
-if(!S.late) S.late={}; if(!S.ev) S.ev={}; if(!S.inbox) S.inbox=[]; if(!S.msgSeen) S.msgSeen=[]; if(!S.msgStats) S.msgStats={ok:0,bad:0}; if(!S.mg) S.mg={sms:0,url:0}; if(S.rank==null) S.rank=0; if(S.sound==null) S.sound=true; if(!S.seenCases) S.seenCases=[]; if(!S.fed) S.fed={cat:0,birds:0}; if(!S.wifi) S.wifi={}; if(S.coins==null) S.coins=100; if(!S.items) S.items={shield:0,lens:0,ins:0,data:false,shoes:false}; if(S.phoneBroken===undefined) S.phoneBroken=null;
+if(!S.late) S.late={}; if(!S.ev) S.ev={}; if(!S.inbox) S.inbox=[]; if(!S.msgSeen) S.msgSeen=[]; if(!S.msgStats) S.msgStats={ok:0,bad:0}; if(!S.mg) S.mg={sms:0,url:0}; if(S.rank==null) S.rank=0; if(S.sound==null) S.sound=true; if(!S.seenCases) S.seenCases=[]; if(!S.fed) S.fed={cat:0,birds:0}; if(!S.wifi) S.wifi={}; if(S.coins==null) S.coins=100; if(!S.items) S.items={shield:0,lens:0,ins:0,data:false,shoes:false}; if(S.phoneBroken===undefined) S.phoneBroken=null; S.items.lens=Math.min(3,S.items.lens||0); if(S.briefed&&!S.items.lens) S.items.lens=1;
 const save = ()=>{ try{ localStorage.setItem(SAVE_KEY, JSON.stringify(S)); }catch(e){} };
 const EN = ()=>S.lang==="en";
 const L = (th,en)=>EN()?en:th;

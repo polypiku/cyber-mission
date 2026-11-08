@@ -112,11 +112,24 @@ function raidScript(n){
         st.push({say:["police","เฮียเงาหนีไปทางประตูหลัง! แต่ลูกน้องโดนจับหมดแล้ว","Boss Shadow got out the back! But his whole crew is caught."],t:2.8}); }
       else { st.push({mv:[[A.boss,770,540,200],[A.c2,770,500,240]]}); st.push({fn:()=>{ A.boss.dir="up"; A.c2.dir="down"; }});
         st.push({say:["police","จับได้แล้ว เฮียเงา! คำให้การของปวีณาบอกทางหนีไว้หมด","Got you, Boss Shadow! Paweena's statement told us every way out."],em:[[A.boss,"😣",2.6]],t:3}); }
-      st.push({say:["police","ชั้น 3 ยังมีคนถูกขังอยู่ เดี๋ยวพวกเราไปช่วยต่อ","People are still locked up on floor 3. We'll get them out next."],t:2.6});
     }
+    // floor 3: the dorm where tricked workers were locked in
+    const tr=DORM_ROOMS.slice(0,4).map((r,k)=>mk(["o_t_workMan","o_t_workMom","o_t_studentGirl","o_t_studentBoy"][k]));
+    A.tr=tr;
+    st.push({mv:[[player,740,150],[A.phop,700,166]]});
+    st.push({fade:()=>{ cinZone(8,{bld:hqB(),floor:3,clear:true}); A.sc.forEach(cinHide); if(A.boss) cinHide(A.boss); cinHide(A.c2);
+      cinPlace(player,740,154,"down"); cinPlace(A.phop,700,166,"down"); DORM_ROOMS.slice(0,4).forEach((r,k)=>cinPlace(tr[k],r.cx-24,r.top?205:500,"down")); }});
+    st.push({say:["police","ชั้นนี้ล็อกจากข้างนอกทุกห้อง เปิดเลย!","Every room here is locked from outside. Open them!"],em:()=>tr.map(a=>[a,"😢",2.4]),t:2.4});
+    st.push({mv:[[player,DORM_ROOMS[1].cx,330],[A.phop,DORM_ROOMS[4].cx,360]]});
+    st.push({say:["me","ปลอดภัยแล้วนะ ทุกคนกลับบ้านได้แล้ว","You're safe now. You can all go home."],em:()=>tr.map(a=>[a,"🥹",2.6]),sfx:"good",t:2.6});
+    // the cell block back at the station
+    st.push({fade:()=>{ tr.forEach(cinHide); cinZone(7,{floor:2,clear:false}); npcs=npcs.filter(x=>x.role==="prisoner");
+      cinPlace(player,70,323,"right"); cinPlace(A.phop,40,300,"right"); }, hold:500});
+    st.push({mv:[[player,420,323,90],[A.phop,380,300,90]]});
+    st.push({say:["police",n>=5?"ทั้งแก๊งอยู่ในห้องขังแล้ว รวมทั้งเฮียเงาด้วย":"คนที่จับได้อยู่ในห้องขังหมดแล้ว",n>=5?"The whole gang is in the cells, Boss Shadow included.":"Everyone we caught is in the cells now."],t:2.8,face:[[player,"up"]]});
   }
   st.push({wait:0.6});
-  return {steps:st, opt:{allRed:true, cars:true, dawn:true, actors:[A.phop,A.c1,A.c2,A.rec,A.guard,A.sc,A.boss]}};
+  return {steps:st, opt:{allRed:true, cars:true, dawn:true, actors:[A.phop,A.c1,A.c2,A.rec,A.guard,A.sc,A.boss,A.tr]}};
 }
 function takenScript(){
   const s2=(BUILDINGS.find(b=>b.zone===7)||{door:1386}).door, st=[], A={phop:mk("police"),t1:mk("cin_thug",{dark:true}),t2:mk("cin_thug",{dark:true})};
@@ -163,10 +176,10 @@ function talkTo(n){
   if(n.role==="clue_admin"){ const first=!S.clueAdmin; S.clueAdmin=true; save();
     say(n.id, lines([t("น้องๆ สนใจลงทุนไหมคะ กลุ่ม VIP ของเจ๊กำไรเดือนละ 30% ไม่มีขาดทุน","Hey there! Want to invest? My VIP group makes 30% a month, never a loss."),
       t("ไม่มีเงินก็ไม่เป็นไร แค่เปิดบัญชีใหม่ให้เจ๊ยืมใช้ รับค่าขนมไปเลย 2,000","No money? No problem. Just open a new account for me to borrow and take ฿2,000 pocket money."),
-      t("แอดไลน์เจ๊ไว้นะ เดี๋ยวส่งลิงก์ให้","Add me on LINE, I'll send you the link.")]),{onEnd:()=>{ if(first) setTimeout(()=>toast(L("🕵️ จำหน้าเธอไว้: กำไรสูงเกินจริง + หาคนเปิดบัญชีม้า = สัญญาณแก๊งเงา","🕵️ Remember her: impossible returns + recruiting mule accounts = Shadow gang signs")),300); }}); return; }
+      t("แอดไลน์เจ๊ไว้นะ เดี๋ยวส่งลิงก์ให้","Add me on LINE, I'll send you the link.")]),{onEnd:()=>{ if(casesOpen(S.zone)) setTimeout(()=>gainClue("npc_admin"),2900); if(first) setTimeout(()=>toast(L("🕵️ จำหน้าเธอไว้: กำไรสูงเกินจริง + หาคนเปิดบัญชีม้า = สัญญาณแก๊งเงา","🕵️ Remember her: impossible returns + recruiting mule accounts = Shadow gang signs")),300); }}); return; }
   if(n.role==="clue_it"){ const first=!S.clueIT; S.clueIT=true; save();
     say(n.id, lines([t("มาซ่อมเน็ตให้ร้านครับ เดี๋ยวเสียบกล่องนี้ไว้ เน็ตจะแรงขึ้น","I'm here to fix the shop's internet. I'll plug this box in and it'll be faster."),
-      t("ใครถามก็บอกว่าช่างจากบริษัทนะ ไม่ต้องไปถามเจ้าของร้านหรอก","If anyone asks, I'm from the company. No need to bother the owner.")]),{onEnd:()=>{ if(first) setTimeout(()=>toast(L("🕵️ เจ้าของร้านไม่ได้เรียกช่าง… กล่องนั้นอาจเป็นตัวปล่อย Wi-Fi ปลอม","🕵️ The owner never called a technician… that box could be a fake Wi-Fi hotspot")),300); }}); return; }
+      t("ใครถามก็บอกว่าช่างจากบริษัทนะ ไม่ต้องไปถามเจ้าของร้านหรอก","If anyone asks, I'm from the company. No need to bother the owner.")]),{onEnd:()=>{ if(casesOpen(S.zone)) setTimeout(()=>gainClue("npc_it"),2900); if(first) setTimeout(()=>toast(L("🕵️ เจ้าของร้านไม่ได้เรียกช่าง… กล่องนั้นอาจเป็นตัวปล่อย Wi-Fi ปลอม","🕵️ The owner never called a technician… that box could be a fake Wi-Fi hotspot")),300); }}); return; }
   if(n.role==="fon"){
     const FON=[
       [t("พี่ใกล้คลอดแล้ว ช่วงนี้มีคนทักมาขายของเด็กอ่อนถูกมาก ให้โอนก่อนแล้วค่อยส่ง… พี่เลยเช็กชื่อบัญชีกับเลขบัญชีก่อนทุกครั้ง","I'm due soon. People keep messaging me cheap baby gear, pay first and they'll ship… so I always check the account name and number first."),t("ถ้าร้านไม่ยอมเก็บเงินปลายทาง ไม่มีรีวิวจริง พี่ไม่ซื้อเลย","If a shop won't do cash on delivery and has no real reviews, I don't buy.")],
@@ -176,6 +189,7 @@ function talkTo(n){
     S.fonI=((S.fonI||0)+1)%FON.length; save(); say(n.id, lines(FON[S.fonI])); return;
   }
   if(n.role==="police"){ talkPolice(n); return; }
+  if(n.role==="prisoner" && /^j_g_/.test(n.id)){ const k=n.id.slice(4); say(n.id, lines(GANG_LINES[/^sc/.test(k)?"sc":k])); return; }
   if(n.role==="prisoner"){
     const where=ZONES[n.jz]?ZONES[n.jz].name[S.lang]:"";
     const P_=[[t(`ผมแค่นั่งปล่อย Wi-Fi ฟรีใน${where}…`,`I was only running free Wi-Fi in the ${where}…`),t("ไม่คิดเลยว่าจะมีคนสังเกตเห็น","I never thought anyone would notice.")],

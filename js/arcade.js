@@ -108,7 +108,7 @@ function openSummary(){
 }
 /* scam handbook: every scam you've met, with how to spot it */
 function openDex(){
-  const ids=[...Object.keys(EVID),"recover",...ZONES[5].cases];
+  const ids=[...new Set([...ALLCASES(),"recover",...ZONES[5].cases])];
   const zoneOf=(k)=>Object.keys(ZONES).find(z=>ZONES[z].cases.includes(k));
   const rows=ids.map(id=>{ const c=CASES[S.lang][id]; if(!c) return "";
     const seen=S.seenCases.includes(id), b=S.best[id];
@@ -133,19 +133,19 @@ function openBoard(){
   const zoneOf=(k)=>Object.keys(ZONES).find(z=>ZONES[z].cases.includes(k));
   const cards=Object.entries(EVID).map(([k,v])=>S.ev[k]
     ? `<div class="evc g-${v.g}"><span class="pin"></span><span class="evi">${v.i}</span><b>${v.t[EN()?1:0]}</b><small>${v.d[EN()?1:0]}</small></div>`
-    : `<div class="evc lockd"><span class="pin"></span><span class="evi">?</span><b>${L("ยังไม่พบ","Not found")}</b><small>${L(`โซน ${zno(zoneOf(k))} · ${CASES[S.lang][k].title}`,`Zone ${zoneOf(k)} · ${CASES[S.lang][k].title}`)}</small></div>`).join("");
+    : `<div class="evc lockd"><span class="pin"></span><span class="evi">?</span><b>${L("ยังไม่พบ","Not found")}</b><small>${clueWhere(k)}</small></div>`).join("");
   const groups=Object.entries(EV_GROUPS).map(([gk,gv])=>{ const mem=Object.keys(EVID).filter(k=>EVID[k].g===gk), got=mem.filter(k=>S.ev[k]).length;
     return `<div class="evg g-${gk}"><div class="zl"><b>${gv.t[EN()?1:0]}</b><span>${got}/${mem.length}</span></div><div class="meter"><i style="width:${got/mem.length*100}%"></i></div><small>${got>=2?gv.r[EN()?1:0]:L("ต้องมีอย่างน้อย 2 ชิ้นถึงจะเห็นจุดเชื่อม","Need at least 2 pieces to see the link")}</small></div>`; }).join("");
   const n=evCount();
   openSheet("board", `${top_(L("บอร์ดสืบสวน: แก๊งเงา","Investigation board: the Shadow gang"))}<div class="sh-body">
-    <div class="seg2" role="tablist"><button aria-pressed="true">${L("บอร์ดสืบสวน","Board")}</button><button data-dex aria-pressed="false">${L("สมุดกลโกง","Scam handbook")} ${S.seenCases.length}/${Object.keys(EVID).length+2}</button></div>
-    <p class="note" style="font-size:.86rem">${L("ทุกเคสเป็นฝีมือแก๊งเดียวกัน ช่วยได้โดยไม่เสียหาย (★★ ขึ้นไป) จะได้หลักฐานหนึ่งชิ้น ช่วยครบทุกโซนแล้วส่งให้ตำรวจได้ ยิ่งมีดาวเยอะ ยิ่งจับได้ครบทั้งแก๊ง","Every case is the same gang's work. Help without harm (★★ or better) to earn evidence. Finish every zone to hand it to the police; the more stars, the more of the gang gets caught.")}</p>
+    <div class="seg2" role="tablist"><button aria-pressed="true">${L("บอร์ดสืบสวน","Board")}</button><button data-dex aria-pressed="false">${L("สมุดกลโกง","Scam handbook")} ${S.seenCases.length}/${ALLCASES().length+1+ZONES[5].cases.length}</button></div>
+    <p class="note" style="font-size:.86rem">${L("ทุกเรื่องเป็นฝีมือแก๊งเดียวกัน เบาะแสมาจากการช่วยคนในเคส ส่องแว่นนักสืบ คุยกับคนแปลกหน้า บ้านผีสิง และแฝงตัวในตึกรังแก๊ง เอาไปส่งพี่ภพที่สถานีตำรวจ ยิ่งส่งเยอะ ฉากจบยิ่งดี","It's all one gang. Clues come from helping people, sweeping the lens, talking to strangers, the haunted house and going undercover. Hand them to Phop at the police station: the more you hand in, the better the ending.")}</p>
     <div class="evgrid">${cards}</div>
     <span class="sect">${L("จุดเชื่อมที่พบ","Links found")}</span><div class="evgs">${groups}</div>
-    <div class="zprog"><div class="zl"><span>${L("ดาวทั้งหมด (มีผลตอนจับแก๊ง)","All stars (decide the final raid)")}</span><b>${starTotal()}/${starMax()}</b></div><div class="meter"><i style="width:${starTotal()/starMax()*100}%"></i></div><small>${L(`หลักฐาน ${n}/${Object.keys(EVID).length} ชิ้น · คาดว่าจะ${["","จับได้แค่ลูกน้อง","จับได้เกือบหมด แต่หัวหน้าหนี","จับได้ทั้งแก๊ง"][bustTier()]}`,`Evidence ${n}/${Object.keys(EVID).length} · forecast: ${["","only the small fry","most of them, but the boss escapes","the whole gang"][bustTier()]}`)}</small></div>
-    ${S.bustTier===3?`<div class="unlockbox"><b>${L("ทลายแก๊งเงาครบทั้งแก๊งแล้ว!","The whole Shadow gang is behind bars!")}</b><span>${L("ขอบคุณที่ช่วยทุกคนในเมือง","Thanks for helping everyone in town")}</span></div>`
-      : allDone()?`<div class="btns">${btn(S.zone===7?(S.ending?L("บุกอีกครั้งด้วยหลักฐานที่ดีขึ้น","Raid again with better evidence"):L("ส่งหลักฐานให้พี่ภพ","Hand the evidence to Phop")):L("🚓 ไปส่งหลักฐานที่สถานีตำรวจ (ซอย 2)","🚓 Take it to the police station (Soi 2)"),"data-bust","y")}</div>`
-      : `<p class="note">${L("ช่วยให้ครบทุกคนทุกโซนก่อน จึงจะส่งหลักฐานได้","Finish every case in every zone to hand in the evidence")}</p>`}
+    <div class="zprog"><div class="zl"><span>${L("ส่งให้ตำรวจแล้ว (ตัดสินฉากจบ)","Handed to Phop (decides the ending)")}</span><b>${S.handed||0}/${clueTotal()}</b></div><div class="meter"><i style="width:${(S.handed||0)/clueTotal()*100}%"></i></div><small>${L(`เก็บได้ ${n}/${clueTotal()} ชิ้น · ถ้าส่งครบตอนนี้ คาดว่าได้ฉากจบ ${endingFrom(n)}/5`,`Found ${n}/${clueTotal()} · if all handed in now: ending ${endingFrom(n)}/5`)}</small></div>
+    <div class="box"><ul class="list">${Object.entries(CLUE_SRC).map(([k,v])=>{ const b=clueBreakdown()[k]; return b?`<li>${v[S.lang]}: <b>${b[0]}/${b[1]}</b></li>`:""; }).join("")}</ul></div>
+    ${(S.bestEnding||0)>=5?`<div class="unlockbox"><b>${L("ทลายแก๊งเงาครบทั้งแก๊งแล้ว!","The whole Shadow gang is behind bars!")}</b><span>${L("ขอบคุณที่ช่วยทุกคนในเมือง","Thanks for helping everyone in town")}</span></div>`
+      : `<div class="btns">${btn(S.zone===7?L("🗂️ คุยกับพี่ภพ","🗂️ Talk to Phop"):L("🚓 ไปส่งเบาะแสที่สถานีตำรวจ (ซอย 2)","🚓 Take clues to the police station (Soi 2)"),"data-bust","y")}</div>`}
   </div>`);
 }
 function openFinale(){
@@ -208,13 +208,12 @@ function wireSheet(){
   on("[data-close]",()=>closeSheet());
   on("[data-shop]",()=>openShop());
   on("[data-phhome]",()=>openPhone());
-  on("[data-lens]",()=>useLens());
   on("[data-tour]",()=>{ closeSheet(); if(S.zone!==1||!npcs.find(n=>n.role==="mentor")){ startCoach(gameTour().filter(st=>!st.world)); } else setTimeout(startTour,100); });
   on("[data-howto]",()=>setTimeout(()=>startCoach(COACH_CASE),50));
   on("[data-zone]",(b)=>goZone(+b.dataset.zone));
   on("[data-dex]",()=>openDex()); on("[data-board]",()=>openBoard());
   on("[data-sound]",(b)=>{ S.sound=!S.sound; save(); b.setAttribute("aria-pressed",String(S.sound)); b.querySelector("span").textContent=S.sound?L("เสียง: เปิด","Sound: on"):L("เสียง: ปิด","Sound: off"); if(S.sound) sfx("good"); });
-  on("[data-bust]",()=>{ closeSheet(); const pol=npcs.find(n=>n.role==="police"); if(S.zone===7&&pol){ if(!S.hqFound&&!S.busted) talkPolice(pol); else openCase("bust",pol); } else toast(L("เอาหลักฐานไปให้พี่ภพที่สถานีตำรวจ (ซอย 2 บนถนน)","Take the evidence to Phop at the police station (Soi 2 on the street)")); });
+  on("[data-bust]",()=>{ closeSheet(); const pol=npcs.find(n=>n.role==="police"); if(S.zone===7&&pol){ talkPolice(pol); } else toast(L("เอาหลักฐานไปให้พี่ภพที่สถานีตำรวจ (ซอย 2 บนถนน)","Take the evidence to Phop at the police station (Soi 2 on the street)")); });
   on("[data-out]",()=>{ closeSheet(); goOutside(S.zone||1); });
   on("[data-lang]",(b)=>{ S.lang=b.dataset.lang; save(); document.documentElement.lang=S.lang; drawStatic(); if(sheetMode==="start") openStart(); else if(sheetMode==="menu") openMenu(); hud(); });
   on("[data-pick]",(b)=>{ pickChar=b.dataset.pick; sh.querySelectorAll("[data-pick]").forEach(x=>x.setAttribute("aria-pressed",String(x===b))); castList(); });

@@ -101,6 +101,8 @@ function officeCast(){
   if(f===1){ out.push({id:"o_recep",role:"o_recep",x:430,y:138,dir:"down"}); if(sc&&!raided()) out.push({id:"o_guard",role:"o_guard",x:806,y:150,dir:"left"}); }
   else if(!sc){ const sp=f===2?[[230,316],[460,486],[740,330]]:[[440,220],[640,330]], bodies=["o_s_workMan","o_s_workMom","o_s_studentBoy","o_s_studentGirl"];
     sp.forEach(([x,y],k)=>out.push({id:bodies[(k+S.bld+f)%4],role:"o_staff",x,y,dir:["down","left","right"][k%3],k:(S.bld*5+f*2+k)})); }
+  else if(f===2 && !raided()){ const b=["cin_sc_workMan","cin_sc_workMom","cin_sc_studentBoy","cin_sc_studentGirl"]; let k=0;
+    for(let i=0;i<3;i++) for(const x of [150,350,550]) if((i+x)%3!==1) out.push({id:b[(k++)%4],role:"o_scam",x,y:248+i*130,dir:"up",k}); }
   else if(f===2) out.push({id:"police",role:"o_cop",x:700,y:300,dir:"left"});
   else DORM_ROOMS.forEach((r,k)=>out.push({id:["o_t_workMan","o_t_workMom","o_t_studentGirl","o_t_studentBoy"][k%4],role:"o_trap",x:r.cx-24,y:r.top?205:500,dir:"down",k}));
   return out;
@@ -109,10 +111,15 @@ function inLift(){ return S.zone===8 && player.y<124 && player.x>OFF_LIFT.x0 && 
 function askLift(){
   keys.clear(); target=null; targetNpc=null; endJoy&&endJoy(); player.y=154; player.dir="down";
   const f=offFloor();
-  if(isScam(S.bld) && !raided()){
+  if(isScam(S.bld) && !raided() && S.uc && f===1 && !S.ucOk){
+    S.ucOk=true; save();
+    say("o_guard", lines([t("หยุดก่อน! …อ้อ บัตรพนักงานใหม่เหรอ","Stop! …Oh, a new staff pass?"),t("ขึ้นไปได้ ชั้น 2 ห้องทำงาน ชั้น 3 ห้องพัก อย่าเดินเพ่นพ่านล่ะ","Go on up. Floor 2 is the work room, floor 3 the dorm. Don't wander.")]),{onEnd:()=>askLift()});
+    return;
+  }
+  if(isScam(S.bld) && !raided() && !S.uc){
     const first=!S.hqFound; S.hqFound=true; save(); hudKey="";
     say("o_guard", lines([t("เดี๋ยวๆ ชั้นบนเฉพาะพนักงานเท่านั้น ห้ามขึ้น","Hold on. Upstairs is staff only. You can't go up."),t("บริษัทเราทำการตลาดออนไลน์ ไม่รับคนนอก กลับไปเถอะ","We do online marketing. No visitors. Off you go.")]),
-      {onEnd:()=>{ if(first) setTimeout(()=>{ sfx("ev"); toast(L("🕵️ ตึกนี้แปลก… มียามกันลิฟต์ แล้วได้ยินเสียงคนคุยโทรศัพท์หลายสิบสายจากชั้นบน","🕵️ Something's off… a guard blocks the lift, and you hear dozens of phone calls upstairs")); setTimeout(()=>toast(L("ไปบอกพี่ภพที่สถานีตำรวจ (ซอย 2) ว่าเจอตึกแล้ว","Tell Phop at the police station (Soi 2) you found the building")),3400); },300); }});
+      {onEnd:()=>{ if(first) setTimeout(()=>{ sfx("ev"); toast(L("🕵️ ตึกนี้แปลก… มียามกันลิฟต์ แล้วได้ยินเสียงคนคุยโทรศัพท์หลายสิบสายจากชั้นบน","🕵️ Something's off… a guard blocks the lift, and you hear dozens of phone calls upstairs")); setTimeout(()=>toast(L("ไปบอกพี่ภพที่สถานีตำรวจ (ซอย 2) ว่าเจอตึกแล้ว","Tell Phop at the police station (Soi 2) you found the building")),3400); },300); else if(!S.uc) setTimeout(()=>toast(L(`ต้องส่งเบาะแสให้พี่ภพ ${UC_MIN} ชิ้นก่อน ถึงจะได้บัตรพนักงานขึ้นไป`,`Hand Phop ${UC_MIN} clues to get a staff pass for upstairs`)),300); }});
     return;
   }
   const btns=[1,2,3].map(k=>`<button class="btn ${k===f?"g":"y"}" data-lift="${k}" ${k===f?"disabled":""}><span>${L(`ชั้น ${k}`,`Floor ${k}`)} · ${esc(offFloorName(k))}${k===f?L(" (อยู่ที่นี่)"," (here)"):""}</span></button>`).join("");
@@ -123,6 +130,8 @@ function goOffFloor(k){
   escort=null; S.floor=k; save(); setWorld(); buildCast(); drawStatic();
   player.x=740; player.y=154; player.dir="down"; keys.clear(); target=null; targetNpc=null; endJoy&&endJoy(); sfx("blip"); hudKey=""; hud();
   toast(`${L(`ชั้น ${k}`,`Floor ${k}`)} · ${offFloorName(k)}`);
+  if(isScam(S.bld) && k===3 && !raided()){ setTimeout(()=>toast(L("🔒 ทุกห้องล็อกจากข้างนอก… ลองคุยกับคนข้างในเบาๆ","🔒 Every door is locked from outside… talk quietly to the people inside")),2600); return; }
+  if(isScam(S.bld) && k===2 && !raided()){ setTimeout(()=>toast(L("📞 ห้องเต็มไปด้วยคนคุยโทรศัพท์… ไวท์บอร์ดข้างบนน่าสนใจ","📞 The room is full of people on calls… that whiteboard looks interesting")),2600); return; }
   if(isScam(S.bld) && k===3 && !S.dormSeen){ S.dormSeen=true; save(); setTimeout(()=>toast(L("🔒 ทุกห้องล็อกจากข้างนอก… มีเสียงคนร้องไห้ คุยกับแต่ละคนเพื่อไขกุญแจ","🔒 Every door is locked from outside… someone's crying. Talk to each person to unlock their door")),2600); }
 }
 const freedN=()=>Object.keys(S.freed||{}).length;
@@ -154,6 +163,14 @@ function talkOffice(n){
   if(n.role==="o_cop") return say(n.id, lines([t("ที่นี่คือห้องทำงานของแก๊งเงา โทรหาเหยื่อวันละหลายพันสาย มีสคริปต์ปลอมเป็นธนาคาร ตำรวจ ไปรษณีย์","This is the Shadow gang's work room. Thousands of calls a day, with scripts posing as banks, police and couriers."),
     t("ซิมการ์ดเป็นลังๆ บัญชีม้าอีกเพียบ ตรงกับหลักฐานที่คุณเก็บมาทุกอย่าง","Crates of SIM cards and piles of mule accounts. It all matches the evidence you collected."),
     freedN()<DORM_ROOMS.length?t("แต่ที่แย่กว่าคือชั้น 3 คนที่นั่นถูกหลอกมาทำงานแล้วถูกขังไว้ ช่วยพี่ไขกุญแจห้องพวกเขาหน่อย","Worse is floor 3. People were tricked into working here and locked in. Help me unlock their rooms."):t("ทุกคนในชั้น 3 ได้ออกมาแล้ว เก่งมาก","Everyone on floor 3 is out. Great work.")]));
+  if(n.role==="o_scam"){ const SC=[[t("เงียบหน่อย กำลังโทรอยู่ “สวัสดีค่ะ ติดต่อจากธนาคาร…”","Shh, I'm on a call. “Hello, this is your bank…”")],[t("พนักงานใหม่เหรอ อ่านสคริปต์บนไวท์บอร์ดให้จำ เดี๋ยวหัวหน้าดุ","New here? Memorise the script on the whiteboard or the boss will yell.")],[t("วันนี้ยังโทรไม่ถึงเป้า… ถ้าไม่ถึงก็อดข้าวอีก","Still short of today's target… miss it and no dinner again.")]];
+    return say(n.id, lines(SC[n.k%SC.length])); }
+  if(n.role==="o_trap" && !raided()){
+    const first=!S.ev.hq_dorm;
+    return say(n.id, lines([t("…เธอเป็นใคร ไม่ใช่คนของพวกมันใช่ไหม","…Who are you? You're not one of them, are you?"),
+      t("พวกเราถูกหลอกมาทำงาน บัตรประชาชนกับมือถือถูกยึด ห้องล็อกจากข้างนอกทุกคืน","We were tricked into coming here. They took our IDs and phones and lock the rooms every night."),
+      t("ตอนนี้ยังไขกุญแจไม่ได้ ถ้าพวกมันรู้จะแย่ ช่วยบอกตำรวจทีนะ","Don't unlock anything yet, they'd find out. Please tell the police.")]),{onEnd:()=>{ if(first) gainClue("hq_dorm",true); }});
+  }
   if(n.role==="o_trap"){
     S.freed=S.freed||{};
     if(S.freed[n.k]) return say(n.id, lines([t("ขอบคุณมากนะ ตำรวจกำลังพาพวกเราไปพบเจ้าหน้าที่ช่วยเหลือ","Thank you so much. The police are taking us to support staff."),t("ถ้ามีคนรู้จักหายไปหลังได้งานแบบนี้ แจ้งศูนย์ช่วยเหลือสังคม 1300 ได้","If someone you know disappears after a job like this, call the 1300 social assistance hotline.")]));

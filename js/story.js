@@ -25,11 +25,13 @@ function PROLOGUE(){ return [
   P("#4A3B6B","📚👥🔍",["จุดแรกคือห้องสมุดเมือง คนเยอะที่สุดแถวนี้ และมีคนแปลกหน้ามาวนเวียนบ่อย","First stop: the City Library. It's the busiest place around, and strangers keep hanging about."],[["police","เบาะแสยิ่งเยอะ ตอนบุกยิ่งจับได้ครบ เจอแล้วเอามาส่งผมที่สถานีตำรวจนะ","The more clues you bring, the more of the gang we catch. Bring them to me at the police station."]])
 ];}
 
-function endingNo(){
-  const pct=starTotal()/starMax(), caughtAll=[1,2,3,4].every(z=>S.caught&&S.caught[z]), witness=S.best.parttime==="safe";
-  if(pct>=.9 && witness && caughtAll) return 5;
-  if(pct>=.75) return 4; if(pct>=.55) return 3; if(pct>=.35) return 2; return 1;
+/* the ending depends on how many clues you handed to Phop */
+function endingFrom(handed){
+  const pct=handed/clueTotal(), witness=S.best.parttime==="safe";
+  if(pct>=.9 && witness) return 5;
+  if(pct>=.72) return 4; if(pct>=.5) return 3; if(pct>=.3) return 2; return 1;
 }
+function endingNo(){ return endingFrom(S.handed||0); }
 const ENDINGS={
  5:{t:["ทลายรัง","Nest destroyed"],c:"#2BB673",panels:()=>[
    P("#22344A","🚓🚓🚓🌅",["รุ่งเช้า ตำรวจล้อมตึกฝั่งตรงข้ามถนนเงียบๆ ทุกทางออก","At dawn, police quietly surround every exit of the building across the road."],[["police","หลักฐานครบทุกสาย มีพยาน มีคนแฝงตัวถูกจับครบ บุกได้!","Every thread is covered, we have a witness, every hidden hacker is caught. Go!"]]),
@@ -65,36 +67,22 @@ const ENDINGS={
 const RAID_OPEN=()=>[P("#22344A","👮🗂️🧩",["ที่สถานีตำรวจ พี่ภพกางหลักฐานทุกชิ้นบนโต๊ะ","At the station, Phop lays every piece of evidence on the table."],[["police","บัญชีม้า เซิร์ฟเวอร์ ซิมการ์ด ทุกสายชี้ไปที่ตึกเดียวกัน","Mule accounts, server, SIM cards: every thread points to one building."]])];
 function playEnding(){
   const n=endingNo(), E=ENDINGS[n];
-  S.ending=n; S.bestEnding=Math.max(S.bestEnding||0,n); if(n>=2){ S.bustTier=Math.max(S.bustTier||0,n); S.busted=true; } save();
+  S.ending=n; S.bestEnding=Math.max(S.bestEnding||0,n); if(n>=2){ S.bustTier=Math.max(S.bustTier||0,n); S.busted=true; } if(n>=3){ jailGang(Math.max(n,S.bestEnding)); S.freed=Object.fromEntries(DORM_ROOMS.map((_,k)=>[k,true])); S.freedAll=true; } save();
   playEndingScene(n,true);
 }
 function endingCard(n){
-  const E=ENDINGS[n], pct=Math.round(starTotal()/starMax()*100), caught=[1,2,3,4].filter(z=>S.caught&&S.caught[z]).length;
+  const E=ENDINGS[n], h=S.handed||0, pct=Math.round(h/clueTotal()*100), bd=clueBreakdown();
   const tick=(ok)=>ok?"✅":"⬜";
+  const rows=Object.entries(CLUE_SRC).map(([k,v])=>bd[k]?`<li>${tick(bd[k][0]===bd[k][1])} ${v[S.lang]} ${bd[k][0]}/${bd[k][1]}</li>`:"").join("");
   openSheet("unlock", `<div class="unlockhero" style="background:${E.c}"><span class="eyebrow">${L("ฉากจบ","Ending")} ${n} / 5</span><div class="ubig">${E.t[EN()?1:0]}</div><p>${L("ฉากจบที่ดีที่สุดที่เคยได้","Best ending so far")}: ${S.bestEnding}/5</p></div>
     <div class="sh-body"><div class="box"><h4>${L("สิ่งที่ส่งผลต่อฉากจบ","What decides the ending")}</h4><ul class="list">
-      <li>★ ${L("ดาวรวม","Stars")} ${starTotal()}/${starMax()} (${pct}%) · ${L("ฉาก 2: 35% · 3: 55% · 4: 75% · 5: 90%","Ending 2: 35% · 3: 55% · 4: 75% · 5: 90%")}</li>
-      <li>${tick(S.best.parttime==="safe")} ${L("ปวีณายอมเป็นพยาน (เคสมหาวิทยาลัย ★★★)","Paweena agrees to testify (university case ★★★)")}</li>
-      <li>${tick(caught===4)} ${L(`จับคนแฝงตัวปล่อย Wi-Fi ปลอมได้ ${caught}/4 ร้าน`,`Hidden Wi-Fi hackers caught: ${caught}/4 shops`)}</li></ul></div>
-    ${n<5?`<p>${L("เล่นเคสซ้ำให้ได้ ★★★ มากขึ้น แล้วกลับไปคุยกับพี่ภพที่สถานีตำรวจเพื่อบุกอีกครั้ง","Replay cases for more ★★★, then talk to Phop at the police station to raid again.")}</p>`:`<p>${L("ทุกเคสในเกมมาจากกลโกงที่เกิดขึ้นจริงในไทย จำไว้: หยุด คิด ตรวจสอบ","Every case is based on real scams in Thailand. Remember: stop, think, check.")}</p>`}
+      <li>🧩 ${L("เบาะแสที่ส่งตำรวจ","Clues handed to Phop")} ${h}/${clueTotal()} (${pct}%) · ${L("ฉาก 2: 30% · 3: 50% · 4: 72% · 5: 90%","Ending 2: 30% · 3: 50% · 4: 72% · 5: 90%")}</li>
+      ${rows}
+      <li>${tick(S.best.parttime==="safe")} ${L("ปวีณายอมเป็นพยาน (ต้องได้ฉาก 5)","Paweena agrees to testify (needed for ending 5)")}</li></ul></div>
+    ${n<5?`<p>${L("หาเบาะแสเพิ่ม ส่งให้พี่ภพ แล้วบุกใหม่ได้ทุกเมื่อ","Find more clues, hand them to Phop, and raid again any time.")}</p>`:`<p>${L("ทุกเคสในเกมมาจากกลโกงที่เกิดขึ้นจริงในไทย จำไว้: หยุด คิด ตรวจสอบ","Every case is based on real scams in Thailand. Remember: stop, think, check.")}</p>`}
     <div class="btns">${btn(L("กลับไปเล่นต่อ","Back to the game"),"data-close","y")}</div></div>`);
 }
 function jailList(){ if(!Array.isArray(S.jailed)) S.jailed=Object.keys(S.caught||{}).map(z=>({b:"workMan",z:+z})); return S.jailed; }
-function talkPolice(n){
-  const jl=jailList().length; if(jl && (S.jailSeen||0)<jl){ S.jailSeen=jl; save(); toast(L(`🔒 คนร้ายที่คุณจับได้ ${jl} คน ถูกขังอยู่ในห้องขัง (ประตูขวามือ)`,`🔒 ${jl} ${jl>1?"suspects":"suspect"} you caught ${jl>1?"are":"is"} in the cell block (door on the right)`)); }
-  if(!S.seen[7]){ say(n.id, lines(ZONE_INTRO[7]), {onEnd:()=>{ S.seen[7]=true; save(); zoneEvent(); }}); return; }
-  const done=ALLCASES().filter(k=>S.best[k]).length, all=ALLCASES().length;
-  if(!allDone()){
-    const left=Object.entries(ZONES).filter(([z,v])=>!v.bonus).map(([z,v])=>[z,v.cases.filter(k=>!S.best[k]).length]).filter(([,c])=>c>0);
-    say(n.id, lines([t(`ตอนนี้ช่วยไปแล้ว ${done}/${all} คน หลักฐานยังไม่พอบุกตึก`,`You've helped ${done}/${all} people so far. Not enough evidence for a raid yet.`),
-      t(`ยังเหลือที่: ${left.map(([z,c])=>ZONES[z].name.th+" ("+c+")").join(", ")}`,`Still to do: ${left.map(([z,c])=>ZONES[z].name.en+" ("+c+")").join(", ")}`),
-      t("ยิ่งได้ ★★★ เยอะ หลักฐานยิ่งแน่น ฉากบุกจะยิ่งดี","The more ★★★ you earn, the stronger the evidence and the better the raid.")])); return;
-  }
-  if(!S.hqFound && !S.busted){ say(n.id, lines([t("หลักฐานครบแล้ว! แต่เรายังไม่รู้ว่าแก๊งซ่อนอยู่ตึกไหน","The evidence is complete! But we still don't know which building the gang is hiding in."),t("ฝั่งตรงข้ามถนนมีตึกออฟฟิศ 3 ตึก หน้าตาเหมือนบริษัทธรรมดาหมด ลองเข้าไปสำรวจทีละตึก ดูว่าตึกไหนมีอะไรแปลกๆ","There are three office buildings across the road, all looking like normal companies. Check each one for anything odd."),t("เจอแล้วกลับมาบอกพี่ แล้วเราจะบุกทันที","Find it, come back, and we raid right away.")])); return; }
-  const again=S.ending && S.ending<5;
-  say(n.id, lines([again?t(`ครั้งก่อนได้ฉากจบ ${S.ending}/5 อยากลองบุกใหม่ด้วยหลักฐานที่ดีขึ้นไหม`,`Last time we got ending ${S.ending}/5. Want to raid again with better evidence?`):t("หลักฐานครบแล้ว! มาดูกันว่าจะชี้ไปที่ใคร","The evidence is complete! Let's see where it points.")]),
-    {choices:[{label:{th:"🗂️ ส่งหลักฐานและวางแผนบุก",en:"🗂️ Hand in the evidence and plan the raid"},fn:()=>openCase("bust",n)},{label:{th:"ยังก่อน",en:"Not yet"},ghost:true}]});
-}
 /* rooms for the two new zones */
 function drawRoomShell(g,o){
   g.fillStyle=o.floor[0]; g.fillRect(0,0,W,H);

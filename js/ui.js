@@ -150,14 +150,6 @@ function openCase(id, npc){
   C={id, npc, scene: late?c.lateStart:c.start, hist:[], order:null, applied:null, late}; renderCase();
 }
 function shuffle(n){ const a=[...Array(n).keys()]; for(let i=n-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
-function useLens(){
-  const c=CASES[S.lang][C.id], s=c.scenes[C.scene]; if(!S.items.lens) return;
-  const cs=[...$("sheet").querySelectorAll(".choice[data-ch]")].filter(b=>!b.disabled), bad=cs.find(b=>s.choices[+b.dataset.ch].v==="bad")||cs.find(b=>s.choices[+b.dataset.ch].v==="risky");
-  if(!bad){ toast(L("ข้อนี้เหลือแต่ทางที่ดีแล้ว","Only good choices left here")); return; }
-  S.items.lens--; save(); hudKey=""; sfx("ping"); bad.disabled=true; bad.classList.add("lensed");
-  if(s.clues&&s.clues.length&&!$("lensOut").innerHTML) $("lensOut").innerHTML=`<div class="clues"><ul><li>🔍 ${s.clues[0]}</li></ul></div>`;
-  const lb=$("sheet").querySelector("[data-lens]"); if(lb){ if(S.items.lens) lb.textContent=`🔍 ${L("ใช้แว่นนักสืบ","Use detective lens")} (${S.items.lens})`; else lb.remove(); }
-}
 /* ---------- first-case tutorial: spotlight each part of the case screen ---------- */
 let coach=null;
 const COACH_CASE=[
@@ -225,7 +217,7 @@ function renderCase(){
   const body=`<h3 class="ktitle">${s.title}</h3>${comicize(s.body, who)}`;
   const panel=`${from}<span class="sect">${L("คุณจะทำอย่างไร","What do you do?")}</span>
     <div class="cchoices">${C.order.o.map((ci,i)=>`<button class="choice" data-ch="${ci}"><span class="k">${"ABCD"[i]}</span><span>${s.choices[ci].t}</span></button>`).join("")}</div>
-    <button class="howto" data-howto>❔ ${L("วิธีเล่นเคส","How cases work")}</button>${S.items.lens?`<button class="clue-btn lens" data-lens>🔍 ${L("ใช้แว่นนักสืบ","Use detective lens")} (${S.items.lens})</button>`:""}<div id="lensOut"></div>`;
+    <button class="howto" data-howto>❔ ${L("วิธีเล่นเคส","How cases work")}</button>`;
   openSheet("case", c3(actor("think", pickLine(MOOD_LINES.think[S.lang])), bigPhone(c.title, body, true), panel));
   if(!C.hist.length) maybeCoach("case");
 }

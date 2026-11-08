@@ -132,9 +132,10 @@ function startTour(){
 function briefing(){
   const p=npcs.find(n=>n.id==="police"); if(p) face(player,p);
   say("police", lines([t(`ยินดีที่ได้รู้จักนะ ${nm(S.char)} นี่โอ๊ต อาสาสมัครไซเบอร์ เขาจะคอยช่วยน้องตลอดทาง`,`Nice to meet you, ${nm(S.char)}. This is Oat, a cyber volunteer. He'll back you up the whole way.`),
-    t("ทุกครั้งที่ช่วยคนได้ จะได้เบาะแสหนึ่งชิ้น เปิดดูได้ที่บอร์ดหลักฐานในมือถือ","Each person you help gives you a clue. You can see them on the evidence board on your phone."),
+    t("ทุกครั้งที่ช่วยคนได้ จะได้เบาะแสหนึ่งชิ้น เปิดดูได้ที่บอร์ดหลักฐาน","Each person you help gives you a clue. You can see them on the evidence board."),
+    t("รับแว่นนักสืบนี่ไปด้วย กดปุ่ม 🔍 (หรือ Q) เพื่อส่องหาของที่ซ่อนอยู่ในห้อง เจอแล้วเอามาส่งพี่ที่สถานีตำรวจ","Take this detective lens. Press 🔍 (or Q) to sweep for hidden things in a room, and bring what you find to me at the police station."),
     t("เริ่มที่ห้องสมุดเมืองก่อนเลย ออกประตูด้านล่างแล้วเดินลงไปที่สี่แยก ห้องสมุดอยู่ทางซ้าย","Start with the City Library. Go out the bottom door, walk down to the crossroads, and the library is on the left.")]),
-    {onEnd:()=>{ S.briefed=true; save(); buildCast(); startTour(); }});
+    {onEnd:()=>{ S.briefed=true; S.items.lens=Math.max(1,S.items.lens||0); save(); hudKey=""; buildCast(); startTour(); }});
 }
 function mentorIntro(){
   const n=npcs.find(x=>x.role==="mentor");
@@ -151,7 +152,7 @@ function mentorIntro(){
 }
 
 /* ---------- talking ---------- */
-function interact(){ const n=nearest(); if(n){ face(player,n); talkTo(n); return; } if(nearKiosk()){ openArcade(); return; } if(nearCat()){ feedCat(); return; } if(nearBirds()){ feedBirds(); return; } if(nearHQ()){ hqT=0; tryHQ(); return; } if(nearRepair()){ openRepair(); return; } if(nearVillain()){ talkVillain(); return; } const d=nearDoor(); if(d) tryEnter(d); }
+function interact(){ const n=nearest(); const sp=nearSpot(); if(sp && (!n || Math.hypot(sp.x-player.x,sp.y-player.y)<Math.hypot(n.x-player.x,n.y-player.y))){ collectSpot(sp); return; } if(n){ face(player,n); talkTo(n); return; } if(nearKiosk()){ openArcade(); return; } if(nearCat()){ feedCat(); return; } if(nearBirds()){ feedBirds(); return; } if(nearHQ()){ hqT=0; tryHQ(); return; } if(nearRepair()){ openRepair(); return; } if(nearVillain()){ talkVillain(); return; } const d=nearDoor(); if(d) tryEnter(d); }
 function nearKiosk(){ return S.zone===0 && S.char && Math.hypot(player.x-KIOSK.x,player.y-(KIOSK.y+18))<58; }
 function nearDoor(){ if(S.zone!==0||!S.char) return null; return BUILDINGS.find(b=>Math.abs(player.x-b.door)<46 && player.y<300) || null; }
 let lockToastT=0;
