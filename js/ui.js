@@ -63,7 +63,7 @@ let pickChar=null;
 function openStart(){
   pickChar = PICKS.includes(S.char) ? S.char : (PICKS.includes(pickChar) ? pickChar : "studentGirl");
   const resume = S.char && (S.intro || doneCount());
-  openSheet("start", `<div class="hero-s">${langSw()}<span class="eyebrow">${L("รู้ทันไซเบอร์ · ภารกิจแก๊งเงา","Cyber Savvy · The Shadow gang")}</span>
+  openSheet("start", `<div class="hero-s"><div class="startset">${langSw()}<button type="button" class="setbtn-s" data-settings>⚙️ ${L("ตั้งค่า · ขนาดตัวอักษร","Settings · text size")}</button></div><span class="eyebrow">${L("รู้ทันไซเบอร์ · ภารกิจแก๊งเงา","Cyber Savvy · The Shadow gang")}</span>
     <div class="big">${L("ภารกิจรู้ทันไซเบอร์","Cyber Mission")}</div>
     <p>${L("คุณเป็นนักศึกษามหาวิทยาลัยหัวเฉียวฯ ตำรวจไซเบอร์ขอให้ช่วยสืบแก๊งมิจฉาชีพที่อยู่แถวมหาลัย ช่วยคนที่กำลังจะโดนหลอก เก็บเบาะแส แล้วพาตำรวจไปจับแก๊งให้ได้","You're a student at Huachiew Chalermprakiet University. Cyber police ask you to help track a scam gang near campus: help people about to be scammed, collect clues, and lead the police to the gang.")}</p></div>
     <div class="sh-body">

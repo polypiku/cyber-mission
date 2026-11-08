@@ -39,7 +39,7 @@ const fresh = ()=>({lang:"th", char:null, name:"", chapter:0, intro:false, resul
 let S = fresh();
 try{ const v=JSON.parse(localStorage.getItem(SAVE_KEY)||"null"); if(v&&v.bars) S=Object.assign(fresh(),v); }catch(e){}
 for(const [k,r] of Object.entries(S.results)) if(!S.best[k]) S.best[k]=r.type;
-if(!S.late) S.late={}; if(!S.ev) S.ev={}; if(!S.inbox) S.inbox=[]; if(!S.msgSeen) S.msgSeen=[]; if(!S.msgStats) S.msgStats={ok:0,bad:0}; if(!S.mg) S.mg={sms:0,url:0}; if(S.rank==null) S.rank=0; if(S.sound==null) S.sound=true; if(!S.seenCases) S.seenCases=[]; if(!S.fed) S.fed={cat:0,birds:0}; if(!S.wifi) S.wifi={}; if(S.coins==null) S.coins=100; if(!S.items) S.items={shield:0,lens:0,ins:0,data:false,shoes:false}; if(S.phoneBroken===undefined) S.phoneBroken=null; S.items.lens=Math.min(3,S.items.lens||0); if(S.briefed&&!S.items.lens) S.items.lens=1;
+if(!S.late) S.late={}; if(!S.ev) S.ev={}; if(!S.inbox) S.inbox=[]; if(!S.msgSeen) S.msgSeen=[]; if(!S.msgStats) S.msgStats={ok:0,bad:0}; if(!S.mg) S.mg={sms:0,url:0}; if(S.rank==null) S.rank=0; if(S.sound==null) S.sound=true; if(!S.seenCases) S.seenCases=[]; if(!S.fed) S.fed={cat:0,birds:0}; if(!S.wifi) S.wifi={}; if(S.coins==null) S.coins=100; if(!S.items) S.items={shield:0,lens:0,ins:0,data:false,shoes:false}; if(S.phoneBroken===undefined) S.phoneBroken=null; S.items.lens=Math.min(3,S.items.lens||0); if(!S.ts) S.ts=1; applyTS(); if(S.briefed&&!S.items.lens) S.items.lens=1;
 const save = ()=>{ try{ localStorage.setItem(SAVE_KEY, JSON.stringify(S)); }catch(e){} };
 const EN = ()=>S.lang==="en";
 const L = (th,en)=>EN()?en:th;
@@ -162,6 +162,7 @@ function recoverRole(){
   return null;
 }
 const ZN = ()=>{ if(S.zone!==0) return ZONES[S.zone]||ZONES[1]; const r=recoverRole(); OUTZ.roleCase=r?{[r]:"recover"}:{}; return OUTZ; };
+function applyTS(){ document.documentElement.style.setProperty("--ts", String(S.ts||1)); }
 const totalScore=()=>MAINZ().reduce((a,z)=>a+zoneScore(z),0), totalMax=()=>MAINZ().reduce((a,z)=>a+zoneMax(z),0);
 const BAR_OF = {scholar:"privacy", itmail:"privacy", parttime:"money", fakeprof:"money", report:"money", ransom:"privacy", invest:"money", publicpc:"privacy", charge:"money", helper:"privacy", update:"privacy", airdrop:"privacy", qr:"money", bank:"money", wifi:"privacy", chat:"trust", pkg:"privacy", call:"money", job:"trust", seller:"money", rush:"money", video:"money", mule:"trust", remote:"privacy", merit:"trust", inherit:"money", romance:"trust", fortune:"money", topup:"money", trade:"privacy", secret:"trust", parent:"money"};
 /* ---------- the Shadow gang: evidence collected from each case ---------- */

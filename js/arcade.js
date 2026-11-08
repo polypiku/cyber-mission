@@ -66,9 +66,22 @@ function endMG(){
 }
 
 /* menu */
+const TS_OPTS=[[0.9,"เล็ก","Small"],[1,"ปกติ","Normal"],[1.15,"ใหญ่","Large"],[1.3,"ใหญ่มาก","X-large"]];
+const tsSw=()=>`<div class="tssw" role="group" aria-label="${L("ขนาดตัวอักษร","Text size")}">${TS_OPTS.map(([v,th,en])=>`<button type="button" data-ts="${v}" aria-pressed="${(S.ts||1)===v}"><b style="font-size:${v}rem">ก A</b><small>${L(th,en)}</small></button>`).join("")}</div>`;
+let setFromStart=false;
+function openSettings(fromStart){
+  if(fromStart!=null) setFromStart=!!fromStart;
+  openSheet(setFromStart?"start":"settings", `${top_(L("⚙️ ตั้งค่า","⚙️ Settings"),!setFromStart)}<div class="sh-body">
+    <div class="box"><h4>${L("ขนาดตัวอักษร","Text size")}</h4>${tsSw()}<p class="tspreview">${L("ตัวอย่าง: ถ้ามีคนโทรมาอ้างเป็นธนาคาร ให้วางสายแล้วโทรกลับเบอร์หลังบัตรเอง","Example: if someone calls claiming to be your bank, hang up and call the number on your card.")}</p></div>
+    <div class="box"><h4>${L("ภาษา","Language")}</h4>${langSw()}</div>
+    <div class="btns"><button class="btn g" data-sound aria-pressed="${S.sound}"><span>${S.sound?L("เสียง: เปิด","Sound: on"):L("เสียง: ปิด","Sound: off")}</span></button></div>
+    <div class="btns">${btn(L("เสร็จแล้ว","Done"),setFromStart?"data-backstart":"data-close","y")}</div></div>`);
+  const bs=$("sheet").querySelector("[data-backstart]"); if(bs) bs.onclick=()=>{ setFromStart=false; openStart(); };
+}
 function openMenu(){
   openSheet("menu", `${top_(L("เมนู","Menu"))}<div class="sh-body">
     <div class="box"><h4>${L("ภาษา","Language")}</h4>${langSw()}</div>
+    <div class="box"><h4>${L("ขนาดตัวอักษร","Text size")}</h4>${tsSw()}</div>
     <div class="btns"><button class="btn g" data-sound aria-pressed="${S.sound}"><span>${S.sound?L("เสียง: เปิด","Sound: on"):L("เสียง: ปิด","Sound: off")}</span></button><button class="btn g" data-dex><span>📖 ${L("สมุดกลโกง","Scam handbook")}</span></button></div>
     <div class="btns"><button class="btn y" data-tour><span>🧭 ${L("ดูทัวร์วิธีเล่นอีกครั้ง","Replay the how-to-play tour")}</span></button></div>
     <div class="box"><h4>${L("วิธีเล่น","How to play")}</h4><ul class="list">
@@ -215,7 +228,9 @@ function wireSheet(){
   on("[data-sound]",(b)=>{ S.sound=!S.sound; save(); b.setAttribute("aria-pressed",String(S.sound)); b.querySelector("span").textContent=S.sound?L("เสียง: เปิด","Sound: on"):L("เสียง: ปิด","Sound: off"); if(S.sound) sfx("good"); });
   on("[data-bust]",()=>{ closeSheet(); const pol=npcs.find(n=>n.role==="police"); if(S.zone===7&&pol){ talkPolice(pol); } else toast(L("เอาหลักฐานไปให้พี่ภพที่สถานีตำรวจ (ซอย 2 บนถนน)","Take the evidence to Phop at the police station (Soi 2 on the street)")); });
   on("[data-out]",()=>{ closeSheet(); goOutside(S.zone||1); });
-  on("[data-lang]",(b)=>{ S.lang=b.dataset.lang; save(); document.documentElement.lang=S.lang; drawStatic(); if(sheetMode==="start") openStart(); else if(sheetMode==="menu") openMenu(); hud(); });
+  on("[data-lang]",(b)=>{ S.lang=b.dataset.lang; save(); document.documentElement.lang=S.lang; drawStatic(); if(setFromStart) openSettings(); else if(sheetMode==="start") openStart(); else if(sheetMode==="menu") openMenu(); else if(sheetMode==="settings") openSettings(); hud(); });
+  on("[data-ts]",(b)=>{ S.ts=+b.dataset.ts; save(); applyTS(); sfx("blip"); const keepPick=sheetMode==="start"&&$("pname")?$("pname").value:null; if(setFromStart) openSettings(); else if(sheetMode==="start"){ openStart(); if(keepPick!=null&&$("pname")) $("pname").value=keepPick; } else if(sheetMode==="menu") openMenu(); else if(sheetMode==="settings") openSettings(); hudKey=""; hud(); });
+  on("[data-settings]",()=>{ const pn=$("pname"); if(pn) S.name=pn.value.trim(); openSettings(sheetMode==="start"); });
   on("[data-pick]",(b)=>{ pickChar=b.dataset.pick; sh.querySelectorAll("[data-pick]").forEach(x=>x.setAttribute("aria-pressed",String(x===b))); castList(); });
   on("[data-go]",(b)=>{
     if(b.dataset.go==="new"){ const lang=S.lang, nmIn=($("pname")&&$("pname").value||"").trim().slice(0,16); S=fresh(); S.lang=lang; S.char=pickChar; S.name=nmIn; S.zone=6; S.seen={6:true}; player.x=432; player.y=520; player.dir="up"; }
@@ -249,6 +264,7 @@ function wireSheet(){
 function resetAll(){ const lang=S.lang, ch=S.char; S=fresh(); S.lang=lang; S.char=ch; save(); setWorld(); buildCast(); drawStatic(); hudKey=""; player.x=432; player.y=500; player.dir="up"; closeSheet(); openStart(); }
 $("phoneBtn").onclick=()=>{ if(!D) openPhone(); };
 $("menuBtn").onclick=()=>{ if(!D) openMenu(); };
+$("setBtn").onclick=()=>{ if(!D) openSettings(false); };
 /* DEBUG (temporary): shortcut to preview the 5 endings without changing the save */
 (function(){
   const b=document.createElement("button"); b.id="dbgEnd"; b.textContent="🎬"; b.title="ดูฉากจบ (ทางลัดชั่วคราว)";
@@ -263,4 +279,4 @@ $("menuBtn").onclick=()=>{ if(!D) openMenu(); };
 })();
 $("prog").onclick=()=>{ if(!D && $("peek").hidden) openZones(); };
 $("boardBtn").onclick=()=>{ if(!D && $("peek").hidden) openBoard(); };
-$("veil").addEventListener("click",(e)=>{ if(e.target===$("veil") && (sheetMode==="phone"||sheetMode==="menu")) closeSheet(); });
+$("veil").addEventListener("click",(e)=>{ if(e.target===$("veil") && (sheetMode==="phone"||sheetMode==="menu"||sheetMode==="settings")) closeSheet(); });
