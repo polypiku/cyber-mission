@@ -898,3 +898,7 @@ body.cin .hud,body.cin #phoneBtn,body.cin #prompt,body.cin #dbgEnd,body.cin #joy
 .goal{position:fixed;left:50%;transform:translateX(-50%);z-index:5;max-width:min(560px,calc(100vw - 24px));background:var(--yellow);border:var(--bw) solid var(--ink);box-shadow:3px 3px 0 var(--ink);
   font:inherit;font-weight:700;font-size:.86rem;line-height:1.35;padding:6px 14px;border-radius:20px;cursor:pointer;text-align:center;color:var(--ink)}
 .goal[hidden]{display:none}
+.bar-row.flash-up{animation:barUp 1.5s ease-out}.bar-row.flash-down{animation:barDown 1.5s ease-out}
+@keyframes barUp{0%,40%{background:#BFF0D2;transform:scale(1.08)}100%{background:transparent;transform:none}}
+@keyframes barDown{0%,40%{background:#FFD0C7;transform:scale(1.08)}100%{background:transparent;transform:none}}
+@media (prefers-reduced-motion:reduce){.bar-row.flash-up,.bar-row.flash-down{animation:none}}

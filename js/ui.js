@@ -226,8 +226,9 @@ function applyResult(type){
   if(type==="safe"){ d[bar]=10; if(bar!=="trust") d.trust=5; }
   else if(type==="warn"){ d[bar]=-10; }
   else { d[bar]=-30; if(bar!=="trust") d.trust=-10; }
-  for(const [k,v] of Object.entries(d)) S.bars[k]=Math.max(0,Math.min(100,S.bars[k]+v));
-  return d;
+  const out={};
+  for(const [k,v] of Object.entries(d)){ const was=S.bars[k]; S.bars[k]=Math.max(0,Math.min(100,was+v)); out[k]=S.bars[k]-was; if(!out[k]) out[k]=v>0?"max":"min"; }
+  return out;
 }
 function renderEnding(c){
   const e=c.endings[C.scene];
@@ -250,7 +251,7 @@ function renderEnding(c){
     if(zoneDone(S.zone) && !S.zoneDoneSeen?.[S.zone]){ S.zoneDoneSeen={...(S.zoneDoneSeen||{}),[S.zone]:true}; }
     save();
   }
-  const deltas=Object.entries(C.applied).map(([k,v])=>`<span class="delta ${v>0?"up":"down"}">${barName(k)} ${v>0?"+":"−"}${Math.abs(v)}</span>`).join("")+(C.coins?coinTag(C.coins):"");
+  const deltas=Object.entries(C.applied).map(([k,v])=>v==="max"?`<span class="delta up">${barName(k)} ${L("เต็ม 100 แล้ว","already full")}</span>`:v==="min"?`<span class="delta down">${barName(k)} ${L("เหลือ 0","at 0")}</span>`:`<span class="delta ${v>0?"up":"down"}">${barName(k)} ${v>0?"+":"−"}${Math.abs(v)}</span>`).join("")+(C.coins?coinTag(C.coins):"");
   const body=`<div class="endtop"><span class="badge t-${e.type}">${e.label||TL(e.type)}</span></div>
     <h3 class="ktitle">${e.title}</h3>${makePanel(e.story, (C.npc&&C.npc.id)||S.char, 0, e.type)}
     <div class="box"><h4>${L("บทเรียน","Lessons")}</h4><ul class="list">${e.lessons.map(l=>`<li>${l}</li>`).join("")}</ul></div>
