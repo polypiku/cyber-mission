@@ -238,6 +238,7 @@ function wireSheet(){
   });
   on("#actor",()=>{ if(C&&C.locked&&C.skip) C.skip(); });
   on("[data-done]",()=>finishCase());
+  on("[data-fix]",()=>openFix(C.id, ()=>{ if(!C) return; if(S.ev[C.id]){ C.newEv=true; C.needFix=false; } renderEnding(CASES[S.lang][C.id]); }));
   on("[data-replay]",()=>{ const id=C.id, npc=C.npc; C=null; openCase(id,npc); });
   on("[data-chat]",()=>{ closeSheet(); openCase("chat",null); });
   on("[data-msg]",(b)=>openMsg(b.dataset.msg));
