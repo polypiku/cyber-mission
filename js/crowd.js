@@ -123,7 +123,7 @@ const COACH_VIL=(M)=>[
 ];
 function stepWifi(dt){
   vilSay+=dt;
-  if(!vilOn() || !S.intro || S.phoneBroken || S.items.data || (S.wifi&&S.wifi[S.zone]) || busy()) return;
+  if(!vilOn() || !S.intro || S.phoneBroken || (S.wifi&&S.wifi[S.zone]) || busy()) return;
   if(S.zone!==1 && !S.seen[S.zone]) return;
   wifiT+=dt;
   if(!(S.tut&&S.tut.vil)){ if(S.zone===1 && doneCount()<1) return; if(wifiT<3 || coach) return; S.tut=S.tut||{}; S.tut.vil=true; save(); const m=npcs.find(n=>n.role==="mentor"); startCoach(COACH_VIL(m?m.id:"guardGirl")); wifiT=3; return; }
@@ -224,7 +224,6 @@ function pickWifi(k){
 }
 function talkVillain(){
   target=null; keys.clear();
-  if(S.items.data && !S.wifi[S.zone] && !S.phoneBroken){ sfx("blip"); toast(L("คุณใช้เน็ตมือถือตัวเองอยู่ Wi-Fi ปลอมของเขาทำอะไรคุณไม่ได้","You're on your own mobile data. His fake Wi-Fi can't touch you.")); return; }
   if(S.wifi[S.zone] || S.phoneBroken){ sfx("blip"); toast(S.phoneBroken?L("ชายฮู้ดดำหัวเราะเบาๆ “ขอบใจสำหรับรหัสนะ”","The hooded man chuckles: “Thanks for the password.”"):L("ชายฮู้ดดำหันหน้าหนี พิมพ์อะไรรัวๆ ในโน้ตบุ๊ก","The hooded man turns away and types fast on his laptop.")); return; }
   openWifi();
 }
@@ -239,12 +238,11 @@ function stepHack(dt){
   el.style.setProperty("--a",Math.min(1,p*1.15).toFixed(3));
   el.classList.toggle("lv2",p>.33); el.classList.toggle("lv3",p>.66);
   if(busy()) return;
-  S.hack.p=Math.min(1,p+dt/HACK_SECS);
+  S.hack.p=Math.min(1,p+dt/HACK_SECS*(S.items.vpn?.5:1));
   if(!RM && (flickT-=dt)<=0){ flickT=Math.max(.35,4.5-p*4)+Math.random()*1.2; $("stage").classList.add("flick"); setTimeout(()=>$("stage").classList.remove("flick"),90+p*220); if(p>.5) sfx("tick"); }
   if(!RM && p>.66 && (gpopT-=dt)<=0){ gpopT=1.8+Math.random(); const d=document.createElement("div"); d.className="vpop"; d.textContent=VPOP[Math.floor(Math.random()*VPOP.length)][EN()?1:0]; d.style.left=(8+Math.random()*60)+"%"; d.style.top=(22+Math.random()*50)+"%"; el.appendChild(d); setTimeout(()=>d.remove(),1500); }
   if(S.hack.p>=1){
     const h=S.hack; S.hack=null;
-    if(S.items.shield>0){ S.items.shield--; save(); hudKey=""; sfx("good"); toast(L("🛡 2FA กันไว้ได้! มัลแวร์ยึดบัญชีไม่สำเร็จ มือถือยังใช้ได้","🛡 2FA held! The malware couldn't take your accounts. Your phone still works")); return; }
     S.phoneBroken={zone:h.zone,net:h.net}; S.bars.money=Math.max(0,S.bars.money-5); S.virusStrikes=0; takeBreakSnap(); save(); hudKey=""; sfx("bad");
     toast(L("📵 สายไปแล้ว! มือถือถูกยึดทั้งเครื่อง ไปซ่อมที่ร้านริมถนน","📵 Too late! The phone's been taken over. Get to the street repair stall"));
   }
@@ -296,7 +294,7 @@ function lossCard(){
 }
 function acceptLoss(){
   {
-    S.coins=0; S.bars.money=5; S.bars.privacy=5; S.bars.trust=Math.max(0,S.bars.trust-20); S.phoneBroken=null; S.hack=null; S.preBreak=null; S.phoneLosses=(S.phoneLosses||0)+1; save(); hudKey=""; hud();
+    if(!S.items.cloud) S.coins=0; S.bars.money=5; S.bars.privacy=5; S.bars.trust=Math.max(0,S.bars.trust-20); S.phoneBroken=null; S.hack=null; S.preBreak=null; S.phoneLosses=(S.phoneLosses||0)+1; save(); hudKey=""; hud();
     cryUntil=performance.now()+20000; sfx("bad");
     toast(L("มือถือถูกล้างเครื่องแล้ว แต่เงินและข้อมูลหายหมด…","The phone has been wiped, but your money and data are gone…"));
   }
@@ -323,7 +321,7 @@ function openRepair(){
   $("sheet").querySelectorAll("[data-fix]").forEach(b=>b.onclick=()=>{
     const o=REPAIR_OPTS[+b.dataset.fix];
     if(!o.ok){ sfx("bad"); b.disabled=true; b.classList.add("dim"); $("fixOut").innerHTML=`<div class="endcard danger"><b>${L("ช่างส่ายหน้า","The repairer shakes his head")}</b><p style="margin:.3em 0 0">${o.why[EN()?1:0]}</p></div>`; return; }
-    const free=S.items.ins>0; if(free) S.items.ins--; const paid=free?0:addCoins(-40);
+    const free=false; const paid=addCoins(-40);
     S.phoneBroken=null; S.virusStrikes=0; S.preBreak=null; S.bars.privacy=Math.min(100,S.bars.privacy+5); S.repairs=(S.repairs||0)+1; save(); hudKey=""; sfx("good");
     $("sheet").querySelector(".sh-body").innerHTML=`<div class="endcard safe"><b>📱 ${L("ซ่อมเสร็จ!","Fixed!")}</b><p style="margin:.3em 0 0">${o.why[EN()?1:0]}</p>${free?`<span class="delta up">🧯 ${L("ประกันจ่ายให้ ซ่อมฟรี","Insurance paid, free repair")}</span>`:paid?`${coinTag(paid)} <small>${L("ค่าซ่อม","repair fee")}</small>`:`<span class="delta">${L("เงินไม่พอ ช่างซ่อมให้ฟรีครั้งนี้","Not enough money, he fixed it free this time")}</span>`} <span class="delta up">${barName("privacy")} +5</span></div>
       <div class="btns"><button class="btn y" data-close><span>${L("ขอบคุณครับ","Thanks")}</span></button><button class="btn g" data-shop><span>🛒 ${L("ดูร้านอัปเกรด","See upgrades")}</span></button></div>`;
@@ -345,26 +343,27 @@ function drawCoinFx(g,dt){
 }
 const coinTag=(n)=>`<span class="delta ${n>0?"up":"down"}">💵 ${n>0?"+":"−"}${BAHT(Math.abs(n))}</span>`;
 const SHOP=[
-  {id:"shield", i:"🛡", n:["เปิด 2FA","Turn on 2FA"], d:["ถ้าเผลอต่อ Wi-Fi ปลอม บัญชีไม่หลุด มือถือไม่พัง (ใช้ได้ 1 ครั้ง) แต่เงินที่โดนดูดไปก็ยังเสีย","If you fall for fake Wi-Fi, your accounts hold and the phone survives (once). The stolen money is still gone."], p:120, stack:true},
-  {id:"lens", i:"🔍", n:["แว่นนักสืบ","Detective lens"], d:["ใช้ในเคส ตัดตัวเลือกอันตรายทิ้ง 1 ข้อ","In a case, cross out one dangerous choice"], p:60, stack:true},
-  {id:"ins", i:"🧯", n:["ประกันมือถือ","Phone insurance"], d:["ซ่อมฟรี 1 ครั้งถ้าโดนแฮก","One free repair if you get hacked"], p:90, stack:true},
-  {id:"shoes", i:"👟", n:["รองเท้าวิ่ง","Running shoes"], d:["เดินเร็วขึ้น ไปทันเหตุการณ์จับเวลา","Walk faster, reach timed events in time"], p:80},
-  {id:"data", i:"📶", n:["แพ็กเน็ตมือถือ","Mobile data pack"], d:["ใช้เน็ตตัวเองตลอด Wi-Fi ปลอมจะไม่เด้งมาอีก","Always on your own data, so fake Wi-Fi stops popping up"], p:150}
+  {id:"pwm", i:"🔑", n:["ตัวจัดการรหัสผ่าน","Password manager"], d:["ตอนตั้งรหัสใหม่ในมือถือ กดปุ่มเดียวได้รหัสยาวและเดายาก","When setting a new password, one tap makes a long, unguessable one"], p:150},
+  {id:"vpn", i:"🛰️", n:["VPN","VPN"], d:["เข้ารหัสการเชื่อมต่อ ถ้าเผลอต่อ Wi-Fi ปลอม ไวรัสจะลามช้าลงครึ่งหนึ่ง","Encrypts your connection. On a fake Wi-Fi, malware spreads half as fast"], p:120},
+  {id:"cloud", i:"☁️", n:["สำรองข้อมูลคลาวด์","Cloud backup"], d:["ถ้ามือถือพังจนกู้ไม่ได้ เงินในกระเป๋าไม่หาย","If the phone is lost to malware, you keep your money"], p:100},
+  {id:"lens", i:"🔍", n:["อัปเกรดแว่นนักสืบ","Detective lens upgrade"], d:["ส่องได้ไกลขึ้น และเห็นเบาะแสที่ซ่อนลึกกว่าเดิม","Sweeps further and reveals better-hidden clues"], lv:[0,0,120,220]}
 ];
+const shopPrice=(it)=>it.lv?it.lv[Math.min(3,(S.items.lens||0)+1)]:it.p;
+const shopOwned=(it)=>it.lv?(S.items.lens||0)>=3:!!S.items[it.id];
 function openShop(msg){
-  const card=(it)=>{ const have=S.items[it.id], own=!it.stack&&have, poor=S.coins<it.p;
-    return `<div class="shopit ${own?"own":""}"><span class="si">${it.i}</span><div class="sb"><b>${it.n[EN()?1:0]}${it.stack&&have?` <em>×${have}</em>`:""}</b><small>${it.d[EN()?1:0]}</small></div>
-      <button class="buy" data-buy="${it.id}" ${own||poor?"disabled":""}>${own?L("มีแล้ว","Owned"):BAHT(it.p)}</button></div>`; };
-  openSheet("shop", `${top_(L("หมอโฟน · ร้านอัปเกรด","Phone Dr. · upgrades"))}<div class="sh-body">
+  const card=(it)=>{ const own=shopOwned(it), pr=shopPrice(it), poor=S.coins<pr, lv=it.lv?(S.items.lens||0):0;
+    return `<div class="shopit ${own?"own":""}"><span class="si">${it.i}</span><div class="sb"><b>${it.n[EN()?1:0]}${it.lv?` <em>${L("ระดับ","Lv")} ${lv}${own?"":" → "+(lv+1)}</em>`:""}</b><small>${it.d[EN()?1:0]}</small></div>
+      <button class="buy" data-buy="${it.id}" ${own||poor||(it.lv&&!lv)?"disabled":""}>${own?L(it.lv?"สูงสุด":"มีแล้ว",it.lv?"Max":"Owned"):it.lv&&!lv?L("รับจากพี่ภพ","From Phop"):BAHT(pr)}</button></div>`; };
+  openSheet("shop", `${top_(L("หมอโฟน · อัปเกรดมือถือ","Phone Dr. · phone upgrades"))}<div class="sh-body">
     <div class="wallet"><span>${L("เงินในกระเป๋า","Your wallet")}</span><b>${BAHT(S.coins)}</b></div>
     ${msg?`<div class="wcomic"><span class="wv">🧑‍🔧</span><p>${msg}</p></div>`:""}
     <div class="shop">${SHOP.map(card).join("")}</div>
-    <p class="note">${L("ของช่วยได้ แต่ไม่ได้ทำให้ไม่โดนหลอก ยังต้องคิดเองทุกครั้ง · หาเงินได้จากการช่วยคน ตอบข้อความถูก และเล่นมินิเกม","Upgrades help, but they don't make you scam-proof. Earn money by helping people, judging messages right, and mini-games.")}</p></div>`);
+    <p class="note">${L("ของช่วยได้ แต่ไม่ได้ทำให้ไม่โดนหลอก ยังต้องคิดเองทุกครั้ง · หาเงินได้จากการช่วยคน ส่งเบาะแส ตอบข้อความถูก และเล่นมินิเกม","Upgrades help, but they don't make you scam-proof. Earn money by helping people, handing in clues, judging messages and mini-games.")}</p></div>`);
   $("sheet").querySelectorAll("[data-buy]").forEach(b=>b.onclick=()=>{
-    const it=SHOP.find(x=>x.id===b.dataset.buy); if(S.coins<it.p) return;
-    S.coins-=it.p; if(it.stack) S.items[it.id]=(S.items[it.id]||0)+1; else S.items[it.id]=true;
-    save(); hudKey=""; sfx("good"); toast(L(`ซื้อ ${it.n[0]} แล้ว`,`Bought ${it.n[1]}`));
-    openShop(L(`“${it.n[0]} จัดให้แล้ว ใช้ให้คุ้มนะ”`,`“${it.n[1]}, all yours. Use it well.”`));
+    const it=SHOP.find(x=>x.id===b.dataset.buy), pr=shopPrice(it); if(S.coins<pr||shopOwned(it)) return;
+    S.coins-=pr; if(it.lv) S.items.lens=Math.min(3,(S.items.lens||0)+1); else S.items[it.id]=true;
+    save(); hudKey=""; sfx("good"); toast(L(`ได้ ${it.n[0]} แล้ว`,`Got ${it.n[1]}`));
+    openShop(it.lv?L(`“แว่นระดับ ${S.items.lens} แล้ว ส่องได้ไกลขึ้นเยอะ”`,`“Level ${S.items.lens} lens. Sweeps much further now”`):L(`“${it.n[0]} ติดตั้งให้แล้ว”`,`“${it.n[1]}, installed”`));
   });
 }
 /* ---------- virus mode: the whole game glitches until you reach the repair stall ---------- */

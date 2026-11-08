@@ -133,7 +133,7 @@ function step(dt){
   player.moving=m>0.05;
   if(player.moving){
     const k=Math.min(1,m); vx=vx/m*k; vy=vy/m*k;
-    const sp=SPEED*(S.items&&S.items.shoes?1.35:1), nx=player.x+vx*sp*dt, ny=player.y+vy*sp*dt;
+    const sp=SPEED, nx=player.x+vx*sp*dt, ny=player.y+vy*sp*dt;
     if(!blocked(nx,player.y,player)) player.x=nx;
     if(!blocked(player.x,ny,player)) player.y=ny;
     player.dir = Math.abs(vx)>Math.abs(vy)*0.9 ? (vx<0?"left":"right") : (vy<0?"up":"down");
@@ -175,7 +175,7 @@ function hud(){
   const sp0=nearSpot(); const key=[sp0&&sp0.id,S.lang,S.zone,S.evNew,xp(),nearCat(),nearBirds(),nearHQ(),nearRepair(),nearVillain(),!!S.phoneBroken,S.coins,JSON.stringify(S.items),S.inbox.length,nearKiosk(),dn&&dn.zone,S.zone?zoneScore(S.zone):totalScore(),S.bars.money,S.bars.privacy,S.bars.trust,doneCount(),S.chat,S.chatSeen,!!S.results.chat,show&&n.id,sheetMode].join("|");
   if(key===hudKey) return; hudKey=key;
   const ri=rankIdx(), nx=RANKS[ri+1];
-  $("bars").innerHTML=`<div class="coinrow" title="${L("เงิน","Money")}"><span>💵</span><b>${BAHT(S.coins)}</b>${S.items.shield?`<i title="2FA">🛡${S.items.shield}</i>`:""}${S.items.ins?`<i>🧯${S.items.ins}</i>`:""}</div><div class="rankrow" title="XP ${xp()}"><span>🛡</span><b>${esc(rankName(ri))}</b>${nx?`<i style="--p:${Math.min(100,(xp()-RANKS[ri][0])/(nx[0]-RANKS[ri][0])*100)}%"></i>`:""}</div>`+["money","privacy","trust"].map(k=>{ const v=S.bars[k]; return `<div class="bar-row" title="${barName(k)}">${BAR_ICON[k]}<div class="meter ${v<40?"low":""}" role="meter" aria-label="${barName(k)}" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${v}"><i style="width:${v}%"></i></div><b>${v}</b></div>`; }).join("");
+  $("bars").innerHTML=`<div class="coinrow" title="${L("เงิน","Money")}"><span>💵</span><b>${BAHT(S.coins)}</b>${S.items.vpn?`<i title="VPN">🛰️</i>`:""}${S.items.cloud?`<i title="Cloud">☁️</i>`:""}${S.items.pwm?`<i title="Password manager">🔑</i>`:""}</div><div class="rankrow" title="XP ${xp()}"><span>🛡</span><b>${esc(rankName(ri))}</b>${nx?`<i style="--p:${Math.min(100,(xp()-RANKS[ri][0])/(nx[0]-RANKS[ri][0])*100)}%"></i>`:""}</div>`+["money","privacy","trust"].map(k=>{ const v=S.bars[k]; return `<div class="bar-row" title="${barName(k)}">${BAR_ICON[k]}<div class="meter ${v<40?"low":""}" role="meter" aria-label="${barName(k)}" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${v}"><i style="width:${v}%"></i></div><b>${v}</b></div>`; }).join("");
   $("prog").innerHTML = S.zone===0 ? `<span class="zn">${L("รวม","Total")}</span><span class="st">★</span> ${totalScore()}/${totalMax()}` : (S.zone===8?`<span class="zn">🏢 ${L("ชั้น","Fl.")} ${offFloor()}</span><span class="st">★</span> ${totalScore()}/${totalMax()}`:`<span class="zn">${L("โซน","Zone")} ${ZONES[S.zone]&&ZONES[S.zone].bonus?"👻":zno(S.zone)}</span><span class="st">★</span> ${zoneScore(S.zone)}/${zoneMax(S.zone)}`);
   $("prog").setAttribute("aria-label", S.zone===0 ? L(`คะแนนรวม ${totalScore()} จาก ${totalMax()} เปิดแผนที่ภารกิจ`,`Total score ${totalScore()} of ${totalMax()}. Open mission map`) : L(`โซน ${zno(S.zone)} คะแนน ${zoneScore(S.zone)} จาก ${zoneMax(S.zone)} เปิดแผนที่ภารกิจ`,`Zone ${zno(S.zone)}, score ${zoneScore(S.zone)} of ${zoneMax(S.zone)}. Open mission map`));
   const pending=S.zone===1 && S.chat && !S.results.chat;

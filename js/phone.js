@@ -70,7 +70,7 @@ function placeName(){
 const PH_APPS=()=>[
   {k:"chat",i:"💬",n:L("แชต","Chats"),bg:"linear-gradient(160deg,#4CD964,#1FA34A)",badge:S.inbox.length+(S.chat&&!S.best.chat?1:0)},
   {k:"wifi",i:"📶",n:"Wi-Fi",bg:"linear-gradient(160deg,#5AA9F0,#1F5FB5)"},
-  {k:"scan",i:"🔍",n:L("สแกน","Scan"),bg:"linear-gradient(160deg,#FF6B5A,#C82A1C)"},
+  {k:"scan",i:"🛡️",n:L("สแกนไวรัส","Virus scan"),bg:"linear-gradient(160deg,#FF6B5A,#C82A1C)"},
   {k:"wallet",i:"💵",n:L("กระเป๋าเงิน","Wallet"),bg:"linear-gradient(160deg,#FFD25A,#E89A1C)"},
   {k:"board",i:"🗂️",n:L("หลักฐาน","Evidence"),bg:"linear-gradient(160deg,#A98BE0,#6A45B0)",badge:S.evNew||0},
   {k:"dex",i:"📖",n:L("สมุดกลโกง","Handbook"),bg:"linear-gradient(160deg,#F08A5D,#B8481E)"},
@@ -86,7 +86,7 @@ function openPhone(){
     <div class="hs-clock"><b>${nowClock()}</b><small>${date}</small></div>
     <div class="hs-widget"><span>📍 ${esc(placeName())}</span><span>💵 ${BAHT(S.coins)}</span></div>
     <div class="hs-grid">${apps}</div>
-    <button class="hs-scan" data-app="scan"><span class="hs-scan-ic">🔍</span><span><b>${L("สแกนรอบตัว","Scan around me")}</b><small>${L("หา Wi-Fi ปลอมและเครื่องดักข้อมูล","Find fake Wi-Fi and snooping devices")}</small></span></button>
+    <button class="hs-scan" data-app="scan"><span class="hs-scan-ic">🛡️</span><span><b>${L("สแกนไวรัส","Virus scan")}</b><small>${L("ตรวจหามัลแวร์ในเครื่อง แล้วลบทิ้ง","Find malware on the phone and remove it")}</small></span></button>
     <div class="homebar"></div></div></div></div>`);
   $("sheet").querySelectorAll("[data-app]").forEach(b=>b.onclick=()=>phoneApp(b.dataset.app));
 }
@@ -102,41 +102,32 @@ function phoneApp(k){
   if(k==="scan") return openScan();
   if(k==="wallet") return phoneScreen(L("กระเป๋าเงิน","Wallet"), `<div class="pwallet"><small>${L("ยอดเงินคงเหลือ","Balance")}</small><b>${BAHT(S.coins)}</b>
       <p>${L("ได้เงินจากการช่วยคนในแต่ละเคส และตัดสินข้อความหลอกได้ถูก","Earn money by helping people in cases and spotting scam messages")}</p></div>
-    <div class="clist">${SHOP.filter(it=>S.items[it.id]).map(it=>`<div class="crow"><span class="av">${it.i}</span><span class="cb"><b>${esc(it.n[EN()?1:0])}${it.stack?` ×${S.items[it.id]}`:""}</b><small>${esc(it.d[EN()?1:0])}</small></span></div>`).join("")||`<p class="cempty">${L("ยังไม่มีของอัปเกรด ซื้อได้ที่ร้านซ่อมมือถือริมถนน","No upgrades yet. Buy them at the phone stall on the street")}</p>`}</div>`);
+    <div class="clist">${SHOP.filter(it=>S.items[it.id]).map(it=>`<div class="crow"><span class="av">${it.i}</span><span class="cb"><b>${esc(it.n[EN()?1:0])}${it.lv?` · ${L("ระดับ","Lv")} ${S.items.lens}`:""}</b><small>${esc(it.d[EN()?1:0])}</small></span></div>`).join("")||`<p class="cempty">${L("ยังไม่มีของอัปเกรด ซื้อได้ที่ร้านซ่อมมือถือริมถนน","No upgrades yet. Buy them at the phone stall on the street")}</p>`}</div><div class="btns"><button class="btn y" data-shop><span>🛒 ${L("ร้านอัปเกรด","Upgrade shop")}</span></button></div>`);
   if(k==="board") return openBoard();
   if(k==="dex") return openDex();
   if(k==="map") return openZones();
   if(k==="set") return openMenu();
 }
+/* the scan app is a plain virus scanner */
 let scanAt=-99;
 function openScan(){
-  phoneScreen(L("สแกน","Scan"), `<div class="scanpad"><div class="radar" id="radar"><i></i><b>📡</b></div>
-    <p>${L("สแกน Wi-Fi และอุปกรณ์รอบตัว เพื่อหาเครือข่ายปลอมหรือเครื่องที่แอบดักข้อมูล","Scan nearby Wi-Fi and devices for fake networks or anything snooping on traffic")}</p>
-    <button class="btn y" data-doscan><span>🔍 ${L("เริ่มสแกน","Start scan")}</span></button></div><div id="scanOut"></div>`);
+  phoneScreen(L("สแกนไวรัส","Virus scan"), `<div class="scanpad"><div class="radar" id="radar"><i></i><b>🛡️</b></div>
+    <p>${L("ตรวจหาแอปแปลกปลอมและมัลแวร์ในเครื่อง ถ้าเพิ่งต่อ Wi-Fi แปลกๆ ให้สแกนทันที","Checks the phone for rogue apps and malware. Joined an odd Wi-Fi? Scan right away")}</p>
+    <button class="btn y" data-doscan><span>🛡️ ${L("เริ่มสแกน","Start scan")}</span></button></div><div id="scanOut"></div>`);
   $("sheet").querySelector("[data-doscan]").onclick=doScan;
 }
 function doScan(){
-  const t0=performance.now()/1000, wait=Math.ceil(15-(t0-scanAt));
-  if(wait>0){ $("scanOut").innerHTML=`<p class="cempty">${L(`เพิ่งสแกนไป รออีก ${wait} วินาทีแล้วค่อยสแกนใหม่`,`Just scanned. Wait ${wait}s before scanning again`)}</p>`; return; }
+  const t0=performance.now()/1000, wait=Math.ceil(10-(t0-scanAt));
+  if(wait>0){ $("scanOut").innerHTML=`<p class="cempty">${L(`เพิ่งสแกนไป รออีก ${wait} วินาที`,`Just scanned. Wait ${wait}s`)}</p>`; return; }
   scanAt=t0; $("radar").classList.add("on"); $("scanOut").innerHTML=`<p class="cempty">${L("กำลังสแกน…","Scanning…")}</p>`; sfx("ping");
   const b=$("sheet").querySelector("[data-doscan]"); if(b) b.disabled=true;
   setTimeout(()=>{ if(!$("scanOut")) return; $("radar").classList.remove("on"); if(b) b.disabled=false; $("scanOut").innerHTML=scanReport(); }, RM?250:1700);
 }
 function scanReport(){
-  const z=S.zone, w=WIFI[z], rows=[]; let risk=0, extra="";
-  const row=(ok,n,d)=>`<div class="scanrow ${ok?"ok":"bad"}"><span>${ok?"✅":"⚠️"}</span><span><b>${esc(n)}</b><small>${d}</small></span></div>`;
-  if(w){ rows.push(row(true,w.real.n,L("มีรหัสผ่าน · WPA2 · ของร้านจริง","Password · WPA2 · the shop's own")));
-    if(vilOn()){ w.fakes.forEach(f=>{ risk++; rows.push(row(false,f.n,L("เปิด ไม่มีรหัส · ชื่อเลียนแบบร้าน · ให้ล็อกอินก่อนใช้","Open, no password · copies the shop's name · wants you to log in"))); }); } }
-  rows.push(row(true,L("เน็ตมือถือ 5G (ของคุณ)","Mobile 5G (yours)"),L("เข้ารหัสโดยผู้ให้บริการ ปลอดภัย","Encrypted by your carrier · safe")));
-  const v=npcs.find(n=>n.vil);
-  if(vilOn() && v){ const d=Math.hypot(v.x-player.x,v.y-player.y), lvl=d<170?3:d<360?2:1; risk++;
-    extra=`<div class="scan-dev l${lvl}"><b>📡 ${L("พบเครื่องปล่อย Wi-Fi ปลอมอยู่แถวนี้","Rogue hotspot somewhere nearby")}</b><span class="sigb">${"▮".repeat(lvl)}${"▯".repeat(3-lvl)}</span>
-      <small>${[L("สัญญาณอ่อน อยู่ไกลจากคุณ ลองเดินไปอีกมุมแล้วสแกนใหม่","Weak: it's far from you. Move to another spot and scan again"),L("สัญญาณปานกลาง อยู่ไม่ไกล ลองขยับเข้าไปอีก","Medium: not far. Move a bit closer"),L("สัญญาณแรงมาก! อยู่ห่างแค่ไม่กี่ก้าว สังเกตคนรอบตัวที่ก้มเล่นเครื่องแปลกๆ","Very strong! Only a few steps away. Watch for someone fiddling with an odd device")][lvl-1]}</small></div>`; }
-  if(z===8 && isScam(S.bld) && !raided()){ risk++;
-    extra+=`<div class="scan-dev l3"><b>📶 ${L("มีซิมการ์ดออนไลน์พร้อมกันกว่า 300 ซิมจากชั้นบน","Over 300 SIM cards online at once upstairs")}</b><small>${L("ออฟฟิศทั่วไปไม่ใช้ซิมเยอะขนาดนี้ แบบนี้คล้าย “ซิมบ็อกซ์” ที่แก๊งคอลเซ็นเตอร์ใช้โทรหาเหยื่อ","Normal offices don't run this many SIMs. It looks like a “SIM box”, the kind call-centre gangs use to phone victims")}</small></div>`; }
-  const verdict=risk?`<div class="endcard danger"><b>⚠ ${L(`พบความเสี่ยง ${risk} จุด`,`${risk} risk${risk>1?"s":""} found`)}</b><p style="margin:.3em 0 0">${L("ต่อเฉพาะ Wi-Fi ที่ร้านให้รหัสเอง หรือใช้เน็ตมือถือตัวเอง","Only join Wi-Fi the shop gives you a password for, or use your own data")}</p></div>`
-    :`<div class="endcard safe"><b>✅ ${L("ไม่พบสิ่งผิดปกติ","Nothing suspicious")}</b><p style="margin:.3em 0 0">${L("แต่ยังต้องระวังลิงก์และข้อความแปลกๆ เหมือนเดิม","Still watch out for odd links and messages")}</p></div>`;
-  return `${verdict}${extra}<div class="apptitle" style="font-size:1rem;padding:10px 4px 2px">${L("เครือข่ายที่เจอ","Networks found")}</div>${rows.join("")}`;
+  if(S.phoneBroken) return `<div class="endcard danger"><b>☠ ${L("มัลแวร์ยึดเครื่องแล้ว ลบเองไม่ได้","Malware has taken over. It can't be removed here")}</b><p style="margin:.3em 0 0">${L("รีบไปร้านหมอโฟนริมถนนให้ล้างเครื่อง","Hurry to Phone Dr. by the road to wipe it")}</p></div>`;
+  if(S.hack){ const net=S.hack.net; S.hack=null; save(); hudKey=""; sfx("good");
+    return `<div class="endcard safe"><b>✅ ${L("เจอมัลแวร์ 1 ตัว ลบแล้ว!","Found 1 piece of malware and removed it!")}</b><p style="margin:.3em 0 0">${L(`มาจาก Wi-Fi “${esc(net||"")}” อย่าต่อเครือข่ายที่ไม่มีรหัสอีก แล้วเปลี่ยนรหัสบัญชีสำคัญด้วย`,`It came from the “${esc(net||"")}” Wi-Fi. Avoid open networks and change your important passwords`)}</p></div>`; }
+  return `<div class="endcard safe"><b>✅ ${L("ไม่พบไวรัส","No viruses found")}</b><p style="margin:.3em 0 0">${L("เครื่องสะอาด แต่ยังต้องระวังลิงก์และ Wi-Fi แปลกๆ เหมือนเดิม","All clean. Still watch out for odd links and Wi-Fi")}</p></div>`;
 }
 function openChats(){
   if(S.phoneBroken) return openHacked();
