@@ -894,3 +894,7 @@ body.cin .hud,body.cin #phoneBtn,body.cin #prompt,body.cin #dbgEnd,body.cin #joy
 .tspreview{background:var(--cream);border:2px dashed var(--ink);padding:10px 12px;margin-top:8px;line-height:1.6}
 .startset{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
 .setbtn-s{font:inherit;font-weight:700;font-size:.86rem;background:var(--paper);border:2px solid var(--ink);padding:4px 10px;cursor:pointer}
+/* ---------- current goal ---------- */
+.goal{position:fixed;left:50%;transform:translateX(-50%);z-index:5;max-width:min(560px,calc(100vw - 24px));background:var(--yellow);border:var(--bw) solid var(--ink);box-shadow:3px 3px 0 var(--ink);
+  font:inherit;font-weight:700;font-size:.86rem;line-height:1.35;padding:6px 14px;border-radius:20px;cursor:pointer;text-align:center;color:var(--ink)}
+.goal[hidden]{display:none}

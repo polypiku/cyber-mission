@@ -40,7 +40,7 @@ function render(now){
   PLANTS.forEach(p=>items.push({y:p.y+14,d:g=>drawPlant(g,p)}));
   if(S.char){ npcs.forEach(n=>items.push({y:n.y,d:g=>drawChar(g,n,now)})); items.push({y:player.y,d:g=>drawChar(g,player,now)}); }
   items.sort((a,b)=>a.y-b.y).forEach(it=>it.d(ctx));
-  drawLibStairSign(ctx,now); drawEscortTalk(ctx); drawSpots(ctx,now); drawCinFx(ctx,now);
+  drawLibStairSign(ctx,now); drawEscortTalk(ctx); drawSpots(ctx,now); drawGoalArrow(ctx,now); drawCinFx(ctx,now);
   if(S.char) npcs.forEach(n=>drawMarker(ctx,n,now));
   if(S.char){ drawUrgent(ctx,now); drawChatter(ctx,now); drawVirusArrow(ctx,now); drawCoinFx(ctx,(now-(window._cfx||now))/1000); window._cfx=now; }
   const dn=nearDoor(); if(dn && !busy()){ ctx.beginPath(); ctx.ellipse(dn.door,262,34,10,0,0,7); ctx.strokeStyle="#FF5A1F"; ctx.lineWidth=3; ctx.stroke(); }
@@ -110,8 +110,23 @@ $("act").addEventListener("click",()=>{ if(!busy()) interact(); });
 $("lensBtn").addEventListener("click",()=>sweepLens());
 
 /* ---------- movement ---------- */
+/* which zebra crossing a point is on, and whether people may walk on it now */
+function xingAt(x,y){
+  const a=XINGS.find(xg=>x>xg.x0&&x<xg.x1&&y>604&&y<774); if(a) return {k:a, go:()=>ewState()==="r"};
+  const b=YXINGS.find(yx=>x>IC.x0-6&&x<IC.x1+6&&y>yx.y0&&y<yx.y1); if(b) return {k:b, go:()=>nsState()==="r"};
+  return null;
+}
+let redWarnT=0;
+function redLight(x,y){
+  if(S.zone!==0 || CIN) return false;
+  const to=xingAt(x,y); if(!to || to.go()) return false;
+  const from=xingAt(player.x,player.y); if(from && from.k===to.k) return false;   /* already crossing: let them finish */
+  if(performance.now()-redWarnT>2500){ redWarnT=performance.now(); xWarnT=performance.now(); toast(L("🚦 ไฟคนข้ามยังแดง รอไฟเขียวก่อนนะ","🚦 Don't walk yet. Wait for the green man")); }
+  return true;
+}
 function blocked(x,y,self){
   const b={x:x-12,y:y-7,w:24,h:14};
+  if(self===player && redLight(x,y)) return true;
   for(const s of SOLIDS) if(b.x<s.x+s.w&&b.x+b.w>s.x&&b.y<s.y+s.h&&b.y+b.h>s.y) return true;
   for(const n of npcs){ if(n===self||n.leaving) continue; if(Math.abs(n.x-x)<26&&Math.abs(n.y-y)<14) return true; }
   return false;
@@ -167,6 +182,12 @@ function nearest(){
 
 /* ---------- HUD ---------- */
 let hudKey="";
+function goalPill(){
+  const el=$("goal"); if(!el) return; const gi=goalInfo(); const show=!!gi && !CIN && !sheetMode;
+  el.hidden=!show; if(!show) return;
+  const txt=`🎯 ${esc(gi.t)}`; if(el.dataset.t!==txt){ el.dataset.t=txt; el.innerHTML=`<span>${txt}</span>`; }
+  el.style.top=($("hud").offsetHeight+6)+"px";
+}
 function hud(){
   const n=nearest();
   const show = !!n && !busy();

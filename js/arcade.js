@@ -107,17 +107,17 @@ function caseRows(z){
   S.zone=prevZone; return rows;
 }
 function openSummary(){
-  const [rt,rd]=rating(), z=S.zone, nz=MAINZ().find(x=>x>z)||0, full=zoneDone(z);
+  const [rt,rd]=rating(), z=S.zone, nz=(()=>{ const c=CHAPTERS[chapterOf(z)+1]; return c!=null&&zoneOpen(c)?c:0; })(), full=zoneDone(z);
   const left=ALLCASES().filter(k=>!S.best[k]).length;
   const next = left===0
       ? `<div class="unlockbox"><b>${L("ช่วยครบทุกคนในเมืองแล้ว!","Everyone in town has been helped!")}</b><span>${L("เปิดบอร์ดหลักฐานแล้วส่งให้ตำรวจเพื่อดูฉากจบ","Open the evidence board and hand it to the police for the ending")}</span></div>`
       : `<div class="unlockbox locked"><b>${L(`ยังเหลืออีก ${left} คนในเมือง`,`${left} people still need help`)}</b><span>${L("ไปโซนไหนก่อนก็ได้ ช่วยให้ครบทุกคนถึงจะได้ฉากจบ","Go to any zone; help everyone to reach the ending")}</span></div>`;
-  openSheet("summary", `${top_(L(`สรุปภารกิจโซน ${zno(z)}`,`Zone ${zno(z)} report`))}<div class="sh-body">
+  openSheet("summary", `${top_(L(`สรุปภารกิจ · ${zoneName(z)}`,`Report · ${zoneName(z)}`))}<div class="sh-body">
     <div class="score"><img src="${SPRITES[S.char].face.src}" alt=""><div><span class="eyebrow">${esc(ZN().name[S.lang])} · ${L("คะแนน","Score")} ${zoneScore(z)}/${zoneMax(z)}</span><b>${rt}</b><p>${rd}</p></div></div>
     <div class="box sumbars">${["money","privacy","trust"].map(k=>`<div class="bar-row">${BAR_ICON[k]}<span>${barName(k)}</span><div class="meter ${S.bars[k]<40?"low":""}"><i style="width:${S.bars[k]}%"></i></div><b>${S.bars[k]}</b></div>`).join("")}</div>
     <span class="sect">${L("ดาวแต่ละเคส","Stars per case")}</span><div class="res">${caseRows(z)}</div>
     ${next}
-    <div class="btns">${ZONES[nz]?btn(L(`ไปโซน ${zno(nz)}`,`Go to Zone ${zno(nz)}`),`data-zone="${nz}"`,"y"):""}<button class="btn g" data-close><span>${L("เดินเล่นต่อ","Keep exploring")}</span></button><button class="btn g" data-reset><span>${L("ล้างความคืบหน้า","Reset progress")}</span></button></div></div>`);
+    <div class="btns">${ZONES[nz]?btn(L(`ไปโซน ${zno(nz)} · ${zoneName(nz)}`,`Go to Zone ${zno(nz)} · ${zoneName(nz)}`),`data-zone="${nz}"`,"y"):""}<button class="btn g" data-close><span>${L("เดินเล่นต่อ","Keep exploring")}</span></button><button class="btn g" data-reset><span>${L("ล้างความคืบหน้า","Reset progress")}</span></button></div></div>`);
 }
 /* scam handbook: every scam you've met, with how to spot it */
 function openDex(){
@@ -197,7 +197,7 @@ function openUnlock(z){
     return;
   }
   const lead=(LEADS[z]||[[L("มีเบาะแสใหม่","A new lead"),L("มีเบาะแสใหม่","A new lead")]])[0];
-  openSheet("unlock", `<div class="unlockhero"><span class="eyebrow">${L("ได้เบาะแสใหม่!","New lead!")}</span><div class="ubig">${L(`บทที่ ${chapterOf(z)+1}`,`Chapter ${chapterOf(z)+1}`)}</div><p>${esc(ZONES[z].name[S.lang])}</p></div>
+  openSheet("unlock", `<div class="unlockhero"><span class="eyebrow">${L("ได้เบาะแสใหม่! เปิดโซนใหม่แล้ว","New lead! A new zone is open")}</span><div class="ubig">${L(`โซน ${zno(z)}`,`Zone ${zno(z)}`)}</div><p>${esc(ZONES[z].name[S.lang])}</p></div>
     <div class="sh-body"><p>${lead[EN()?1:0]}</p>
     ${chapterOf(z)===1?`<p class="note">${L("ตั้งแต่ตอนนี้ไปส่งหลักฐานให้พี่ภพที่สถานีตำรวจได้ และที่นั่นก็มีคนรอความช่วยเหลืออยู่ด้วย","From now on you can hand evidence to Phop at the police station, and people there need help too.")}</p>`:""}
     <div class="btns">${btn(L("ออกไปข้างนอก","Head outside"),`data-out`,"y")}<button class="btn g" data-close><span>${L("อยู่ที่นี่ก่อน","Stay here for now")}</span></button></div></div>`);
@@ -264,6 +264,7 @@ function wireSheet(){
 function resetAll(){ const lang=S.lang, ch=S.char; S=fresh(); S.lang=lang; S.char=ch; save(); setWorld(); buildCast(); drawStatic(); hudKey=""; player.x=432; player.y=500; player.dir="up"; closeSheet(); openStart(); }
 $("phoneBtn").onclick=()=>{ if(!D) openPhone(); };
 $("menuBtn").onclick=()=>{ if(!D) openMenu(); };
+$("goal").onclick=()=>{ if(!D&&!busy()) openZones(); };
 $("setBtn").onclick=()=>{ if(!D) openSettings(false); };
 /* DEBUG (temporary): shortcut to preview the 5 endings without changing the save */
 (function(){

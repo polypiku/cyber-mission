@@ -51,3 +51,38 @@ const LEADS = {
   6:[["เบาะแสจากธนาคาร: เงินทุกก้อนไหลผ่านบัญชีของนักศึกษาคนหนึ่งในมหาวิทยาลัย","From the bank: every payment flows through a student's account at the university"]]
 };
 const clueTotal = ()=>Object.keys(EVID).length;
+
+/* ---------- what to do next: the goal pill under the HUD and the arrow on the street ---------- */
+const zoneName=(z)=>ZONES[z]?ZONES[z].name[S.lang]:"";
+function doorOf(z){
+  if(z===8){ const o=OFFICES[S.hqFound?hqB():0]; return {x:o.door,y:OFF_TOP+10}; }
+  const b=BUILDINGS.find(b=>b.zone===z && !b.hide); return b?{x:b.door,y:250}:null;
+}
+function goalInfo(){
+  if(!S.char) return null;
+  if(!S.briefed) return {t:L("คุยกับพี่ภพ ตำรวจไซเบอร์","Talk to Phop, the cyber police officer"), z:6};
+  const ch=chapter(), cz=CHAPTERS[ch];
+  if(cz!=null && ch<CHAPTERS.length-1 || (cz===6 && !zoneDone(6))){
+    const left=ZONES[cz].cases.filter(k=>!S.best[k]).length, tot=ZONES[cz].cases.length;
+    if(S.zone===cz) return {t:L(`ช่วยคนที่มี ! ใน${zoneName(cz)} (${tot-left}/${tot})`,`Help everyone with a ! at ${zoneName(cz)} (${tot-left}/${tot})`), z:cz, here:true};
+    return {t:L(`ไปที่${zoneName(cz)} · โซน ${zno(cz)}`,`Go to ${zoneName(cz)} · Zone ${zno(cz)}`), z:cz};
+  }
+  const rest=Object.keys(ZONES).map(Number).filter(z=>!ZONES[z].bonus && casesOpen(z) && !zoneDone(z));
+  if(rest.length){ const z=rest.includes(S.zone)?S.zone:rest[0]; const n=ZONES[z].cases.filter(k=>!S.best[k]).length;
+    return {t:L(`ยังมีคนรอให้ช่วยที่${zoneName(z)} (${n} คน)`,`${n} still need help at ${zoneName(z)}`), z, here:S.zone===z}; }
+  if(!S.hqFound) return {t:L("สำรวจตึกออฟฟิศ 3 ตึกฝั่งตรงข้ามถนน หาตึกของแก๊ง","Search the 3 office buildings across the road for the gang's base"), z:8};
+  if(evCount()>(S.handed||0)) return {t:L(`เอาเบาะแส ${evCount()-(S.handed||0)} ชิ้นไปส่งพี่ภพที่สถานีตำรวจ`,`Take ${evCount()-(S.handed||0)} clue(s) to Phop at the police station`), z:7, here:S.zone===7};
+  if(S.uc && !raided() && !(S.ev.hq_script&&S.ev.hq_dorm)) return {t:L("แฝงตัวขึ้นชั้น 2–3 ของตึกแก๊ง หาเบาะแส","Sneak up to floors 2–3 of the gang's building for clues"), z:8};
+  if(!S.ending) return {t:L("ไปหาพี่ภพที่สถานีตำรวจ วางแผนบุกรังแก๊ง","See Phop at the police station to plan the raid"), z:7, here:S.zone===7};
+  if(S.ending<5) return {t:L(`ได้ฉากจบ ${S.ending}/5 · หาเบาะแสเพิ่มแล้วบุกใหม่ได้`,`Ending ${S.ending}/5 · find more clues and raid again`), z:7, here:S.zone===7};
+  return {t:L("ทลายแก๊งเงาสำเร็จ! เดินเล่นต่อได้เลย","The Shadow gang is finished! Explore as you like")};
+}
+function drawGoalArrow(g,now){
+  if(S.zone!==0 || !S.char || busy() || CIN) return;
+  const gi=goalInfo(); if(!gi || gi.z==null) return; const d=doorOf(gi.z); if(!d) return;
+  const dx=d.x-player.x, dy=d.y-player.y, dist=Math.hypot(dx,dy); if(dist<90) return;
+  const a=Math.atan2(dy,dx), r=58+(RM?0:Math.sin(now/220)*5), cx=player.x+Math.cos(a)*r, cy=player.y-34+Math.sin(a)*r;
+  g.save(); g.translate(cx,cy); g.rotate(a);
+  g.beginPath(); g.moveTo(16,0); g.lineTo(-8,-12); g.lineTo(-3,0); g.lineTo(-8,12); g.closePath();
+  g.fillStyle="#FFC414"; g.fill(); g.lineWidth=3; g.strokeStyle=INK; g.stroke(); g.restore();
+}

@@ -153,7 +153,7 @@ const ZONES = {
   5:{bonus:true, name:{th:"บ้านผีสิงในตรอกมืด",en:"The haunted house in the alley"}, cases:["merit","inherit","romance","fortune"], roleCase:{grandma:"merit", grandpa:"inherit", tips:"romance", friend:"fortune"}}
 };
 const MAINZ = ()=>Object.keys(ZONES).map(Number).filter(z=>!ZONES[z].bonus);
-const zno = (z)=>{ const i=MAINZ().indexOf(+z); return i<0?z:i+1; };
+const zno = (z)=>{ z=+z; const i=CHAPTERS.indexOf(z); if(i>=0) return i+1; if(z===7) return "🚓"; if(ZONES[z]&&ZONES[z].bonus) return "👻"; return ""; };
 const OUTZ={name:{th:"ถนนหน้าร้าน",en:"The street"}, cases:[], roleCase:{}};
 const VICTIM_CASES={grandma:["qr","rush"], grandpa:["bank","video"]};
 function recoverRole(){

@@ -346,7 +346,7 @@ function drawDoorBadges(g,now){
     if(b.closed){ label=L("🚧 ปิดปรับปรุง","🚧 Closed for renovation"); const tw=g.measureText(label).width+22, by=y+108; rr(g,b.door-tw/2,by-14,tw,28,14); g.fillStyle="#FFFFFF"; g.fill(); g.lineWidth=2.5; g.strokeStyle=INK; g.stroke(); g.fillStyle=INK; g.fillText(label,b.door,by+1);
       g.fillStyle="#8C8578"; g.fillRect(b.door-34,160,68,90); g.strokeStyle="#6E685E"; g.lineWidth=2; for(let yy=168;yy<250;yy+=9){ g.beginPath(); g.moveTo(b.door-34,yy); g.lineTo(b.door+34,yy); g.stroke(); } continue; }
     if(b.soon) label=L("🔒 เร็วๆ นี้","🔒 Coming soon");
-    else if(!open) label=L(`🔒 ช่วยให้ครบทุกคนในโซน ${b.zone-1} ก่อน`,`🔒 Finish every case in Zone ${b.zone-1} first`);
+    else if(!open){ const pz=CHAPTERS[chapterOf(b.zone)-1]; label=pz!=null?L(`🔒 โซน ${zno(b.zone)} · ช่วยคนใน${zoneName(pz)}ให้ครบก่อน`,`🔒 Zone ${zno(b.zone)} · finish ${zoneName(pz)} first`):L("🔒 ยังไม่เปิด","🔒 Locked"); }
     else label=`${L("โซน","Zone")} ${zno(b.zone)} · ★ ${zoneScore(b.zone)}/${zoneMax(b.zone)}`;
     const tw=g.measureText(label).width+22, by=y+108;
     rr(g,b.door-tw/2,by-14,tw,28,14); g.fillStyle=open?(zoneFull(b.zone)?"#D8F1E3":"#FFC414"):"#FFFFFF"; g.fill(); g.lineWidth=2.5; g.strokeStyle=INK; g.stroke();
