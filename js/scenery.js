@@ -6,10 +6,10 @@ const GREEN=["#4E9A3F","#5FAE47","#3F8636","#6DBB4E"];
 
 /* grass with little tufts and flowers */
 function grassArea(g,x,y,w,h,seed){
-  g.fillStyle="#8CC665"; g.fillRect(x,y,w,h);
+  g.fillStyle="#6CBF45"; g.fillRect(x,y,w,h);
   const r=seeded(seed||7), n=Math.floor(w*h/900);
   for(let i=0;i<n;i++){ const px=x+r()*w, py=y+r()*h;
-    g.strokeStyle=r()<.5?"#6FAE4C":"#7EBB57"; g.lineWidth=1.6;
+    g.strokeStyle=r()<.5?"#4FA035":"#5CB040"; g.lineWidth=1.6;
     g.beginPath(); g.moveTo(px-3,py); g.lineTo(px-1,py-5); g.moveTo(px,py); g.lineTo(px+1,py-6); g.moveTo(px+3,py); g.lineTo(px+4,py-4); g.stroke(); }
   for(let i=0;i<n/5;i++){ const px=x+r()*w, py=y+r()*h, c=["#FFFFFF","#FFD84D","#F48FB1","#FFB0A0"][Math.floor(r()*4)];
     g.fillStyle=c; for(const [dx,dy] of [[-2,0],[2,0],[0,-2],[0,2]]){ g.beginPath(); g.arc(px+dx,py+dy,1.7,0,7); g.fill(); }
@@ -99,16 +99,11 @@ function stringLights(g,x1,y1,x2,y2,sag){
 function drawStreetGround(g){
   grassArea(g,0,0,OW,OH,21);
   treeLine(g,0,OW,10,70,31);
-  /* pavement in front of the shops, and the plaza */
-  brickPave(g,28,250,OW-56,90,41);
-  dirtArea(g,28,340,OW-56,260,51);
-  /* grass islands under the trees and around the benches */
-  let s=60;
-  for(const p of OUT_TREES) grassIsland(g,p.x,p.y-6,70,46,s++);
-  for(const b of OUT_BENCHES) grassIsland(g,b.x,b.y-10,96,50,s++);
-  for(const [x,y,rx,ry] of [[690,450,80,44],[1560,450,90,46],[220,420,60,34],[1660,520,60,36]]) grassIsland(g,x,y,rx,ry,s++);
-  /* brick paths from the plaza to each shop door */
-  for(const b of BUILDINGS){ if(b.alley) continue; brickPave(g,b.door-34,250,68,120,71+b.zone); }
+  /* green grass everywhere; brick only for the walkways: along the shops, along the road,
+     and from every shop door down to the road */
+  brickPave(g,28,250,OW-56,70,41);
+  brickPave(g,28,540,OW-56,60,42);
+  for(const b of BUILDINGS){ if(b.alley) continue; brickPave(g,b.door-34,300,68,240,71+b.zone); }
 }
 /* flowers, bushes and lights drawn over the shop fronts */
 function drawStreetDecor(g){
