@@ -4,56 +4,49 @@ const LOGO_SRC = null;
 const GAME_VER = "v0.3";
 let titleOn=false;
 
-function cityBackdrop(){
-  /* far hills, a temple spire, the campus tower, shophouses and trees, with lit windows */
-  const win=(x,y,w,h,cols,rows,seed)=>{ let s="", r=seeded(seed); for(let i=0;i<cols;i++) for(let j=0;j<rows;j++){ if(r()<.35) continue; s+=`<rect x="${x+8+i*(w-16)/cols}" y="${y+10+j*(h-20)/rows}" width="${(w-16)/cols-6}" height="${(h-20)/rows-8}" rx="2" fill="${r()<.7?"#FFD27A":"#FFE9B0"}" opacity="${.65+r()*.35}"/>`; } return s; };
-  let trees=""; const r=seeded(77);
-  for(let x=-20;x<1640;x+=38+r()*30){ const h=60+r()*60; trees+=`<circle cx="${x}" cy="${452-h*.4}" r="${26+r()*22}" fill="#1E2A3F"/>`; }
-  return `<svg class="t-city" viewBox="0 0 1600 520" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
-    <path d="M0 330 Q200 230 380 300 T760 280 T1140 250 T1600 300 V520 H0Z" fill="#7B4E86" opacity=".55"/>
-    <path d="M0 360 Q260 300 520 350 T1040 330 T1600 350 V520 H0Z" fill="#5A3A70" opacity=".7"/>
-    <g fill="#3A2752"><path d="M1250 360 L1262 230 L1274 360Z"/><rect x="1236" y="350" width="52" height="40"/><path d="M1220 392 h84 l-10 -16 h-64z"/></g>
-    <g fill="#2B2340"><rect x="140" y="250" width="150" height="200"/><rect x="190" y="190" width="50" height="70"/><path d="M182 192 L215 160 L248 192Z"/><circle cx="215" cy="222" r="14" fill="#FFE9B0"/>${win(140,260,150,180,4,4,3)}</g>
-    <g fill="#26203A"><rect x="330" y="300" width="170" height="150"/><path d="M318 304 L415 262 L512 304Z"/>${win(330,310,170,130,4,3,5)}
-      <rect x="560" y="320" width="140" height="130"/><path d="M548 324 L630 286 L712 324Z"/>${win(560,330,140,110,3,3,7)}
-      <rect x="900" y="280" width="200" height="170"/>${win(900,290,200,150,5,4,9)}
-      <rect x="1350" y="300" width="180" height="150"/><path d="M1338 304 L1440 262 L1542 304Z"/>${win(1350,310,180,130,4,3,11)}</g>
-    <g>${trees}</g>
-    <rect x="0" y="452" width="1600" height="68" fill="#1A1626"/>
-    <path d="M0 470 H1600" stroke="#FFC414" stroke-width="3" stroke-dasharray="40 30" opacity=".7"/>
-    ${[120,420,720,1020,1320].map(x=>`<g><rect x="${x}" y="370" width="5" height="84" fill="#120F1C"/><circle cx="${x+2}" cy="366" r="9" fill="#FFE38A"/><circle cx="${x+2}" cy="366" r="26" fill="#FFE38A" opacity=".18"/></g>`).join("")}
-  </svg>`;
+/* a sunny town square: brick plaza, shops at the sides, trees, lamps, a bench and the road at the bottom */
+function plazaScene(){
+  const tree=(x,y,k)=>`<g transform="translate(${x} ${y}) scale(${k})"><ellipse cx="0" cy="62" rx="34" ry="8" fill="#000" opacity=".12"/><rect x="-7" y="20" width="14" height="44" rx="3" fill="#8A5A33" stroke="#3A2516" stroke-width="3"/><circle cx="-20" cy="10" r="24" fill="#6DBB4E" stroke="#3A2516" stroke-width="3"/><circle cx="20" cy="8" r="25" fill="#6DBB4E" stroke="#3A2516" stroke-width="3"/><circle cx="0" cy="-14" r="28" fill="#7DC75A" stroke="#3A2516" stroke-width="3"/><circle cx="-8" cy="-22" r="8" fill="#fff" opacity=".25"/></g>`;
+  const lamp=(x,y)=>`<g transform="translate(${x} ${y})"><rect x="-4" y="0" width="8" height="110" fill="#4A4D52" stroke="#2B2B2B" stroke-width="2"/><rect x="-12" y="-26" width="24" height="28" rx="4" fill="#FFD84D" stroke="#2B2B2B" stroke-width="3"/><rect x="-14" y="-32" width="28" height="8" rx="3" fill="#4A4D52" stroke="#2B2B2B" stroke-width="2"/><rect x="-10" y="106" width="20" height="10" rx="2" fill="#4A4D52" stroke="#2B2B2B" stroke-width="2"/></g>`;
+  const grass=(x,y,w)=>`<rect x="${x}" y="${y}" width="${w}" height="46" rx="22" fill="#9BD07A" stroke="#7DB85A" stroke-width="2"/>`;
+  const house=(x,y,flip)=>`<g transform="translate(${x} ${y}) scale(${flip?-1:1} 1)"><rect x="0" y="20" width="160" height="150" fill="#F3E3C8" stroke="#3A2516" stroke-width="3"/><path d="M-12 26 L80 -14 L172 26Z" fill="#9A5A35" stroke="#3A2516" stroke-width="3"/><rect x="18" y="50" width="54" height="40" fill="#BFE3F2" stroke="#3A2516" stroke-width="3"/><rect x="88" y="50" width="54" height="40" fill="#BFE3F2" stroke="#3A2516" stroke-width="3"/><rect x="58" y="104" width="44" height="66" fill="#8A5A33" stroke="#3A2516" stroke-width="3"/><rect x="0" y="96" width="160" height="10" fill="#C99561" stroke="#3A2516" stroke-width="2"/></g>`;
+  const bench=(x,y)=>`<g transform="translate(${x} ${y})"><rect x="0" y="0" width="90" height="12" rx="3" fill="#C86A3A" stroke="#3A2516" stroke-width="3"/><rect x="0" y="16" width="90" height="12" rx="3" fill="#C86A3A" stroke="#3A2516" stroke-width="3"/><rect x="8" y="28" width="7" height="16" fill="#3A2516"/><rect x="75" y="28" width="7" height="16" fill="#3A2516"/></g>`;
+  return `<div class="t-plaza" aria-hidden="true">
+    <svg class="t-side left" viewBox="0 0 260 900" preserveAspectRatio="xMinYMax meet">${house(-90,120,false)}${grass(-20,560,200)}${bench(10,520)}${lamp(170,500)}${tree(40,330,1)}${tree(60,800,1.1)}${grass(-30,900,220)}</svg>
+    <svg class="t-side right" viewBox="0 0 260 900" preserveAspectRatio="xMaxYMax meet">${house(350,240,true)}${grass(80,560,200)}${lamp(90,500)}${tree(200,420,.9)}${tree(210,800,1.1)}</svg>
+    <div class="t-road"><i></i></div>
+  </div>`;
 }
 function logoHTML(){
   if(LOGO_SRC) return `<img class="t-logoimg" src="${LOGO_SRC}" alt="Cyber Mission">`;
   return `<div class="t-logo" role="img" aria-label="Cyber Mission ภารกิจรู้ทันไซเบอร์">
-    <svg class="t-shield" viewBox="0 0 64 72" aria-hidden="true"><path d="M32 3 L60 13 V35 C60 52 47 64 32 69 C17 64 4 52 4 35 V13Z" fill="#2F6DB5" stroke="#141414" stroke-width="4"/><path d="M22 33 h20 v16 h-20z" fill="#FFC414" stroke="#141414" stroke-width="3"/><path d="M25 33 v-6 a7 7 0 0 1 14 0 v6" fill="none" stroke="#141414" stroke-width="3.5"/></svg>
-    <span class="t-w1">CYBER</span><span class="t-w2">MISSION</span>
+    <svg class="t-shield" viewBox="0 0 64 72" aria-hidden="true"><path d="M32 3 L60 13 V35 C60 52 47 64 32 69 C17 64 4 52 4 35 V13Z" fill="#3B7FD0" stroke="#2B1A10" stroke-width="5"/><path d="M32 10 L53 18 V35 C53 48 43 57 32 61 Z" fill="#fff" opacity=".18"/><path d="M22 33 h20 v16 h-20z" fill="#FFC414" stroke="#141414" stroke-width="3"/><path d="M25 33 v-6 a7 7 0 0 1 14 0 v6" fill="none" stroke="#141414" stroke-width="3.5"/></svg>
+    <i class="t-px a"></i><i class="t-px b"></i><i class="t-px c"></i><i class="t-px d"></i>
+    <span class="t-w1" data-t="CYBER">CYBER</span><span class="t-w2" data-t="MISSION">MISSION</span>
     <span class="t-ribbon">ภารกิจรู้ทันไซเบอร์</span></div>`;
 }
 function openTitle(){
   titleOn=true;
   const el=$("title"), resume=S.char && (S.intro || doneCount());
-  el.innerHTML=`<div class="t-sky"></div><div class="t-sun"></div><div class="t-bits" aria-hidden="true">${Array.from({length:18},(_,i)=>`<i style="left:${(i*53)%100}%;animation-delay:-${(i*.73)%9}s;animation-duration:${8+(i%5)*2}s">${i%3?"1":"0"}</i>`).join("")}</div>
-    ${cityBackdrop()}
+  el.innerHTML=`${plazaScene()}
     <div class="t-top"><span class="t-chip">${L("เวอร์ชันทดสอบ","Test build")} ${GAME_VER}</span>${langSw()}</div>
     <main class="t-center">
       ${logoHTML()}
       <div class="t-plank">${resume&&S.name?L(`ยินดีต้อนรับกลับ ${esc(S.name)}`,`Welcome back, ${esc(S.name)}`):L("ยินดีต้อนรับ","Welcome")}</div>
-      <button class="t-play" data-tplay><span><b>${resume?L("เล่นต่อ","Continue"):L("เริ่มเล่น","Play")}</b><small>${resume?"CONTINUE":"PLAY"}</small></span><i aria-hidden="true">›</i></button>
+      <button class="t-play" data-tplay><em aria-hidden="true"></em><span><b>${resume?L("เล่นต่อ","Continue"):L("เริ่มเล่น","Play")}</b><small>${resume?"CONTINUE":"PLAY"}</small></span><i aria-hidden="true">›</i></button>
       ${resume?`<button class="t-again" data-tnew>${L("เริ่มเกมใหม่ / เปลี่ยนตัวละคร","New game / change character")}</button>`:""}
       <div class="t-row">
-        <button data-thow><span aria-hidden="true">📖</span>${L("วิธีเล่น","How to play")}</button>
-        <button data-tnews><span aria-hidden="true">📰</span>${L("อัปเดต","Updates")}</button>
-        <button data-tset><span aria-hidden="true">⚙️</span>${L("ตั้งค่า","Settings")}</button>
+        <button data-thow><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5h7a2 2 0 0 1 2 2v12a2 2 0 0 0-2-2H3z" fill="#DCEBFA"/><path d="M21 5h-7a2 2 0 0 0-2 2v12a2 2 0 0 1 2-2h7z" fill="#DCEBFA"/><path d="M3 5h7a2 2 0 0 1 2 2v12a2 2 0 0 0-2-2H3zM21 5h-7a2 2 0 0 0-2 2v12a2 2 0 0 1 2-2h7zM5.5 9h4M5.5 12h4M14.5 9h4M14.5 12h4"/></svg>${L("วิธีเล่น","How to play")}</button>
+        <button data-tnews><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="8" width="18" height="12" rx="2" fill="#FFF6E3"/><path d="M3 8l2.5-4.5L21 5.5 20 8" fill="#3A3F46"/><rect x="3" y="8" width="18" height="12" rx="2"/><path d="M3 8l2.5-4.5L21 5.5 20 8M8 4.2l2 3.6M13 4.6l2 3.4M10.5 11.5v5l4-2.5z"/></svg>${L("อัปเดต","Updates")}</button>
+        <button data-tset><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.8l1.6 2.3 2.7-.7.6 2.7 2.6 1-.8 2.7 1.9 2-1.9 2 .8 2.7-2.6 1-.6 2.7-2.7-.7L12 21.2l-1.6-2.3-2.7.7-.6-2.7-2.6-1 .8-2.7L3.4 11l1.9-2-.8-2.7 2.6-1 .6-2.7 2.7.7z" fill="#3B7FD0"/><circle cx="12" cy="12" r="3.4" fill="#FFF6E3"/></svg>${L("ตั้งค่า","Settings")}</button>
       </div>
     </main>
-    <footer class="t-foot"><button data-tcred>${L("ผู้จัดทำ","Credits")}</button><span>|</span><button data-tpriv>${L("ข้อมูลส่วนตัว","Privacy")}</button><span>|</span><span>${L("ชื่อคน ร้าน และเว็บในเกมเป็นเรื่องสมมติ","All names in the game are fictional")}</span></footer>`;
+    <footer class="t-foot"><button data-tcred>${L("ผู้จัดทำ","Credits")}</button><i>|</i><button data-tpriv>${L("ข้อมูลส่วนตัว","Privacy")}</button><i>|</i><button data-thow2>${L("วิธีเล่น","How to play")}</button><i>|</i><span>${L("ชื่อในเกมเป็นเรื่องสมมติ","All names are fictional")}</span></footer>`;
   el.hidden=false;
   const q=(s,f)=>{ const b=el.querySelector(s); if(b) b.onclick=f; };
   q("[data-tplay]",()=>{ sfx("good"); if(resume){ pickChar=S.char; beginGame("resume"); } else { hideTitle(); openStart(); } });
   q("[data-tnew]",()=>{ hideTitle(); openStart(); });
-  q("[data-thow]",()=>titleSheet("how"));
+  q("[data-thow]",()=>titleSheet("how")); q("[data-thow2]",()=>titleSheet("how"));
   q("[data-tnews]",()=>titleSheet("news"));
   q("[data-tset]",()=>openSettings(true));
   q("[data-tcred]",()=>titleSheet("cred"));
