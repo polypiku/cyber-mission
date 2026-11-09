@@ -6,7 +6,7 @@
 <title>ภารกิจร้านกาแฟ</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Noto+Sans+Thai:wght@400;500;600;700;800&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Luckiest+Guy&family=Mitr:wght@500;600&family=Noto+Sans+Thai:wght@400;500;600;700;800&display=swap">
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -15,7 +15,9 @@
 <div class="virus" id="virus" hidden aria-live="polite"><div class="vscan"></div><i class="vbar b1"></i><i class="vbar b2"></i>
   <div class="vclock" id="vclock"><span class="vsk">☠</span><div><small>VIRUS · <span id="vwhere"></span></small><b id="vtime">0:30</b></div><span class="vsk">🔧</span></div></div>
 <div class="glitch" id="glitch" hidden aria-hidden="true"><div class="gscan"></div><i class="gbar"></i></div>
+<div class="title" id="title" hidden></div>
 <button class="goal" id="goal" type="button" hidden></button>
+<button class="mini" id="mini" type="button" hidden aria-label="Map"><canvas id="miniCv"></canvas><span id="miniName"></span></button>
 <div class="hud" id="hud">
   <div class="bars" id="bars"></div>
   <div class="hud-r">
@@ -54,6 +56,7 @@
 <script src="js/progress.js"></script>
 <script src="js/world.js"></script>
 <script src="js/render.js"></script>
+<script src="js/scenery.js"></script>
 <script src="js/crowd.js"></script>
 <script src="js/story.js"></script>
 <script src="js/engine.js"></script>
@@ -63,6 +66,7 @@
 <script src="js/clues.js"></script>
 <script src="js/fix.js"></script>
 <script src="js/guide.js"></script>
+<script src="js/title.js"></script>
 <script src="js/ui.js"></script>
 <script src="js/phone.js"></script>
 <script src="js/arcade.js"></script>

@@ -131,3 +131,25 @@ function slapScene(then){
   st.push({say:["me","…มือถือยายหล่นจอแตกด้วย","…and Grandma's phone fell and cracked."],em:[[player,"😰",2]],t:2});
   startCinema(st, ()=>then(), {actors:[A]});
 }
+
+/* ---------- always-on minimap in the top-right corner ---------- */
+let miniT=0;
+function drawMini(now){
+  const el=$("mini"); if(!el) return;
+  const show=!!S.char && !CIN && !sheetMode && bg.width>0;
+  el.hidden=!show; if(!show || now-miniT<120) return; miniT=now;
+  const cvm=$("miniCv"), wide=window.innerWidth>=760, cw=wide?220:128, ch=Math.round(Math.min(cw*H/W, wide?170:110));
+  const sx=cw/W, sy=ch/H;
+  if(cvm.width!==cw*2||cvm.height!==ch*2){ cvm.width=cw*2; cvm.height=ch*2; cvm.style.width=cw+"px"; cvm.style.height=ch+"px"; }
+  const g=cvm.getContext("2d"); g.setTransform(2,0,0,2,0,0); g.clearRect(0,0,cw,ch);
+  g.drawImage(bg,0,0,bg.width,bg.height,0,0,cw,ch);
+  g.fillStyle="rgba(255,255,255,.12)"; g.fillRect(0,0,cw,ch);
+  /* what the screen shows right now */
+  g.strokeStyle="rgba(255,255,255,.95)"; g.lineWidth=1.5; g.strokeRect(camX*sx,camY*sy,(VW/Z)*sx,(VH/Z)*sy);
+  const dot=(x,y,r,fill,ring)=>{ g.beginPath(); g.arc(x*sx,y*sy,r,0,7); g.fillStyle=fill; g.fill(); g.lineWidth=1.5; g.strokeStyle=ring||INK; g.stroke(); };
+  for(const n of npcs){ const c=!n.filler && caseOf(n); if(c && !S.best[c]) dot(n.x,n.y,3.4,"#FFC414"); }
+  for(const e of roomExits()) dot(e.x,e.y,3.4,"#FF8A00","#FFFFFF");
+  if(S.zone===0){ const gi=goalInfo(), d=gi&&gi.z!=null&&doorOf(gi.z); if(d){ const p=RM?1:1+Math.sin(now/220)*.25; dot(d.x,d.y,5*p,"#FF8A00","#FFFFFF"); } }
+  dot(player.x,player.y,4.2,"#2F6DB5","#FFFFFF");
+  $("miniName").textContent=S.zone===0?L("ถนนหน้าร้าน","Main street"):zoneName(S.zone);
+}

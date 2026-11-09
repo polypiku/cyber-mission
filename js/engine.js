@@ -189,6 +189,7 @@ function goalPill(){
   el.hidden=!show; if(!show) return;
   const txt=`🎯 ${esc(gi.t)}`; if(el.dataset.t!==txt){ el.dataset.t=txt; el.innerHTML=`<span>${txt}</span>`; }
   el.style.top=($("hud").offsetHeight+6)+"px";
+  const mi=$("mini"); if(mi) mi.style.top=($("hud").offsetHeight+6)+"px";
 }
 let hudPrev=null, hudFlash={}, hudFlashT=null;
 function hud(){

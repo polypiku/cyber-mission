@@ -76,7 +76,7 @@ function openSettings(fromStart){
     <div class="box"><h4>${L("ภาษา","Language")}</h4>${langSw()}</div>
     <div class="btns"><button class="btn g" data-sound aria-pressed="${S.sound}"><span>${S.sound?L("เสียง: เปิด","Sound: on"):L("เสียง: ปิด","Sound: off")}</span></button></div>
     <div class="btns">${btn(L("เสร็จแล้ว","Done"),setFromStart?"data-backstart":"data-close","y")}</div></div>`);
-  const bs=$("sheet").querySelector("[data-backstart]"); if(bs) bs.onclick=()=>{ setFromStart=false; openStart(); };
+  const bs=$("sheet").querySelector("[data-backstart]"); if(bs) bs.onclick=()=>{ setFromStart=false; if(titleOn) closeSheet(); else openStart(); };
 }
 function openMenu(){
   openSheet("menu", `${top_(L("เมนู","Menu"))}<div class="sh-body">
@@ -233,13 +233,7 @@ function wireSheet(){
   on("[data-ts]",(b)=>{ S.ts=+b.dataset.ts; save(); applyTS(); sfx("blip"); const keepPick=sheetMode==="start"&&$("pname")?$("pname").value:null; if(setFromStart) openSettings(); else if(sheetMode==="start"){ openStart(); if(keepPick!=null&&$("pname")) $("pname").value=keepPick; } else if(sheetMode==="menu") openMenu(); else if(sheetMode==="settings") openSettings(); hudKey=""; hud(); });
   on("[data-settings]",()=>{ const pn=$("pname"); if(pn) S.name=pn.value.trim(); openSettings(sheetMode==="start"); });
   on("[data-pick]",(b)=>{ pickChar=b.dataset.pick; sh.querySelectorAll("[data-pick]").forEach(x=>x.setAttribute("aria-pressed",String(x===b))); castList(); });
-  on("[data-go]",(b)=>{
-    if(b.dataset.go==="new"){ const lang=S.lang, nmIn=($("pname")&&$("pname").value||"").trim().slice(0,16); S=fresh(); S.lang=lang; S.char=pickChar; S.name=nmIn; S.zone=6; S.seen={6:true}; player.x=432; player.y=520; player.dir="up"; }
-    else if(S.char!==pickChar){ S.char=pickChar; }
-    save(); setWorld(); buildCast(); drawStatic(); closeSheet(); hudKey=""; if(S.zone===2){ player.x=720; player.y=LH-90; } if(cbFloor()){ player.x=70; player.y=(CB_TOP+CB_BOT)/2; }
-    if(!S.intro){ setTimeout(startTour,250); }
-    else setTimeout(zoneEvent,400);
-  });
+  on("[data-go]",(b)=>beginGame(b.dataset.go));
   on("[data-hint]",(b)=>{ const h=$("hint"); h.hidden=!h.hidden; b.setAttribute("aria-expanded",String(!h.hidden)); });
   on("[data-ch]",(b)=>{
     if(C.locked) return; C.locked=true;
@@ -267,6 +261,7 @@ function wireSheet(){
 function resetAll(){ const lang=S.lang, ch=S.char; S=fresh(); S.lang=lang; S.char=ch; save(); setWorld(); buildCast(); drawStatic(); hudKey=""; player.x=432; player.y=500; player.dir="up"; closeSheet(); openStart(); }
 $("phoneBtn").onclick=()=>{ if(!D) openPhone(); };
 $("menuBtn").onclick=()=>{ if(!D) openMenu(); };
+$("mini").onclick=()=>{ if(!D&&!busy()) openZones(); };
 $("goal").onclick=()=>{ if(!D&&!busy()) openZones(); };
 $("setBtn").onclick=()=>{ if(!D) openSettings(false); };
 /* DEBUG (temporary): shortcut to preview the 5 endings without changing the save */
@@ -284,3 +279,13 @@ $("setBtn").onclick=()=>{ if(!D) openSettings(false); };
 $("prog").onclick=()=>{ if(!D && $("peek").hidden) openZones(); };
 $("boardBtn").onclick=()=>{ if(!D && $("peek").hidden) openBoard(); };
 $("veil").addEventListener("click",(e)=>{ if(e.target===$("veil") && (sheetMode==="phone"||sheetMode==="menu"||sheetMode==="settings")) closeSheet(); });
+
+/* start or resume from the character screen (or the title screen's play button) */
+function beginGame(go){
+  hideTitle();
+  if(go==="new"){ const lang=S.lang, nmIn=($("pname")&&$("pname").value||"").trim().slice(0,16); S=fresh(); S.lang=lang; S.char=pickChar; S.name=nmIn; S.zone=6; S.seen={6:true}; player.x=432; player.y=520; player.dir="up"; }
+  else if(S.char!==pickChar){ S.char=pickChar; }
+  save(); setWorld(); buildCast(); drawStatic(); closeSheet(); hudKey=""; if(S.zone===2){ player.x=720; player.y=LH-90; } if(cbFloor()){ player.x=70; player.y=(CB_TOP+CB_BOT)/2; }
+  if(!S.intro){ setTimeout(startTour,250); }
+  else setTimeout(zoneEvent,400);
+}

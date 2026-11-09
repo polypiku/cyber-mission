@@ -61,20 +61,7 @@ function drawStatic(){
 
 /* the street */
 function drawStreetStatic(g){
-  // grass + hedge behind buildings
-  g.fillStyle="#9ACB7A"; g.fillRect(0,0,OW,OH);
-  g.fillStyle="#7DB55E"; for(let x=0;x<OW;x+=36){ g.beginPath(); g.arc(x+18,30,26,0,7); g.fill(); }
-  // sidewalk
-  g.fillStyle="#D9D4CA"; g.fillRect(28,250,OW-56,90);
-  g.strokeStyle="rgba(80,70,60,.18)"; g.lineWidth=1.2;
-  for(let x=28;x<OW;x+=48){ g.beginPath(); g.moveTo(x,250); g.lineTo(x,340); g.stroke(); }
-  g.beginPath(); g.moveTo(28,295); g.lineTo(OW-28,295); g.stroke();
-  // plaza paving
-  g.fillStyle="#EADFC9"; g.fillRect(28,340,OW-56,260);
-  g.strokeStyle="rgba(122,90,50,.15)";
-  for(let y=340,r=0;y<600;y+=30,r++){ g.beginPath(); g.moveTo(28,y); g.lineTo(OW-28,y); g.stroke(); for(let x=28+(r%2?30:0);x<OW;x+=60){ g.beginPath(); g.moveTo(x,y); g.lineTo(x,y+30); g.stroke(); } }
-  // paths to doors
-  for(const b of BUILDINGS){ if(b.alley) continue; g.fillStyle="#C9C1B2"; g.fillRect(b.door-34,250,68,90); }
+  drawStreetGround(g);
   // the dark alley between the café and the store
   g.fillStyle="#2A2238"; g.fillRect(462,40,72,212); g.strokeStyle=INK; g.lineWidth=3; g.strokeRect(462,40,72,212);
   g.fillStyle="#3A3050"; for(let y=60;y<250;y+=26) g.fillRect(470+(y%52?6:0),y,26,10);
@@ -91,9 +78,8 @@ function drawStreetStatic(g){
   g.fillStyle="#4A4D52"; g.fillRect(0,614,OW,150);
   // south curb + sidewalk
   g.fillStyle="#B9B2A6"; g.fillRect(0,764,OW,14); g.strokeStyle=INK; g.lineWidth=3; g.beginPath(); g.moveTo(0,764); g.lineTo(OW,764); g.moveTo(0,778); g.lineTo(OW,778); g.stroke();
-  g.fillStyle="#CFC9BD"; g.fillRect(0,778,OW,80);
-  g.strokeStyle="rgba(80,70,60,.18)"; g.lineWidth=1.2; for(let x=0;x<OW;x+=48){ g.beginPath(); g.moveTo(x,778); g.lineTo(x,858); g.stroke(); }
-  g.fillStyle="#5E7A4E"; g.fillRect(0,858,OW,OH-858);
+  brickPave(g,0,778,OW,80,91);
+  grassArea(g,0,858,OW,OH-858,93);
   drawOfficesStatic(g);
   drawSouthRoad(g);
   g.strokeStyle="#F2F2F2"; g.lineWidth=4; g.setLineDash([34,26]); g.beginPath(); g.moveTo(0,690); g.lineTo(OW,690); g.stroke(); g.setLineDash([]);
@@ -102,11 +88,12 @@ function drawStreetStatic(g){
   for(const xg of XINGS){ g.fillStyle="#F2F2F2"; for(let xx=xg.x0+4;xx+12<=xg.x1;xx+=22) g.fillRect(xx,620,12,140);
     if(!xg.dir||xg.dir>0) g.fillRect(xg.x0-20,618,6,70); if(!xg.dir||xg.dir<0) g.fillRect(xg.x1+14,692,6,70); }
   // side fences
-  g.fillStyle="#7DB55E"; g.fillRect(0,250,28,350); g.fillRect(OW-28,250,28,350); g.fillRect(0,778,28,80); g.fillRect(OW-28,778,28,80);
+  grassArea(g,0,250,28,350,95); grassArea(g,OW-28,250,28,350,96);
   // buildings
   for(const b of BUILDINGS){
     if(b.alley) continue;
     const y0=60, h=190;
+    thaiRoof(g,b,y0);
     g.fillStyle="rgba(0,0,0,.18)"; g.fillRect(b.x+8,y0+8,b.w,h);
     rr(g,b.x,y0,b.w,h,4); g.fillStyle=b.wall; g.fill(); g.lineWidth=3; g.strokeStyle=INK; g.stroke();
     // roof / awning
@@ -125,6 +112,7 @@ function drawStreetStatic(g){
     if(!b.soon){ rr(g,b.door-22,y0+118,44,40,3); g.fillStyle="#CBE6F1"; g.fill(); g.lineWidth=2; g.stroke(); }
     g.fillStyle="#FFC414"; g.beginPath(); g.arc(b.door+20,y0+160,3,0,7); g.fill();
   }
+  drawStreetDecor(g);
 }
 function drawTree(g,p){
   g.fillStyle="rgba(0,0,0,.18)"; g.beginPath(); g.ellipse(p.x,p.y+10,26,8,0,0,7); g.fill();
