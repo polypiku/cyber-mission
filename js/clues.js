@@ -37,7 +37,7 @@ const UC_MIN = 18;
 function clueWhere(k){
   const src=srcOf(k), zoneOf=(id)=>Object.keys(ZONES).find(z=>ZONES[z].cases.includes(id));
   if(src==="case"){ const z=zoneOf(k); return `${z?ZONES[z].name[S.lang]:""} · ${CASES[S.lang][k].title}`; }
-  if(src==="ghost") return L("บ้านผีสิง (ตรอกมืด)","Haunted house (dark alley)");
+  if(src==="ghost") return L("บ้านร้างในป่า","The old house in the woods");
   if(src==="people") return L(k==="npc_it"?"มีคนแปลกหน้าในร้านเน็ต":"มีคนแปลกหน้าในธนาคาร",k==="npc_it"?"A stranger at the net café":"A stranger at the bank");
   if(src==="hq") return L("ข้างในตึกรังแก๊ง","Inside the gang's building");
   const sp=SPOTS.find(s=>s.id===k); const zn=sp.z===8?L("ตึกรังแก๊ง","the gang's building"):ZONES[sp.z].name[S.lang];
@@ -144,8 +144,8 @@ function nextHint(){
   if(!S.hqFound) return t("ตึกออฟฟิศ 3 ตึกฝั่งตรงข้ามถนน ตึกไหนมีอะไรแปลกๆ ลองเข้าไปดู","Check the three office buildings across the road for anything odd.");
   if(!S.uc && (S.handed||0)<UC_MIN) return t(`ส่งเบาะแสให้ได้ ${UC_MIN} ชิ้น พี่จะทำบัตรพนักงานให้แฝงตัวขึ้นไปดูชั้นบน`,`Hand in ${UC_MIN} clues and I'll make you a staff pass to sneak upstairs.`);
   if(S.uc && !(S.ev.hq_script&&S.ev.hq_dorm)) return t("ขึ้นไปชั้น 2 ถ่ายรูปไวท์บอร์ด แล้วไปคุยกับคนที่ชั้น 3","Go up, photograph the whiteboard on floor 2, and talk to people on floor 3.");
-  if(!ghostOpen()) return t(`ได้ยินว่าตรอกมืดข้างร้านกาแฟมีเบาะแส แต่ต้องมีคะแนน ${GHOST_MIN} ★ ก่อนนะ`,`Word is the dark alley by the café hides clues, but you need ${GHOST_MIN} ★ first.`);
-  if(["merit","inherit","romance","fortune"].some(k=>!S.ev[k])) return t("ตรอกมืดข้างร้านกาแฟยังมีเบาะแสเหลืออยู่","The dark alley by the café still holds clues.");
+  if(!ghostOpen()) return t(`ได้ยินว่าบ้านร้างในป่าทางซ้ายล่างของเมืองมีเบาะแส แต่ต้องมีคะแนน ${GHOST_MIN} ★ ก่อนนะ`,`Word is the old house in the woods, bottom left of town hides clues, but you need ${GHOST_MIN} ★ first.`);
+  if(["merit","inherit","romance","fortune"].some(k=>!S.ev[k])) return t("บ้านร้างในป่าทางซ้ายล่างของเมืองยังมีเบาะแสเหลืออยู่","The old house in the woods still holds clues.");
   if(SPOTS.some(s=>s.lv>0 && !S.ev[s.id])) return t("ยังมีของแปลกๆ ซ่อนอยู่ตามห้องต่างๆ มองหาเครื่องหมาย ? สีเหลือง","There are still odd things hidden in rooms. Look for the yellow ? marks.");
   if(!S.ev.npc_it || !S.ev.npc_admin) return t("มีคนแปลกหน้าในร้านเน็ตกับธนาคาร ลองไปคุยดู","There are strangers at the net café and the bank. Talk to them.");
   return t("เคสไหนยังไม่ได้เบาะแส ลองเล่นใหม่ให้ปลอดภัย","Replay any case that didn't give a clue, and keep everyone safe.");

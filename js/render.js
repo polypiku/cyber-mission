@@ -15,7 +15,7 @@ window.addEventListener("resize",resize);
 function rr(g,x,y,w,h,r){ g.beginPath(); g.moveTo(x+r,y); g.arcTo(x+w,y,x+w,y+h,r); g.arcTo(x+w,y+h,x,y+h,r); g.arcTo(x,y+h,x,y,r); g.arcTo(x,y,x+w,y,r); g.closePath(); }
 const INK="#141414";
 function drawStatic(){
-  const s=2; bg.width=W*s; bg.height=H*s; const g=bg.getContext("2d"); g.scale(s,s);
+  const s=Math.min(2,Math.sqrt(14e6/(W*H))); bg.width=Math.round(W*s); bg.height=Math.round(H*s); const g=bg.getContext("2d"); g.scale(s,s);
   g.lineJoin="round"; g.lineCap="round";
   if(S.zone===2){ drawLibStatic(g); return; }
   if(S.zone===0){ drawStreetStatic(g); return; }
@@ -25,7 +25,6 @@ function drawStatic(){
   if(S.zone===6){ drawUniStatic(g); return; }
   if(S.zone===8){ drawOfficeStatic(g); return; }
   if(S.zone===7){ if(cbFloor()) drawCellBlockStatic(g); else drawPoliceStatic(g); return; }
-  if(S.zone===14){ drawSoiStatic(g); return; }
   if(ROOMS2[S.zone]){ drawRoom2Static(g); return; }
   // floor
   g.fillStyle="#E7CFA6"; g.fillRect(0,0,W,H);
@@ -64,7 +63,7 @@ function drawStatic(){
 /* the street */
 function drawStreetStatic(g){
   drawStreetGround(g);
-  // the dark alley between the café and the store
+  // the old house in the woods between the café and the store
   g.fillStyle="#2A2238"; g.fillRect(462,40,72,212); g.strokeStyle=INK; g.lineWidth=3; g.strokeRect(462,40,72,212);
   g.fillStyle="#3A3050"; for(let y=60;y<250;y+=26) g.fillRect(470+(y%52?6:0),y,26,10);
   g.fillStyle="rgba(150,130,200,.25)"; g.beginPath(); g.ellipse(498,236,34,10,0,0,7); g.fill();
@@ -157,7 +156,7 @@ function drawAmbientBack(g,now){
   }
 }
 /* pigeons on the street scatter when you walk up */
-const PIGEONS=[{x:620,y:520},{x:650,y:540},{x:600,y:548},{x:1090,y:400},{x:1110,y:416},{x:360,y:400}].map(p=>({...p,hx:p.x,hy:p.y,fly:0,back:0}));
+const PIGEONS=[{x:2080,y:410},{x:2110,y:425},{x:2060,y:440},{x:2230,y:415},{x:2250,y:430},{x:1980,y:380}].map(p=>({...p,hx:p.x,hy:p.y,fly:0,back:0}));
 function drawPigeon(g,p,now){
   const f=p.fly, bob=RM?0:(p.peck?Math.abs(Math.sin(now/90+p.hx))*5:Math.abs(Math.sin(now/180+p.hx))*2);
   g.save(); g.translate(p.x,p.y-f*80); if(p.face<0) g.scale(-1,1);

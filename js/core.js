@@ -150,13 +150,12 @@ const ZONES = {
   4:{name:{th:"ร้านเน็ต NET ZONE",en:"NET ZONE internet café"}, cases:["topup","trade","secret"], roleCase:{friend:"topup", tips:"trade", grandpa:"secret"}},
   6:{name:{th:"มหาวิทยาลัยหัวเฉียวเฉลิมพระเกียรติ",en:"Huachiew Chalermprakiet University"}, cases:["itmail","parttime","fakeprof"], roleCase:{tips:"itmail", paweena:"parttime", prof:"fakeprof"}},
   7:{name:{th:"สถานีตำรวจ",en:"Police station"}, cases:["report","ransom"], roleCase:{grandpa:"report", visitor:"ransom"}},
-  5:{bonus:true, name:{th:"บ้านผีสิงในตรอกมืด",en:"The haunted house in the alley"}, cases:["merit","inherit","romance","fortune"], roleCase:{grandma:"merit", grandpa:"inherit", tips:"romance", friend:"fortune"}},
+  5:{bonus:true, name:{th:"บ้านร้างในป่า",en:"The old house in the woods"}, cases:["merit","inherit","romance","fortune"], roleCase:{grandma:"merit", grandpa:"inherit", tips:"romance", friend:"fortune"}},
   9:{side:true, name:{th:"ศูนย์อาหาร",en:"Food court"}, cases:["invest","pig","bec"], roleCase:{friend:"invest", c_pig:"pig", c_bec:"bec"}},
   10:{side:true, name:{th:"ตลาดนัด",en:"Market"}, cases:["qr","gold","share"], roleCase:{grandma:"qr", c_gold:"gold", c_share:"share"}},
   11:{side:true, name:{th:"ร้านสะดวกซื้อ",en:"Mini mart"}, cases:["parent","atm","wrong"], roleCase:{grandma:"parent", c_atm:"atm", c_wrong:"wrong"}},
   12:{side:true, name:{th:"ร้านมือถือ หมอโฟน ไอที",en:"Phone Dr. IT shop"}, cases:["simswap","apk","deepfake"], roleCase:{c_sim:"simswap", c_apk:"apk", c_deep:"deepfake"}},
   13:{side:true, name:{th:"หอพักนักศึกษา",en:"Student dorm"}, cases:["airdrop","scholar","task"], roleCase:{friend:"airdrop", tips:"scholar", c_task:"task"}},
-  14:{side:true, soi:true, name:{th:"ซอยร้านค้า",en:"Shop lane"}, cases:[], roleCase:{}},
 };
 const MAINZ = ()=>Object.keys(ZONES).map(Number).filter(z=>!ZONES[z].bonus);
 const zno = (z)=>{ z=+z; const i=CHAPTERS.indexOf(z); if(i>=0) return i+1; if(z===7) return "🚓"; if(ZONES[z]&&ZONES[z].bonus) return "👻"; return ""; };

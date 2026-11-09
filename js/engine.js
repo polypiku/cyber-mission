@@ -14,29 +14,22 @@ function render(now){
   if(bg.width) ctx.drawImage(bg,0,0,W,H);
   drawAmbientBack(ctx,now);
   if(S.zone===0){ drawDoorBadges(ctx,now); drawOfficesLive(ctx,now); }
-  if(S.zone===14) drawSoiBadges(ctx,now);
   const near=nearest();
   if(near && !busy()){ ctx.beginPath(); ctx.ellipse(near.x,near.y,24,9,0,0,7); ctx.strokeStyle="#FF5A1F"; ctx.lineWidth=3; ctx.stroke(); }
   if(target && !busy()){ ctx.beginPath(); ctx.arc(target.x,target.y,6+(RM?0:Math.sin(now/120)),0,7); ctx.strokeStyle="rgba(20,20,20,.55)"; ctx.lineWidth=2; ctx.stroke(); }
-  const items = (S.zone===0||S.zone===2||S.zone===8||cbFloor()||ROOMS2[S.zone]||S.zone===14) ? [] : [{y:186,d:g=>drawCounter(g)}];
+  const items = (S.zone===0||S.zone===2||S.zone===8||cbFloor()||ROOMS2[S.zone]) ? [] : [{y:186,d:g=>drawCounter(g)}];
   if(cbFloor()){ items.push({y:CB_TOP+1,d:g=>drawCellBlockBars(g,true)}); items.push({y:9000,d:g=>drawCellBlockBars(g,false)}); }
   if(S.zone===0){ items.push({y:(CRUMBS?CRUMBS.y-12:0),d:g=>drawCrumbs(g)}); PIGEONS.forEach(p=>items.push({y:p.y,d:g=>drawPigeon(g,p,now)})); }
   if(vilOn()) items.push({y:9999,d:g=>drawVilFx(g,now)});
   if(S.zone===0) items.push({y:REPAIR.y+12,d:g=>drawRepair(g,now)});
-  if(S.zone===14) soiItems(items,now);
   if(S.zone===1){ items.push({y:CAT.y+1,d:g=>drawBowl(g,now)}); items.push({y:CAT.y,d:g=>drawCat(g,now)}); }
   if(S.zone===0){
-    items.push({y:446,d:g=>drawFountain(g,now)});
+    items.push({y:FOUNTAIN.y+6,d:g=>drawFountain(g,now)});
     OUT_TREES.forEach(p=>items.push({y:p.y+10,d:g=>drawTree(g,p)}));
     OUT_BENCHES.forEach(b=>items.push({y:b.y+8,d:g=>drawBench(g,b)}));
     OUT_LAMPS.forEach(l=>items.push({y:l.y+4,d:g=>drawLamp(g,l,now)}));
     items.push({y:KIOSK.y+10,d:g=>drawKiosk(g,now)});
-    if(!(CIN&&CIN.noCars)) CARS.forEach(c=>items.push({y:c.y+20,d:g=>drawCar(g,c)}));
     if(CIN&&CIN.van){ const v=CIN.van; items.push({y:v.y+20,d:g=>drawCar(g,v)}); }
-    XINGS.filter(xg=>!xg.sig).forEach(xg=>{ items.push({y:606,d:g=>drawTL(g,xg.x0-30,606,xg,now)}); items.push({y:780,d:g=>drawTL(g,xg.x1+30,780,xg,now)}); });
-    const EWS={sig:"ew"}, NSS={sig:"ns"};
-    items.push({y:606,d:g=>drawTL(g,872,606,EWS,now)}); items.push({y:782,d:g=>drawTL(g,1018,782,NSS,now)});
-    if(!(CIN&&CIN.noCars)) VCARS.forEach(c=>items.push({y:c.y+c.len/2,d:g=>drawCarV(g,c)}));
   }
   TABLES.forEach(t=>items.push({y:S.zone===2?t.y+LIB_SIZE[t.item][1]/2:t.y+18,d:g=>drawTable(g,t)}));
   CHAIRS.forEach(c=>items.push({y:c.y+8,d:g=>drawChair(g,c)}));
@@ -162,18 +155,17 @@ function step(dt){
     if(target){ const p=lastPos; if(p && Math.hypot(p.x-player.x,p.y-player.y)<0.3){ stuckT+=dt; if(stuckT>0.35){ target=null; if(targetNpc && Math.hypot(targetNpc.x-player.x,targetNpc.y-player.y)<TALK+30){ const n=targetNpc; face(player,n); talkTo(n); } targetNpc=null; } } else stuckT=0; }
     lastPos={x:player.x,y:player.y};
   }
-  if(S.zone===0){ tlT+=dt; stepCars(dt); stepVCars(dt); }
+  
   if(!busy() && S.char){
     // leaving a shop through its door
-    if(S.zone>0 && (S.zone===14 ? soiExit() : S.zone===2 ? inLibExit() : (player.y>598 && player.x>384 && player.x<480))) goOutside(S.zone);
+    if(S.zone>0 && (S.zone===2 ? inLibExit() : (player.y>598 && player.x>384 && player.x<480))) goOutside(S.zone);
     else if(inLibStairs()) askStairs();
     else if(inLift()) askLift();
     else if(S.zone===7 && !cbFloor() && player.x>RW-60 && player.y>PDOOR.y0 && player.y<PDOOR.y1) switchCells(true);
     else if(cbFloor() && player.x<44) switchCells(false);
     // walking into a shop door on the street
-    else if(S.zone===0 && nearHQ() && player.y>846) tryHQ();
-    else if(S.zone===14 && soiDoorHit()) goZone(soiDoorHit().zone);
-    else if(S.zone===0 && player.y<268){ const b=BUILDINGS.find(b=>Math.abs(player.x-b.door)<30); if(b) tryEnter(b); }
+    else if(S.zone===0 && nearHQ() && player.y>OFF_TOP-12) tryHQ();
+    else if(S.zone===0){ const b=BUILDINGS.find(b=>Math.abs(player.x-b.door)<30 && player.y<b.bot+18 && player.y>b.bot-12); if(b) tryEnter(b); }
   }
   // NPCs drift back to their resting direction
   npcs.forEach(n=>{ if(rush&&rush.n===n) return; n.moving=false; if(!talking||talking!==n){ n.dir=n.home; } });

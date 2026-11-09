@@ -158,7 +158,7 @@ function openBoard(){
     <div class="zprog"><div class="zl"><span>${L("ส่งให้ตำรวจแล้ว (ตัดสินฉากจบ)","Handed to Phop (decides the ending)")}</span><b>${S.handed||0}/${clueTotal()}</b></div><div class="meter"><i style="width:${(S.handed||0)/clueTotal()*100}%"></i></div><small>${L(`เก็บได้ ${n}/${clueTotal()} ชิ้น · ถ้าส่งครบตอนนี้ คาดว่าได้ฉากจบ ${endingFrom(n)}/5`,`Found ${n}/${clueTotal()} · if all handed in now: ending ${endingFrom(n)}/5`)}</small></div>
     <div class="box"><ul class="list">${Object.entries(CLUE_SRC).map(([k,v])=>{ const b=clueBreakdown()[k]; return b?`<li>${v[S.lang]}: <b>${b[0]}/${b[1]}</b></li>`:""; }).join("")}</ul></div>
     ${(S.bestEnding||0)>=5?`<div class="unlockbox"><b>${L("ทลายแก๊งเงาครบทั้งแก๊งแล้ว!","The whole Shadow gang is behind bars!")}</b><span>${L("ขอบคุณที่ช่วยทุกคนในเมือง","Thanks for helping everyone in town")}</span></div>`
-      : `<div class="btns">${btn(S.zone===7?L("🗂️ คุยกับพี่ภพ","🗂️ Talk to Phop"):L("🚓 ไปส่งเบาะแสที่สถานีตำรวจ (ซอย 2)","🚓 Take clues to the police station (Soi 2)"),"data-bust","y")}</div>`}
+      : `<div class="btns">${btn(S.zone===7?L("🗂️ คุยกับพี่ภพ","🗂️ Talk to Phop"):L("🚓 ไปส่งเบาะแสที่สถานีตำรวจ","🚓 Take clues to the police station (Soi 2)"),"data-bust","y")}</div>`}
   </div>`);
 }
 function openFinale(){
@@ -229,7 +229,7 @@ function wireSheet(){
   on("[data-zone]",(b)=>goZone(+b.dataset.zone));
   on("[data-dex]",()=>openDex()); on("[data-board]",()=>openBoard());
   on("[data-sound]",(b)=>{ S.sound=!S.sound; save(); b.setAttribute("aria-pressed",String(S.sound)); b.querySelector("span").textContent=S.sound?L("เสียง: เปิด","Sound: on"):L("เสียง: ปิด","Sound: off"); if(S.sound) sfx("good"); });
-  on("[data-bust]",()=>{ closeSheet(); const pol=npcs.find(n=>n.role==="police"); if(S.zone===7&&pol){ talkPolice(pol); } else toast(L("เอาหลักฐานไปให้พี่ภพที่สถานีตำรวจ (ซอย 2 บนถนน)","Take the evidence to Phop at the police station (Soi 2 on the street)")); });
+  on("[data-bust]",()=>{ closeSheet(); const pol=npcs.find(n=>n.role==="police"); if(S.zone===7&&pol){ talkPolice(pol); } else toast(L("เอาหลักฐานไปให้พี่ภพที่สถานีตำรวจ ","Take the evidence to Phop at the police station (Soi 2 on the street)")); });
   on("[data-out]",()=>{ closeSheet(); goOutside(S.zone||1); });
   on("[data-lang]",(b)=>{ S.lang=b.dataset.lang; save(); document.documentElement.lang=S.lang; drawStatic(); if(setFromStart) openSettings(); else if(sheetMode==="start") openStart(); else if(sheetMode==="menu") openMenu(); else if(sheetMode==="settings") openSettings(); hud(); });
   on("[data-ts]",(b)=>{ S.ts=+b.dataset.ts; save(); applyTS(); sfx("blip"); const keepPick=sheetMode==="start"&&$("pname")?$("pname").value:null; if(setFromStart) openSettings(); else if(sheetMode==="start"){ openStart(); if(keepPick!=null&&$("pname")) $("pname").value=keepPick; } else if(sheetMode==="menu") openMenu(); else if(sheetMode==="settings") openSettings(); hudKey=""; hud(); });

@@ -44,7 +44,7 @@ const clueTotal = ()=>Object.keys(EVID).length;
 const zoneName=(z)=>ZONES[z]?ZONES[z].name[S.lang]:"";
 function doorOf(z){
   if(z===8){ const o=OFFICES[S.hqFound?hqB():0]; return {x:o.door,y:OFF_TOP+10}; }
-  const b=BUILDINGS.find(b=>b.zone===z && !b.hide); return b?{x:b.door,y:250}:null;
+  const b=BUILDINGS.find(b=>b.zone===z && !b.hide); return b?{x:b.door,y:b.bot}:null;
 }
 function goalInfo(){
   if(!S.char) return null;

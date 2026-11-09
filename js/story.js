@@ -203,7 +203,7 @@ function drawKiosk(g,now){
   g.fillStyle=INK; g.font="800 10px 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', Tahoma, sans-serif"; g.fillText(S.lang==="en"?"MINI-GAMES":"มินิเกม",x,y-81);
 }
 function drawFountain(g,now){
-  const cx=720, cy=440;
+  const cx=FOUNTAIN.x, cy=FOUNTAIN.y;
   g.fillStyle="rgba(0,0,0,.15)"; g.beginPath(); g.ellipse(cx,cy+26,62,14,0,0,7); g.fill();
   g.beginPath(); g.ellipse(cx,cy+8,60,30,0,0,7); g.fillStyle="#B9B2A6"; g.fill(); g.lineWidth=3; g.strokeStyle=INK; g.stroke();
   g.beginPath(); g.ellipse(cx,cy+4,48,22,0,0,7); g.fillStyle="#7CC8F2"; g.fill(); g.lineWidth=2; g.stroke();

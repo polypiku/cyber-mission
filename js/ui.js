@@ -281,7 +281,7 @@ function finishCase(){
   hud();
 }
 function afterCaseCheck(){
-  if(ghostOpen() && !S.alleyHint){ S.alleyHint=true; save(); setTimeout(()=>toast(L("เสียงแปลกๆ ดังมาจากตรอกมืดข้างร้านกาแฟ… 👻","Strange noises from the dark alley by the café… 👻")),2800); }
+  if(ghostOpen() && !S.alleyHint){ S.alleyHint=true; save(); setTimeout(()=>toast(L("เสียงแปลกๆ ดังมาจากบ้านร้างในป่าทางซ้ายล่างของเมือง… 👻","Strange noises from the old house in the woods, bottom left of town… 👻")),2800); }
   if(S.bustPending){ S.bustPending=false; save(); setTimeout(playEnding,350); hud(); return; }
   if(S.unlockPending){ const z=S.unlockPending; S.unlockPending=0; save(); setTimeout(()=>openUnlock(z), 350); hud(); return; }
   if(S.chatPending){ S.chatPending=false; save(); setTimeout(showPeek, 450); hud(); return; }

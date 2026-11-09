@@ -22,49 +22,83 @@ ROOM_CHAIRS.forEach(c=>ROOM_SOLIDS.push({x:c.x-14,y:c.y-10,w:28,h:20}));
 ROOM_PLANTS.forEach(p=>ROOM_SOLIDS.push({x:p.x-20,y:p.y-14,w:40,h:28}));
 const POLICE_SOLIDS=ROOM_SOLIDS.filter(r=>!(r.x===RW-44&&r.y===0)).concat([{x:RW-44,y:0,w:44,h:PDOOR.y0},{x:RW-44,y:PDOOR.y1,w:44,h:RH-PDOOR.y1}]);
 
-/* ---------- outside: the street that links the zones ---------- */
-const OW=40*T, OH=23*T;
+function seeded(seed){ let a=seed>>>0; return ()=>{ a=(a+0x6D2B79F5)>>>0; let t=a; t=Math.imul(t^(t>>>15),t|1); t^=t+Math.imul(t^(t>>>7),t|61); return ((t^(t>>>14))>>>0)/4294967296; }; }
+/* ---------- outside: a little town of winding brick paths, a river with bridges and one main road ---------- */
+const OW=60*T, OH=46*T;                       /* 2880 x 2208 */
+const ROW_A=150, ROW_B=720, ROW_C=1400, ROW_D=1830, AVE={y0:1130,y1:1250};
 const BUILDINGS=[
-  {zone:1, x:96,  w:360, door:276, name:{th:"Bean House",en:"Bean House"}, sub:{th:"ร้านกาแฟ",en:"Café"}, wall:"#F3E3C8", roof:"#C2552E", sign:"#2E3B33", signFg:"#FFC414"},
-  {zone:2, x:540, w:310, door:695, name:{th:"ห้องสมุดเมือง",en:"CITY LIBRARY"}, sub:{th:"2 ชั้น · Wi-Fi ฟรี",en:"2 floors · Free Wi-Fi"}, wall:"#EFE6D6", roof:"#5B3A24", sign:"#3A2516", signFg:"#F2C14E"},
-  {zone:3, x:1040, w:304, door:1192, name:{th:"ธนาคารนครทอง",en:"NKT BANK"}, sub:{th:"สาขาตลาด",en:"Market branch"}, wall:"#F1ECE0", roof:"#0F5E46", sign:"#0F5E46", signFg:"#F2C14E"},
-  {zone:5, alley:true, x:462, w:72, door:498, name:{th:"ตรอกมืด",en:"Dark alley"}, sub:{th:"",en:""}},
-  {zone:6, alley:true, soi:true, road:true, x:850, w:40, door:870, icon:"🎓", col:"#F2C14E", name:{th:"ถนนไป ม.หัวเฉียวฯ",en:"Road to the university"}, sub:{th:"",en:""}},
-  {zone:6, alley:true, soi:true, road:true, hide:true, x:1000, w:40, door:1020, icon:"🎓", col:"#F2C14E", name:{th:"ถนนไป ม.หัวเฉียวฯ",en:"Road to the university"}, sub:{th:"",en:""}},
-  {zone:7, alley:true, soi:true, x:1350, w:72, door:1386, icon:"🚓", col:"#9CC3F0", name:{th:"ซอย 2 · สถานีตำรวจ",en:"Soi 2 · Police station"}, sub:{th:"",en:""}},
-  {zone:14, alley:true, soi:true, x:1808, w:80, door:1848, icon:"🛍️", col:"#FFC9A0", name:{th:"ซอยร้านค้า",en:"Shop lane"}, sub:{th:"",en:""}},
-  {zone:4, x:1428, w:360, door:1608, name:{th:"NET ZONE",en:"NET ZONE"}, sub:{th:"ร้านเน็ต · เกม",en:"Internet café · games"}, wall:"#2E3350", roof:"#7A5AA6", sign:"#13162A", signFg:"#5EE6D0"}
+  {zone:6, x:100, w:540, y0:ROW_A, door:370, name:{th:"ม.หัวเฉียวฯ",en:"HUACHIEW UNI"}, sub:{th:"มหาวิทยาลัย",en:"University"}, wall:"#F2D3C2", roof:"#C2552E", sign:"#7A2E1A", signFg:"#FFE08A"},
+  {zone:2, x:760, w:320, y0:ROW_A, door:920, name:{th:"ห้องสมุดเมือง",en:"CITY LIBRARY"}, sub:{th:"2 ชั้น · Wi-Fi ฟรี",en:"2 floors · Free Wi-Fi"}, wall:"#EFE6D6", roof:"#5B3A24", sign:"#3A2516", signFg:"#F2C14E"},
+  {zone:1, x:1480, w:340, y0:ROW_A, door:1650, name:{th:"Bean House",en:"Bean House"}, sub:{th:"ร้านกาแฟ",en:"Café"}, wall:"#F3E3C8", roof:"#C2552E", sign:"#2E3B33", signFg:"#FFC414"},
+  {zone:3, x:100, w:320, y0:ROW_B, door:260, name:{th:"ธนาคารนครทอง",en:"NKT BANK"}, sub:{th:"สาขาตลาด",en:"Market branch"}, wall:"#F1ECE0", roof:"#0F5E46", sign:"#0F5E46", signFg:"#F2C14E"},
+  {zone:4, x:520, w:340, y0:ROW_B, door:690, name:{th:"NET ZONE",en:"NET ZONE"}, sub:{th:"ร้านเน็ต · เกม",en:"Internet café · games"}, wall:"#2E3350", roof:"#7A5AA6", sign:"#13162A", signFg:"#5EE6D0"},
+  {zone:7, x:1480, w:320, y0:ROW_B, door:1640, name:{th:"สถานีตำรวจ",en:"POLICE STATION"}, sub:{th:"ตำรวจไซเบอร์ · แจ้งความ",en:"Cyber police · reports"}, wall:"#EAF1FA", roof:"#2F6DB5", sign:"#173D66", signFg:"#FFFFFF"},
+  {zone:9, x:1900, w:300, y0:ROW_B, door:2050, name:{th:"ศูนย์อาหาร",en:"FOOD COURT"}, sub:{th:"อร่อย ราคาเบา",en:"Cheap and tasty"}, wall:"#FBEFD9", roof:"#D9822B", sign:"#7A3B12", signFg:"#FFE08A"},
+  {zone:11, x:2300, w:290, y0:ROW_B, door:2445, name:{th:"ร้านสะดวกซื้อ",en:"MINI MART"}, sub:{th:"เปิด 24 ชั่วโมง",en:"Open 24 hours"}, wall:"#F4F7F2", roof:"#2E8B57", sign:"#1F6E43", signFg:"#FFFFFF"},
+  {zone:12, x:1480, w:290, y0:ROW_C, door:1625, name:{th:"หมอโฟน ไอที",en:"PHONE DR. IT"}, sub:{th:"มือถือ · ซ่อม · อัปเกรด",en:"Phones · repair · upgrades"}, wall:"#E8F1F8", roof:"#2F6DB5", sign:"#173D66", signFg:"#7FD3F7"},
+  {zone:10, x:1880, w:300, y0:ROW_C, door:2030, name:{th:"ตลาดนัด",en:"MARKET"}, sub:{th:"ของกิน ของใช้",en:"Food and goods"}, wall:"#F6E7C8", roof:"#B8432E", sign:"#5A2A1A", signFg:"#FFD84D"},
+  {zone:13, x:2290, w:320, y0:ROW_C, door:2450, name:{th:"หอพักนักศึกษา",en:"STUDENT DORM"}, sub:{th:"หอใน ม.หัวเฉียวฯ",en:"Huachiew dorm"}, wall:"#EFE3F2", roof:"#7A4E8C", sign:"#4A2B5A", signFg:"#F6D9FF"},
+  {zone:5, x:120, w:300, y0:ROW_D, door:270, ghost:true, name:{th:"บ้านร้างในป่า",en:"THE OLD HOUSE"}, sub:{th:"ว่ากันว่ามีผี…",en:"They say it's haunted…"}, wall:"#5A4E66", roof:"#2A2238", sign:"#1A1424", signFg:"#C9B8F0"}
 ];
-/* the five places up the shop lane (zone 14) */
-const SOI_BLDG=[
-  {zone:9, x:1840, w:300, door:1990, name:{th:"ศูนย์อาหาร",en:"FOOD COURT"}, sub:{th:"อร่อย ราคาเบา",en:"Cheap and tasty"}, wall:"#FBEFD9", roof:"#D9822B", sign:"#7A3B12", signFg:"#FFE08A"},
-  {zone:11, x:2160, w:300, door:2310, name:{th:"ร้านสะดวกซื้อ",en:"MINI MART"}, sub:{th:"เปิด 24 ชั่วโมง",en:"Open 24 hours"}, wall:"#F4F7F2", roof:"#2E8B57", sign:"#1F6E43", signFg:"#FFFFFF"},
-  {zone:12, x:2480, w:300, door:2630, name:{th:"หมอโฟน ไอที",en:"PHONE DR. IT"}, sub:{th:"มือถือ · ซ่อม · อัปเกรด",en:"Phones · repair · upgrades"}, wall:"#E8F1F8", roof:"#2F6DB5", sign:"#173D66", signFg:"#7FD3F7"},
-  {zone:10, x:2800, w:300, door:2950, name:{th:"ตลาดนัด",en:"MARKET"}, sub:{th:"ของกิน ของใช้",en:"Food and goods"}, wall:"#F6E7C8", roof:"#B8432E", sign:"#5A2A1A", signFg:"#FFD84D"},
-  {zone:13, x:3120, w:300, door:3270, name:{th:"หอพักนักศึกษา",en:"STUDENT DORM"}, sub:{th:"หอใน ม.หัวเฉียวฯ",en:"Huachiew dorm"}, wall:"#EFE3F2", roof:"#7A4E8C", sign:"#4A2B5A", signFg:"#F6D9FF"}
+BUILDINGS.forEach(b=>b.bot=b.y0+190);
+const SOI_BLDG=BUILDINGS.filter(b=>[9,11,12,10,13].includes(b.zone));
+/* the river, as a centre line; bridges are the gaps */
+const RIVER=[[1320,0],[1280,250],[1340,520],[1290,800],[1350,1100],[1300,1400],[1360,1700],[1310,1950],[1340,OH]], RIVER_W=96;
+const BRIDGES=[[400,480],[970,1050],[AVE.y0,AVE.y1],[1640,1720]];
+function riverX(y){ for(let i=1;i<RIVER.length;i++){ const [x0,y0]=RIVER[i-1],[x1,y1]=RIVER[i]; if(y<=y1){ const k=(y-y0)/(y1-y0); return x0+(x1-x0)*(k*k*(3-2*k)); } } return RIVER[RIVER.length-1][0]; }
+/* brick paths (centre lines) */
+const PATHS=[
+  [[40,430],[220,455],[400,440],[580,412],[760,426],[930,462],[1100,446],[1320,440],[1500,418],[1700,446],[1900,462],[2100,436],[2300,414],[2500,446],[2700,462],[2840,440]],
+  [[40,1000],[220,1028],[400,1016],[600,984],[800,994],[960,1030],[1100,1020],[1320,1010],[1500,986],[1700,1012],[1900,1034],[2100,1012],[2300,986],[2500,1006],[2700,1030],[2840,1010]],
+  [[40,1676],[220,1700],[420,1690],[620,1660],[820,1672],[1020,1700],[1200,1690],[1320,1680],[1480,1660],[1660,1684],[1860,1660],[2060,1648],[2260,1672],[2460,1686],[2660,1660],[2840,1672]],
+  [[470,450],[430,560],[512,700],[440,860],[470,1016],[466,1130]],
+  [[1100,446],[1150,580],[1060,720],[1140,880],[1100,1020],[1105,1130]],
+  [[1850,450],[1806,580],[1890,720],[1820,880],[1858,1030],[1852,1130]],
+  [[2720,460],[2770,580],[2690,720],[2760,880],[2716,1030],[2716,1130]],
+  [[410,1250],[440,1370],[392,1530],[410,1690]],[[1840,1250],[1800,1380],[1860,1520],[1840,1662]],[[2700,1250],[2740,1380],[2680,1520],[2700,1660]],
+  [[410,1690],[500,1780],[440,1920],[480,2070],[270,2075]],
+  [[2060,1648],[2010,1760],[2080,1860],[2050,1890]],[[900,1672],[860,1780],[880,1870]]
 ];
-/* three zebra crossings, each with traffic lights */
-const IC={x0:890,x1:1000,y0:612,y1:766};   /* the crossroads: main road x the road up to the university */
-const XINGS=[{x0:760,x1:880,sig:"ew",dir:1},{x0:1010,x1:1130,sig:"ew",dir:-1}];
-const YXINGS=[{y0:520,y1:600,dir:1},{y0:778,y1:858,dir:-1}];
+/* the y of a horizontal path at x (for the brick aprons in front of doors) */
+function pathYAt(P,x){ for(let i=1;i<P.length;i++){ const [ax,ay]=P[i-1],[bx,by]=P[i]; if(x<=bx){ const k=(x-ax)/(bx-ax); return ay+(by-ay)*k; } } return P[P.length-1][1]; }
+const FOUNTAIN={x:2150,y:320}, POND={x:2660,y:240,rx:130,ry:62}, POND2={x:2560,y:1960,rx:160,ry:72};
+const BEDS=[{x:2050,y:1960,rx:110,ry:56},{x:880,y:1950,rx:120,ry:58}];
+const OUT_SOLIDS=[{x:0,y:0,w:OW,h:60},{x:0,y:0,w:28,h:OH},{x:OW-28,y:0,w:28,h:OH},{x:0,y:OH-24,w:OW,h:24},
+  ...BUILDINGS.map(b=>({x:b.x-14,y:b.y0-40,w:b.w+28,h:230})),
+  {x:FOUNTAIN.x-58,y:FOUNTAIN.y-20,w:116,h:52},{x:POND.x-POND.rx*.9,y:POND.y-POND.ry*.8,w:POND.rx*1.8,h:POND.ry*1.6},{x:POND2.x-POND2.rx*.9,y:POND2.y-POND2.ry*.8,w:POND2.rx*1.8,h:POND2.ry*1.6},
+  ...BEDS.map(d=>({x:d.x-d.rx*.85,y:d.y-d.ry*.7,w:d.rx*1.7,h:d.ry*1.4}))];
+for(let y=0;y<OH;y+=20){ const mid=y+10; if(BRIDGES.some(([a,b])=>mid>a&&mid<b)) continue; const cx=riverX(mid); OUT_SOLIDS.push({x:cx-RIVER_W/2+6,y,w:RIVER_W-12,h:20}); }
+/* no traffic lights or cars any more: the crossings stay defined but empty */
+const IC={x0:-9999,x1:-9998,y0:-9999,y1:-9998};
+const XINGS=[], YXINGS=[];
 const TL_P=16, IC_P=28; let tlT=0, xWarnT=0;
-function ewState(){ if(CIN&&CIN.allRed) return "r"; const p=tlT%IC_P; return p<8?"g":p<10?"y":"r"; }
-function nsState(){ if(CIN&&CIN.allRed) return "r"; const p=tlT%IC_P; return p<14?"r":p<22?"g":p<24?"y":"r"; }
-function tlState(xg){ if(xg.sig==="ew") return ewState(); if(xg.sig==="ns") return nsState(); const p=(tlT+xg.ph)%TL_P; return p<9?"g":p<11?"y":"r"; }
-const OUT_SOLIDS=[{x:0,y:0,w:OW,h:250},{x:0,y:0,w:28,h:OH},{x:OW-28,y:0,w:28,h:OH},
-  ...[0,...XINGS.map(x=>x.x1)].map((a,i)=>({x:a,y:612,w:(i<XINGS.length?XINGS[i].x0:OW)-a,h:154})),
-  {x:890,y:250,w:110,h:270},{x:890,y:600,w:110,h:12},{x:890,y:766,w:110,h:12},{x:0,y:858,w:OW,h:OH-858},
-  {x:672,y:420,w:96,h:56}];
-const OUT_TREES=[{x:80,y:360},{x:80,y:560},{x:500,y:560},{x:1110,y:560},{x:1290,y:360},{x:1360,y:560},{x:1760,y:400}];
-const OUT_BENCHES=[{x:300,y:470},{x:1140,y:470},{x:1560,y:470}];
-const OUT_LAMPS=[{x:470,y:330},{x:1070,y:330},{x:120,y:600},{x:1240,y:600},{x:1880,y:600}];
-/* bus stops: ride to any open place for a small fare */
-const BUS_STOPS=[{x:330,y:584},{x:1700,y:584}];
+function ewState(){ return "r"; }
+function nsState(){ return "r"; }
+function tlState(xg){ return "r"; }
+const OUT_BENCHES=[{x:2290,y:240},{x:2040,y:540},{x:620,y:580},{x:1650,y:1090}];
+const OUT_LAMPS=[{x:300,y:385},{x:1000,y:385},{x:1700,y:385},{x:300,y:960},{x:1000,y:960},{x:2200,y:955},{x:700,y:1640},{x:1600,y:1625},{x:2300,y:1620}];
+const BUS_STOPS=[{x:700,y:1118},{x:1600,y:1118},{x:2450,y:1118}];
+const KIOSK={x:2400,y:340};
+/* trees: scattered over the grass, away from buildings, paths, the river and the road */
+const OUT_TREES=(()=>{
+  const r=seeded(4242), out=[], clear=(x,y)=>{
+    if(x<60||x>OW-60||y<110||y>OH-40) return false;
+    if(BUILDINGS.some(b=>x>b.x-50&&x<b.x+b.w+50&&y>b.y0-70&&y<b.bot+70)) return false;
+    if(y>AVE.y0-70&&y<AVE.y1+50) return false;
+    if(Math.abs(x-riverX(y))<RIVER_W) return false;
+    if(Math.hypot(x-FOUNTAIN.x,y-FOUNTAIN.y)<130||Math.hypot((x-POND.x)/POND.rx,(y-POND.y)/POND.ry)<1.5||Math.hypot((x-POND2.x)/POND2.rx,(y-POND2.y)/POND2.ry)<1.5||BEDS.some(d=>Math.hypot((x-d.x)/d.rx,(y-d.y)/d.ry)<1.6)||Math.hypot(x-KIOSK.x,y-KIOSK.y)<90) return false;
+    if(y>1280&&y<1660&&x<1300) return false;
+    for(const P of PATHS) for(let i=1;i<P.length;i++){ const [ax,ay]=P[i-1],[bx,by]=P[i], dx=bx-ax, dy=by-ay, k=Math.max(0,Math.min(1,((x-ax)*dx+(y-ay)*dy)/(dx*dx+dy*dy))); if(Math.hypot(x-ax-dx*k,y-ay-dy*k)<70) return false; }
+    if([...OUT_BENCHES,...OUT_LAMPS,...BUS_STOPS].some(o=>Math.hypot(x-o.x,y-o.y)<90)) return false;
+    if(out.some(o=>Math.hypot(x-o.x,y-o.y)<110)) return false;
+    return true; };
+  for(let gy=120;gy<OH;gy+=120) for(let gx=60;gx<OW;gx+=140){ const x=gx+r()*80, y=gy+r()*70; if(clear(x,y)) out.push({x:Math.round(x),y:Math.round(y),pink:r()<.38}); }
+  return out;
+})();
 OUT_TREES.forEach(p=>OUT_SOLIDS.push({x:p.x-22,y:p.y-14,w:44,h:28}));
 OUT_BENCHES.forEach(b=>OUT_SOLIDS.push({x:b.x-40,y:b.y-12,w:80,h:22}));
 OUT_LAMPS.forEach(l=>OUT_SOLIDS.push({x:l.x-6,y:l.y-6,w:12,h:12}));
 BUS_STOPS.forEach(b=>OUT_SOLIDS.push({x:b.x-44,y:b.y-8,w:88,h:12}));
-const KIOSK={x:790,y:330};
 OUT_SOLIDS.push({x:KIOSK.x-26,y:KIOSK.y-14,w:52,h:24});
 /* ---------- zone 2: the city library — a bigger, two-floor map ---------- */
 const LW=30*T, LH=20*T, LIB_DOOR={x0:672,x1:768};
@@ -248,7 +282,6 @@ function setWorld(){
   else if(S.zone===2){ const L_=LIB[libFloor()]; W=LW; H=LH; SOLIDS=L_.solids; TABLES=L_.props; CHAIRS=L_.chairs; PLANTS=L_.plants; }
   else if(S.zone===8){ W=RW; H=RH; SOLIDS=offSolids(); TABLES=[]; CHAIRS=[]; PLANTS=[]; }
   else if(S.zone===7){ if(cbFloor()){ W=CB_W; H=CB_H; SOLIDS=CB_SOLIDS; TABLES=[]; CHAIRS=[]; PLANTS=[]; } else { W=RW; H=RH; SOLIDS=POLICE_SOLIDS; TABLES=ROOM_TABLES; CHAIRS=ROOM_CHAIRS; PLANTS=ROOM_PLANTS; } }
-  else if(S.zone===14){ W=SOI_W; H=SOI_H; SOLIDS=SOI_SOLIDS; TABLES=[]; CHAIRS=[]; PLANTS=[]; }
   else if(ROOMS2[S.zone]){ W=RW; H=RH; SOLIDS=ROOMS2[S.zone].solids; TABLES=[]; CHAIRS=[]; PLANTS=[]; }
   else { W=RW; H=RH; SOLIDS=ROOM_SOLIDS; TABLES=ROOM_TABLES; CHAIRS=ROOM_CHAIRS; PLANTS=ROOM_PLANTS; }
 }
@@ -265,12 +298,11 @@ function buildCast0(){
   const friend = ({1:"pBoss",3:"pMay",6:"ton"})[S.zone] || friend0;
   const tips = ({0:"rider",1:"rider",2:"jayFresh",6:"mew"})[S.zone] || rest.find(c=>c!==friend0 && c!=="guardBoy") || rest.find(c=>c!==friend0);
   if(S.zone===0){
-    npcs=[{id:mentor, role:"mentor", x:600, y:360, dir:"down"},{id:tips, role:"tips", x:1060, y:470, dir:"left"},
-      {id:"grandma", role:"grandma", x:236, y:520, dir:"right"},{id:"grandpa", role:"grandpa", x:1200, y:380, dir:"left"},{id:"fon", role:"fon", x:400, y:420, dir:"down"},{id:"techTon", role:"repairman", x:REPAIR.x+56, y:REPAIR.y+6, dir:"left"}].map(n=>({...n, home:n.dir}));
+    npcs=[{id:mentor, role:"mentor", x:560, y:520, dir:"down"},{id:tips, role:"tips", x:1000, y:1080, dir:"left"},
+      {id:"grandma", role:"grandma", x:300, y:560, dir:"right"},{id:"grandpa", role:"grandpa", x:1180, y:560, dir:"left"},{id:"fon", role:"fon", x:2000, y:1090, dir:"down"},{id:"techTon", role:"repairman", x:REPAIR.x+56, y:REPAIR.y+6, dir:"left"}].map(n=>({...n, home:n.dir}));
     player.id=S.char; return;
   }
   if(S.zone===2){ npcs=libCast(mentor,friend,tips); player.id=S.char; return; }
-  if(S.zone===14){ npcs=[]; player.id=S.char; return; }
   if(ROOMS2[S.zone]){ npcs=cast2(mentor,friend0).map(n=>({...n, home:n.dir})); player.id=S.char; return; }
   if(S.zone===8){ npcs=officeCast().map(n=>({...n, home:n.dir})); player.id=S.char; return; }
   if(S.zone===6){

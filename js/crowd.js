@@ -1,7 +1,7 @@
 /* The crowd, the hidden Wi-Fi hacker, Phop's escort, the infection, money and virus mode. */
 /* ---------- the hooded stranger in every shop, his fake Wi-Fi, and the phone repair stall ---------- */
 const VIL={x:136,y:500};
-const REPAIR={x:1500,y:470};
+const REPAIR={x:2200,y:1060};
 OUT_SOLIDS.push({x:REPAIR.x-40,y:REPAIR.y-16,w:80,h:28});
 const WIFI={
   1:{real:{n:"BeanHouse",how:["รหัสพิมพ์อยู่บนใบเสร็จ","Password is printed on your receipt"]},fakes:[{n:"BeanHouse_FREE",ask:["ล็อกอินด้วย Facebook เพื่อใช้ฟรี","Log in with Facebook to use it free"]},{n:"Free_Fast_5G",ask:["ติดตั้งแอป WiFi Booster ก่อนใช้งาน","Install the WiFi Booster app first"]}]},
@@ -37,7 +37,7 @@ function addFillers(){
   const z=S.zone; if(z===5 || !S.char || cbFloor() || (z===8 && isScam(S.bld) && offFloor()>1)) return;
   const used=new Set([S.char,...npcs.map(n=>PLACEHOLDER_ART[n.id]||n.id)]);
   const pool=Object.keys(FILL_NAMES).filter(b=>!used.has(b) && b!=="guardBoy").sort(()=>Math.random()-.5);
-  const spots=(z===0?FILL_SPOTS.street:z===14?FILL_SPOTS.soi:z===2?FILL_SPOTS["lib"+libFloor()]:FILL_SPOTS.room).filter(p=>
+  const spots=(z===0?FILL_SPOTS.street:z===2?FILL_SPOTS["lib"+libFloor()]:FILL_SPOTS.room).filter(p=>
     !SOLIDS.some(r=>p.x>r.x-14&&p.x<r.x+r.w+14&&p.y>r.y-8&&p.y<r.y+r.h+8) &&
     !npcs.some(n=>Math.hypot(n.x-p.x,n.y-p.y)<80) && Math.hypot(p.x-432,p.y-540)>90 && !(z===7 && p.x>680 && p.y>250 && p.y<430)).sort(()=>Math.random()-.5);
   const want=z===0?6:z===2?9:z===8?3:4, n=Math.min(want, spots.length), out=[]; while(pool.length&&pool.length<n) pool.push(...pool.slice(0,n-pool.length));
@@ -82,9 +82,9 @@ function stepEscort(dt){
     const arrived=moveTo(pol,e.d.x,e.d.y,120,dt);
     moveTo(sus,pol.x+(sus.x<pol.x?-22:22)*0, pol.y-30,125,dt);
     if(arrived){ npcs=npcs.filter(x=>x!==sus); if(!e.back) npcs=npcs.filter(x=>x!==pol); else { e.phase="back"; return; }
-      escort=null; toast(L("🚓 พี่ภพพาตัวไปขังที่สถานีตำรวจ (ซอย 2) แล้ว Wi-Fi ปลอมในที่นี้ถูกปิด","🚓 Phop has taken him to the cell at the police station (Soi 2). The fake Wi-Fi here is shut down")); }
+      escort=null; toast(L("🚓 พี่ภพพาตัวไปขังที่สถานีตำรวจ แล้ว Wi-Fi ปลอมในที่นี้ถูกปิด","🚓 Phop has taken him to the cell at the police station (Soi 2). The fake Wi-Fi here is shut down")); }
     return; }
-  if(e.phase==="back"){ if(moveTo(pol,e.back.x,e.back.y,150,dt)){ pol.leaving=false; pol.home=e.back.dir; pol.dir=e.back.dir; escort=null; toast(L("🚓 พี่ภพพาตัวไปขังที่สถานีตำรวจ (ซอย 2) แล้ว Wi-Fi ปลอมในที่นี้ถูกปิด","🚓 Phop has taken him to the cell at the police station (Soi 2). The fake Wi-Fi here is shut down")); } }
+  if(e.phase==="back"){ if(moveTo(pol,e.back.x,e.back.y,150,dt)){ pol.leaving=false; pol.home=e.back.dir; pol.dir=e.back.dir; escort=null; toast(L("🚓 พี่ภพพาตัวไปขังที่สถานีตำรวจ แล้ว Wi-Fi ปลอมในที่นี้ถูกปิด","🚓 Phop has taken him to the cell at the police station (Soi 2). The fake Wi-Fi here is shut down")); } }
 }
 function drawEscortTalk(g){
   if(!escort || escort.phase!=="talk") return;
