@@ -156,7 +156,7 @@ function drawAmbientBack(g,now){
   }
 }
 /* pigeons on the street scatter when you walk up */
-const PIGEONS=[{x:2080,y:410},{x:2110,y:425},{x:2060,y:440},{x:2230,y:415},{x:2250,y:430},{x:1980,y:380}].map(p=>({...p,hx:p.x,hy:p.y,fly:0,back:0}));
+const PIGEONS=[{x:1660,y:2620},{x:1690,y:2640},{x:1640,y:2650},{x:1840,y:2630},{x:1870,y:2645},{x:1600,y:2600}].map(p=>({...p,hx:p.x,hy:p.y,fly:0,back:0}));
 function drawPigeon(g,p,now){
   const f=p.fly, bob=RM?0:(p.peck?Math.abs(Math.sin(now/90+p.hx))*5:Math.abs(Math.sin(now/180+p.hx))*2);
   g.save(); g.translate(p.x,p.y-f*80); if(p.face<0) g.scale(-1,1);

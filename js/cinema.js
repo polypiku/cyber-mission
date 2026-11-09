@@ -76,10 +76,10 @@ function raidScript(n){
   st.push({fade:()=>{ cinZone(0); player.x=s2; player.y=py; player.dir="down";
     cinPlace(A.phop,s2+40,py-8,"down"); cinPlace(A.c1,s2-34,py-30,"down"); cinPlace(A.c2,s2+74,py-30,"down"); }});
   st.push({say:["police",`ทุกคนพร้อมนะ เป้าหมายคือ${B.name.th} อีกฝั่งของถนนใหญ่`,`Everyone ready? Target: ${B.name.en}, across the main road.`],t:2.8});
-  st.push({mv:[[player,s2,ay],[A.phop,s2+40,ay],[A.c1,s2-34,ay-30],[A.c2,s2+74,ay-30]]});
-  st.push({say:["me","ข้ามสะพานไปเลย","Over the bridge. Let's go."],t:1.6});
-  st.push({mv:[[player,dx,ay],[A.phop,dx+40,ay],[A.c1,dx-40,ay-30],[A.c2,dx+80,ay-30]]});
-  st.push({mv:[[player,dx,oy],[A.phop,dx+40,oy],[A.c1,dx-40,oy-20],[A.c2,dx+80,oy-20]]});
+  const grp=(x,y)=>({mv:[[player,x,y],[A.phop,x+40,y],[A.c1,x-34,y-26],[A.c2,x+74,y-26]]});
+  for(const [x,y] of [[s2,pb.front],[720,pb.front],[720,2850],[1120,2850]]) st.push(grp(x,y));
+  st.push({say:["me","ข้ามสะพานหินไปเลย","Over the stone bridge. Let's go."],t:1.6});
+  for(const [x,y] of [[1120,3125],[dx,3125],[dx,oy]]) st.push(grp(x,y));
   st.push({say:["police",n>=4?"หลักฐานแน่นพอ บุกได้!":"เข้าไปเลย ระวังตัวด้วย",n>=4?"The evidence is solid. Go!":"In we go. Stay sharp."],t:2.2,face:[[player,"down"]]});
   st.push({mv:[[player,dx,OFF_TOP-6],[A.phop,dx+30,OFF_TOP-6],[A.c1,dx-30,OFF_TOP-10],[A.c2,dx+50,OFF_TOP-10]]});
   // lobby
@@ -137,15 +137,16 @@ function takenScript(){
   st.push({fade:()=>{ cinZone(0); player.x=s2; player.y=py; player.dir="down"; cinPlace(A.phop,s2+40,py-8,"left"); }});
   st.push({say:["police","ขอโทษนะ หลักฐานยังไม่พอ ต้องรอหมายค้นก่อน","Sorry. The evidence isn't enough. We have to wait for a warrant."],t:2.8});
   st.push({say:["me","งั้นวันนี้กลับก่อนนะ","I'll head home for today then."],t:1.8});
-  st.push({mv:[[player,s2,AVE.y0-40,90]]});
-  st.push({fn:()=>{ cinHide(A.phop); CIN.van={x:s2-1400,y:ay,v:300,c:"#18181C",cab:"#0C0C0E",kind:"truck",len:176,stopAt:s2}; }});
-  st.push({mv:[[player,s2,AVE.y0-26,40]],min:2.2});
-  st.push({until:()=>CIN.van&&Math.abs(CIN.van.x-s2)<4});
+  const rx=730, ry=AVE.y1+40;
+  st.push({mv:[[player,s2,pb.front,160]]}); st.push({mv:[[player,rx,pb.front,160]]}); st.push({mv:[[player,rx,ry+120,170]]});
+  st.push({fn:()=>{ cinHide(A.phop); CIN.van={x:rx-1400,y:ay,v:300,c:"#18181C",cab:"#0C0C0E",kind:"truck",len:176,stopAt:rx}; }});
+  st.push({mv:[[player,rx,ry,40]],min:2.2});
+  st.push({until:()=>CIN.van&&Math.abs(CIN.van.x-rx)<4});
   st.push({say:["me","เดี๋ยว… รถตู้คันนี้จอดทำไม…","Wait… why is this van stopping…"],em:[[player,"😨",2.6]],t:2});
-  st.push({fn:()=>{ cinPlace(A.t1,s2-40,ay-10,"up"); cinPlace(A.t2,s2+40,ay-10,"up"); }});
-  st.push({mv:[[A.t1,s2-28,AVE.y0-20,160],[A.t2,s2+28,AVE.y0-20,160]]});
+  st.push({fn:()=>{ cinPlace(A.t1,rx-40,ay+10,"down"); cinPlace(A.t2,rx+40,ay+10,"down"); }});
+  st.push({mv:[[A.t1,rx-28,ry-6,160],[A.t2,rx+28,ry-6,160]]});
   st.push({say:["cin_thug","ไปกับพวกเราดีๆ นักสืบ","Come quietly, detective."],t:2.2});
-  st.push({mv:[[player,s2,ay-6,90],[A.t1,s2-24,ay-6,90],[A.t2,s2+24,ay-6,90]]});
+  st.push({mv:[[player,rx,ay+6,90],[A.t1,rx-24,ay+6,90],[A.t2,rx+24,ay+6,90]]});
   st.push({fn:()=>{ player.hide=true; cinHide(A.t1); cinHide(A.t2); CIN.van.go=true; CIN.van.v=320; sfx("bad"); }});
   st.push({wait:1.6});
   return {steps:st, opt:{noCars:true, night:true, actors:[A.phop,A.t1,A.t2]}};

@@ -1,12 +1,12 @@
 /* The three office buildings across the road, inside and out. */
 /* ---------- the three office buildings across the road: one of them hides the Shadow gang ---------- */
 const OFFICES=[
-  {x:40,  w:340, door:210,  name:{th:"อาคารเจริญกิจ",en:"Charoenkij Building"}, wall:"#E7DFCF", glass:"#9FC6DB", trim:"#3E5C76", roof:"#9C9488", floor:["#E9E6DF","#DEDAD1"], style:0, tenants:[{th:"บจก. เจริญกิจ การบัญชี",en:"Charoenkij Accounting"},{th:"บจก. สยามดีไซน์ สตูดิโอ",en:"Siam Design Studio"}]},
-  {x:440, w:340, door:610,  name:{th:"สยามบิซ เซ็นเตอร์",en:"SiamBiz Center"},     wall:"#D5DBE1", glass:"#7FB0C9", trim:"#2E3B33", roof:"#8C949C", floor:["#E3E8EC","#D7DDE3"], style:1, tenants:[{th:"บจก. ไทยโลจิสติกส์",en:"Thai Logistics"},{th:"บจก. บิซคลาวด์ ไอที",en:"BizCloud IT"}]},
-  {x:840, w:360, door:1020, name:{th:"รุ่งเรือง ทาวเวอร์",en:"Rungrueang Tower"},   wall:"#E9D6C1", glass:"#A9C9B8", trim:"#8E4A2B", roof:"#A78F7A", floor:["#EFE6DA","#E4D9CB"], style:2, tenants:[{th:"บจก. รุ่งเรือง ประกันภัย",en:"Rungrueang Insurance"},{th:"บจก. กรีนฟู้ด เทรดดิ้ง",en:"Green Food Trading"}]}
+  {x:120, w:340, door:290,  name:{th:"อาคารเจริญกิจ",en:"Charoenkij Building"}, wall:"#E7DFCF", glass:"#9FC6DB", trim:"#3E5C76", roof:"#9C9488", floor:["#E9E6DF","#DEDAD1"], style:0, tenants:[{th:"บจก. เจริญกิจ การบัญชี",en:"Charoenkij Accounting"},{th:"บจก. สยามดีไซน์ สตูดิโอ",en:"Siam Design Studio"}]},
+  {x:520, w:340, door:690,  name:{th:"สยามบิซ เซ็นเตอร์",en:"SiamBiz Center"},     wall:"#D5DBE1", glass:"#7FB0C9", trim:"#2E3B33", roof:"#8C949C", floor:["#E3E8EC","#D7DDE3"], style:1, tenants:[{th:"บจก. ไทยโลจิสติกส์",en:"Thai Logistics"},{th:"บจก. บิซคลาวด์ ไอที",en:"BizCloud IT"}]},
+  {x:920, w:400, door:1120, name:{th:"รุ่งเรือง ทาวเวอร์",en:"Rungrueang Tower"},   wall:"#E9D6C1", glass:"#A9C9B8", trim:"#8E4A2B", roof:"#A78F7A", floor:["#EFE6DA","#E4D9CB"], style:2, tenants:[{th:"บจก. รุ่งเรือง ประกันภัย",en:"Rungrueang Insurance"},{th:"บจก. กรีนฟู้ด เทรดดิ้ง",en:"Green Food Trading"}]}
 ];
 const SCAM_TENANT={th:"บจก. โกลบอล ดิจิทัล มาร์เก็ตติ้ง",en:"Global Digital Marketing Co."};
-const OFF_TOP=1330, OFF_H=280, OFF_FH=118, OFF_LIFT={x0:690,x1:790};
+const OFF_FH=118, OFF_LIFT={x0:690,x1:790};
 const OFNT="'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', Tahoma, sans-serif";
 function hqB(){ if(!(S.hqB>=0&&S.hqB<3)){ S.hqB=Math.floor(Math.random()*3); save(); } return S.hqB; }
 const isScam=(i)=>i===hqB();

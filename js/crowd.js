@@ -1,7 +1,7 @@
 /* The crowd, the hidden Wi-Fi hacker, Phop's escort, the infection, money and virus mode. */
 /* ---------- the hooded stranger in every shop, his fake Wi-Fi, and the phone repair stall ---------- */
 const VIL={x:136,y:500};
-const REPAIR={x:2200,y:1060};
+const REPAIR={x:1720,y:1960};
 OUT_SOLIDS.push({x:REPAIR.x-40,y:REPAIR.y-16,w:80,h:28});
 const WIFI={
   1:{real:{n:"BeanHouse",how:["รหัสพิมพ์อยู่บนใบเสร็จ","Password is printed on your receipt"]},fakes:[{n:"BeanHouse_FREE",ask:["ล็อกอินด้วย Facebook เพื่อใช้ฟรี","Log in with Facebook to use it free"]},{n:"Free_Fast_5G",ask:["ติดตั้งแอป WiFi Booster ก่อนใช้งาน","Install the WiFi Booster app first"]}]},

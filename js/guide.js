@@ -157,7 +157,7 @@ function openBigMap(tab,fromStop){
     for(const b of BUILDINGS){ if(b.hide) continue;
       const open=b.alley?(b.soi||ghostOpen()):zoneOpen(b.zone), goal=gi&&gi.z===b.zone, here=S.zone===b.zone;
       const label=`${ZONES[b.zone].name[S.lang]}${zno(b.zone)?` · ${L("โซน","Zone")} ${zno(b.zone)}`:""}`;
-      pins+=`<button class="bm-pin${open?"":" locked"}${goal?" tgt":""}${here?" here":""}" style="${pct(b.door,b.y0+70)}" ${open?`data-bmgo="${b.zone}"`:"disabled"} aria-label="${esc(label)}">${open?"":"🔒 "}${esc(label)}${goal?" 🎯":""}</button>`; }
+      pins+=`<button class="bm-pin${open?"":" locked"}${goal?" tgt":""}${here?" here":""}" style="${pct(b.door,b.y0-40)}" ${open?`data-bmgo="${b.zone}"`:"disabled"} aria-label="${esc(label)}">${open?"":"🔒 "}${esc(label)}${goal?" 🎯":""}</button>`; }
     for(const [i,o] of OFFICES.entries()){ const hq=S.hqFound&&i===hqB();
       pins+=`<span class="bm-pin office${gi&&gi.z===8?" tgt":""}" style="${pct(o.door,OFF_TOP+120)}">${esc(o.name[S.lang])}${hq?L(" · ⚠️ รังแก๊ง"," · ⚠️ gang"):""}</span>`; }
     pins+=`<span class="bm-pin small" style="${pct(REPAIR.x,REPAIR.y-40)}">🔧 ${L("หมอโฟน","Phone Dr.")}</span><span class="bm-pin small" style="${pct(KIOSK.x,KIOSK.y-60)}">🕹️ ${L("มินิเกม","Games")}</span>`;
@@ -183,7 +183,7 @@ function openBigMap(tab,fromStop){
   el.querySelector("[data-bmlist]").onclick=()=>{ closeBigMap(); openZones(); };
   el.querySelectorAll("[data-bmgo]").forEach(b=>b.onclick=()=>{ const z=+b.dataset.bmgo; closeBigMap(); if(z===S.zone) return; rideBus(z); });
   const here=el.querySelector(".bm-me"), sc=el.querySelector(".bm-scroll");
-  if(here && sc.scrollWidth>sc.clientWidth) sc.scrollLeft=here.offsetLeft-sc.clientWidth/2;
+  if(here && sc.scrollWidth>sc.clientWidth) sc.scrollLeft=here.offsetLeft-sc.clientWidth/2; if(here && sc.scrollHeight>sc.clientHeight) sc.scrollTop=here.offsetTop-sc.clientHeight/2;
 }
 function closeBigMap(){ const el=$("bigmap"); if(el){ el.hidden=true; el.innerHTML=""; } }
 const bigMapOpen=()=>!$("bigmap").hidden;
