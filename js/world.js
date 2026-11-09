@@ -39,9 +39,9 @@ const LOTS=[
 const BUILDINGS=[
   {zone:13, style:"house", x:220, w:320, y0:230, door:380, front:560, name:{th:"หอพักนักศึกษา",en:"STUDENT DORM"}, sub:{th:"หอใน ม.หัวเฉียวฯ",en:"Huachiew dorm"}, wall:"#F7F4EE", roof:"#2F5FB0", sign:"#4A2B5A", signFg:"#F6D9FF"},
   {zone:9, style:"awning", x:920, w:320, y0:230, door:1080, front:560, name:{th:"ศูนย์อาหาร",en:"FOOD COURT"}, sub:{th:"อร่อย ราคาเบา",en:"Cheap and tasty"}, wall:"#FBEFD9", roof:"#E77FA0", sign:"#7A3B12", signFg:"#FFE08A"},
-  {zone:10, style:"awning", x:210, w:340, y0:700, door:380, front:1040, name:{th:"ตลาดนัด",en:"MARKET"}, sub:{th:"ของกิน ของใช้",en:"Food and goods"}, wall:"#F6F1E4", roof:"#2E9A6E", sign:"#5A2A1A", signFg:"#FFD84D"},
-  {zone:4, style:"awning", x:910, w:340, y0:700, door:1080, front:1040, name:{th:"NET ZONE",en:"NET ZONE"}, sub:{th:"ร้านเน็ต · เกม",en:"Internet café · games"}, wall:"#EEEAF6", roof:"#7A5AA6", sign:"#13162A", signFg:"#5EE6D0"},
-  {zone:12, style:"awning", x:1630, w:300, y0:700, door:1780, front:1040, name:{th:"หมอโฟน ไอที",en:"PHONE DR. IT"}, sub:{th:"มือถือ · ซ่อม",en:"Phones · repair"}, wall:"#E8F1F8", roof:"#2F6DB5", sign:"#173D66", signFg:"#7FD3F7"},
+  {zone:10, style:"awning", x:210, w:340, y0:700, door:380, front:1094, name:{th:"ตลาดนัด",en:"MARKET"}, sub:{th:"ของกิน ของใช้",en:"Food and goods"}, wall:"#F6F1E4", roof:"#2E9A6E", sign:"#5A2A1A", signFg:"#FFD84D"},
+  {zone:4, style:"awning", x:910, w:340, y0:700, door:1080, front:1094, name:{th:"NET ZONE",en:"NET ZONE"}, sub:{th:"ร้านเน็ต · เกม",en:"Internet café · games"}, wall:"#EEEAF6", roof:"#7A5AA6", sign:"#13162A", signFg:"#5EE6D0"},
+  {zone:12, style:"awning", x:1630, w:300, y0:700, door:1780, front:1094, name:{th:"หมอโฟน ไอที",en:"PHONE DR. IT"}, sub:{th:"มือถือ · ซ่อม",en:"Phones · repair"}, wall:"#E8F1F8", roof:"#2F6DB5", sign:"#173D66", signFg:"#7FD3F7"},
   {zone:11, style:"flat", x:220, w:320, y0:1310, door:380, front:1720, name:{th:"ร้านสะดวกซื้อ",en:"MINI MART"}, sub:{th:"เปิด 24 ชั่วโมง",en:"Open 24 hours"}, wall:"#F4F7F2", roof:"#2F6DB5", sign:"#1F6E43", signFg:"#FFFFFF"},
   {zone:3, style:"flat", x:920, w:320, y0:1310, door:1080, front:1720, name:{th:"ธนาคารนครทอง",en:"NKT BANK"}, sub:{th:"สาขาตลาด",en:"Market branch"}, wall:"#EEF3F7", roof:"#0F5E46", sign:"#0F5E46", signFg:"#F2C14E"},
   {zone:1, style:"awning", x:1620, w:320, y0:1310, door:1780, front:1720, name:{th:"Bean House",en:"Bean House"}, sub:{th:"ร้านกาแฟ",en:"Café"}, wall:"#FFF3E6", roof:"#E5677F", sign:"#2E3B33", signFg:"#FFC414", cup:true},

@@ -22,6 +22,20 @@ function drawBrickPath(g,P,w){
   smoothPath(g,P); g.strokeStyle=brickPattern(g); g.lineWidth=w; g.stroke();
   g.restore();
 }
+/* every path is a little asphalt road: curbs, then tarmac, then the dashed yellow centre line,
+   each layer drawn for all roads together so the junctions join up cleanly */
+function drawRoads(g,list,w){
+  g.save(); g.lineCap="round"; g.lineJoin="round";
+  for(const P of list){ smoothPath(g,P); g.strokeStyle=INK; g.lineWidth=w+26; g.stroke(); }
+  for(const P of list){ smoothPath(g,P); g.strokeStyle="#C9C2B6"; g.lineWidth=w+20; g.stroke(); }
+  for(const P of list){ smoothPath(g,P); g.strokeStyle=INK; g.lineWidth=w+4; g.stroke(); }
+  for(const P of list){ smoothPath(g,P); g.strokeStyle="#5A5E64"; g.lineWidth=w; g.stroke(); }
+  g.fillStyle="#5A5E64"; g.fillRect(0,AVE.y0+3,OW,AVE.y1-AVE.y0-6);
+  g.lineCap="butt"; g.setLineDash([30,24]);
+  for(const P of list){ smoothPath(g,P); g.strokeStyle="#FFD84D"; g.lineWidth=5; g.stroke(); }
+  g.beginPath(); g.moveTo(0,(AVE.y0+AVE.y1)/2); g.lineTo(OW,(AVE.y0+AVE.y1)/2); g.lineWidth=5; g.stroke();
+  g.setLineDash([]); g.restore();
+}
 function polyline(g,P){ g.beginPath(); g.moveTo(P[0][0],P[0][1]); for(let i=1;i<P.length;i++) g.lineTo(P[i][0],P[i][1]); }
 function drawRiver(g){
   const P=riverSamples();
@@ -58,8 +72,6 @@ function drawAvenue(g){
   g.fillStyle="#5A5E64"; g.fillRect(0,y0,OW,y1-y0);
   g.strokeStyle=INK; g.lineWidth=3; g.beginPath(); g.moveTo(0,y0-12); g.lineTo(OW,y0-12); g.moveTo(0,y0); g.lineTo(OW,y0); g.moveTo(0,y1); g.lineTo(OW,y1); g.moveTo(0,y1+12); g.lineTo(OW,y1+12); g.stroke();
   g.strokeStyle="#FFD84D"; g.lineWidth=5; g.setLineDash([40,30]); g.beginPath(); g.moveTo(0,(y0+y1)/2); g.lineTo(OW,(y0+y1)/2); g.stroke(); g.setLineDash([]);
-  g.fillStyle="#F2F2F2";
-  for(const x of [730,1424,2156]) for(let yy=y0+8;yy<y1-8;yy+=20) g.fillRect(x-36,yy,72,11);
 }
 function drawLot(g,l){
   rr(g,l.x,l.y,l.w,l.h,26);
@@ -207,9 +219,9 @@ function drawTownStatic(g){
   for(const l of LOTS) drawLot(g,l);
   drawRiver(g);
   drawAvenue(g);
-  for(const P of PATHS) drawBrickPath(g,P,58);
-  for(const b of BUILDINGS){ const L_=LOTS.find(l=>b.door>l.x&&b.door<l.x+l.w&&b.y0>l.y&&b.y0<l.y+l.h); brickPave(g,b.door-32,b.bot,64,b.front-b.bot,71+b.zone); }
-  for(const o of OFFICES) brickPave(g,o.door-40,3120,80,OFF_TOP-3120,81);
+  drawRoads(g,PATHS,74);
+  for(const b of BUILDINGS){ const L_=LOTS.find(l=>b.door>l.x&&b.door<l.x+l.w&&b.y0>l.y&&b.y0<l.y+l.h); brickPave(g,b.door-32,b.bot,64,Math.max(10,b.front-b.bot-46),71+b.zone); }
+  
   for(const br of BRIDGES) drawBridge(g,br);
   drawPond(g,POND);
   for(const d of BEDS) drawFlowerBed(g,d);
@@ -264,7 +276,7 @@ function streetMapSVG(){
   for(const l of LOTS) s+=`<rect x="${l.x}" y="${l.y}" width="${l.w}" height="${l.h}" rx="26" fill="#C3E6A6"/>`;
   s+=`<path d="${rp}" stroke="#6EC3EA" stroke-width="${RIVER_W}" fill="none"/>`;
   s+=`<rect x="0" y="${AVE.y0}" width="${OW}" height="${AVE.y1-AVE.y0}" fill="#5A5E64"/>`;
-  for(const P of PATHS) s+=`<path d="${P.map((p,i)=>`${i?"L":"M"}${p[0]} ${p[1]}`).join(" ")}" stroke="#DDB98A" stroke-width="50" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`;
+  for(const P of PATHS) s+=`<path d="${P.map((p,i)=>`${i?"L":"M"}${p[0]} ${p[1]}`).join(" ")}" stroke="#5A5E64" stroke-width="60" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`;
   for(const b of BUILDINGS){ const goal=b.zone===gz;
     s+=`<g class="mb${goal?" tgt":""}" data-zone="${b.zone}"><rect x="${b.x}" y="${b.y0-30}" width="${b.w}" height="220" rx="10" fill="${b.wall}" stroke="#1B1B1B" stroke-width="6"/><rect x="${b.x}" y="${b.y0-30}" width="${b.w}" height="56" rx="10" fill="${b.roof}" stroke="#1B1B1B" stroke-width="6"/>`;
     s+=lab(b.x+b.w/2,b.y0+110,b.name[S.lang],40,b.ghost?"#FFFFFF":"#1B1B1B")+(goal?lab(b.x+b.w/2,b.y0+170,"🎯",48):"")+`</g>`; }
