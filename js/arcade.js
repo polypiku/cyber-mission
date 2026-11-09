@@ -152,13 +152,13 @@ function openBoard(){
   const n=evCount();
   openSheet("board", `${top_(L("บอร์ดสืบสวน: แก๊งเงา","Investigation board: the Shadow gang"))}<div class="sh-body">
     <div class="seg2" role="tablist"><button aria-pressed="true">${L("บอร์ดสืบสวน","Board")}</button><button data-dex aria-pressed="false">${L("สมุดกลโกง","Scam handbook")} ${S.seenCases.length}/${ALLCASES().length+1+ZONES[5].cases.length}</button></div>
-    <p class="note" style="font-size:.86rem">${L("ทุกเรื่องเป็นฝีมือแก๊งเดียวกัน เบาะแสมาจากการช่วยคนในเคส ของแปลกที่ซ่อนในห้อง (เครื่องหมาย ?) คุยกับคนแปลกหน้า บ้านผีสิง และแฝงตัวในตึกรังแก๊ง เอาไปส่งพี่ภพที่สถานีตำรวจ ยิ่งส่งเยอะ ฉากจบยิ่งดี","It's all one gang. Clues come from helping people, hidden ? spots in rooms, talking to strangers, the haunted house and going undercover. Hand them to Phop at the police station: the more you hand in, the better the ending.")}</p>
+    <p class="note" style="font-size:.86rem">${L("ทุกเรื่องเป็นฝีมือแก๊งเดียวกัน เบาะแสมาจากการช่วยคนในเคส ส่องแว่นนักสืบ คุยกับคนแปลกหน้า บ้านผีสิง และแฝงตัวในตึกรังแก๊ง เอาไปส่งพี่ภพที่สถานีตำรวจ ยิ่งส่งเยอะ ฉากจบยิ่งดี","It's all one gang. Clues come from helping people, sweeping the lens, talking to strangers, the haunted house and going undercover. Hand them to Phop at the police station: the more you hand in, the better the ending.")}</p>
     <div class="evgrid">${cards}</div>
     <span class="sect">${L("จุดเชื่อมที่พบ","Links found")}</span><div class="evgs">${groups}</div>
     <div class="zprog"><div class="zl"><span>${L("ส่งให้ตำรวจแล้ว (ตัดสินฉากจบ)","Handed to Phop (decides the ending)")}</span><b>${S.handed||0}/${clueTotal()}</b></div><div class="meter"><i style="width:${(S.handed||0)/clueTotal()*100}%"></i></div><small>${L(`เก็บได้ ${n}/${clueTotal()} ชิ้น · ถ้าส่งครบตอนนี้ คาดว่าได้ฉากจบ ${endingFrom(n)}/5`,`Found ${n}/${clueTotal()} · if all handed in now: ending ${endingFrom(n)}/5`)}</small></div>
     <div class="box"><ul class="list">${Object.entries(CLUE_SRC).map(([k,v])=>{ const b=clueBreakdown()[k]; return b?`<li>${v[S.lang]}: <b>${b[0]}/${b[1]}</b></li>`:""; }).join("")}</ul></div>
     ${(S.bestEnding||0)>=5?`<div class="unlockbox"><b>${L("ทลายแก๊งเงาครบทั้งแก๊งแล้ว!","The whole Shadow gang is behind bars!")}</b><span>${L("ขอบคุณที่ช่วยทุกคนในเมือง","Thanks for helping everyone in town")}</span></div>`
-      : `<div class="btns">${btn(S.zone===7?L("🗂️ คุยกับพี่ภพ","🗂️ Talk to Phop"):L("🚓 ไปส่งเบาะแสที่สถานีตำรวจ","🚓 Take clues to the police station (Soi 2)"),"data-bust","y")}</div>`}
+      : `<div class="btns">${btn(S.zone===7?L("🗂️ คุยกับพี่ภพ","🗂️ Talk to Phop"):L("🚓 ไปส่งเบาะแสที่สถานีตำรวจ (ซอย 2)","🚓 Take clues to the police station (Soi 2)"),"data-bust","y")}</div>`}
   </div>`);
 }
 function openFinale(){
@@ -177,7 +177,7 @@ function openFinale(){
 /* mission map: all zones, scores, locks */
 const LOCK_I='<svg viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="10" rx="1"/><path d="M8 10V7a4 4 0 018 0v3"/></svg>';
 function openZones(){
-  const cards=[...CHAPTERS,...SIDE_ZONES,7,5].filter(z=>ZONES[z]).map(z=>{
+  const cards=[...CHAPTERS,7,5].filter(z=>ZONES[z]).map(z=>{
     const open=zoneOpen(z), cur=S.zone===z, sc=zoneScore(z), mx=zoneMax(z);
     return `<div class="zcard ${open?"":"locked"} ${cur?"cur":""}">
       <div class="zh"><span class="zno">${ZONES[z].bonus?"👻":zno(z)}</span><div><b>${esc(ZONES[z].name[S.lang])}</b><small>${open?`${L("คะแนน","Score")} ${sc}/${mx}${zoneFull(z)?" · "+L("เต็ม!","Perfect!"):""}`:esc(lockMsg(z))}</small></div>${open?(cur?`<span class="here">${L("อยู่ที่นี่","You're here")}</span>`:""):`<span class="lk">${LOCK_I}</span>`}</div>
@@ -212,7 +212,6 @@ function goZone(z){
   toast(ZONES[z].name[S.lang]);
   const m=npcs.find(n=>n.role==="mentor")||npcs.find(n=>n.role==="police");
   rush=null; urgent=null; wifiT=0; escort=null;
-  if(z===9 && !S.overheard){ setTimeout(playCanteenScene,450); return; }
   if(z!==1 && !S.seen[z]) setTimeout(()=>{ face(player,m); talkTo(m); },400);
   else setTimeout(zoneEvent,500);
 }
@@ -224,12 +223,11 @@ function wireSheet(){
   on("[data-shop]",()=>openShop());
   on("[data-phhome]",()=>openPhone());
   on("[data-tour]",()=>{ closeSheet(); if(S.zone!==1||!npcs.find(n=>n.role==="mentor")){ startCoach(gameTour().filter(st=>!st.world)); } else setTimeout(startTour,100); });
-  on("[data-chint]",()=>buyCaseHint());
   on("[data-howto]",()=>setTimeout(()=>startCoach(COACH_CASE),50));
   on("[data-zone]",(b)=>goZone(+b.dataset.zone));
   on("[data-dex]",()=>openDex()); on("[data-board]",()=>openBoard());
   on("[data-sound]",(b)=>{ S.sound=!S.sound; save(); b.setAttribute("aria-pressed",String(S.sound)); b.querySelector("span").textContent=S.sound?L("เสียง: เปิด","Sound: on"):L("เสียง: ปิด","Sound: off"); if(S.sound) sfx("good"); });
-  on("[data-bust]",()=>{ closeSheet(); const pol=npcs.find(n=>n.role==="police"); if(S.zone===7&&pol){ talkPolice(pol); } else toast(L("เอาหลักฐานไปให้พี่ภพที่สถานีตำรวจ ","Take the evidence to Phop at the police station (Soi 2 on the street)")); });
+  on("[data-bust]",()=>{ closeSheet(); const pol=npcs.find(n=>n.role==="police"); if(S.zone===7&&pol){ talkPolice(pol); } else toast(L("เอาหลักฐานไปให้พี่ภพที่สถานีตำรวจ (ซอย 2 บนถนน)","Take the evidence to Phop at the police station (Soi 2 on the street)")); });
   on("[data-out]",()=>{ closeSheet(); goOutside(S.zone||1); });
   on("[data-lang]",(b)=>{ S.lang=b.dataset.lang; save(); document.documentElement.lang=S.lang; drawStatic(); if(setFromStart) openSettings(); else if(sheetMode==="start") openStart(); else if(sheetMode==="menu") openMenu(); else if(sheetMode==="settings") openSettings(); hud(); });
   on("[data-ts]",(b)=>{ S.ts=+b.dataset.ts; save(); applyTS(); sfx("blip"); const keepPick=sheetMode==="start"&&$("pname")?$("pname").value:null; if(setFromStart) openSettings(); else if(sheetMode==="start"){ openStart(); if(keepPick!=null&&$("pname")) $("pname").value=keepPick; } else if(sheetMode==="menu") openMenu(); else if(sheetMode==="settings") openSettings(); hudKey=""; hud(); });

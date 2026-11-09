@@ -15,7 +15,7 @@ window.addEventListener("resize",resize);
 function rr(g,x,y,w,h,r){ g.beginPath(); g.moveTo(x+r,y); g.arcTo(x+w,y,x+w,y+h,r); g.arcTo(x+w,y+h,x,y+h,r); g.arcTo(x,y+h,x,y,r); g.arcTo(x,y,x+w,y,r); g.closePath(); }
 const INK="#141414";
 function drawStatic(){
-  const s=Math.min(2,Math.sqrt(14e6/(W*H))); bg.width=Math.round(W*s); bg.height=Math.round(H*s); const g=bg.getContext("2d"); g.scale(s,s);
+  const s=2; bg.width=W*s; bg.height=H*s; const g=bg.getContext("2d"); g.scale(s,s);
   g.lineJoin="round"; g.lineCap="round";
   if(S.zone===2){ drawLibStatic(g); return; }
   if(S.zone===0){ drawStreetStatic(g); return; }
@@ -25,7 +25,6 @@ function drawStatic(){
   if(S.zone===6){ drawUniStatic(g); return; }
   if(S.zone===8){ drawOfficeStatic(g); return; }
   if(S.zone===7){ if(cbFloor()) drawCellBlockStatic(g); else drawPoliceStatic(g); return; }
-  if(ROOMS2[S.zone]){ drawRoom2Static(g); return; }
   // floor
   g.fillStyle="#E7CFA6"; g.fillRect(0,0,W,H);
   g.strokeStyle="rgba(122,78,36,.22)"; g.lineWidth=1.2;
@@ -63,7 +62,7 @@ function drawStatic(){
 /* the street */
 function drawStreetStatic(g){
   drawStreetGround(g);
-  // the old house in the woods between the café and the store
+  // the dark alley between the café and the store
   g.fillStyle="#2A2238"; g.fillRect(462,40,72,212); g.strokeStyle=INK; g.lineWidth=3; g.strokeRect(462,40,72,212);
   g.fillStyle="#3A3050"; for(let y=60;y<250;y+=26) g.fillRect(470+(y%52?6:0),y,26,10);
   g.fillStyle="rgba(150,130,200,.25)"; g.beginPath(); g.ellipse(498,236,34,10,0,0,7); g.fill();
@@ -91,12 +90,9 @@ function drawStreetStatic(g){
   // side fences
   grassArea(g,0,250,28,350,95); grassArea(g,OW-28,250,28,350,96);
   // buildings
-  for(const b of BUILDINGS){ if(b.alley) continue; drawShopFront(g,b,60); }
-  drawStreetDecor(g);
-  drawBusStops(g);
-}
-function drawShopFront(g,b,y0){
-  const h=190;
+  for(const b of BUILDINGS){
+    if(b.alley) continue;
+    const y0=60, h=190;
     thaiRoof(g,b,y0);
     g.fillStyle="rgba(0,0,0,.18)"; g.fillRect(b.x+8,y0+8,b.w,h);
     rr(g,b.x,y0,b.w,h,4); g.fillStyle=b.wall; g.fill(); g.lineWidth=3; g.strokeStyle=INK; g.stroke();
@@ -116,6 +112,8 @@ function drawShopFront(g,b,y0){
     if(!b.soon){ rr(g,b.door-22,y0+118,44,40,3); g.fillStyle="#CBE6F1"; g.fill(); g.lineWidth=2; g.stroke(); }
     g.fillStyle="#FFC414"; g.beginPath(); g.arc(b.door+20,y0+160,3,0,7); g.fill();
   }
+  drawStreetDecor(g);
+}
 function drawTree(g,p){
   g.fillStyle="rgba(0,0,0,.18)"; g.beginPath(); g.ellipse(p.x,p.y+10,26,8,0,0,7); g.fill();
   g.fillStyle="#7A5233"; g.fillRect(p.x-6,p.y-30,12,40); g.lineWidth=2.5; g.strokeStyle=INK; g.strokeRect(p.x-6,p.y-30,12,40);
@@ -156,7 +154,7 @@ function drawAmbientBack(g,now){
   }
 }
 /* pigeons on the street scatter when you walk up */
-const PIGEONS=[{x:1660,y:2620},{x:1690,y:2640},{x:1640,y:2650},{x:1840,y:2630},{x:1870,y:2645},{x:1600,y:2600}].map(p=>({...p,hx:p.x,hy:p.y,fly:0,back:0}));
+const PIGEONS=[{x:620,y:520},{x:650,y:540},{x:600,y:548},{x:1090,y:400},{x:1110,y:416},{x:360,y:400}].map(p=>({...p,hx:p.x,hy:p.y,fly:0,back:0}));
 function drawPigeon(g,p,now){
   const f=p.fly, bob=RM?0:(p.peck?Math.abs(Math.sin(now/90+p.hx))*5:Math.abs(Math.sin(now/180+p.hx))*2);
   g.save(); g.translate(p.x,p.y-f*80); if(p.face<0) g.scale(-1,1);

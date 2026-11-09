@@ -1,7 +1,7 @@
 /* The crowd, the hidden Wi-Fi hacker, Phop's escort, the infection, money and virus mode. */
 /* ---------- the hooded stranger in every shop, his fake Wi-Fi, and the phone repair stall ---------- */
 const VIL={x:136,y:500};
-const REPAIR={x:1720,y:1960};
+const REPAIR={x:1500,y:470};
 OUT_SOLIDS.push({x:REPAIR.x-40,y:REPAIR.y-16,w:80,h:28});
 const WIFI={
   1:{real:{n:"BeanHouse",how:["รหัสพิมพ์อยู่บนใบเสร็จ","Password is printed on your receipt"]},fakes:[{n:"BeanHouse_FREE",ask:["ล็อกอินด้วย Facebook เพื่อใช้ฟรี","Log in with Facebook to use it free"]},{n:"Free_Fast_5G",ask:["ติดตั้งแอป WiFi Booster ก่อนใช้งาน","Install the WiFi Booster app first"]}]},
@@ -18,7 +18,7 @@ const FILL_SPOTS={
   room:[{x:470,y:262,d:"down"},{x:150,y:430,d:"right"},{x:620,y:330,d:"left"},{x:790,y:330,d:"left"},{x:420,y:500,d:"up"},{x:770,y:500,d:"left"},{x:330,y:440,d:"right"},{x:560,y:236,d:"down"}],
   lib1:[{x:1150,y:640,d:"left"},{x:300,y:850,d:"up"},{x:1150,y:875,d:"up"},{x:480,y:780,d:"right"},{x:860,y:880,d:"up"},{x:150,y:255,d:"right"},{x:590,y:420,d:"down"},{x:1300,y:780,d:"left"},{x:600,y:240,d:"down"},{x:560,y:620,d:"right"},{x:900,y:660,d:"left"},{x:330,y:700,d:"right"},{x:980,y:580,d:"left"},{x:120,y:500,d:"right"},{x:1300,y:540,d:"left"},{x:900,y:200,d:"down"}],
   lib2:[{x:1200,y:300,d:"left"},{x:1300,y:700,d:"left"},{x:560,y:880,d:"up"},{x:840,y:895,d:"up"},{x:1080,y:620,d:"left"},{x:240,y:880,d:"right"},{x:1100,y:260,d:"down"},{x:450,y:420,d:"right"},{x:560,y:320,d:"down"},{x:640,y:640,d:"right"},{x:880,y:640,d:"left"},{x:480,y:560,d:"right"},{x:1300,y:520,d:"left"},{x:1000,y:620,d:"down"},{x:300,y:880,d:"up"}],
-  street:[{x:2040,y:420,d:"down"},{x:2600,y:470,d:"left"},{x:3000,y:400,d:"down"},{x:3300,y:500,d:"left"},{x:1000,y:380,d:"down"},{x:1700,y:380,d:"down"},{x:260,y:560,d:"right"},{x:620,y:520,d:"right"},{x:1500,y:380,d:"down"},{x:1220,y:530,d:"left"},{x:820,y:540,d:"left"},{x:1320,y:420,d:"down"},{x:1700,y:540,d:"left"},{x:180,y:420,d:"right"},{x:1080,y:560,d:"up"}]
+  street:[{x:1000,y:380,d:"down"},{x:1700,y:380,d:"down"},{x:260,y:560,d:"right"},{x:620,y:520,d:"right"},{x:1500,y:380,d:"down"},{x:1220,y:530,d:"left"},{x:820,y:540,d:"left"},{x:1320,y:420,d:"down"},{x:1700,y:540,d:"left"},{x:180,y:420,d:"right"},{x:1080,y:560,d:"up"}]
 };
 let FILL_LINES_=null;
 const FL=()=>FILL_LINES_||(FILL_LINES_={
@@ -82,9 +82,9 @@ function stepEscort(dt){
     const arrived=moveTo(pol,e.d.x,e.d.y,120,dt);
     moveTo(sus,pol.x+(sus.x<pol.x?-22:22)*0, pol.y-30,125,dt);
     if(arrived){ npcs=npcs.filter(x=>x!==sus); if(!e.back) npcs=npcs.filter(x=>x!==pol); else { e.phase="back"; return; }
-      escort=null; toast(L("🚓 พี่ภพพาตัวไปขังที่สถานีตำรวจ แล้ว Wi-Fi ปลอมในที่นี้ถูกปิด","🚓 Phop has taken him to the cell at the police station (Soi 2). The fake Wi-Fi here is shut down")); }
+      escort=null; toast(L("🚓 พี่ภพพาตัวไปขังที่สถานีตำรวจ (ซอย 2) แล้ว Wi-Fi ปลอมในที่นี้ถูกปิด","🚓 Phop has taken him to the cell at the police station (Soi 2). The fake Wi-Fi here is shut down")); }
     return; }
-  if(e.phase==="back"){ if(moveTo(pol,e.back.x,e.back.y,150,dt)){ pol.leaving=false; pol.home=e.back.dir; pol.dir=e.back.dir; escort=null; toast(L("🚓 พี่ภพพาตัวไปขังที่สถานีตำรวจ แล้ว Wi-Fi ปลอมในที่นี้ถูกปิด","🚓 Phop has taken him to the cell at the police station (Soi 2). The fake Wi-Fi here is shut down")); } }
+  if(e.phase==="back"){ if(moveTo(pol,e.back.x,e.back.y,150,dt)){ pol.leaving=false; pol.home=e.back.dir; pol.dir=e.back.dir; escort=null; toast(L("🚓 พี่ภพพาตัวไปขังที่สถานีตำรวจ (ซอย 2) แล้ว Wi-Fi ปลอมในที่นี้ถูกปิด","🚓 Phop has taken him to the cell at the police station (Soi 2). The fake Wi-Fi here is shut down")); } }
 }
 function drawEscortTalk(g){
   if(!escort || escort.phase!=="talk") return;
@@ -348,6 +348,7 @@ const SHOP=[
   {id:"pwm", i:"🔑", n:["ตัวจัดการรหัสผ่าน","Password manager"], d:["ตอนตั้งรหัสใหม่ในมือถือ กดปุ่มเดียวได้รหัสยาวและเดายาก","When setting a new password, one tap makes a long, unguessable one"], p:150},
   {id:"vpn", i:"🛰️", n:["VPN","VPN"], d:["เข้ารหัสการเชื่อมต่อ ถ้าเผลอต่อ Wi-Fi ปลอม ไวรัสจะลามช้าลงครึ่งหนึ่ง","Encrypts your connection. On a fake Wi-Fi, malware spreads half as fast"], p:120},
   {id:"cloud", i:"☁️", n:["สำรองข้อมูลคลาวด์","Cloud backup"], d:["ถ้ามือถือพังจนกู้ไม่ได้ เงินในกระเป๋าไม่หาย","If the phone is lost to malware, you keep your money"], p:100},
+  {id:"lens", i:"🔍", n:["อัปเกรดแว่นนักสืบ","Detective lens upgrade"], d:["ส่องได้ไกลขึ้น และเห็นเบาะแสที่ซ่อนลึกกว่าเดิม","Sweeps further and reveals better-hidden clues"], lv:[0,0,120,220]}
 ];
 const shopPrice=(it)=>it.lv?it.lv[Math.min(3,(S.items.lens||0)+1)]:it.p;
 const shopOwned=(it)=>it.lv?(S.items.lens||0)>=3:!!S.items[it.id];

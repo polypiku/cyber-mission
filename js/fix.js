@@ -13,9 +13,7 @@ function fixShell(inner){
   const f=FIXST.f, tr=FIXST.tier;
   return `<div class="fx"><div class="fx-head"><span class="fx-app">${esc(LX(f.app)||({reply:L("แชต","Chat"),dial:L("โทรศัพท์","Phone"),order:L("รายการที่ต้องทำ","To-do"),pick:L("เบราว์เซอร์","Browser"),multi:L("เช็กลิสต์","Checklist"),pin:L("ตั้งรหัส","Set PIN")})[f.kind])}</span><span class="fx-tier">${"🔧".repeat(tr)} ${L(`ระดับ ${tr}`,`Level ${tr}`)}</span></div>
     <div class="fx-goal"><small>${L("ลงมือแก้เอง","Fix it yourself")}</small><b>${esc(LX(f.goal))}</b></div>
-    ${FIXST.hint?`<div class="hintbox"><b>💡 ${L("คำใบ้","Hint")}</b><span>${FIXST.hint}</span></div>`:""}
     ${inner}<div class="fx-msg" id="fxMsg" aria-live="polite"></div>
-    ${FIXST.hint?"":`<button class="hintbuy" data-fxhint>💡 ${L("ติดอยู่? ซื้อคำใบ้","Stuck? Buy a hint")} <b>${BAHT(HINT_PRICE.fix)}</b></button>`}
     <div class="fx-foot"><button class="btn g" data-fxback><span>${L("ไว้ทีหลัง","Later")}</span></button><button class="btn y" data-fxgo><span>${FIXST.f.kind==="dial"?L("📞 โทร","📞 Call"):L("ส่ง / ยืนยัน","Submit")}</span></button></div></div>`;
 }
 function fixMsg(ok, txt){ const m=$("fxMsg"); if(!m) return; m.className="fx-msg "+(ok?"ok":"bad"); m.innerHTML=txt; if(!ok) sfx("bad"); }
@@ -90,7 +88,6 @@ function wireFix(){
   const q=(s,fn)=>sh.querySelectorAll(s).forEach(el=>el.onclick=(e)=>fn(el,e));
   q("[data-fxback]",()=>fixExit(false));
   q("[data-fxgo]",()=>submitFix());
-  q("[data-fxhint]",()=>buyFixHint());
   const inp=$("fxIn");
   if(inp){ inp.oninput=()=>{ if(f.kind==="reply") st.txt=inp.value; else { st.pw=inp.value; liveRules(); } }; inp.onkeydown=(e)=>{ e.stopPropagation(); if(e.key==="Enter"&&f.kind!=="reply"){ e.preventDefault(); submitFix(); } }; setTimeout(()=>inp.focus({preventScroll:true}),60); if(f.kind==="pw") liveRules(); }
   q("[data-fxmail]",(el)=>{ const m=f.inbox[+el.dataset.fxmail]; if(m.ok){ st.mail=true; sfx("blip"); drawFix(); } else if(m.skip) fixMsg(false,L("อีเมลนี้ไม่เกี่ยว ลองหาอีเมลรีเซ็ตรหัส","Not this one. Find the reset email")); else { el.classList.add("bad"); fixMsg(false,L(`ระวัง! ${esc(m.from)} ไม่ใช่โดเมนจริง นี่คืออีเมลฟิชชิง`,`Careful! ${esc(m.from)} isn't the real domain. That's phishing`)); } });

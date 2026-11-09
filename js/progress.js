@@ -5,11 +5,23 @@ const CHAPTERS = [2, 1, 4, 3, 6];
 const GHOST_MIN = 300;                      /* points (★ in the HUD) needed to enter the haunted house */
 const chapterOf = (z)=>CHAPTERS.indexOf(+z);
 const chapter = ()=>S.chapter||0;
-const ghostOpen = ()=>true;
+const ghostOpen = ()=>totalScore()>=GHOST_MIN;
 
-/* every place is open from the start; the chapter order is only a suggested route */
-function zoneOpen(z){ return true; }
-function casesOpen(z){ return true; }
+/* can the player walk into this zone? */
+function zoneOpen(z){
+  z=+z;
+  if(z===0 || z===6 || z===7 || z===8) return true;        /* street, campus, police, offices */
+  if(ZONES[z] && ZONES[z].bonus) return ghostOpen();
+  const i=chapterOf(z); return i>=0 && i<=chapter();
+}
+/* are this zone's cases ready to play yet? */
+function casesOpen(z){
+  z=+z;
+  if(z===7) return chapter()>=1;                             /* police cases open after the library */
+  if(z===6) return chapter()>=4;                             /* campus cases are the last chapter */
+  if(ZONES[z] && ZONES[z].bonus) return ghostOpen();
+  return zoneOpen(z);
+}
 function lockMsg(z){
   z=+z;
   if(ZONES[z] && ZONES[z].bonus) return L(`ตรอกถูกกั้นไว้… ต้องมีคะแนนอย่างน้อย ${GHOST_MIN} ★ ถึงจะกล้าเข้าไป (ตอนนี้ ${totalScore()})`,`The alley is blocked… you need at least ${GHOST_MIN} ★ to dare go in (now ${totalScore()})`);
@@ -23,7 +35,7 @@ function advanceChapter(){
   const cur=CHAPTERS[chapter()];
   if(cur==null || !zoneDone(cur)) return;
   S.chapter=chapter()+1;
-
+  S.unlockPending = CHAPTERS[S.chapter]!=null ? CHAPTERS[S.chapter] : -1;
 }
 /* older saves had every zone open: work out which chapter they had reached */
 function migrateChapter(){
@@ -44,16 +56,20 @@ const clueTotal = ()=>Object.keys(EVID).length;
 const zoneName=(z)=>ZONES[z]?ZONES[z].name[S.lang]:"";
 function doorOf(z){
   if(z===8){ const o=OFFICES[S.hqFound?hqB():0]; return {x:o.door,y:OFF_TOP+10}; }
-  const b=BUILDINGS.find(b=>b.zone===z && !b.hide); return b?{x:b.door,y:b.bot}:null;
+  const b=BUILDINGS.find(b=>b.zone===z && !b.hide); return b?{x:b.door,y:250}:null;
 }
 function goalInfo(){
   if(!S.char) return null;
   if(!S.briefed) return {t:L("คุยกับพี่ภพ ตำรวจไซเบอร์","Talk to Phop, the cyber police officer"), z:6};
-  const ORDER=[...CHAPTERS,9,11,12,10,13,7];
-  const rest=ORDER.filter(z=>ZONES[z] && !zoneDone(z));
-  if(rest.length){ const z=rest.includes(S.zone)?S.zone:rest[0]; const n=ZONES[z].cases.filter(k=>!S.best[k]).length, tot=ZONES[z].cases.length;
-    if(S.zone===z) return {t:L(`ช่วยคนที่มี ! ใน${zoneName(z)} (${tot-n}/${tot})`,`Help everyone with a ! at ${zoneName(z)} (${tot-n}/${tot})`), z, here:true};
-    return {t:L(`แนะนำ: ไปที่${zoneName(z)} (รอให้ช่วย ${n} คน) · ไปที่ไหนก่อนก็ได้`,`Suggested: ${zoneName(z)} (${n} waiting) · go anywhere you like`), z}; }
+  const ch=chapter(), cz=CHAPTERS[ch];
+  if(cz!=null && ch<CHAPTERS.length-1 || (cz===6 && !zoneDone(6))){
+    const left=ZONES[cz].cases.filter(k=>!S.best[k]).length, tot=ZONES[cz].cases.length;
+    if(S.zone===cz) return {t:L(`ช่วยคนที่มี ! ใน${zoneName(cz)} (${tot-left}/${tot})`,`Help everyone with a ! at ${zoneName(cz)} (${tot-left}/${tot})`), z:cz, here:true};
+    return {t:L(`ไปที่${zoneName(cz)} · โซน ${zno(cz)}`,`Go to ${zoneName(cz)} · Zone ${zno(cz)}`), z:cz};
+  }
+  const rest=Object.keys(ZONES).map(Number).filter(z=>!ZONES[z].bonus && casesOpen(z) && !zoneDone(z));
+  if(rest.length){ const z=rest.includes(S.zone)?S.zone:rest[0]; const n=ZONES[z].cases.filter(k=>!S.best[k]).length;
+    return {t:L(`ยังมีคนรอให้ช่วยที่${zoneName(z)} (${n} คน)`,`${n} still need help at ${zoneName(z)}`), z, here:S.zone===z}; }
   if(!S.hqFound) return {t:L("สำรวจตึกออฟฟิศ 3 ตึกฝั่งตรงข้ามถนน หาตึกของแก๊ง","Search the 3 office buildings across the road for the gang's base"), z:8};
   if(evCount()>(S.handed||0)) return {t:L(`เอาเบาะแส ${evCount()-(S.handed||0)} ชิ้นไปส่งพี่ภพที่สถานีตำรวจ`,`Take ${evCount()-(S.handed||0)} clue(s) to Phop at the police station`), z:7, here:S.zone===7};
   if(S.uc && !raided() && !(S.ev.hq_script&&S.ev.hq_dorm)) return {t:L("แฝงตัวขึ้นชั้น 2–3 ของตึกแก๊ง หาเบาะแส","Sneak up to floors 2–3 of the gang's building for clues"), z:8};

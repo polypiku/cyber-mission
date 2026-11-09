@@ -72,16 +72,16 @@ function raidScript(n){
   const A={phop:mk("police"),c1:mk("cin_cop1"),c2:mk("cin_cop2"),rec:mk("o_recep"),guard:mk("o_guard"),sc:spots.map((_,k)=>mk("cin_sc_"+bodies[k%4])),boss:n>=4?mk("cin_boss"):null};
   if(A.sc[0]) A.sc[0].id="itGuy"; if(n>=4&&A.sc[1]) A.sc[1].id="jeAdmin";
   const st=[];
-  const pb=BUILDINGS.find(b=>b.zone===7), py=pb.bot+40, ay=(AVE.y0+AVE.y1)/2, oy=OFF_TOP-40;
-  st.push({fade:()=>{ cinZone(0); player.x=s2; player.y=py; player.dir="down";
-    cinPlace(A.phop,s2+40,py-8,"down"); cinPlace(A.c1,s2-34,py-30,"down"); cinPlace(A.c2,s2+74,py-30,"down"); }});
-  st.push({say:["police",`ทุกคนพร้อมนะ เป้าหมายคือ${B.name.th} อีกฝั่งของถนนใหญ่`,`Everyone ready? Target: ${B.name.en}, across the main road.`],t:2.8});
-  const grp=(x,y)=>({mv:[[player,x,y],[A.phop,x+40,y],[A.c1,x-34,y-26],[A.c2,x+74,y-26]]});
-  for(const [x,y] of [[s2,pb.front],[720,pb.front],[720,2850],[1120,2850]]) st.push(grp(x,y));
-  st.push({say:["me","ข้ามสะพานหินไปเลย","Over the stone bridge. Let's go."],t:1.6});
-  for(const [x,y] of [[1120,3125],[dx,3125],[dx,oy]]) st.push(grp(x,y));
+  st.push({fade:()=>{ cinZone(0); player.x=s2; player.y=300; player.dir="down";
+    cinPlace(A.phop,s2+40,292,"down"); cinPlace(A.c1,s2-34,262,"down"); cinPlace(A.c2,s2+74,262,"down"); }});
+  st.push({say:["police",`ทุกคนพร้อมนะ เป้าหมายคือ${B.name.th} ฝั่งตรงข้ามถนน`,`Everyone ready? Target: ${B.name.en}, across the road.`],t:2.8});
+  st.push({mv:[[player,s2,578],[A.phop,s2+40,578],[A.c1,s2-34,548],[A.c2,s2+74,548]]});
+  st.push({mv:[[player,1070,590],[A.phop,1108,590],[A.c1,1040,560],[A.c2,1118,556]]});
+  st.push({say:["me","ไฟคนข้ามเขียวแล้ว ไปกัน","Walk light's green. Let's go."],t:1.8});
+  st.push({mv:[[player,1070,812],[A.phop,1108,812],[A.c1,1040,790],[A.c2,1118,790]]});
+  st.push({mv:[[player,dx,816],[A.phop,dx+40,816],[A.c1,dx-40,796],[A.c2,dx+80,796]]});
   st.push({say:["police",n>=4?"หลักฐานแน่นพอ บุกได้!":"เข้าไปเลย ระวังตัวด้วย",n>=4?"The evidence is solid. Go!":"In we go. Stay sharp."],t:2.2,face:[[player,"down"]]});
-  st.push({mv:[[player,dx,OFF_TOP-6],[A.phop,dx+30,OFF_TOP-6],[A.c1,dx-30,OFF_TOP-10],[A.c2,dx+50,OFF_TOP-10]]});
+  st.push({mv:[[player,dx,850],[A.phop,dx+30,850],[A.c1,dx-30,846],[A.c2,dx+50,846]]});
   // lobby
   st.push({fade:()=>{ cinZone(8,{bld:hqB(),floor:1,clear:true});
     cinPlace(player,432,580,"up"); cinPlace(A.phop,474,590,"up"); cinPlace(A.c1,394,600,"up"); cinPlace(A.c2,512,600,"up");
@@ -133,20 +133,18 @@ function raidScript(n){
 }
 function takenScript(){
   const s2=(BUILDINGS.find(b=>b.zone===7)||{door:1386}).door, st=[], A={phop:mk("police"),t1:mk("cin_thug",{dark:true}),t2:mk("cin_thug",{dark:true})};
-  const pb=BUILDINGS.find(b=>b.zone===7), py=pb.bot+40, ay=(AVE.y0+AVE.y1)/2;
-  st.push({fade:()=>{ cinZone(0); player.x=s2; player.y=py; player.dir="down"; cinPlace(A.phop,s2+40,py-8,"left"); }});
+  st.push({fade:()=>{ cinZone(0); player.x=s2; player.y=300; player.dir="down"; cinPlace(A.phop,s2+40,292,"left"); }});
   st.push({say:["police","ขอโทษนะ หลักฐานยังไม่พอ ต้องรอหมายค้นก่อน","Sorry. The evidence isn't enough. We have to wait for a warrant."],t:2.8});
   st.push({say:["me","งั้นวันนี้กลับก่อนนะ","I'll head home for today then."],t:1.8});
-  const rx=730, ry=AVE.y1+40;
-  st.push({mv:[[player,s2,pb.front,160]]}); st.push({mv:[[player,rx,pb.front,160]]}); st.push({mv:[[player,rx,ry+120,170]]});
-  st.push({fn:()=>{ cinHide(A.phop); CIN.van={x:rx-1400,y:ay,v:300,c:"#18181C",cab:"#0C0C0E",kind:"truck",len:176,stopAt:rx}; }});
-  st.push({mv:[[player,rx,ry,40]],min:2.2});
-  st.push({until:()=>CIN.van&&Math.abs(CIN.van.x-rx)<4});
+  st.push({mv:[[player,s2,560,90]]});
+  st.push({fn:()=>{ cinHide(A.phop); CIN.van={x:-220,y:652,v:300,c:"#18181C",cab:"#0C0C0E",kind:"truck",len:176,stopAt:1250}; }});
+  st.push({mv:[[player,1250,590,80]],min:2.2});
+  st.push({until:()=>CIN.van&&Math.abs(CIN.van.x-1250)<4});
   st.push({say:["me","เดี๋ยว… รถตู้คันนี้จอดทำไม…","Wait… why is this van stopping…"],em:[[player,"😨",2.6]],t:2});
-  st.push({fn:()=>{ cinPlace(A.t1,rx-40,ay+10,"down"); cinPlace(A.t2,rx+40,ay+10,"down"); }});
-  st.push({mv:[[A.t1,rx-28,ry-6,160],[A.t2,rx+28,ry-6,160]]});
+  st.push({fn:()=>{ cinPlace(A.t1,1210,640,"up"); cinPlace(A.t2,1290,640,"up"); }});
+  st.push({mv:[[A.t1,1222,596,160],[A.t2,1278,596,160]]});
   st.push({say:["cin_thug","ไปกับพวกเราดีๆ นักสืบ","Come quietly, detective."],t:2.2});
-  st.push({mv:[[player,rx,ay+6,90],[A.t1,rx-24,ay+6,90],[A.t2,rx+24,ay+6,90]]});
+  st.push({mv:[[player,1250,646,90],[A.t1,1226,646,90],[A.t2,1274,646,90]]});
   st.push({fn:()=>{ player.hide=true; cinHide(A.t1); cinHide(A.t2); CIN.van.go=true; CIN.van.v=320; sfx("bad"); }});
   st.push({wait:1.6});
   return {steps:st, opt:{noCars:true, night:true, actors:[A.phop,A.t1,A.t2]}};
@@ -162,7 +160,7 @@ function goOutside(fromZone){
   const ob=fromZone===8?OFFICES[S.bld||0]:null;
   S.zone=0; save(); setWorld(); buildCast(); drawStatic();
   const b=bOf(fromZone)||BUILDINGS[0];
-  if(ob){ player.x=ob.door; player.y=OFF_TOP-36; player.dir="up"; hqT=performance.now(); } else { player.x=b.door; player.y=b.bot+40; player.dir="down"; } target=null; targetNpc=null; keys.clear();
+  if(ob){ player.x=ob.door; player.y=822; player.dir="up"; hqT=performance.now(); } else { player.x=b.door; player.y=300; player.dir="down"; } target=null; targetNpc=null; keys.clear();
   hudKey=""; hud(); toast(ZN().name[S.lang]);
 }
 function talkTo(n){
@@ -205,11 +203,11 @@ function talkTo(n){
     const ls=[t(`ข้างนอกนี่คือถนนที่เชื่อมทุกโซน ตอนนี้เข้าได้ ${open.length} ที่ คะแนนรวม ${totalScore()}/${totalMax()}`,`This street links every zone. ${open.length} open so far. Total score ${totalScore()}/${totalMax()}.`)];
     if(nextZ) ls.push(t(lockMsg(nextZ),lockMsg(nextZ)));
     else if(chapter()<CHAPTERS.length) ls.push(t(`ตอนนี้ไปช่วยคนที่${ZONES[CHAPTERS[chapter()]].name.th}ก่อนนะ`,`Head to ${ZONES[CHAPTERS[chapter()]].name.en} next.`));
-    ls.push(allDone()&&!S.busted ? t("ช่วยครบทุกที่แล้ว! เอาหลักฐานไปให้พี่ภพที่สถานีตำรวจ ได้เลย","You've helped everywhere! Take the evidence to Phop at the police station, Soi 2.")
+    ls.push(allDone()&&!S.busted ? t("ช่วยครบทุกที่แล้ว! เอาหลักฐานไปให้พี่ภพที่สถานีตำรวจ ซอย 2 ได้เลย","You've helped everywhere! Take the evidence to Phop at the police station, Soi 2.")
       : S.busted ? t("แก๊งเงาถูกทลายแล้ว แต่มิจฉาชีพยังมีอีกเยอะ ระวังตัวด้วยนะ","The Shadow gang is down, but there are plenty more scammers. Stay sharp.")
       : t(`ทุกเรื่องที่เจอเป็นฝีมือแก๊งเดียวกัน ตอนนี้มีหลักฐาน ${evCount()}/${Object.keys(EVID).length} ชิ้น ช่วยให้ครบทุกที่ รวมทั้งมหาวิทยาลัยกับสถานีตำรวจในซอย`,`It's all one gang. You have ${evCount()}/${Object.keys(EVID).length} clues. Help everywhere, including the university and police station down the sois.`));
     if(!(S.bustTier>=1)) ls.push((S.hqFound?t(`${OFFICES[hqB()].name.th} นั่นแหละ มียามกันไม่ให้ขึ้นชั้นบน พี่ว่าใช่รังแก๊งเงาแน่ๆ`,`${OFFICES[hqB()].name.en}, the one with a guard blocking the lift. That has to be the Shadow gang's den.`):t("ได้ข่าวว่าแก๊งเงาซ่อนอยู่ในตึกออฟฟิศสักตึกฝั่งตรงข้ามถนน หน้าตาเหมือนบริษัทธรรมดาเลย ต้องเข้าไปสำรวจเอง","Word is the Shadow gang hides in one of the office buildings across the road. They look like ordinary companies, so we'll have to check them ourselves.")));
-    if(allDone()) ls.push(t("เมื่อกี้พี่ได้ยินเสียงแปลกๆ จากบ้านร้างในป่าทางซ้ายล่างของเมือง… ลองไปดูไหม","I just heard strange noises from the old house in the woods, bottom left of town… want to take a look?"));
+    if(allDone()) ls.push(t("เมื่อกี้พี่ได้ยินเสียงแปลกๆ จากตรอกมืดข้างร้านกาแฟ… ลองไปดูไหม","I just heard strange noises from the dark alley by the café… want to take a look?"));
     if(recoverRole()) ls.push(t("ยายกับตาเพิ่งได้สายแปลกๆ ไปคุยด้วยหน่อยนะ","Grandma and Grandpa just got some strange calls. Go and talk to them."));
     S.seen[0]=true; save();
     say(n.id, lines(ls)); return;
@@ -223,7 +221,7 @@ function talkTo(n){
     say(n.id, lines([t(`ยังเหลืออีก ${left} เรื่องที่ต้องช่วย ดูที่เครื่องหมาย ! นะ`,`${left} more to go. Look for the ! markers.`),...extra])); return;
   }
   if(n.role==="tips" && !caseOf(n)){ const tip=SCRIPT.tips[S.tip%SCRIPT.tips.length]; S.tip++; save(); say(n.id, lines([tip])); return; }
-  const cid=caseOf(n), sc=(cid&&CASE_SCRIPT[cid])||scriptFor(n.role);
+  const cid=caseOf(n), sc=scriptFor(n.role);
   if(!cid){ say(n.id, lines([thanksLine(n.role,n.id)])); return; }
   const r=S.best[cid];
   if(!r){ say(n.id, lines(sc.intro), {choices:[{...CH.help[0],fn:()=>openCase(cid,n)},CH.help[1]]}); return; }

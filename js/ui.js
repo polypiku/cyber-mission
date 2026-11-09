@@ -217,9 +217,7 @@ function renderCase(){
   const who=(C.npc&&C.npc.id)||S.char;
   const body=`<h3 class="ktitle">${s.title}</h3>${comicize(s.body, who)}`;
   const panel=`${from}<span class="sect">${L("คุณจะทำอย่างไร","What do you do?")}</span>
-    ${caseHintBox(s)}
-    <div class="cchoices">${C.order.o.map((ci,i)=>{ const x=caseHinted()&&s.choices[ci].v==="bad"&&s.choices.filter(c=>c.v==="bad").indexOf(s.choices[ci])===0; return `<button class="choice${x?" struck":""}" data-ch="${ci}" ${x?"disabled":""}><span class="k">${"ABCD"[i]}</span><span>${s.choices[ci].t}</span></button>`; }).join("")}</div>
-    ${caseHintBtn()}
+    <div class="cchoices">${C.order.o.map((ci,i)=>`<button class="choice" data-ch="${ci}"><span class="k">${"ABCD"[i]}</span><span>${s.choices[ci].t}</span></button>`).join("")}</div>
     <button class="howto" data-howto>❔ ${L("วิธีเล่นเคส","How cases work")}</button>`;
   openSheet("case", c3(actor("think", pickLine(MOOD_LINES.think[S.lang])), bigPhone(c.title, body, true), panel));
   if(!C.hist.length) maybeCoach("case");
@@ -274,14 +272,14 @@ function renderEnding(c){
 }
 function finishCase(){
   const ty=C.lastType||S.best[C.id], npc=C.npc; C=null; closeSheet();
-  const sc=npc && ((caseOf(npc)&&CASE_SCRIPT[caseOf(npc)])||scriptFor(npc.role));
+  const sc=npc && scriptFor(npc.role);
   const onEnd = (npc && npc.ghost && ty!=="danger") ? ()=>{ startAscend(npc); afterCaseCheck(); } : afterCaseCheck;
   if(sc?.after){ talking=npc; face(npc,player); say(npc.id, lines([sc.after[ty]]), {onEnd}); }
   else afterCaseCheck();
   hud();
 }
 function afterCaseCheck(){
-  if(ghostOpen() && !S.alleyHint){ S.alleyHint=true; save(); setTimeout(()=>toast(L("เสียงแปลกๆ ดังมาจากบ้านร้างในป่าทางซ้ายล่างของเมือง… 👻","Strange noises from the old house in the woods, bottom left of town… 👻")),2800); }
+  if(ghostOpen() && !S.alleyHint){ S.alleyHint=true; save(); setTimeout(()=>toast(L("เสียงแปลกๆ ดังมาจากตรอกมืดข้างร้านกาแฟ… 👻","Strange noises from the dark alley by the café… 👻")),2800); }
   if(S.bustPending){ S.bustPending=false; save(); setTimeout(playEnding,350); hud(); return; }
   if(S.unlockPending){ const z=S.unlockPending; S.unlockPending=0; save(); setTimeout(()=>openUnlock(z), 350); hud(); return; }
   if(S.chatPending){ S.chatPending=false; save(); setTimeout(showPeek, 450); hud(); return; }

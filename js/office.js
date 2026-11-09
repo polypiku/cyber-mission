@@ -1,12 +1,12 @@
 /* The three office buildings across the road, inside and out. */
 /* ---------- the three office buildings across the road: one of them hides the Shadow gang ---------- */
 const OFFICES=[
-  {x:120, w:340, door:290,  name:{th:"อาคารเจริญกิจ",en:"Charoenkij Building"}, wall:"#E7DFCF", glass:"#9FC6DB", trim:"#3E5C76", roof:"#9C9488", floor:["#E9E6DF","#DEDAD1"], style:0, tenants:[{th:"บจก. เจริญกิจ การบัญชี",en:"Charoenkij Accounting"},{th:"บจก. สยามดีไซน์ สตูดิโอ",en:"Siam Design Studio"}]},
-  {x:520, w:340, door:690,  name:{th:"สยามบิซ เซ็นเตอร์",en:"SiamBiz Center"},     wall:"#D5DBE1", glass:"#7FB0C9", trim:"#2E3B33", roof:"#8C949C", floor:["#E3E8EC","#D7DDE3"], style:1, tenants:[{th:"บจก. ไทยโลจิสติกส์",en:"Thai Logistics"},{th:"บจก. บิซคลาวด์ ไอที",en:"BizCloud IT"}]},
-  {x:920, w:400, door:1120, name:{th:"รุ่งเรือง ทาวเวอร์",en:"Rungrueang Tower"},   wall:"#E9D6C1", glass:"#A9C9B8", trim:"#8E4A2B", roof:"#A78F7A", floor:["#EFE6DA","#E4D9CB"], style:2, tenants:[{th:"บจก. รุ่งเรือง ประกันภัย",en:"Rungrueang Insurance"},{th:"บจก. กรีนฟู้ด เทรดดิ้ง",en:"Green Food Trading"}]}
+  {x:50,  w:400, door:250,  name:{th:"อาคารเจริญกิจ",en:"Charoenkij Building"}, wall:"#E7DFCF", glass:"#9FC6DB", trim:"#3E5C76", roof:"#9C9488", floor:["#E9E6DF","#DEDAD1"], style:0, tenants:[{th:"บจก. เจริญกิจ การบัญชี",en:"Charoenkij Accounting"},{th:"บจก. สยามดีไซน์ สตูดิโอ",en:"Siam Design Studio"}]},
+  {x:470, w:400, door:670,  name:{th:"สยามบิซ เซ็นเตอร์",en:"SiamBiz Center"},     wall:"#D5DBE1", glass:"#7FB0C9", trim:"#2E3B33", roof:"#8C949C", floor:["#E3E8EC","#D7DDE3"], style:1, tenants:[{th:"บจก. ไทยโลจิสติกส์",en:"Thai Logistics"},{th:"บจก. บิซคลาวด์ ไอที",en:"BizCloud IT"}]},
+  {x:1300,w:460, door:1530, name:{th:"รุ่งเรือง ทาวเวอร์",en:"Rungrueang Tower"},   wall:"#E9D6C1", glass:"#A9C9B8", trim:"#8E4A2B", roof:"#A78F7A", floor:["#EFE6DA","#E4D9CB"], style:2, tenants:[{th:"บจก. รุ่งเรือง ประกันภัย",en:"Rungrueang Insurance"},{th:"บจก. กรีนฟู้ด เทรดดิ้ง",en:"Green Food Trading"}]}
 ];
 const SCAM_TENANT={th:"บจก. โกลบอล ดิจิทัล มาร์เก็ตติ้ง",en:"Global Digital Marketing Co."};
-const OFF_FH=118, OFF_LIFT={x0:690,x1:790};
+const OFF_TOP=858, OFF_FH=118, OFF_LIFT={x0:690,x1:790};
 const OFNT="'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', Tahoma, sans-serif";
 function hqB(){ if(!(S.hqB>=0&&S.hqB<3)){ S.hqB=Math.floor(Math.random()*3); save(); } return S.hqB; }
 const isScam=(i)=>i===hqB();
@@ -29,7 +29,7 @@ SPRITES.o_guard=SPRITES.workMan; PEOPLE.o_guard={name:{th:"รปภ. หน้�
 /* ----- the street side: three normal-looking facades ----- */
 function drawOfficesStatic(g){ OFFICES.forEach(b=>drawOfficeFacade(g,b)); }
 function drawOfficeFacade(g,b){
-  const {x,w,door,style}=b, top=OFF_TOP, h=OFF_H, fh=OFF_FH;
+  const {x,w,door,style}=b, top=OFF_TOP, h=OH-top-10, fh=OFF_FH;
   g.fillStyle="rgba(0,0,0,.22)"; g.fillRect(x+8,top+8,w,h);
   rr(g,x,top,w,h,4); g.fillStyle=b.roof; g.fill(); g.lineWidth=3; g.strokeStyle=INK; g.stroke();
   g.fillStyle=b.wall; g.fillRect(x+3,top+3,w-6,fh);
@@ -55,7 +55,7 @@ function drawOfficeFacade(g,b){
     for(let k=0;k<3;k++){ rr(g,x+w-170+k*48,ry-16,38,30,3); g.fillStyle="#DADFE3"; g.fill(); g.lineWidth=2; g.stroke(); g.beginPath(); g.arc(x+w-151+k*48,ry-1,9,0,7); g.stroke(); } }
   else if(style===1){ g.beginPath(); g.arc(x+w-90,ry-4,30,0,7); g.fillStyle="#6F7780"; g.fill(); g.lineWidth=2.5; g.stroke(); g.fillStyle="#FFC414"; g.font=`800 26px ${OFNT}`; g.fillText("H",x+w-90,ry-3);
     for(let k=0;k<4;k++){ rr(g,x+30+k*40,ry-14,30,26,3); g.fillStyle="#DADFE3"; g.fill(); g.lineWidth=2; g.stroke(); } }
-  else { for(let k=0;k<Math.floor((w-40)/84);k++){ rr(g,x+30+k*84,ry-14,64,28,6); g.fillStyle="#8A5A33"; g.fill(); g.lineWidth=2; g.stroke(); for(let j=0;j<3;j++){ g.beginPath(); g.arc(x+46+k*84+j*16,ry-14,9,0,7); g.fillStyle="#3F8E4E"; g.fill(); g.stroke(); } } }
+  else { for(let k=0;k<5;k++){ rr(g,x+30+k*84,ry-14,64,28,6); g.fillStyle="#8A5A33"; g.fill(); g.lineWidth=2; g.stroke(); for(let j=0;j<3;j++){ g.beginPath(); g.arc(x+46+k*84+j*16,ry-14,9,0,7); g.fillStyle="#3F8E4E"; g.fill(); g.stroke(); } } }
 }
 function drawOfficesLive(g,now){
   OFFICES.forEach((b,i)=>{
@@ -64,11 +64,11 @@ function drawOfficesLive(g,now){
     if(Math.floor(now/600+i)%2){ g.fillStyle="#E5402F"; g.beginPath(); g.arc(door+62,top+18,2.2,0,7); g.fill(); }
     if(isScam(i) && (raided()||(CIN&&CIN.cars))){
       g.save(); g.lineWidth=7; for(const [y1,y2] of [[top+10,top+80],[top+80,top+10]]){ g.strokeStyle="#F2C14E"; g.beginPath(); g.moveTo(door-42,y1); g.lineTo(door+42,y2); g.stroke(); g.setLineDash([6,6]); g.strokeStyle=INK; g.beginPath(); g.moveTo(door-42,y1); g.lineTo(door+42,y2); g.stroke(); g.setLineDash([]); } g.restore();
-      for(const cx of [door-150,door+160]){ drawCar(g,{x:cx,y:OFF_TOP-38,v:1,c:"#F5F5F5"}); const k=Math.floor(now/250)%2; g.fillStyle=k?"#E5402F":"#2F6DB5"; rr(g,cx-12,OFF_TOP-70,10,6,2); g.fill(); g.fillStyle=k?"#2F6DB5":"#E5402F"; rr(g,cx+2,OFF_TOP-70,10,6,2); g.fill(); }
+      for(const cx of [door-150,door+160]){ drawCar(g,{x:cx,y:820,v:1,c:"#F5F5F5"}); const k=Math.floor(now/250)%2; g.fillStyle=k?"#E5402F":"#2F6DB5"; rr(g,cx-12,788,10,6,2); g.fill(); g.fillStyle=k?"#2F6DB5":"#E5402F"; rr(g,cx+2,788,10,6,2); g.fill(); }
     }
   });
 }
-function nearOffice(){ if(S.zone!==0 || !S.char) return -1; return OFFICES.findIndex(b=>Math.abs(player.x-b.door)<44 && player.y>OFF_TOP-58); }
+function nearOffice(){ if(S.zone!==0 || !S.char) return -1; return OFFICES.findIndex(b=>Math.abs(player.x-b.door)<44 && player.y>800); }
 function nearHQ(){ return nearOffice()>=0; }
 let hqT=0;
 function tryHQ(){
@@ -119,7 +119,7 @@ function askLift(){ markExitSeen("lift"+S.bld);
   if(isScam(S.bld) && !raided() && !S.uc){
     const first=!S.hqFound; S.hqFound=true; save(); hudKey="";
     say("o_guard", lines([t("เดี๋ยวๆ ชั้นบนเฉพาะพนักงานเท่านั้น ห้ามขึ้น","Hold on. Upstairs is staff only. You can't go up."),t("บริษัทเราทำการตลาดออนไลน์ ไม่รับคนนอก กลับไปเถอะ","We do online marketing. No visitors. Off you go.")]),
-      {onEnd:()=>{ if(first) setTimeout(()=>{ sfx("ev"); toast(L("🕵️ ตึกนี้แปลก… มียามกันลิฟต์ แล้วได้ยินเสียงคนคุยโทรศัพท์หลายสิบสายจากชั้นบน","🕵️ Something's off… a guard blocks the lift, and you hear dozens of phone calls upstairs")); setTimeout(()=>toast(L("ไปบอกพี่ภพที่สถานีตำรวจ ว่าเจอตึกแล้ว","Tell Phop at the police station (Soi 2) you found the building")),3400); },300); else if(!S.uc) setTimeout(()=>toast(L(`ต้องส่งเบาะแสให้พี่ภพ ${UC_MIN} ชิ้นก่อน ถึงจะได้บัตรพนักงานขึ้นไป`,`Hand Phop ${UC_MIN} clues to get a staff pass for upstairs`)),300); }});
+      {onEnd:()=>{ if(first) setTimeout(()=>{ sfx("ev"); toast(L("🕵️ ตึกนี้แปลก… มียามกันลิฟต์ แล้วได้ยินเสียงคนคุยโทรศัพท์หลายสิบสายจากชั้นบน","🕵️ Something's off… a guard blocks the lift, and you hear dozens of phone calls upstairs")); setTimeout(()=>toast(L("ไปบอกพี่ภพที่สถานีตำรวจ (ซอย 2) ว่าเจอตึกแล้ว","Tell Phop at the police station (Soi 2) you found the building")),3400); },300); else if(!S.uc) setTimeout(()=>toast(L(`ต้องส่งเบาะแสให้พี่ภพ ${UC_MIN} ชิ้นก่อน ถึงจะได้บัตรพนักงานขึ้นไป`,`Hand Phop ${UC_MIN} clues to get a staff pass for upstairs`)),300); }});
     return;
   }
   const btns=[1,2,3].map(k=>`<button class="btn ${k===f?"g":"y"}" data-lift="${k}" ${k===f?"disabled":""}><span>${L(`ชั้น ${k}`,`Floor ${k}`)} · ${esc(offFloorName(k))}${k===f?L(" (อยู่ที่นี่)"," (here)"):""}</span></button>`).join("");

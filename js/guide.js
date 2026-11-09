@@ -136,17 +136,15 @@ function slapScene(then){
 let townC=null, townKey="", bigTab="town";
 function townImage(){
   const key=S.lang+(S.hqFound?1:0);
-  if(S.zone===0){ townC=document.createElement("canvas"); townC.width=bg.width; townC.height=bg.height; const tg=townC.getContext("2d"); tg.drawImage(bg,0,0); townKey=key;
-    tg.save(); tg.scale(bg.width/OW,bg.height/OH); [...OUT_TREES].sort((a,b)=>a.y-b.y).forEach(p=>drawTree(tg,p)); drawFountain(tg,0); tg.restore(); return townC; }
+  if(S.zone===0){ townC=document.createElement("canvas"); townC.width=bg.width; townC.height=bg.height; townC.getContext("2d").drawImage(bg,0,0); townKey=key; return townC; }
   if(townC && townKey===key) return townC;
   const z=S.zone, f=S.floor, b=S.bld;
   S.zone=0; setWorld(); drawStatic();
-  townC=document.createElement("canvas"); townC.width=bg.width; townC.height=bg.height; const tg=townC.getContext("2d"); tg.drawImage(bg,0,0); townKey=key;
-  tg.save(); tg.scale(bg.width/OW,bg.height/OH); [...OUT_TREES].sort((a,b)=>a.y-b.y).forEach(p=>drawTree(tg,p)); drawFountain(tg,0); tg.restore();
+  townC=document.createElement("canvas"); townC.width=bg.width; townC.height=bg.height; townC.getContext("2d").drawImage(bg,0,0); townKey=key;
   S.zone=z; S.floor=f; S.bld=b; setWorld(); drawStatic();
   return townC;
 }
-function openBigMap(tab,fromStop){
+function openBigMap(tab){
   if(!S.char) return;
   bigTab=tab||(S.zone===0?"town":bigTab==="room"?"room":"town");
   const el=$("bigmap"), town=bigTab==="town", gi=goalInfo();
@@ -156,8 +154,8 @@ function openBigMap(tab,fromStop){
   if(town){
     for(const b of BUILDINGS){ if(b.hide) continue;
       const open=b.alley?(b.soi||ghostOpen()):zoneOpen(b.zone), goal=gi&&gi.z===b.zone, here=S.zone===b.zone;
-      const label=`${ZONES[b.zone].name[S.lang]}${zno(b.zone)?` · ${L("โซน","Zone")} ${zno(b.zone)}`:""}`;
-      pins+=`<button class="bm-pin${open?"":" locked"}${goal?" tgt":""}${here?" here":""}" style="${pct(b.door,b.y0-40)}" ${open?`data-bmgo="${b.zone}"`:"disabled"} aria-label="${esc(label)}">${open?"":"🔒 "}${esc(label)}${goal?" 🎯":""}</button>`; }
+      const label=b.alley?(b.zone===5?L("👻 ตรอกมืด","👻 Dark alley"):b.zone===7?L("🚓 สถานีตำรวจ","🚓 Police"):L("🎓 มหาวิทยาลัย","🎓 Campus")):`${b.name[S.lang]}${zno(b.zone)?` · ${L("โซน","Zone")} ${zno(b.zone)}`:""}`;
+      pins+=`<button class="bm-pin${open?"":" locked"}${goal?" tgt":""}${here?" here":""}" style="${pct(b.door,b.alley?150:120)}" ${open?`data-bmgo="${b.zone}"`:"disabled"} aria-label="${esc(label)}">${open?"":"🔒 "}${esc(label)}${goal?" 🎯":""}</button>`; }
     for(const [i,o] of OFFICES.entries()){ const hq=S.hqFound&&i===hqB();
       pins+=`<span class="bm-pin office${gi&&gi.z===8?" tgt":""}" style="${pct(o.door,OFF_TOP+120)}">${esc(o.name[S.lang])}${hq?L(" · ⚠️ รังแก๊ง"," · ⚠️ gang"):""}</span>`; }
     pins+=`<span class="bm-pin small" style="${pct(REPAIR.x,REPAIR.y-40)}">🔧 ${L("หมอโฟน","Phone Dr.")}</span><span class="bm-pin small" style="${pct(KIOSK.x,KIOSK.y-60)}">🕹️ ${L("มินิเกม","Games")}</span>`;
@@ -173,17 +171,17 @@ function openBigMap(tab,fromStop){
   el.innerHTML=`<div class="bm-top"><b>🗺️ ${L("แผนที่","Map")}</b>
       <div class="bm-tabs" role="tablist"><button role="tab" aria-selected="${town}" data-bmtab="town">${L("ทั้งเมือง","Town")}</button>${S.zone!==0?`<button role="tab" aria-selected="${!town}" data-bmtab="room">${L("ที่นี่","Here")} · ${esc(zoneName(S.zone))}</button>`:""}</div>
       <button class="bm-close" data-bmclose aria-label="${L("ปิดแผนที่","Close map")}">✕</button></div>
-    ${fromStop?`<div class="bm-goal">🚏 ${L(`ป้ายรถเมล์ · เลือกที่หมาย ค่ารถ ${BAHT(BUS_FARE)}`,`Bus stop · choose where to go, fare ${BAHT(BUS_FARE)}`)}</div>`:""}${gi?`<div class="bm-goal">🎯 ${esc(gi.t)}</div>`:""}
+    ${gi?`<div class="bm-goal">🎯 ${esc(gi.t)}</div>`:""}
     <div class="bm-scroll"><div class="bm-map" style="aspect-ratio:${MW}/${MH}"><canvas id="bmCv"></canvas>${pins}</div></div>
-    <div class="bm-foot"><span><i class="lg me"></i>${L("คุณ","You")}</span><span><i class="lg bang">!</i>${L("คนที่ต้องช่วย","Needs help")}</span><span><i class="lg tgt"></i>${L("ที่ต้องไป","Your goal")}</span>${town?`<span>🚌 ${L(`แตะชื่อสถานที่เพื่อนั่งรถเมล์ไป (${BAHT(BUS_FARE)})`,`Tap a place to ride the bus there (${BAHT(BUS_FARE)})`)}</span>`:""}<button class="bm-list" data-bmlist>${L("📋 รายการภารกิจ","📋 Mission list")}</button></div>`;
+    <div class="bm-foot"><span><i class="lg me"></i>${L("คุณ","You")}</span><span><i class="lg bang">!</i>${L("คนที่ต้องช่วย","Needs help")}</span><span><i class="lg tgt"></i>${L("ที่ต้องไป","Your goal")}</span>${town?`<span>${L("แตะชื่อสถานที่ที่เปิดแล้วเพื่อไปได้เลย","Tap an open place to go there")}</span>`:""}<button class="bm-list" data-bmlist>${L("📋 รายการภารกิจ","📋 Mission list")}</button></div>`;
   el.hidden=false; sfx("blip");
   const cvm=$("bmCv"); cvm.width=img.width; cvm.height=img.height; cvm.getContext("2d").drawImage(img,0,0);
   el.querySelectorAll("[data-bmtab]").forEach(b=>b.onclick=()=>openBigMap(b.dataset.bmtab));
   el.querySelector("[data-bmclose]").onclick=closeBigMap;
   el.querySelector("[data-bmlist]").onclick=()=>{ closeBigMap(); openZones(); };
-  el.querySelectorAll("[data-bmgo]").forEach(b=>b.onclick=()=>{ const z=+b.dataset.bmgo; closeBigMap(); if(z===S.zone) return; rideBus(z); });
+  el.querySelectorAll("[data-bmgo]").forEach(b=>b.onclick=()=>{ const z=+b.dataset.bmgo; closeBigMap(); if(z===S.zone) return; goZone(z); });
   const here=el.querySelector(".bm-me"), sc=el.querySelector(".bm-scroll");
-  if(here && sc.scrollWidth>sc.clientWidth) sc.scrollLeft=here.offsetLeft-sc.clientWidth/2; if(here && sc.scrollHeight>sc.clientHeight) sc.scrollTop=here.offsetTop-sc.clientHeight/2;
+  if(here && sc.scrollWidth>sc.clientWidth) sc.scrollLeft=here.offsetLeft-sc.clientWidth/2;
 }
 function closeBigMap(){ const el=$("bigmap"); if(el){ el.hidden=true; el.innerHTML=""; } }
 const bigMapOpen=()=>!$("bigmap").hidden;

@@ -89,7 +89,7 @@ const ZONE_INTRO = {
   6:[t("ถนนจากสี่แยกพาเรามาถึงมหาวิทยาลัยหัวเฉียวเฉลิมพระเกียรติ","The road from the crossroads brings us to Huachiew Chalermprakiet University."),t("แก๊งเงาชอบเล็งนักศึกษา เพราะทุกคนออนไลน์ทั้งวัน และบางคนกำลังหาเงิน","The Shadow gang targets students: everyone's online all day, and some need money."),t("ได้ยินว่ามีนักศึกษาชื่อปวีณาเกี่ยวข้องด้วย ลองหาเธอดูนะ","I've heard a student called Paweena is mixed up in this. Try to find her.")],
   7:[t("นี่คือสถานีตำรวจ ฐานของพี่ภพ ตำรวจไซเบอร์","This is the police station, Phop's base. He's cyber police."),t("ที่นี่เราจะได้เรียนวิธีแจ้งความที่ถูกต้อง และเอาหลักฐานทั้งหมดมาส่ง","Here you'll learn how to report properly, and hand in all the evidence."),t("ช่วยคนให้ครบทุกที่ แล้วกลับมาคุยกับพี่ภพ เราจะบุกตึกแก๊งเงาด้วยกัน","Help everyone everywhere, then come back to Phop. We'll raid the Shadow gang's building together.")],
   2:[t("โซน 1 ห้องสมุดเมือง ที่นี่ใหญ่กว่าที่อื่น มีสองชั้น บันไดอยู่มุมขวาบน","Zone 2, the City Library. It's bigger than the others and has two floors. The stairs are top right."),t("คนเยอะ Wi-Fi ฟรี ปลั๊กฟรี คอมสาธารณะ มิจฉาชีพชอบที่แบบนี้มาก","Crowds, free Wi-Fi, free charging, public computers. Scammers love it here."),t("ป้ายที่บันไดจะบอกว่าอีกชั้นยังมีคนรอความช่วยเหลืออยู่กี่คน","The sign by the stairs shows how many people still need help on the other floor.")],
-  5:[t("ขนลุกจัง… ที่นี่คือบ้านร้างในป่า","Spooky… this is the abandoned house in the woods."),t("ผีที่นี่ก็โดนแก๊งหลอกเหมือนกัน เรื่องค้างคาใจเลยไปไหนไม่ได้","Even the ghosts here were scammed. With business left unfinished, they can't move on."),t("ช่วยผีให้ได้ไปต่อนะ พี่รอตรงประตูนี่แหละ ไม่เข้าไปลึกกว่านี้แล้ว","Help them move on. I'll wait right here by the door. I'm not going any further.")],
+  5:[t("ขนลุกจัง… ที่นี่คือบ้านร้างในตรอก","Spooky… this is the abandoned house in the alley."),t("ผีที่นี่ก็โดนแก๊งหลอกเหมือนกัน เรื่องค้างคาใจเลยไปไหนไม่ได้","Even the ghosts here were scammed. With business left unfinished, they can't move on."),t("ช่วยผีให้ได้ไปต่อนะ พี่รอตรงประตูนี่แหละ ไม่เข้าไปลึกกว่านี้แล้ว","Help them move on. I'll wait right here by the door. I'm not going any further.")],
   4:[t("โซน 3 ร้านเน็ต NET ZONE เด็กๆ มาเล่นเกมที่นี่ทุกวัน","Zone 3, NET ZONE. Kids come here to game every day."),t("แก๊งเงาเริ่มหลอกเด็กในเกม ทั้งขายของนอกระบบ ยึดบัญชี และชวนให้ปิดเป็นความลับจากผู้ใหญ่","The Shadow gang has started targeting kids in games: off-platform sales, account theft, and asking them to keep secrets from adults."),t("ช่วยทั้งเด็กและผู้ปกครองนะ บางทีสิ่งที่ยากที่สุดคือช่วยให้เด็กกล้าเล่า","Help both the kids and their guardian. Sometimes the hardest part is helping a child feel safe to talk.")],
   3:[t("โซน 4 ธนาคาร ที่นี่เรื่องจริงจังขึ้นมาก","Zone 4, the bank. Things get serious here."),t("คนที่โดนหลอกมักถูกเร่งและถูกสั่งให้อยู่คนเดียว บางคนเดินมาถอนเงินสดไปให้คนร้ายถึงที่ บางคนโอนทีละหลายแสน","Victims are rushed and told to stay alone. Some come here to withdraw cash for the scammer, some wire hundreds of thousands."),t("ครั้งนี้คุณต้องช่วยคนอื่นที่กำลังตื่นตระหนก บางทีการช่วยที่ดีที่สุดคือทำให้เขาไม่อยู่คนเดียว","This time you're helping people in a panic. Sometimes the best help is making sure they're not alone.")]
 };
@@ -116,7 +116,7 @@ function gameTour(){
     {who:M, sel:"#prog", t:["คะแนนและแผนที่","Score & map"], d:["ดาวที่เก็บได้ในที่นี้ แตะเพื่อเปิดแผนที่ภารกิจ ดูว่าบทไหนเปิดแล้ว และยังเหลือใครต้องช่วย","Stars collected here. Tap it for the mission map: see which chapters are open and who still needs help."]},
     {who:M, sel:"#phoneBtn", t:["มือถือของคุณ","Your phone"], d:["จะมี SMS เด้งเข้ามาระหว่างเล่น ตัดสินว่าจริงหรือหลอก และระวัง Wi-Fi ฟรีในร้าน ถ้าต่อผิด มือถือจะโดนแฮก!","Messages arrive as you play: decide real or scam. And beware free Wi-Fi in the shops. Join the wrong one and your phone gets hacked!"]},
     {who:M, sel:"#boardBtn", t:["บอร์ดหลักฐาน","Evidence board"], d:["ทุกเคสที่ช่วยจนจบและลงมือแก้ในมือถือสำเร็จ จะได้เบาะแสหนึ่งชิ้น ยังมีเบาะแสซ่อนอยู่อีก ต้องใช้แว่นนักสืบหา","Every case you finish, including the hands-on fix on the phone, gives a clue. More clues are hidden around; the detective lens finds them."]},
-    {who:M, world:{x:372,y:560,w:120,h:70}, t:["ออกไปข้างนอก","Going outside"], d:["ประตูด้านล่างพาลงไปที่ถนน เดินลงไปจนถึงสี่แยก ห้องสมุดอยู่ทางซ้าย สถานีตำรวจ ทางขวาไปสถานีตำรวจของพี่ภพ ที่อื่นจะเปิดเมื่อได้เบาะแสชี้ไป","The bottom door leads down to the street. Walk to the crossroads: the library is on the left, Soi 2 on the right goes to Phop's police station. Other places open as leads point to them."]},
+    {who:M, world:{x:372,y:560,w:120,h:70}, t:["ออกไปข้างนอก","Going outside"], d:["ประตูด้านล่างพาลงไปที่ถนน เดินลงไปจนถึงสี่แยก ห้องสมุดอยู่ทางซ้าย ซอย 2 ทางขวาไปสถานีตำรวจของพี่ภพ ที่อื่นจะเปิดเมื่อได้เบาะแสชี้ไป","The bottom door leads down to the street. Walk to the crossroads: the library is on the left, Soi 2 on the right goes to Phop's police station. Other places open as leads point to them."]},
     {who:M, sel:"#menuBtn", t:["เมนู","Menu"], d:["เปลี่ยนภาษา เปิดปิดเสียง เปิดสมุดกลโกง และดูทัวร์นี้ซ้ำได้ที่นี่","Change language, toggle sound, open the scam book, or replay this tour here."]},
     {who:M, t:["เป้าหมาย","The goal"], d:["ตามเบาะแสไปทีละที่ แล้วเอาไปส่งพี่ภพ ยิ่งมีเบาะแสมาก ตอนบุกยิ่งจับได้ครบ ฉากจบมี 5 แบบ จำสามคำ: หยุด คิด ตรวจสอบ","Follow the leads place by place and hand them to Phop. The more clues, the more of the gang gets caught. There are 5 endings. Remember: stop, think, check."]}
   ].filter(Boolean);
@@ -133,7 +133,7 @@ function briefing(){
   const p=npcs.find(n=>n.id==="police"); if(p) face(player,p);
   say("police", lines([t(`ยินดีที่ได้รู้จักนะ ${nm(S.char)} นี่โอ๊ต อาสาสมัครไซเบอร์ เขาจะคอยช่วยน้องตลอดทาง`,`Nice to meet you, ${nm(S.char)}. This is Oat, a cyber volunteer. He'll back you up the whole way.`),
     t("ทุกครั้งที่ช่วยคนได้ จะได้เบาะแสหนึ่งชิ้น เปิดดูได้ที่บอร์ดหลักฐาน","Each person you help gives you a clue. You can see them on the evidence board."),
-    t("ในห้องต่างๆ อาจมีของแปลกๆ ซ่อนอยู่ ตรงไหนมีเครื่องหมาย ? ให้เดินไปดู ถ้าติดตรงไหน กดปุ่ม 💡 ซื้อคำใบ้ได้","Odd things may be hidden in rooms: walk to any ? mark. If you get stuck, press 💡 to buy a hint."),
+    t("รับแว่นนักสืบนี่ไปด้วย กดปุ่ม 🔍 (หรือ Q) เพื่อส่องหาของที่ซ่อนอยู่ในห้อง เจอแล้วเอามาส่งพี่ที่สถานีตำรวจ","Take this detective lens. Press 🔍 (or Q) to sweep for hidden things in a room, and bring what you find to me at the police station."),
     t("เริ่มที่ห้องสมุดเมืองก่อนเลย ออกประตูด้านล่างแล้วเดินลงไปที่สี่แยก ห้องสมุดอยู่ทางซ้าย","Start with the City Library. Go out the bottom door, walk down to the crossroads, and the library is on the left.")]),
     {onEnd:()=>{ S.briefed=true; S.items.lens=Math.max(1,S.items.lens||0); save(); hudKey=""; buildCast(); startTour(); }});
 }
@@ -152,9 +152,9 @@ function mentorIntro(){
 }
 
 /* ---------- talking ---------- */
-function interact(){ const n=nearest(); const bs=nearBus(); if(bs && (!n || Math.hypot(n.x-player.x,n.y-player.y)>Math.hypot(bs.x-player.x,bs.y-player.y))){ openBigMap("town",true); return; } const sp=nearSpot(); if(sp && (!n || Math.hypot(sp.x-player.x,sp.y-player.y)<Math.hypot(n.x-player.x,n.y-player.y))){ collectSpot(sp); return; } if(n){ face(player,n); talkTo(n); return; } if(nearKiosk()){ openArcade(); return; } if(nearCat()){ feedCat(); return; } if(nearBirds()){ feedBirds(); return; } if(nearHQ()){ hqT=0; tryHQ(); return; } if(nearRepair()){ openRepair(); return; } if(nearVillain()){ talkVillain(); return; } const d=nearDoor(); if(d) tryEnter(d); }
+function interact(){ const n=nearest(); const sp=nearSpot(); if(sp && (!n || Math.hypot(sp.x-player.x,sp.y-player.y)<Math.hypot(n.x-player.x,n.y-player.y))){ collectSpot(sp); return; } if(n){ face(player,n); talkTo(n); return; } if(nearKiosk()){ openArcade(); return; } if(nearCat()){ feedCat(); return; } if(nearBirds()){ feedBirds(); return; } if(nearHQ()){ hqT=0; tryHQ(); return; } if(nearRepair()){ openRepair(); return; } if(nearVillain()){ talkVillain(); return; } const d=nearDoor(); if(d) tryEnter(d); }
 function nearKiosk(){ return S.zone===0 && S.char && Math.hypot(player.x-KIOSK.x,player.y-(KIOSK.y+18))<58; }
-function nearDoor(){ if(S.zone!==0||!S.char) return null; return BUILDINGS.find(b=>Math.abs(player.x-b.door)<46 && player.y<b.bot+60 && player.y>b.bot-20) || null; }
+function nearDoor(){ if(S.zone!==0||!S.char) return null; return BUILDINGS.find(b=>Math.abs(player.x-b.door)<46 && player.y<300) || null; }
 let lockToastT=0;
 function tryEnter(b){
   if(b.closed){ player.y=Math.max(player.y,282); target=null; targetNpc=null; keys.clear(); if(performance.now()-lockToastT<1500) return; lockToastT=performance.now(); toast(L("ร้านนี้ปิดปรับปรุงอยู่","This shop is closed for renovation")); return; }
@@ -248,7 +248,7 @@ function startAscend(n){
 /* bank: grandma runs up to you in a panic */
 let rush=null;
 /* timed events: someone is about to make a mistake, get there first */
-const URGENT={10:{role:"grandma",cid:"qr",secs:45,say:{th:"สแกนเลยดีกว่า…",en:"I'll just scan it…"},start:{th:"ยายศรีกำลังจะสแกน QR บนโต๊ะ! ไปให้ทันก่อนหมดเวลา",en:"Grandma Sri is about to scan the table QR! Get there in time"},late:{th:"ไม่ทัน! ยายสแกนจ่ายไปแล้ว",en:"Too late! Grandma already scanned and paid"}},
+const URGENT={1:{role:"grandma",cid:"qr",secs:45,say:{th:"สแกนเลยดีกว่า…",en:"I'll just scan it…"},start:{th:"ยายศรีกำลังจะสแกน QR บนโต๊ะ! ไปให้ทันก่อนหมดเวลา",en:"Grandma Sri is about to scan the table QR! Get there in time"},late:{th:"ไม่ทัน! ยายสแกนจ่ายไปแล้ว",en:"Too late! Grandma already scanned and paid"}},
   4:{role:"friend",cid:"topup",secs:45,say:{th:"โอนเลยดีกว่า…",en:"I'll just pay…"},start:{th:"ภูมิกำลังจะโอนซื้อเพชรอีกรอบ! ไปคุยก่อนหมดเวลา",en:"Phum is about to pay for more diamonds! Talk to him in time"},late:{th:"ไม่ทัน! ภูมิโอนไปแล้ว 1,500",en:"Too late! Phum already paid 1,500"}},
   2:{role:"grandpa",cid:"charge",secs:50,say:{th:"กดเชื่อถือเลยดีกว่า…",en:"I'll just tap trust…"},start:{th:"ลุงประยูรกำลังจะเสียบมือถือกับตู้ชาร์จฟรี! ไปให้ทันก่อนหมดเวลา",en:"Uncle Prayoon is about to plug into the free charging station! Get there in time"},late:{th:"ไม่ทัน! ลุงกดเชื่อถือไปแล้ว",en:"Too late! Uncle Prayoon already tapped trust"}}};
 let urgent=null;
@@ -280,7 +280,7 @@ function drawUrgent(g,now){
   g.restore();
 }
 function zoneEvent(){
-  if(S.zone===10 || S.zone===2 || S.zone===4){ startUrgent(); return; }
+  if(S.zone===1 || S.zone===2 || S.zone===4){ startUrgent(); return; }
   if(S.zone!==3 || S.best.rush) return;
   const g=npcs.find(n=>n.role==="grandma"); if(!g) return;
   rush={n:g, t:0};

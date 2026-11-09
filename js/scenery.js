@@ -99,13 +99,16 @@ function stringLights(g,x1,y1,x2,y2,sag){
 function drawStreetGround(g){
   grassArea(g,0,0,OW,OH,21);
   treeLine(g,0,OW,10,70,31);
-  /* grass everywhere; brick for the walkways: in front of the shops, along the road,
-     from every door down to the road, and a small square round the fountain */
-  brickPave(g,28,250,OW-56,70,41);
-  brickPave(g,28,536,OW-56,64,42);
-  for(const b of BUILDINGS){ if(b.alley && !(b.soi&&!b.road)) continue; brickPave(g,b.door-34,300,68,240,71+b.zone); }
-  brickPave(g,600,380,240,140,61);
-  brickPave(g,226,440,150,60,62); brickPave(g,1066,440,150,60,63); brickPave(g,1486,440,150,60,64);
+  /* pavement in front of the shops, and the plaza */
+  brickPave(g,28,250,OW-56,90,41);
+  dirtArea(g,28,340,OW-56,260,51);
+  /* grass islands under the trees and around the benches */
+  let s=60;
+  for(const p of OUT_TREES) grassIsland(g,p.x,p.y-6,70,46,s++);
+  for(const b of OUT_BENCHES) grassIsland(g,b.x,b.y-10,96,50,s++);
+  for(const [x,y,rx,ry] of [[690,450,80,44],[1560,450,90,46],[220,420,60,34],[1660,520,60,36]]) grassIsland(g,x,y,rx,ry,s++);
+  /* brick paths from the plaza to each shop door */
+  for(const b of BUILDINGS){ if(b.alley) continue; brickPave(g,b.door-34,250,68,120,71+b.zone); }
 }
 /* flowers, bushes and lights drawn over the shop fronts */
 function drawStreetDecor(g){
@@ -114,8 +117,8 @@ function drawStreetDecor(g){
     for(const wx of [b.x+22, b.x+b.w-112]) flowerBox(g,wx-2,214,94,fb[(b.zone+wx)%4]);
     pottedPlant(g,b.door-48,262); pottedPlant(g,b.door+48,262);
   }
-  for(const [x,y,c] of [[580,370,"#F48FB1"],[860,370,"#FFD84D"],[220,400,"#FFFFFF"],[1660,420,"#FF8A50"],[30,340,"#F48FB1"],[OW-30,340,"#FFD84D"]]) flowerBush(g,x,y,16,c);
-  for(const [x,y] of [[580,500],[860,500],[1300,450],[1700,470],[180,520],[420,420]]) bush(g,x,y,12);
+  for(const [x,y,c] of [[690,440,"#F48FB1"],[1560,444,"#FFD84D"],[220,414,"#FFFFFF"],[1660,514,"#FF8A50"],[30,340,"#F48FB1"],[OW-30,340,"#FFD84D"]]) flowerBush(g,x,y,16,c);
+  for(const [x,y] of [[620,450],[760,440],[1500,450],[1620,456],[180,424],[260,426]]) bush(g,x,y,12);
   /* south pavement hedges */
   for(let x=60;x<OW-40;x+=150){ if(OFFICES.some(o=>Math.abs(o.door-x)<90) || (x>IC.x0-60&&x<IC.x1+60)) continue; bush(g,x,846,13,"#4E9A3F"); }
 }

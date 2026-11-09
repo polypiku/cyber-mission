@@ -144,22 +144,17 @@ const PLAYABLE=["studentGirl","studentBoy","guardGirl","guardBoy"];
 const nm = (id)=>(id===S.char && S.name) ? S.name : PEOPLE[id].name[S.lang];
 /* ---------- zones + scoring ---------- */
 const ZONES = {
-  1:{name:{th:"ร้านกาแฟ Bean House",en:"Bean House café"}, cases:["bank","wifi","chat"], roleCase:{grandpa:"bank", friend:"wifi", phone:"chat"}},
-  2:{name:{th:"ห้องสมุดเมือง",en:"City Library"}, cases:["charge","helper","publicpc"], roleCase:{grandpa:"charge", grandma:"helper", tips:"publicpc"}},
-  3:{name:{th:"ธนาคารนครทอง",en:"Nakhonthong Bank"}, cases:["rush","video","remote"], roleCase:{grandma:"rush", grandpa:"video", tips:"remote"}},
-  4:{name:{th:"ร้านเน็ต NET ZONE",en:"NET ZONE internet café"}, cases:["topup","trade","secret"], roleCase:{friend:"topup", tips:"trade", grandpa:"secret"}},
-  6:{name:{th:"มหาวิทยาลัยหัวเฉียวเฉลิมพระเกียรติ",en:"Huachiew Chalermprakiet University"}, cases:["itmail","parttime","fakeprof"], roleCase:{tips:"itmail", paweena:"parttime", prof:"fakeprof"}},
+  1:{name:{th:"ร้านกาแฟ Bean House",en:"Bean House café"}, cases:["qr","bank","wifi","chat"], roleCase:{grandma:"qr", grandpa:"bank", friend:"wifi", phone:"chat"}},
+  2:{name:{th:"ห้องสมุดเมือง",en:"City Library"}, cases:["charge","helper","publicpc","airdrop"], roleCase:{grandpa:"charge", grandma:"helper", tips:"publicpc", friend:"airdrop"}},
+  3:{name:{th:"ธนาคารนครทอง",en:"Nakhonthong Bank"}, cases:["rush","video","invest","remote"], roleCase:{grandma:"rush", grandpa:"video", friend:"invest", tips:"remote"}},
+  4:{name:{th:"ร้านเน็ต NET ZONE",en:"NET ZONE internet café"}, cases:["topup","trade","secret","parent"], roleCase:{friend:"topup", tips:"trade", grandpa:"secret", grandma:"parent"}},
+  6:{name:{th:"มหาวิทยาลัยหัวเฉียวเฉลิมพระเกียรติ",en:"Huachiew Chalermprakiet University"}, cases:["scholar","itmail","parttime","fakeprof"], roleCase:{friend:"scholar", tips:"itmail", paweena:"parttime", prof:"fakeprof"}},
   7:{name:{th:"สถานีตำรวจ",en:"Police station"}, cases:["report","ransom"], roleCase:{grandpa:"report", visitor:"ransom"}},
-  5:{bonus:true, name:{th:"บ้านร้างในป่า",en:"The old house in the woods"}, cases:["merit","inherit","romance","fortune"], roleCase:{grandma:"merit", grandpa:"inherit", tips:"romance", friend:"fortune"}},
-  9:{side:true, name:{th:"ศูนย์อาหาร",en:"Food court"}, cases:["invest","pig","bec"], roleCase:{friend:"invest", c_pig:"pig", c_bec:"bec"}},
-  10:{side:true, name:{th:"ตลาดนัด",en:"Market"}, cases:["qr","gold","share"], roleCase:{grandma:"qr", c_gold:"gold", c_share:"share"}},
-  11:{side:true, name:{th:"ร้านสะดวกซื้อ",en:"Mini mart"}, cases:["parent","atm","wrong"], roleCase:{grandma:"parent", c_atm:"atm", c_wrong:"wrong"}},
-  12:{side:true, name:{th:"ร้านมือถือ หมอโฟน ไอที",en:"Phone Dr. IT shop"}, cases:["simswap","apk","deepfake"], roleCase:{c_sim:"simswap", c_apk:"apk", c_deep:"deepfake"}},
-  13:{side:true, name:{th:"หอพักนักศึกษา",en:"Student dorm"}, cases:["airdrop","scholar","task"], roleCase:{friend:"airdrop", tips:"scholar", c_task:"task"}},
+  5:{bonus:true, name:{th:"บ้านผีสิงในตรอกมืด",en:"The haunted house in the alley"}, cases:["merit","inherit","romance","fortune"], roleCase:{grandma:"merit", grandpa:"inherit", tips:"romance", friend:"fortune"}}
 };
 const MAINZ = ()=>Object.keys(ZONES).map(Number).filter(z=>!ZONES[z].bonus);
 const zno = (z)=>{ z=+z; const i=CHAPTERS.indexOf(z); if(i>=0) return i+1; if(z===7) return "🚓"; if(ZONES[z]&&ZONES[z].bonus) return "👻"; return ""; };
-const OUTZ={name:{th:"ถนนหน้าร้าน",en:"The street"}, cases:["simswap","apk","deepfake"], roleCase:{c_sim:"simswap", c_apk:"apk", c_deep:"deepfake"}};
+const OUTZ={name:{th:"ถนนหน้าร้าน",en:"The street"}, cases:[], roleCase:{}};
 const VICTIM_CASES={grandma:["qr","rush"], grandpa:["bank","video"]};
 function recoverRole(){
   if(S.best.recover==="safe") return null;
@@ -169,7 +164,7 @@ function recoverRole(){
 const ZN = ()=>{ if(S.zone!==0) return ZONES[S.zone]||ZONES[1]; const r=recoverRole(); OUTZ.roleCase=r?{[r]:"recover"}:{}; return OUTZ; };
 function applyTS(){ document.documentElement.style.setProperty("--ts", String(S.ts||1)); }
 const totalScore=()=>MAINZ().reduce((a,z)=>a+zoneScore(z),0), totalMax=()=>MAINZ().reduce((a,z)=>a+zoneMax(z),0);
-const BAR_OF = {scholar:"privacy", itmail:"privacy", parttime:"money", fakeprof:"money", report:"money", ransom:"privacy", invest:"money", publicpc:"privacy", charge:"money", helper:"privacy", update:"privacy", airdrop:"privacy", qr:"money", bank:"money", wifi:"privacy", chat:"trust", pkg:"privacy", call:"money", job:"trust", seller:"money", rush:"money", video:"money", mule:"trust", remote:"privacy", merit:"trust", inherit:"money", romance:"trust", fortune:"money", topup:"money", trade:"privacy", secret:"trust", parent:"money", pig:"money", bec:"money", gold:"money", share:"trust", atm:"money", wrong:"trust", simswap:"privacy", apk:"privacy", deepfake:"trust", task:"money"};
+const BAR_OF = {scholar:"privacy", itmail:"privacy", parttime:"money", fakeprof:"money", report:"money", ransom:"privacy", invest:"money", publicpc:"privacy", charge:"money", helper:"privacy", update:"privacy", airdrop:"privacy", qr:"money", bank:"money", wifi:"privacy", chat:"trust", pkg:"privacy", call:"money", job:"trust", seller:"money", rush:"money", video:"money", mule:"trust", remote:"privacy", merit:"trust", inherit:"money", romance:"trust", fortune:"money", topup:"money", trade:"privacy", secret:"trust", parent:"money"};
 /* ---------- the Shadow gang: evidence collected from each case ---------- */
 const EVID = {
   qr:{i:"🏷️",g:"acct",t:["สติกเกอร์ QR ปลอม","Fake QR sticker"],d:["บัญชีปลายทาง: นาย ธนพล ส.","Receiving account: Mr Thanaphon S."]},

@@ -17,19 +17,24 @@ function render(now){
   const near=nearest();
   if(near && !busy()){ ctx.beginPath(); ctx.ellipse(near.x,near.y,24,9,0,0,7); ctx.strokeStyle="#FF5A1F"; ctx.lineWidth=3; ctx.stroke(); }
   if(target && !busy()){ ctx.beginPath(); ctx.arc(target.x,target.y,6+(RM?0:Math.sin(now/120)),0,7); ctx.strokeStyle="rgba(20,20,20,.55)"; ctx.lineWidth=2; ctx.stroke(); }
-  const items = (S.zone===0||S.zone===2||S.zone===8||cbFloor()||ROOMS2[S.zone]) ? [] : [{y:186,d:g=>drawCounter(g)}];
+  const items = (S.zone===0||S.zone===2||S.zone===8||cbFloor()) ? [] : [{y:186,d:g=>drawCounter(g)}];
   if(cbFloor()){ items.push({y:CB_TOP+1,d:g=>drawCellBlockBars(g,true)}); items.push({y:9000,d:g=>drawCellBlockBars(g,false)}); }
   if(S.zone===0){ items.push({y:(CRUMBS?CRUMBS.y-12:0),d:g=>drawCrumbs(g)}); PIGEONS.forEach(p=>items.push({y:p.y,d:g=>drawPigeon(g,p,now)})); }
   if(vilOn()) items.push({y:9999,d:g=>drawVilFx(g,now)});
   if(S.zone===0) items.push({y:REPAIR.y+12,d:g=>drawRepair(g,now)});
   if(S.zone===1){ items.push({y:CAT.y+1,d:g=>drawBowl(g,now)}); items.push({y:CAT.y,d:g=>drawCat(g,now)}); }
   if(S.zone===0){
-    items.push({y:FOUNTAIN.y+6,d:g=>drawFountain(g,now)});
+    items.push({y:446,d:g=>drawFountain(g,now)});
     OUT_TREES.forEach(p=>items.push({y:p.y+10,d:g=>drawTree(g,p)}));
     OUT_BENCHES.forEach(b=>items.push({y:b.y+8,d:g=>drawBench(g,b)}));
     OUT_LAMPS.forEach(l=>items.push({y:l.y+4,d:g=>drawLamp(g,l,now)}));
     items.push({y:KIOSK.y+10,d:g=>drawKiosk(g,now)});
+    if(!(CIN&&CIN.noCars)) CARS.forEach(c=>items.push({y:c.y+20,d:g=>drawCar(g,c)}));
     if(CIN&&CIN.van){ const v=CIN.van; items.push({y:v.y+20,d:g=>drawCar(g,v)}); }
+    XINGS.filter(xg=>!xg.sig).forEach(xg=>{ items.push({y:606,d:g=>drawTL(g,xg.x0-30,606,xg,now)}); items.push({y:780,d:g=>drawTL(g,xg.x1+30,780,xg,now)}); });
+    const EWS={sig:"ew"}, NSS={sig:"ns"};
+    items.push({y:606,d:g=>drawTL(g,872,606,EWS,now)}); items.push({y:782,d:g=>drawTL(g,1018,782,NSS,now)});
+    if(!(CIN&&CIN.noCars)) VCARS.forEach(c=>items.push({y:c.y+c.len/2,d:g=>drawCarV(g,c)}));
   }
   TABLES.forEach(t=>items.push({y:S.zone===2?t.y+LIB_SIZE[t.item][1]/2:t.y+18,d:g=>drawTable(g,t)}));
   CHAIRS.forEach(c=>items.push({y:c.y+8,d:g=>drawChair(g,c)}));
@@ -46,7 +51,7 @@ function render(now){
 const keys=new Set();
 let joy={x:0,y:0,active:false,id:null}, target=null, targetNpc=null, stuckT=0, lastPos=null;
 /* use physical key positions so WASD/E work on a Thai keyboard layout too */
-const KMAP={KeyW:"w",KeyA:"a",KeyS:"s",KeyD:"d",KeyE:"e",KeyQ:"q",KeyH:"h",KeyM:"m",ArrowUp:"arrowup",ArrowDown:"arrowdown",ArrowLeft:"arrowleft",ArrowRight:"arrowright",Space:" ",Enter:"enter",NumpadEnter:"enter",Escape:"escape"};
+const KMAP={KeyW:"w",KeyA:"a",KeyS:"s",KeyD:"d",KeyE:"e",KeyQ:"q",KeyM:"m",ArrowUp:"arrowup",ArrowDown:"arrowdown",ArrowLeft:"arrowleft",ArrowRight:"arrowright",Space:" ",Enter:"enter",NumpadEnter:"enter",Escape:"escape"};
 const keyOf=(e)=>KMAP[e.code]||e.key.toLowerCase();
 window.addEventListener("keydown",(e)=>{
   if(e.ctrlKey||e.metaKey||e.altKey) return;
@@ -56,7 +61,7 @@ window.addEventListener("keydown",(e)=>{
     if(!$("dlg").hidden && (k==="e"||document.activeElement?.tagName!=="BUTTON")){ advance(); e.preventDefault(); return; }
     if(!busy()){ interact(); e.preventDefault(); }
   }
-  if((k==="q"||k==="h") && !busy()){ openHintMenu(); e.preventDefault(); }
+  if(k==="q" && !busy()){ sweepLens(); e.preventDefault(); }
   if(k==="m"){ if(bigMapOpen()) closeBigMap(); else if(!busy()) openBigMap(); e.preventDefault(); }
   if(k==="escape" && bigMapOpen()){ closeBigMap(); e.preventDefault(); return; }
   if(k==="escape"){ if(!$("veil").hidden && sheetMode!=="case" && sheetMode!=="start") closeSheet(); }
@@ -106,7 +111,7 @@ function tapWalk(e){
 }
 $("act").addEventListener("click",()=>{ if(!busy()) interact(); });
 $("bars").addEventListener("click",(e)=>{ if(D||busy()) return; if(e.target.closest(".coinrow,.netrow")) openMoney(); });
-$("lensBtn").addEventListener("click",()=>openHintMenu());
+$("lensBtn").addEventListener("click",()=>sweepLens());
 
 /* ---------- movement ---------- */
 /* which zebra crossing a point is on, and whether people may walk on it now */
@@ -120,7 +125,7 @@ function redLight(x,y){
   if(S.zone!==0 || CIN) return false;
   const to=xingAt(x,y); if(!to || to.go()) return false;
   const from=xingAt(player.x,player.y); if(from && from.k===to.k) return false;   /* already crossing: let them finish */
-  if(performance.now()-redWarnT>2500){ redWarnT=performance.now(); xWarnT=performance.now(); pedRequest(to); }
+  if(performance.now()-redWarnT>2500){ redWarnT=performance.now(); xWarnT=performance.now(); toast(L("🚦 ไฟคนข้ามยังแดง รอไฟเขียวก่อนนะ","🚦 Don't walk yet. Wait for the green man")); }
   return true;
 }
 function blocked(x,y,self){
@@ -155,7 +160,7 @@ function step(dt){
     if(target){ const p=lastPos; if(p && Math.hypot(p.x-player.x,p.y-player.y)<0.3){ stuckT+=dt; if(stuckT>0.35){ target=null; if(targetNpc && Math.hypot(targetNpc.x-player.x,targetNpc.y-player.y)<TALK+30){ const n=targetNpc; face(player,n); talkTo(n); } targetNpc=null; } } else stuckT=0; }
     lastPos={x:player.x,y:player.y};
   }
-  
+  if(S.zone===0){ tlT+=dt; stepCars(dt); stepVCars(dt); }
   if(!busy() && S.char){
     // leaving a shop through its door
     if(S.zone>0 && (S.zone===2 ? inLibExit() : (player.y>598 && player.x>384 && player.x<480))) goOutside(S.zone);
@@ -164,8 +169,8 @@ function step(dt){
     else if(S.zone===7 && !cbFloor() && player.x>RW-60 && player.y>PDOOR.y0 && player.y<PDOOR.y1) switchCells(true);
     else if(cbFloor() && player.x<44) switchCells(false);
     // walking into a shop door on the street
-    else if(S.zone===0 && nearHQ() && player.y>OFF_TOP-12) tryHQ();
-    else if(S.zone===0){ const b=BUILDINGS.find(b=>Math.abs(player.x-b.door)<30 && player.y<b.bot+18 && player.y>b.bot-12); if(b) tryEnter(b); }
+    else if(S.zone===0 && nearHQ() && player.y>846) tryHQ();
+    else if(S.zone===0 && player.y<268){ const b=BUILDINGS.find(b=>Math.abs(player.x-b.door)<30); if(b) tryEnter(b); }
   }
   // NPCs drift back to their resting direction
   npcs.forEach(n=>{ if(rush&&rush.n===n) return; n.moving=false; if(!talking||talking!==n){ n.dir=n.home; } });
@@ -193,7 +198,7 @@ function hud(){
   const show = !!n && !busy();
   const dn=nearDoor();
   checkRank();
-  const sp0=nearSpot(); const key=[sp0&&sp0.id,!!nearBus(),netLabel().t,S.lang,S.zone,S.evNew,xp(),nearCat(),nearBirds(),nearHQ(),nearRepair(),nearVillain(),!!S.phoneBroken,S.coins,JSON.stringify(S.items),S.inbox.length,nearKiosk(),dn&&dn.zone,S.zone?zoneScore(S.zone):totalScore(),S.bars.money,S.bars.privacy,S.bars.trust,doneCount(),S.chat,S.chatSeen,!!S.results.chat,show&&n.id,sheetMode].join("|");
+  const sp0=nearSpot(); const key=[sp0&&sp0.id,netLabel().t,S.lang,S.zone,S.evNew,xp(),nearCat(),nearBirds(),nearHQ(),nearRepair(),nearVillain(),!!S.phoneBroken,S.coins,JSON.stringify(S.items),S.inbox.length,nearKiosk(),dn&&dn.zone,S.zone?zoneScore(S.zone):totalScore(),S.bars.money,S.bars.privacy,S.bars.trust,doneCount(),S.chat,S.chatSeen,!!S.results.chat,show&&n.id,sheetMode].join("|");
   if(key===hudKey) return; hudKey=key;
   if(hudPrev && !sheetMode){ let ch=false; for(const k of ["money","privacy","trust"]){ const dv=S.bars[k]-hudPrev[k]; if(dv){ hudFlash[k]=dv>0?"flash-up":"flash-down"; ch=true; } }
     if(ch){ clearTimeout(hudFlashT); hudFlashT=setTimeout(()=>{ hudFlash={}; hudKey=""; },1600); } }
@@ -206,16 +211,14 @@ function hud(){
   $("boardDot").hidden=!S.evNew; $("boardDot").textContent=S.evNew||""; $("boardBtn").setAttribute("aria-label",L("บอร์ดหลักฐาน","Evidence board"));
   const pcount=S.inbox.length+(pending?1:0);
   $("phoneDot").hidden=!pcount && !S.phoneBroken; $("phoneDot").textContent=S.phoneBroken?"✕":pcount; $("phoneBtn").classList.toggle("broken",!!S.phoneBroken); $("phoneBtn").classList.toggle("ring", (pending && !S.chatSeen) || S.inbox.length>0);
-  $("phoneBtn").setAttribute("aria-label",L("โทรศัพท์","Phone")); $("lensBtn").hidden=!S.char; $("lensLv").textContent=""; $("lensBtn").setAttribute("aria-label",L("ซื้อคำใบ้ (H)","Buy a hint (H)")); $("menuBtn").setAttribute("aria-label",L("เมนู","Menu"));
+  $("phoneBtn").setAttribute("aria-label",L("โทรศัพท์","Phone")); $("lensBtn").hidden=!lensLv(); $("lensLv").textContent=lensLv()||""; $("lensBtn").setAttribute("aria-label",L(`แว่นนักสืบ ระดับ ${lensLv()} (Q)`,`Detective lens level ${lensLv()} (Q)`)); $("menuBtn").setAttribute("aria-label",L("เมนู","Menu"));
   const kk = !show && !busy() && nearKiosk();
   const fc = !show && !kk && !busy() && nearCat(), fb = !show && !kk && !fc && !busy() && nearBirds(), feed=fc||fb;
   const hq = !show && !kk && !feed && !busy() && nearHQ();
   const rp = !show && !kk && !feed && !hq && !busy() && nearRepair(), vl = !show && !kk && !feed && !hq && !rp && !busy() && nearVillain();
   const sp = !show && !busy() && sp0;
-  const bus = !show && !sp && nearBus();
-  const showDoor = !show && !sp && !bus && !kk && !feed && !rp && !vl && !!dn && !busy();
-  $("prompt").hidden=!(show||sp||bus||showDoor||kk||feed||hq||rp||vl);
-  if(bus) $("prompt").innerHTML=`🚌 ${L("ขึ้นรถเมล์","Take the bus")} (${BAHT(BUS_FARE)})${TOUCH?"":"<kbd>E</kbd>"}`;
+  const showDoor = !show && !sp && !kk && !feed && !rp && !vl && !!dn && !busy();
+  $("prompt").hidden=!(show||sp||showDoor||kk||feed||hq||rp||vl);
   if(sp) $("prompt").innerHTML=`${L("ตรวจดู ","Inspect ")}${EVID[sp.id].i}${TOUCH?"":"<kbd>E</kbd>"}`;
   if(rp) $("prompt").innerHTML=`${S.phoneBroken?L("ซ่อมมือถือที่หมอโฟน 🔧","Fix your phone at Phone Dr. 🔧"):L("ร้านซ่อมมือถือ","Phone repair stall")}${TOUCH?"":"<kbd>E</kbd>"}`;
   if(vl) $("prompt").innerHTML=`${L("ชายใส่ฮู้ดดำ…","The hooded man…")}${TOUCH?"":"<kbd>E</kbd>"}`;
@@ -224,8 +227,8 @@ function hud(){
   if(kk) $("prompt").innerHTML=`${L("เล่นมินิเกม","Play mini-games")}${TOUCH?"":"<kbd>E</kbd>"}`;
   if(show) $("prompt").innerHTML=`${L("คุยกับ","Talk to")} ${esc(nm(n.id))}${TOUCH?"":"<kbd>E</kbd>"}`;
   else if(showDoor) $("prompt").innerHTML=`${(dn.alley?(dn.soi||ghostOpen()):(!dn.soon&&zoneOpen(dn.zone)))?L("เข้า ","Enter ")+esc(dn.name[S.lang]):L("ล็อกอยู่: ","Locked: ")+esc(dn.name[S.lang])}${TOUCH?"":"<kbd>E</kbd>"}`;
-  const act=$("act"); act.disabled=!(show||sp||bus||showDoor||kk||feed||hq||rp||vl); act.textContent=bus?L("รถเมล์","Bus"):sp?L("ตรวจ","Inspect"):kk?L("เล่น","Play"):feed?L("ให้อาหาร","Feed"):hq?L("เข้า","Enter"):vl?L("สำรวจ","Look"):rp?L("ซ่อม","Repair"):showDoor?L("เข้า","Enter"):L("คุย","Talk");
-  $("keys").innerHTML=L(`<kbd>WASD</kbd>/<kbd>←↑→↓</kbd> เดิน · <kbd>E</kbd> คุย · <kbd>H</kbd> คำใบ้ · <kbd>M</kbd> แผนที่ · คลิกพื้นเพื่อเดิน`,`<kbd>WASD</kbd>/<kbd>←↑→↓</kbd> walk · <kbd>E</kbd> talk · <kbd>H</kbd> hint · <kbd>M</kbd> map · click the floor to walk`);
+  const act=$("act"); act.disabled=!(show||sp||showDoor||kk||feed||hq||rp||vl); act.textContent=sp?L("ตรวจ","Inspect"):kk?L("เล่น","Play"):feed?L("ให้อาหาร","Feed"):hq?L("เข้า","Enter"):vl?L("สำรวจ","Look"):rp?L("ซ่อม","Repair"):showDoor?L("เข้า","Enter"):L("คุย","Talk");
+  $("keys").innerHTML=L(`<kbd>WASD</kbd>/<kbd>←↑→↓</kbd> เดิน · <kbd>E</kbd> คุย · <kbd>Q</kbd> ส่องแว่น · <kbd>M</kbd> แผนที่ · คลิกพื้นเพื่อเดิน`,`<kbd>WASD</kbd>/<kbd>←↑→↓</kbd> walk · <kbd>E</kbd> talk · <kbd>Q</kbd> lens · <kbd>M</kbd> map · click the floor to walk`);
   const hide = sheetMode==="start";
   $("hud").hidden=hide; $("joy").hidden=hide; $("act").hidden=hide; $("keys").hidden=hide;
 }

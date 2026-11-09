@@ -22,109 +22,37 @@ ROOM_CHAIRS.forEach(c=>ROOM_SOLIDS.push({x:c.x-14,y:c.y-10,w:28,h:20}));
 ROOM_PLANTS.forEach(p=>ROOM_SOLIDS.push({x:p.x-20,y:p.y-14,w:40,h:28}));
 const POLICE_SOLIDS=ROOM_SOLIDS.filter(r=>!(r.x===RW-44&&r.y===0)).concat([{x:RW-44,y:0,w:44,h:PDOOR.y0},{x:RW-44,y:PDOOR.y1,w:44,h:RH-PDOOR.y1}]);
 
-function seeded(seed){ let a=seed>>>0; return ()=>{ a=(a+0x6D2B79F5)>>>0; let t=a; t=Math.imul(t^(t>>>15),t|1); t^=t+Math.imul(t^(t>>>7),t|61); return ((t^(t>>>14))>>>0)/4294967296; }; }
-/* ---------- outside: a storybook town. Each building sits on its own lot, brick paths wind between them,
-   one main road runs across the top third, and a river runs down the right side and curls along the bottom ---------- */
-const OW=2560, OH=3520;
-const AVE={y0:1060,y1:1180};
-const OFF_TOP=3170, OFF_H=280;
-/* lots: a patch of lawn (or paving) with a hedge round it, one per building or park */
-const LOTS=[
-  {x:70,y:120,w:620,h:400,fence:true},{x:770,y:120,w:620,h:400},{x:1470,y:110,w:620,h:420,park:true},
-  {x:70,y:620,w:620,h:380},{x:770,y:620,w:620,h:380},{x:1470,y:620,w:620,h:380},
-  {x:70,y:1250,w:620,h:420,plaza:true},{x:770,y:1250,w:620,h:420,plaza:true},{x:1470,y:1250,w:620,h:420,plaza:true},
-  {x:70,y:1770,w:620,h:400,fence:true},{x:770,y:1770,w:620,h:400,park:true},{x:1470,y:1770,w:620,h:400,park:true},
-  {x:50,y:2290,w:700,h:500,fence:true},{x:830,y:2290,w:560,h:500},{x:1470,y:2290,w:620,h:500,park:true}
-];
+/* ---------- outside: the street that links the zones ---------- */
+const OW=38*T, OH=23*T;
 const BUILDINGS=[
-  {zone:13, style:"house", x:220, w:320, y0:230, door:380, front:560, name:{th:"หอพักนักศึกษา",en:"STUDENT DORM"}, sub:{th:"หอใน ม.หัวเฉียวฯ",en:"Huachiew dorm"}, wall:"#F7F4EE", roof:"#2F5FB0", sign:"#4A2B5A", signFg:"#F6D9FF"},
-  {zone:9, style:"awning", x:920, w:320, y0:230, door:1080, front:560, name:{th:"ศูนย์อาหาร",en:"FOOD COURT"}, sub:{th:"อร่อย ราคาเบา",en:"Cheap and tasty"}, wall:"#FBEFD9", roof:"#E77FA0", sign:"#7A3B12", signFg:"#FFE08A"},
-  {zone:10, style:"awning", x:210, w:340, y0:700, door:380, front:1094, name:{th:"ตลาดนัด",en:"MARKET"}, sub:{th:"ของกิน ของใช้",en:"Food and goods"}, wall:"#F6F1E4", roof:"#2E9A6E", sign:"#5A2A1A", signFg:"#FFD84D"},
-  {zone:4, style:"awning", x:910, w:340, y0:700, door:1080, front:1094, name:{th:"NET ZONE",en:"NET ZONE"}, sub:{th:"ร้านเน็ต · เกม",en:"Internet café · games"}, wall:"#EEEAF6", roof:"#7A5AA6", sign:"#13162A", signFg:"#5EE6D0"},
-  {zone:12, style:"awning", x:1630, w:300, y0:700, door:1780, front:1094, name:{th:"หมอโฟน ไอที",en:"PHONE DR. IT"}, sub:{th:"มือถือ · ซ่อม",en:"Phones · repair"}, wall:"#E8F1F8", roof:"#2F6DB5", sign:"#173D66", signFg:"#7FD3F7"},
-  {zone:11, style:"flat", x:220, w:320, y0:1310, door:380, front:1720, name:{th:"ร้านสะดวกซื้อ",en:"MINI MART"}, sub:{th:"เปิด 24 ชั่วโมง",en:"Open 24 hours"}, wall:"#F4F7F2", roof:"#2F6DB5", sign:"#1F6E43", signFg:"#FFFFFF"},
-  {zone:3, style:"flat", x:920, w:320, y0:1310, door:1080, front:1720, name:{th:"ธนาคารนครทอง",en:"NKT BANK"}, sub:{th:"สาขาตลาด",en:"Market branch"}, wall:"#EEF3F7", roof:"#0F5E46", sign:"#0F5E46", signFg:"#F2C14E"},
-  {zone:1, style:"awning", x:1620, w:320, y0:1310, door:1780, front:1720, name:{th:"Bean House",en:"Bean House"}, sub:{th:"ร้านกาแฟ",en:"Café"}, wall:"#FFF3E6", roof:"#E5677F", sign:"#2E3B33", signFg:"#FFC414", cup:true},
-  {zone:7, style:"house", x:210, w:340, y0:1830, door:380, front:2240, name:{th:"สถานีตำรวจ",en:"POLICE"}, sub:{th:"ตำรวจไซเบอร์",en:"Cyber police"}, wall:"#F2F2EE", roof:"#3E4660", sign:"#173D66", signFg:"#FFFFFF"},
-  {zone:6, style:"school", x:140, w:520, y0:2360, door:400, front:2850, name:{th:"ม.หัวเฉียวฯ",en:"HUACHIEW UNI"}, sub:{th:"มหาวิทยาลัย",en:"University"}, wall:"#F2D58A", roof:"#2F5FB0", sign:"#7A2E1A", signFg:"#FFE08A"},
-  {zone:2, style:"museum", x:920, w:380, y0:2360, door:1110, front:2850, name:{th:"ห้องสมุดเมือง",en:"CITY LIBRARY"}, sub:{th:"2 ชั้น",en:"2 floors"}, wall:"#E9E4DA", roof:"#AEB4BC", sign:"#3A2516", signFg:"#F2C14E"},
-  {zone:5, style:"house", ghost:true, x:1980, w:300, y0:3190, door:2130, front:3460, name:{th:"บ้านร้างในป่า",en:"THE OLD HOUSE"}, sub:{th:"ว่ากันว่ามีผี…",en:"They say it's haunted…"}, wall:"#5A4E66", roof:"#2A2238", sign:"#1A1424", signFg:"#C9B8F0"}
+  {zone:1, x:96,  w:360, door:276, name:{th:"Bean House",en:"Bean House"}, sub:{th:"ร้านกาแฟ",en:"Café"}, wall:"#F3E3C8", roof:"#C2552E", sign:"#2E3B33", signFg:"#FFC414"},
+  {zone:2, x:540, w:310, door:695, name:{th:"ห้องสมุดเมือง",en:"CITY LIBRARY"}, sub:{th:"2 ชั้น · Wi-Fi ฟรี",en:"2 floors · Free Wi-Fi"}, wall:"#EFE6D6", roof:"#5B3A24", sign:"#3A2516", signFg:"#F2C14E"},
+  {zone:3, x:1040, w:304, door:1192, name:{th:"ธนาคารนครทอง",en:"NKT BANK"}, sub:{th:"สาขาตลาด",en:"Market branch"}, wall:"#F1ECE0", roof:"#0F5E46", sign:"#0F5E46", signFg:"#F2C14E"},
+  {zone:5, alley:true, x:462, w:72, door:498, name:{th:"ตรอกมืด",en:"Dark alley"}, sub:{th:"",en:""}},
+  {zone:6, alley:true, soi:true, road:true, x:850, w:40, door:870, icon:"🎓", col:"#F2C14E", name:{th:"ถนนไป ม.หัวเฉียวฯ",en:"Road to the university"}, sub:{th:"",en:""}},
+  {zone:6, alley:true, soi:true, road:true, hide:true, x:1000, w:40, door:1020, icon:"🎓", col:"#F2C14E", name:{th:"ถนนไป ม.หัวเฉียวฯ",en:"Road to the university"}, sub:{th:"",en:""}},
+  {zone:7, alley:true, soi:true, x:1350, w:72, door:1386, icon:"🚓", col:"#9CC3F0", name:{th:"ซอย 2 · สถานีตำรวจ",en:"Soi 2 · Police station"}, sub:{th:"",en:""}},
+  {zone:4, x:1428, w:360, door:1608, name:{th:"NET ZONE",en:"NET ZONE"}, sub:{th:"ร้านเน็ต · เกม",en:"Internet café · games"}, wall:"#2E3350", roof:"#7A5AA6", sign:"#13162A", signFg:"#5EE6D0"}
 ];
-BUILDINGS.forEach(b=>b.bot=b.y0+190);
-/* the river: down the right side, then curling west along the bottom */
-const RIVER=[[2300,-40],[2250,300],[2320,700],[2240,1100],[2310,1500],[2240,1900],[2300,2300],[2230,2700],[2050,2960],[1700,3050],[1300,3030],[900,3070],[500,3040],[100,3080],[-60,3060]], RIVER_W=110;
-function riverSamples(){
-  if(riverSamples.c) return riverSamples.c;
-  const P=RIVER, out=[]; const seg=(a,c,b)=>{ for(let t=0;t<1;t+=.02){ const u=1-t; out.push([u*u*a[0]+2*u*t*c[0]+t*t*b[0], u*u*a[1]+2*u*t*c[1]+t*t*b[1]]); } };
-  let cur=P[0];
-  for(let i=1;i<P.length-1;i++){ const m=[(P[i][0]+P[i+1][0])/2,(P[i][1]+P[i+1][1])/2]; seg(cur,P[i],m); cur=m; }
-  out.push(cur,P[P.length-1]); return (riverSamples.c=out);
-}
-function riverDist(x,y){ let d=1e9; for(const p of riverSamples()){ const k=Math.hypot(x-p[0],y-p[1]); if(k<d) d=k; } return d; }
-/* bridges: across (h = walk east-west over a north-south river) or v */
-const BRIDGES=[{x:2280,y:560,dir:"h",kind:"wood",half:44},{x:2275,y:1120,dir:"h",kind:"road",half:62},{x:2275,y:2240,dir:"h",kind:"wood",half:44},
-  {x:1120,y:3045,dir:"v",kind:"stone",half:56},{x:1880,y:3010,dir:"v",kind:"wood",half:44}];
-/* brick paths (centre lines) */
-const PATHS=[
-  [[30,565],[300,575],[720,548],[1100,572],[1420,556],[1800,575],[2150,560],[2330,560],[2540,566]],
-  [[30,1720],[300,1735],[720,1712],[1100,1730],[1420,1714],[1800,1734],[2150,1716]],
-  [[30,2240],[300,2252],[720,2228],[1100,2248],[1420,2232],[1800,2246],[2150,2236],[2330,2240],[2540,2236]],
-  [[30,2850],[300,2862],[720,2840],[1120,2858],[1420,2846],[1800,2862],[2120,2850]],
-  [[730,140],[700,340],[748,560],[716,820],[736,1060]],[[1420,140],[1440,340],[1404,560],[1440,820],[1424,1060]],
-  [[730,1180],[710,1460],[742,1720],[712,1990],[736,2240],[700,2540],[730,2850]],[[1420,1180],[1440,1460],[1404,1720],[1436,1990],[1414,2240],[1444,2540],[1420,2850]],
-  [[2150,560],[2130,820],[2160,1060]],[[2150,1180],[2170,1460],[2140,1716],[2170,1990],[2150,2236],[2170,2540],[2120,2850]],
-  [[1120,2858],[1110,2960],[1120,3130],[700,3125],[300,3132]],[[1120,3130],[1500,3120],[1880,3125],[1880,2930],[2050,2880]],[[1880,3125],[1850,3300],[1900,3462],[2130,3466]]
-];
-function pathYAt(P,x){ for(let i=1;i<P.length;i++){ const [ax,ay]=P[i-1],[bx,by]=P[i]; if(x<=bx){ const k=(x-ax)/(bx-ax); return ay+(by-ay)*k; } } return P[P.length-1][1]; }
-const FOUNTAIN={x:1760,y:2520}, POND={x:1800,y:270,rx:160,ry:80}, GAZEBO={x:2000,y:440};
-const BEDS=[{x:1080,y:1960,rx:170,ry:80}];
-const PLAY=[{k:"slide",x:180,y:2690},{k:"swing",x:600,y:2700}];
-const OUT_SOLIDS=[{x:0,y:0,w:OW,h:60},{x:0,y:0,w:28,h:OH},{x:OW-28,y:0,w:28,h:OH},{x:0,y:OH-24,w:OW,h:24},
-  ...BUILDINGS.map(b=>({x:b.x-14,y:b.y0-60,w:b.w+28,h:250})),
-  {x:FOUNTAIN.x-62,y:FOUNTAIN.y-22,w:124,h:56},{x:POND.x-POND.rx*.9,y:POND.y-POND.ry*.8,w:POND.rx*1.8,h:POND.ry*1.6},{x:GAZEBO.x-50,y:GAZEBO.y-30,w:100,h:50},
-  ...BEDS.map(d=>({x:d.x-d.rx*.85,y:d.y-d.ry*.7,w:d.rx*1.7,h:d.ry*1.4})),
-  ...PLAY.map(p=>({x:p.x-46,y:p.y-30,w:92,h:44}))];
-(()=>{ const r=RIVER_W/2-8;
-  const P=riverSamples();
-  P.forEach(([x,y],i)=>{
-    if(BRIDGES.some(b=>b.dir==="h"?Math.abs(y-b.y)<b.half-6&&Math.abs(x-b.x)<140:Math.abs(x-b.x)<b.half-6&&Math.abs(y-b.y)<140)) return;
-    const q=P[Math.min(P.length-1,i+1)], p0=P[Math.max(0,i-1)], vert=Math.abs(q[1]-p0[1])>=Math.abs(q[0]-p0[0]);
-    OUT_SOLIDS.push(vert?{x:x-r,y:y-7,w:r*2,h:14}:{x:x-7,y:y-r,w:14,h:r*2});
-  }); })();
-/* no traffic lights or cars any more */
-const IC={x0:-9999,x1:-9998,y0:-9999,y1:-9998};
-const XINGS=[], YXINGS=[];
+/* three zebra crossings, each with traffic lights */
+const IC={x0:890,x1:1000,y0:612,y1:766};   /* the crossroads: main road x the road up to the university */
+const XINGS=[{x0:760,x1:880,sig:"ew",dir:1},{x0:1010,x1:1130,sig:"ew",dir:-1}];
+const YXINGS=[{y0:520,y1:600,dir:1},{y0:778,y1:858,dir:-1}];
 const TL_P=16, IC_P=28; let tlT=0, xWarnT=0;
-function ewState(){ return "r"; }
-function nsState(){ return "r"; }
-function tlState(xg){ return "r"; }
-const OUT_BENCHES=[{x:1600,y:2400},{x:1920,y:2400},{x:1300,y:1960},{x:860,y:1960},{x:1640,y:460}];
-const OUT_LAMPS=[{x:640,y:520},{x:1360,y:520},{x:640,y:1690},{x:1360,y:1690},{x:640,y:2200},{x:1360,y:2200},{x:1600,y:2800},{x:640,y:2800}];
-const BUS_STOPS=[{x:560,y:1048},{x:1260,y:1048},{x:1960,y:1048}];
-const KIOSK={x:1580,y:420};
-/* trees fill every gap that isn't a building, path, river, road or park piece */
-const OUT_TREES=(()=>{
-  const r=seeded(4242), out=[], segd=(x,y,P)=>{ let d=1e9; for(let i=1;i<P.length;i++){ const [ax,ay]=P[i-1],[bx,by]=P[i], dx=bx-ax, dy=by-ay, k=Math.max(0,Math.min(1,((x-ax)*dx+(y-ay)*dy)/(dx*dx+dy*dy||1))); d=Math.min(d,Math.hypot(x-ax-dx*k,y-ay-dy*k)); } return d; };
-  const clear=(x,y)=>{
-    if(x<50||x>OW-50||y<100||y>OH-40) return false;
-    if(BUILDINGS.some(b=>x>b.x-60&&x<b.x+b.w+60&&y>b.y0-90&&y<b.bot+90)) return false;
-    if(y>AVE.y0-60&&y<AVE.y1+50) return false;
-    if(riverDist(x,y)<RIVER_W) return false;
-    if(Math.hypot(x-FOUNTAIN.x,y-FOUNTAIN.y)<190||Math.hypot((x-POND.x)/POND.rx,(y-POND.y)/POND.ry)<1.6||Math.hypot(x-GAZEBO.x,y-GAZEBO.y)<110||Math.hypot(x-KIOSK.x,y-KIOSK.y)<100) return false;
-    if(BEDS.some(d=>Math.hypot((x-d.x)/d.rx,(y-d.y)/d.ry)<1.6)||PLAY.some(p=>Math.hypot(x-p.x,y-p.y)<120)) return false;
-    if(y>OFF_TOP-90&&y<OFF_TOP+OFF_H+40&&x<1500) return false;
-    if(LOTS.filter(l=>l.plaza).some(l=>x>l.x&&x<l.x+l.w&&y>l.y&&y<l.y+l.h)) return false;
-    if(PATHS.some(P=>segd(x,y,P)<72)) return false;
-    if([...OUT_BENCHES,...OUT_LAMPS,...BUS_STOPS].some(o=>Math.hypot(x-o.x,y-o.y)<90)) return false;
-    if(out.some(o=>Math.hypot(x-o.x,y-o.y)<100)) return false;
-    return true; };
-  for(let gy=110;gy<OH;gy+=95) for(let gx=50;gx<OW;gx+=105){ const x=gx+r()*70, y=gy+r()*60; if(clear(x,y)) out.push({x:Math.round(x),y:Math.round(y),pink:r()<.33}); }
-  return out;
-})();
+function ewState(){ if(CIN&&CIN.allRed) return "r"; const p=tlT%IC_P; return p<8?"g":p<10?"y":"r"; }
+function nsState(){ if(CIN&&CIN.allRed) return "r"; const p=tlT%IC_P; return p<14?"r":p<22?"g":p<24?"y":"r"; }
+function tlState(xg){ if(xg.sig==="ew") return ewState(); if(xg.sig==="ns") return nsState(); const p=(tlT+xg.ph)%TL_P; return p<9?"g":p<11?"y":"r"; }
+const OUT_SOLIDS=[{x:0,y:0,w:OW,h:250},{x:0,y:0,w:28,h:OH},{x:OW-28,y:0,w:28,h:OH},
+  ...[0,...XINGS.map(x=>x.x1)].map((a,i)=>({x:a,y:612,w:(i<XINGS.length?XINGS[i].x0:OW)-a,h:154})),
+  {x:890,y:250,w:110,h:270},{x:890,y:600,w:110,h:12},{x:890,y:766,w:110,h:12},{x:0,y:858,w:OW,h:OH-858},
+  {x:672,y:420,w:96,h:56}];
+const OUT_TREES=[{x:80,y:360},{x:80,y:560},{x:500,y:560},{x:1110,y:560},{x:1290,y:360},{x:1360,y:560},{x:1760,y:360},{x:1760,y:560}];
+const OUT_BENCHES=[{x:300,y:470},{x:1140,y:470}];
+const OUT_LAMPS=[{x:470,y:330},{x:1070,y:330},{x:120,y:600},{x:1240,y:600}];
 OUT_TREES.forEach(p=>OUT_SOLIDS.push({x:p.x-22,y:p.y-14,w:44,h:28}));
 OUT_BENCHES.forEach(b=>OUT_SOLIDS.push({x:b.x-40,y:b.y-12,w:80,h:22}));
 OUT_LAMPS.forEach(l=>OUT_SOLIDS.push({x:l.x-6,y:l.y-6,w:12,h:12}));
-BUS_STOPS.forEach(b=>OUT_SOLIDS.push({x:b.x-44,y:b.y-8,w:88,h:12}));
+const KIOSK={x:790,y:330};
 OUT_SOLIDS.push({x:KIOSK.x-26,y:KIOSK.y-14,w:52,h:24});
 /* ---------- zone 2: the city library — a bigger, two-floor map ---------- */
 const LW=30*T, LH=20*T, LIB_DOOR={x0:672,x1:768};
@@ -162,7 +90,7 @@ for(const f of [1,2]){
   L_.plants.forEach(p=>L_.solids.push({x:p.x-20,y:p.y-14,w:40,h:28}));
   (L_.rooms||[]).forEach(r=>L_.solids.push({x:r.x,y:r.y,w:r.w,h:r.h}));
 }
-const LIB_ROLES={1:["mentor","grandpa","grandma"],2:["tips"]};
+const LIB_ROLES={1:["mentor","grandpa","grandma"],2:["tips","friend"]};
 const libFloor=()=>S.floor===2?2:1;
 function libCast(mentor, friend, tips){
   const f=libFloor();
@@ -308,14 +236,13 @@ function setWorld(){
   else if(S.zone===2){ const L_=LIB[libFloor()]; W=LW; H=LH; SOLIDS=L_.solids; TABLES=L_.props; CHAIRS=L_.chairs; PLANTS=L_.plants; }
   else if(S.zone===8){ W=RW; H=RH; SOLIDS=offSolids(); TABLES=[]; CHAIRS=[]; PLANTS=[]; }
   else if(S.zone===7){ if(cbFloor()){ W=CB_W; H=CB_H; SOLIDS=CB_SOLIDS; TABLES=[]; CHAIRS=[]; PLANTS=[]; } else { W=RW; H=RH; SOLIDS=POLICE_SOLIDS; TABLES=ROOM_TABLES; CHAIRS=ROOM_CHAIRS; PLANTS=ROOM_PLANTS; } }
-  else if(ROOMS2[S.zone]){ W=RW; H=RH; SOLIDS=ROOMS2[S.zone].solids; TABLES=[]; CHAIRS=[]; PLANTS=[]; }
   else { W=RW; H=RH; SOLIDS=ROOM_SOLIDS; TABLES=ROOM_TABLES; CHAIRS=ROOM_CHAIRS; PLANTS=ROOM_PLANTS; }
 }
 const bOf=(z)=>BUILDINGS.find(b=>b.zone===z);
 
 let player={id:"studentGirl",x:432,y:500,dir:"down",moving:false,t:0};
 let npcs=[];
-function buildCast(){ buildCast0(); const mo=MOVED_OUT[S.zone]||[]; npcs=npcs.filter(n=>!mo.includes(n.role)); addFillers(); }
+function buildCast(){ buildCast0(); addFillers(); }
 function buildCast0(){
   const others=PLAYABLE.filter(c=>c!==S.char);
   const mentor = "volOat";
@@ -324,12 +251,11 @@ function buildCast0(){
   const friend = ({1:"pBoss",3:"pMay",6:"ton"})[S.zone] || friend0;
   const tips = ({0:"rider",1:"rider",2:"jayFresh",6:"mew"})[S.zone] || rest.find(c=>c!==friend0 && c!=="guardBoy") || rest.find(c=>c!==friend0);
   if(S.zone===0){
-    npcs=[{id:mentor, role:"mentor", x:900, y:620, dir:"down"},{id:tips, role:"tips", x:1240, y:1220, dir:"left"},
-      {id:"grandma", role:"grandma", x:520, y:1790, dir:"right"},{id:"grandpa", role:"grandpa", x:1560, y:2290, dir:"left"},{id:"fon", role:"fon", x:600, y:1220, dir:"down"},{id:"techTon", role:"repairman", x:REPAIR.x+56, y:REPAIR.y+6, dir:"left"}].map(n=>({...n, home:n.dir}));
+    npcs=[{id:mentor, role:"mentor", x:600, y:360, dir:"down"},{id:tips, role:"tips", x:1060, y:470, dir:"left"},
+      {id:"grandma", role:"grandma", x:236, y:520, dir:"right"},{id:"grandpa", role:"grandpa", x:1200, y:380, dir:"left"},{id:"fon", role:"fon", x:400, y:420, dir:"down"},{id:"techTon", role:"repairman", x:REPAIR.x+56, y:REPAIR.y+6, dir:"left"}].map(n=>({...n, home:n.dir}));
     player.id=S.char; return;
   }
   if(S.zone===2){ npcs=libCast(mentor,friend,tips); player.id=S.char; return; }
-  if(ROOMS2[S.zone]){ npcs=cast2(mentor,friend0).map(n=>({...n, home:n.dir})); player.id=S.char; return; }
   if(S.zone===8){ npcs=officeCast().map(n=>({...n, home:n.dir})); player.id=S.char; return; }
   if(S.zone===6){
     npcs=[{id:mentor, role:"mentor", x:528, y:548, dir:"up"},{id:friend, role:"friend", x:268, y:514, dir:"right"},{id:tips, role:"tips", x:690, y:232, dir:"down"},
