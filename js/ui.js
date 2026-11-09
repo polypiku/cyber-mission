@@ -181,6 +181,7 @@ function showCoach(){
   el.querySelector(".co-t").textContent=st.who?`${nm(st.who)} · ${st.t[EN()?1:0]}`:st.t[EN()?1:0]; el.querySelector(".co-d").textContent=st.d[EN()?1:0];
   el.querySelector(".co-n").textContent=`${coach.i+1}/${coach.steps.length}`;
   el.querySelector(".co-next").textContent=coach.i===coach.steps.length-1?L("เข้าใจแล้ว!","Got it!"):L("ต่อไป ›","Next ›");
+  camFocus=st.focus?st.focus():null; if(camFocus) updateCam();
   let tg=st.sel&&document.querySelector(st.sel);
   if(st.world){ const w=typeof st.world==="function"?st.world():st.world, cr=$("cv").getBoundingClientRect();
     if(w){ const L_=cr.left+(w.x-camX)*Z, T_=cr.top+(w.y-camY)*Z; tg={getBoundingClientRect:()=>({left:L_,top:T_,width:w.w*Z,height:w.h*Z})}; } }
@@ -199,7 +200,7 @@ function showCoach(){
     tip.style.left=Math.max(12,Math.min(W-tw-12,tx))+"px"; tip.style.top=Math.max(12,Math.min(H-th-12,ty))+"px";
   });
 }
-function endCoach(finished){ if(!coach) return; const d=coach.done; coach.el.remove(); coach=null; if(finished&&d) d(); }
+function endCoach(finished){ camFocus=null; if(!coach) return; const d=coach.done; coach.el.remove(); coach=null; if(finished&&d) d(); }
 addEventListener("resize",()=>{ if(coach) showCoach(); });
 function maybeCoach(kind){
   if(!S.tut) S.tut={};

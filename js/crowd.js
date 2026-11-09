@@ -106,17 +106,18 @@ function reportFiller(n){
   }
 }
 function drawVilFx(g,now){
-  const v=npcs.find(n=>n.vil); if(!v || RM) return;
-  const per=6200, p=(now%per)/1700; if(p>=1) return; // one faint ripple every ~6 seconds
+  const v=npcs.find(n=>n.vil); if(!v) return;
+  const demo=coach&&coach.steps[coach.i]&&coach.steps[coach.i].demo, per=demo?1700:4200, p=RM?.35:(now%per)/1700; if(p>=1) return; // a red ripple every ~4 seconds (held still for reduced motion)
   const h=CHAR_H*(SCALE[v.id]||1), x=v.x+(v.dir==="left"?-10:10), y=v.y-h*.55;
-  g.save(); g.lineCap="round"; g.lineWidth=1.6; g.strokeStyle=`rgba(229,64,47,${.42*(1-p)})`;
-  g.beginPath(); g.arc(x,y,5+p*18,Math.PI*1.2,Math.PI*1.8); g.stroke();
-  if(p>.25){ const q=(p-.25)/.75; g.strokeStyle=`rgba(229,64,47,${.3*(1-q)})`; g.beginPath(); g.arc(x,y,5+q*18,Math.PI*1.2,Math.PI*1.8); g.stroke(); }
+  const R=demo?40:18;
+  g.save(); g.lineCap="round"; g.lineWidth=demo?4:2.6; g.strokeStyle=`rgba(229,64,47,${.8*(1-p)})`;
+  g.beginPath(); g.arc(x,y,5+p*R,Math.PI*1.2,Math.PI*1.8); g.stroke();
+  if(p>.25){ const q=(p-.25)/.75; g.strokeStyle=`rgba(229,64,47,${.6*(1-q)})`; g.beginPath(); g.arc(x,y,5+q*R,Math.PI*1.2,Math.PI*1.8); g.stroke(); }
   g.restore();
 }
 const COACH_VIL=(M)=>[
   {who:M, i:"🕵️", t:["มีคนแฝงตัวอยู่","Someone is hiding here"], d:["คนที่ปล่อย Wi-Fi ปลอมไม่ได้แต่งตัวแปลกๆ นะ เขาแฝงตัวเป็นลูกค้าธรรมดาปนอยู่กับคนอื่นในทุกร้าน","The person running fake Wi-Fi doesn't look strange. He blends in as an ordinary customer in every shop."]},
-  {who:M, i:"📶", t:["สังเกตสัญญาณ","Watch for the signal"], d:["มือถือของเขาจะปล่อยคลื่นสีแดงจางๆ ออกมานานๆ ครั้ง ต้องยืนดูสักพักถึงจะเห็น คนเล่นมือถือไม่ได้แปลว่าเป็นคนร้ายเสมอไป","His phone gives off a faint red ripple every so often. You have to watch for a while. Not everyone on a phone is a hacker."]},
+  {who:M, i:"📶", demo:true, focus:()=>npcs.find(n=>n.vil)||null, world:()=>{ const v=npcs.find(n=>n.vil); return v?{x:v.x-70,y:v.y-CHAR_H*(SCALE[v.id]||1)-50,w:140,h:CHAR_H*(SCALE[v.id]||1)+70}:null; }, t:["ใครมีคลื่น Wi-Fi ออกมา = น่าสงสัย!","Wi-Fi waves coming off someone = suspicious!"], d:["ดูคนในวงนี้ เห็นคลื่น Wi-Fi สีแดงลอยออกมาจากตัวไหม? จำไว้เลย ใครมีคลื่นแบบนี้ คนนั้นน่าสงสัย! ร้านต่อไปจะไม่บอกแล้ว คลื่นขึ้นทุกไม่กี่วินาที ต้องยืนสังเกตเอง","See the red Wi-Fi waves coming off the person in the circle? Remember: whoever gives off waves like that is your suspect! In later shops nobody will point him out. The waves pop up every few seconds, so stand and watch."]},
   {who:M, i:"👂", t:["ฟังคำพูด","Listen"], d:["ลองเข้าไปคุย คนร้ายมักชวนให้ต่อ Wi-Fi ที่ไม่ต้องใส่รหัส หรืออาสาตั้งค่ามือถือให้ ส่วนคนทั่วไปจะบอกให้ถามรหัสที่เคาน์เตอร์","Chat with people. The hacker pushes a no-password network or offers to set up your phone. Ordinary people tell you to ask the counter."]},
   {who:M, i:"🚩", t:["แจ้งเคาน์เตอร์","Report him"], d:["มั่นใจแล้วกด “🚩 แจ้งเคาน์เตอร์” แจ้งถูก พี่ภพ ตำรวจไซเบอร์ จะมารับตัวไป ได้เงินรางวัล 300 บาท และ Wi-Fi ปลอมในร้านนั้นจะหายไป แจ้งผิดคน ความไว้ใจลด อย่าตัดสินจากหน้าตา","When you're sure, tap “🚩 Report”. Right: Phop from the cyber police takes him away, +฿300, and that shop's fake Wi-Fi is gone. Wrong: trust drops. Never judge by looks."]},
   {who:M, i:"📱", t:["ถ้าหาไม่ทัน","If you're too slow"], d:["ถ้าเผลอต่อ Wi-Fi ปลอม จอจะเริ่มกระตุกแปลกๆ ยิ่งปล่อยนานยิ่งหนัก รีบเปิดมือถือกด “ตัดการเชื่อมต่อ” หรือจับคนร้ายให้ทัน ไม่งั้นเครื่องพังทั้งเครื่อง","Join a fake Wi-Fi by mistake and the screen starts glitching, worse the longer you wait. Open your phone and tap “Disconnect”, or catch the hacker in time, or the whole phone dies."]}

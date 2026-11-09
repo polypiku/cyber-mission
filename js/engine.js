@@ -1,9 +1,10 @@
 /* Camera, game loop, input, movement, HUD and dialogue boxes. */
 /* ---------- camera + loop ---------- */
+let camFocus=null;   /* a point the tutorial wants on screen instead of the player */
 function updateCam(){
-  const vw=VW/Z, vh=VH/Z;
-  camX = W<=vw ? (W-vw)/2 : Math.min(Math.max(player.x-vw/2,0),W-vw);
-  const ty = player.y-CHAR_H/2-vh/2;
+  const vw=VW/Z, vh=VH/Z, f=camFocus||player;
+  camX = W<=vw ? (W-vw)/2 : Math.min(Math.max(f.x-vw/2,0),W-vw);
+  const ty = f.y-CHAR_H/2-vh/2;
   camY = H<=vh ? (H-vh)/2 : Math.min(Math.max(ty,0),H-vh);
 }
 function render(now){
