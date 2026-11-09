@@ -25,6 +25,7 @@ function drawStatic(){
   if(S.zone===6){ drawUniStatic(g); return; }
   if(S.zone===8){ drawOfficeStatic(g); return; }
   if(S.zone===7){ if(cbFloor()) drawCellBlockStatic(g); else drawPoliceStatic(g); return; }
+  if(ROOMS2[S.zone]){ drawRoom2Static(g); return; }
   // floor
   g.fillStyle="#E7CFA6"; g.fillRect(0,0,W,H);
   g.strokeStyle="rgba(122,78,36,.22)"; g.lineWidth=1.2;
@@ -113,6 +114,7 @@ function drawStreetStatic(g){
     g.fillStyle="#FFC414"; g.beginPath(); g.arc(b.door+20,y0+160,3,0,7); g.fill();
   }
   drawStreetDecor(g);
+  drawBusStops(g);
 }
 function drawTree(g,p){
   g.fillStyle="rgba(0,0,0,.18)"; g.beginPath(); g.ellipse(p.x,p.y+10,26,8,0,0,7); g.fill();

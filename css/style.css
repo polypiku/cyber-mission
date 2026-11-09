@@ -1008,3 +1008,12 @@ button.bm-pin:not(:disabled):hover{background:#FFF4CC}
 .lg.me{background:#2F6DB5;border-color:#fff}.lg.bang{background:#FFC414}.lg.tgt{background:#FFC414;outline:2px solid #FF8A00}
 .bm-list{font:inherit;font-weight:700;font-size:.82rem;background:var(--paper);color:var(--ink);border:2px solid var(--ink);border-radius:10px;padding:6px 12px;cursor:pointer;min-height:40px}
 @media (prefers-reduced-motion:reduce){ .bm-pin.tgt,.bm-me i{animation:none} }
+/* ---------- bus ride ---------- */
+.busride{position:fixed;inset:0;z-index:13;background:rgba(24,18,12,.82);display:grid;place-content:center;justify-items:center;gap:8px;color:#fff;font-family:var(--f-display);text-align:center;animation:brIn .2s ease-out}
+.busride.out{opacity:0;transition:opacity .3s}
+.busride b{font-size:1.3rem}.busride small{opacity:.85}
+.br-road{width:min(80vw,520px);height:110px;position:relative;overflow:hidden;border-bottom:8px solid #6A6D72}
+.br-bus{position:absolute;bottom:4px;left:-170px;width:160px;height:70px;animation:brDrive 1.4s ease-in-out forwards}
+@keyframes brDrive{to{left:calc(100% + 10px)}}
+@keyframes brIn{from{opacity:0}}
+@media (prefers-reduced-motion:reduce){ .br-bus{animation:none;left:calc(50% - 80px)} }

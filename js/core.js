@@ -144,13 +144,18 @@ const PLAYABLE=["studentGirl","studentBoy","guardGirl","guardBoy"];
 const nm = (id)=>(id===S.char && S.name) ? S.name : PEOPLE[id].name[S.lang];
 /* ---------- zones + scoring ---------- */
 const ZONES = {
-  1:{name:{th:"ร้านกาแฟ Bean House",en:"Bean House café"}, cases:["qr","bank","wifi","chat"], roleCase:{grandma:"qr", grandpa:"bank", friend:"wifi", phone:"chat"}},
-  2:{name:{th:"ห้องสมุดเมือง",en:"City Library"}, cases:["charge","helper","publicpc","airdrop"], roleCase:{grandpa:"charge", grandma:"helper", tips:"publicpc", friend:"airdrop"}},
-  3:{name:{th:"ธนาคารนครทอง",en:"Nakhonthong Bank"}, cases:["rush","video","invest","remote"], roleCase:{grandma:"rush", grandpa:"video", friend:"invest", tips:"remote"}},
-  4:{name:{th:"ร้านเน็ต NET ZONE",en:"NET ZONE internet café"}, cases:["topup","trade","secret","parent"], roleCase:{friend:"topup", tips:"trade", grandpa:"secret", grandma:"parent"}},
-  6:{name:{th:"มหาวิทยาลัยหัวเฉียวเฉลิมพระเกียรติ",en:"Huachiew Chalermprakiet University"}, cases:["scholar","itmail","parttime","fakeprof"], roleCase:{friend:"scholar", tips:"itmail", paweena:"parttime", prof:"fakeprof"}},
+  1:{name:{th:"ร้านกาแฟ Bean House",en:"Bean House café"}, cases:["bank","wifi","chat"], roleCase:{grandpa:"bank", friend:"wifi", phone:"chat"}},
+  2:{name:{th:"ห้องสมุดเมือง",en:"City Library"}, cases:["charge","helper","publicpc"], roleCase:{grandpa:"charge", grandma:"helper", tips:"publicpc"}},
+  3:{name:{th:"ธนาคารนครทอง",en:"Nakhonthong Bank"}, cases:["rush","video","remote"], roleCase:{grandma:"rush", grandpa:"video", tips:"remote"}},
+  4:{name:{th:"ร้านเน็ต NET ZONE",en:"NET ZONE internet café"}, cases:["topup","trade","secret"], roleCase:{friend:"topup", tips:"trade", grandpa:"secret"}},
+  6:{name:{th:"มหาวิทยาลัยหัวเฉียวเฉลิมพระเกียรติ",en:"Huachiew Chalermprakiet University"}, cases:["itmail","parttime","fakeprof"], roleCase:{tips:"itmail", paweena:"parttime", prof:"fakeprof"}},
   7:{name:{th:"สถานีตำรวจ",en:"Police station"}, cases:["report","ransom"], roleCase:{grandpa:"report", visitor:"ransom"}},
-  5:{bonus:true, name:{th:"บ้านผีสิงในตรอกมืด",en:"The haunted house in the alley"}, cases:["merit","inherit","romance","fortune"], roleCase:{grandma:"merit", grandpa:"inherit", tips:"romance", friend:"fortune"}}
+  5:{bonus:true, name:{th:"บ้านผีสิงในตรอกมืด",en:"The haunted house in the alley"}, cases:["merit","inherit","romance","fortune"], roleCase:{grandma:"merit", grandpa:"inherit", tips:"romance", friend:"fortune"}},
+  9:{side:true, name:{th:"ศูนย์อาหาร",en:"Food court"}, cases:["invest"], roleCase:{friend:"invest"}},
+  10:{side:true, name:{th:"ตลาดนัด",en:"Market"}, cases:["qr"], roleCase:{grandma:"qr"}},
+  11:{side:true, name:{th:"ร้านสะดวกซื้อ",en:"Mini mart"}, cases:["parent"], roleCase:{grandma:"parent"}},
+  12:{side:true, name:{th:"ร้านมือถือ หมอโฟน ไอที",en:"Phone Dr. IT shop"}, cases:[], roleCase:{}},
+  13:{side:true, name:{th:"หอพักนักศึกษา",en:"Student dorm"}, cases:["airdrop","scholar"], roleCase:{friend:"airdrop", tips:"scholar"}},
 };
 const MAINZ = ()=>Object.keys(ZONES).map(Number).filter(z=>!ZONES[z].bonus);
 const zno = (z)=>{ z=+z; const i=CHAPTERS.indexOf(z); if(i>=0) return i+1; if(z===7) return "🚓"; if(ZONES[z]&&ZONES[z].bonus) return "👻"; return ""; };

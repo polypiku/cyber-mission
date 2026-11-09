@@ -17,7 +17,7 @@ function render(now){
   const near=nearest();
   if(near && !busy()){ ctx.beginPath(); ctx.ellipse(near.x,near.y,24,9,0,0,7); ctx.strokeStyle="#FF5A1F"; ctx.lineWidth=3; ctx.stroke(); }
   if(target && !busy()){ ctx.beginPath(); ctx.arc(target.x,target.y,6+(RM?0:Math.sin(now/120)),0,7); ctx.strokeStyle="rgba(20,20,20,.55)"; ctx.lineWidth=2; ctx.stroke(); }
-  const items = (S.zone===0||S.zone===2||S.zone===8||cbFloor()) ? [] : [{y:186,d:g=>drawCounter(g)}];
+  const items = (S.zone===0||S.zone===2||S.zone===8||cbFloor()||ROOMS2[S.zone]) ? [] : [{y:186,d:g=>drawCounter(g)}];
   if(cbFloor()){ items.push({y:CB_TOP+1,d:g=>drawCellBlockBars(g,true)}); items.push({y:9000,d:g=>drawCellBlockBars(g,false)}); }
   if(S.zone===0){ items.push({y:(CRUMBS?CRUMBS.y-12:0),d:g=>drawCrumbs(g)}); PIGEONS.forEach(p=>items.push({y:p.y,d:g=>drawPigeon(g,p,now)})); }
   if(vilOn()) items.push({y:9999,d:g=>drawVilFx(g,now)});
@@ -125,7 +125,7 @@ function redLight(x,y){
   if(S.zone!==0 || CIN) return false;
   const to=xingAt(x,y); if(!to || to.go()) return false;
   const from=xingAt(player.x,player.y); if(from && from.k===to.k) return false;   /* already crossing: let them finish */
-  if(performance.now()-redWarnT>2500){ redWarnT=performance.now(); xWarnT=performance.now(); toast(L("🚦 ไฟคนข้ามยังแดง รอไฟเขียวก่อนนะ","🚦 Don't walk yet. Wait for the green man")); }
+  if(performance.now()-redWarnT>2500){ redWarnT=performance.now(); xWarnT=performance.now(); pedRequest(to); }
   return true;
 }
 function blocked(x,y,self){
@@ -198,7 +198,7 @@ function hud(){
   const show = !!n && !busy();
   const dn=nearDoor();
   checkRank();
-  const sp0=nearSpot(); const key=[sp0&&sp0.id,netLabel().t,S.lang,S.zone,S.evNew,xp(),nearCat(),nearBirds(),nearHQ(),nearRepair(),nearVillain(),!!S.phoneBroken,S.coins,JSON.stringify(S.items),S.inbox.length,nearKiosk(),dn&&dn.zone,S.zone?zoneScore(S.zone):totalScore(),S.bars.money,S.bars.privacy,S.bars.trust,doneCount(),S.chat,S.chatSeen,!!S.results.chat,show&&n.id,sheetMode].join("|");
+  const sp0=nearSpot(); const key=[sp0&&sp0.id,!!nearBus(),netLabel().t,S.lang,S.zone,S.evNew,xp(),nearCat(),nearBirds(),nearHQ(),nearRepair(),nearVillain(),!!S.phoneBroken,S.coins,JSON.stringify(S.items),S.inbox.length,nearKiosk(),dn&&dn.zone,S.zone?zoneScore(S.zone):totalScore(),S.bars.money,S.bars.privacy,S.bars.trust,doneCount(),S.chat,S.chatSeen,!!S.results.chat,show&&n.id,sheetMode].join("|");
   if(key===hudKey) return; hudKey=key;
   if(hudPrev && !sheetMode){ let ch=false; for(const k of ["money","privacy","trust"]){ const dv=S.bars[k]-hudPrev[k]; if(dv){ hudFlash[k]=dv>0?"flash-up":"flash-down"; ch=true; } }
     if(ch){ clearTimeout(hudFlashT); hudFlashT=setTimeout(()=>{ hudFlash={}; hudKey=""; },1600); } }
@@ -217,8 +217,10 @@ function hud(){
   const hq = !show && !kk && !feed && !busy() && nearHQ();
   const rp = !show && !kk && !feed && !hq && !busy() && nearRepair(), vl = !show && !kk && !feed && !hq && !rp && !busy() && nearVillain();
   const sp = !show && !busy() && sp0;
-  const showDoor = !show && !sp && !kk && !feed && !rp && !vl && !!dn && !busy();
-  $("prompt").hidden=!(show||sp||showDoor||kk||feed||hq||rp||vl);
+  const bus = !show && !sp && nearBus();
+  const showDoor = !show && !sp && !bus && !kk && !feed && !rp && !vl && !!dn && !busy();
+  $("prompt").hidden=!(show||sp||bus||showDoor||kk||feed||hq||rp||vl);
+  if(bus) $("prompt").innerHTML=`🚌 ${L("ขึ้นรถเมล์","Take the bus")} (${BAHT(BUS_FARE)})${TOUCH?"":"<kbd>E</kbd>"}`;
   if(sp) $("prompt").innerHTML=`${L("ตรวจดู ","Inspect ")}${EVID[sp.id].i}${TOUCH?"":"<kbd>E</kbd>"}`;
   if(rp) $("prompt").innerHTML=`${S.phoneBroken?L("ซ่อมมือถือที่หมอโฟน 🔧","Fix your phone at Phone Dr. 🔧"):L("ร้านซ่อมมือถือ","Phone repair stall")}${TOUCH?"":"<kbd>E</kbd>"}`;
   if(vl) $("prompt").innerHTML=`${L("ชายใส่ฮู้ดดำ…","The hooded man…")}${TOUCH?"":"<kbd>E</kbd>"}`;
@@ -227,7 +229,7 @@ function hud(){
   if(kk) $("prompt").innerHTML=`${L("เล่นมินิเกม","Play mini-games")}${TOUCH?"":"<kbd>E</kbd>"}`;
   if(show) $("prompt").innerHTML=`${L("คุยกับ","Talk to")} ${esc(nm(n.id))}${TOUCH?"":"<kbd>E</kbd>"}`;
   else if(showDoor) $("prompt").innerHTML=`${(dn.alley?(dn.soi||ghostOpen()):(!dn.soon&&zoneOpen(dn.zone)))?L("เข้า ","Enter ")+esc(dn.name[S.lang]):L("ล็อกอยู่: ","Locked: ")+esc(dn.name[S.lang])}${TOUCH?"":"<kbd>E</kbd>"}`;
-  const act=$("act"); act.disabled=!(show||sp||showDoor||kk||feed||hq||rp||vl); act.textContent=sp?L("ตรวจ","Inspect"):kk?L("เล่น","Play"):feed?L("ให้อาหาร","Feed"):hq?L("เข้า","Enter"):vl?L("สำรวจ","Look"):rp?L("ซ่อม","Repair"):showDoor?L("เข้า","Enter"):L("คุย","Talk");
+  const act=$("act"); act.disabled=!(show||sp||bus||showDoor||kk||feed||hq||rp||vl); act.textContent=bus?L("รถเมล์","Bus"):sp?L("ตรวจ","Inspect"):kk?L("เล่น","Play"):feed?L("ให้อาหาร","Feed"):hq?L("เข้า","Enter"):vl?L("สำรวจ","Look"):rp?L("ซ่อม","Repair"):showDoor?L("เข้า","Enter"):L("คุย","Talk");
   $("keys").innerHTML=L(`<kbd>WASD</kbd>/<kbd>←↑→↓</kbd> เดิน · <kbd>E</kbd> คุย · <kbd>Q</kbd> ส่องแว่น · <kbd>M</kbd> แผนที่ · คลิกพื้นเพื่อเดิน`,`<kbd>WASD</kbd>/<kbd>←↑→↓</kbd> walk · <kbd>E</kbd> talk · <kbd>Q</kbd> lens · <kbd>M</kbd> map · click the floor to walk`);
   const hide = sheetMode==="start";
   $("hud").hidden=hide; $("joy").hidden=hide; $("act").hidden=hide; $("keys").hidden=hide;

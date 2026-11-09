@@ -152,7 +152,7 @@ function mentorIntro(){
 }
 
 /* ---------- talking ---------- */
-function interact(){ const n=nearest(); const sp=nearSpot(); if(sp && (!n || Math.hypot(sp.x-player.x,sp.y-player.y)<Math.hypot(n.x-player.x,n.y-player.y))){ collectSpot(sp); return; } if(n){ face(player,n); talkTo(n); return; } if(nearKiosk()){ openArcade(); return; } if(nearCat()){ feedCat(); return; } if(nearBirds()){ feedBirds(); return; } if(nearHQ()){ hqT=0; tryHQ(); return; } if(nearRepair()){ openRepair(); return; } if(nearVillain()){ talkVillain(); return; } const d=nearDoor(); if(d) tryEnter(d); }
+function interact(){ const n=nearest(); const bs=nearBus(); if(bs && (!n || Math.hypot(n.x-player.x,n.y-player.y)>Math.hypot(bs.x-player.x,bs.y-player.y))){ openBigMap("town",true); return; } const sp=nearSpot(); if(sp && (!n || Math.hypot(sp.x-player.x,sp.y-player.y)<Math.hypot(n.x-player.x,n.y-player.y))){ collectSpot(sp); return; } if(n){ face(player,n); talkTo(n); return; } if(nearKiosk()){ openArcade(); return; } if(nearCat()){ feedCat(); return; } if(nearBirds()){ feedBirds(); return; } if(nearHQ()){ hqT=0; tryHQ(); return; } if(nearRepair()){ openRepair(); return; } if(nearVillain()){ talkVillain(); return; } const d=nearDoor(); if(d) tryEnter(d); }
 function nearKiosk(){ return S.zone===0 && S.char && Math.hypot(player.x-KIOSK.x,player.y-(KIOSK.y+18))<58; }
 function nearDoor(){ if(S.zone!==0||!S.char) return null; return BUILDINGS.find(b=>Math.abs(player.x-b.door)<46 && player.y<300) || null; }
 let lockToastT=0;
@@ -248,7 +248,7 @@ function startAscend(n){
 /* bank: grandma runs up to you in a panic */
 let rush=null;
 /* timed events: someone is about to make a mistake, get there first */
-const URGENT={1:{role:"grandma",cid:"qr",secs:45,say:{th:"สแกนเลยดีกว่า…",en:"I'll just scan it…"},start:{th:"ยายศรีกำลังจะสแกน QR บนโต๊ะ! ไปให้ทันก่อนหมดเวลา",en:"Grandma Sri is about to scan the table QR! Get there in time"},late:{th:"ไม่ทัน! ยายสแกนจ่ายไปแล้ว",en:"Too late! Grandma already scanned and paid"}},
+const URGENT={10:{role:"grandma",cid:"qr",secs:45,say:{th:"สแกนเลยดีกว่า…",en:"I'll just scan it…"},start:{th:"ยายศรีกำลังจะสแกน QR บนโต๊ะ! ไปให้ทันก่อนหมดเวลา",en:"Grandma Sri is about to scan the table QR! Get there in time"},late:{th:"ไม่ทัน! ยายสแกนจ่ายไปแล้ว",en:"Too late! Grandma already scanned and paid"}},
   4:{role:"friend",cid:"topup",secs:45,say:{th:"โอนเลยดีกว่า…",en:"I'll just pay…"},start:{th:"ภูมิกำลังจะโอนซื้อเพชรอีกรอบ! ไปคุยก่อนหมดเวลา",en:"Phum is about to pay for more diamonds! Talk to him in time"},late:{th:"ไม่ทัน! ภูมิโอนไปแล้ว 1,500",en:"Too late! Phum already paid 1,500"}},
   2:{role:"grandpa",cid:"charge",secs:50,say:{th:"กดเชื่อถือเลยดีกว่า…",en:"I'll just tap trust…"},start:{th:"ลุงประยูรกำลังจะเสียบมือถือกับตู้ชาร์จฟรี! ไปให้ทันก่อนหมดเวลา",en:"Uncle Prayoon is about to plug into the free charging station! Get there in time"},late:{th:"ไม่ทัน! ลุงกดเชื่อถือไปแล้ว",en:"Too late! Uncle Prayoon already tapped trust"}}};
 let urgent=null;
@@ -280,7 +280,7 @@ function drawUrgent(g,now){
   g.restore();
 }
 function zoneEvent(){
-  if(S.zone===1 || S.zone===2 || S.zone===4){ startUrgent(); return; }
+  if(S.zone===10 || S.zone===2 || S.zone===4){ startUrgent(); return; }
   if(S.zone!==3 || S.best.rush) return;
   const g=npcs.find(n=>n.role==="grandma"); if(!g) return;
   rush={n:g, t:0};

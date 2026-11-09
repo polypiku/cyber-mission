@@ -177,7 +177,7 @@ function openFinale(){
 /* mission map: all zones, scores, locks */
 const LOCK_I='<svg viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="10" rx="1"/><path d="M8 10V7a4 4 0 018 0v3"/></svg>';
 function openZones(){
-  const cards=[...CHAPTERS,7,5].filter(z=>ZONES[z]).map(z=>{
+  const cards=[...CHAPTERS,...SIDE_ZONES,7,5].filter(z=>ZONES[z]).map(z=>{
     const open=zoneOpen(z), cur=S.zone===z, sc=zoneScore(z), mx=zoneMax(z);
     return `<div class="zcard ${open?"":"locked"} ${cur?"cur":""}">
       <div class="zh"><span class="zno">${ZONES[z].bonus?"👻":zno(z)}</span><div><b>${esc(ZONES[z].name[S.lang])}</b><small>${open?`${L("คะแนน","Score")} ${sc}/${mx}${zoneFull(z)?" · "+L("เต็ม!","Perfect!"):""}`:esc(lockMsg(z))}</small></div>${open?(cur?`<span class="here">${L("อยู่ที่นี่","You're here")}</span>`:""):`<span class="lk">${LOCK_I}</span>`}</div>
@@ -212,6 +212,7 @@ function goZone(z){
   toast(ZONES[z].name[S.lang]);
   const m=npcs.find(n=>n.role==="mentor")||npcs.find(n=>n.role==="police");
   rush=null; urgent=null; wifiT=0; escort=null;
+  if(z===9 && !S.overheard){ setTimeout(playCanteenScene,450); return; }
   if(z!==1 && !S.seen[z]) setTimeout(()=>{ face(player,m); talkTo(m); },400);
   else setTimeout(zoneEvent,500);
 }

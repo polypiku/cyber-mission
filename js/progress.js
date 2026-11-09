@@ -12,6 +12,7 @@ function zoneOpen(z){
   z=+z;
   if(z===0 || z===6 || z===7 || z===8) return true;        /* street, campus, police, offices */
   if(ZONES[z] && ZONES[z].bonus) return ghostOpen();
+  if(ZONES[z] && ZONES[z].side) return true;
   const i=chapterOf(z); return i>=0 && i<=chapter();
 }
 /* are this zone's cases ready to play yet? */

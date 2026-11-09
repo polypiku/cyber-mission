@@ -144,7 +144,7 @@ function townImage(){
   S.zone=z; S.floor=f; S.bld=b; setWorld(); drawStatic();
   return townC;
 }
-function openBigMap(tab){
+function openBigMap(tab,fromStop){
   if(!S.char) return;
   bigTab=tab||(S.zone===0?"town":bigTab==="room"?"room":"town");
   const el=$("bigmap"), town=bigTab==="town", gi=goalInfo();
@@ -171,15 +171,15 @@ function openBigMap(tab){
   el.innerHTML=`<div class="bm-top"><b>🗺️ ${L("แผนที่","Map")}</b>
       <div class="bm-tabs" role="tablist"><button role="tab" aria-selected="${town}" data-bmtab="town">${L("ทั้งเมือง","Town")}</button>${S.zone!==0?`<button role="tab" aria-selected="${!town}" data-bmtab="room">${L("ที่นี่","Here")} · ${esc(zoneName(S.zone))}</button>`:""}</div>
       <button class="bm-close" data-bmclose aria-label="${L("ปิดแผนที่","Close map")}">✕</button></div>
-    ${gi?`<div class="bm-goal">🎯 ${esc(gi.t)}</div>`:""}
+    ${fromStop?`<div class="bm-goal">🚏 ${L(`ป้ายรถเมล์ · เลือกที่หมาย ค่ารถ ${BAHT(BUS_FARE)}`,`Bus stop · choose where to go, fare ${BAHT(BUS_FARE)}`)}</div>`:""}${gi?`<div class="bm-goal">🎯 ${esc(gi.t)}</div>`:""}
     <div class="bm-scroll"><div class="bm-map" style="aspect-ratio:${MW}/${MH}"><canvas id="bmCv"></canvas>${pins}</div></div>
-    <div class="bm-foot"><span><i class="lg me"></i>${L("คุณ","You")}</span><span><i class="lg bang">!</i>${L("คนที่ต้องช่วย","Needs help")}</span><span><i class="lg tgt"></i>${L("ที่ต้องไป","Your goal")}</span>${town?`<span>${L("แตะชื่อสถานที่ที่เปิดแล้วเพื่อไปได้เลย","Tap an open place to go there")}</span>`:""}<button class="bm-list" data-bmlist>${L("📋 รายการภารกิจ","📋 Mission list")}</button></div>`;
+    <div class="bm-foot"><span><i class="lg me"></i>${L("คุณ","You")}</span><span><i class="lg bang">!</i>${L("คนที่ต้องช่วย","Needs help")}</span><span><i class="lg tgt"></i>${L("ที่ต้องไป","Your goal")}</span>${town?`<span>🚌 ${L(`แตะชื่อสถานที่เพื่อนั่งรถเมล์ไป (${BAHT(BUS_FARE)})`,`Tap a place to ride the bus there (${BAHT(BUS_FARE)})`)}</span>`:""}<button class="bm-list" data-bmlist>${L("📋 รายการภารกิจ","📋 Mission list")}</button></div>`;
   el.hidden=false; sfx("blip");
   const cvm=$("bmCv"); cvm.width=img.width; cvm.height=img.height; cvm.getContext("2d").drawImage(img,0,0);
   el.querySelectorAll("[data-bmtab]").forEach(b=>b.onclick=()=>openBigMap(b.dataset.bmtab));
   el.querySelector("[data-bmclose]").onclick=closeBigMap;
   el.querySelector("[data-bmlist]").onclick=()=>{ closeBigMap(); openZones(); };
-  el.querySelectorAll("[data-bmgo]").forEach(b=>b.onclick=()=>{ const z=+b.dataset.bmgo; closeBigMap(); if(z===S.zone) return; goZone(z); });
+  el.querySelectorAll("[data-bmgo]").forEach(b=>b.onclick=()=>{ const z=+b.dataset.bmgo; closeBigMap(); if(z===S.zone) return; rideBus(z); });
   const here=el.querySelector(".bm-me"), sc=el.querySelector(".bm-scroll");
   if(here && sc.scrollWidth>sc.clientWidth) sc.scrollLeft=here.offsetLeft-sc.clientWidth/2;
 }
