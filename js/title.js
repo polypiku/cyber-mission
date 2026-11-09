@@ -67,11 +67,11 @@ function titleSheet(k){
       <li>${L("เดินด้วยจอยสติ๊ก (มือถือ) หรือ WASD / ลูกศร (คอม) แตะหรือคลิกพื้นเพื่อเดินไปตรงนั้น","Walk with the joystick (phone) or WASD / arrows (computer). Tap or click the ground to walk there")}</li>
       <li>${L("คนที่มี ! เหนือหัวกำลังจะโดนหลอก เดินไปคุยแล้วเลือกทางที่ปลอดภัย","People with a ! are about to be scammed. Talk to them and pick the safe way")}</li>
       <li>${L("จบเคสแล้วลงมือแก้ในมือถือเพื่อรับเบาะแส","After a case, fix things on the phone to earn the clue")}</li>
-      <li>${L("ป้ายเหลืองด้านบนบอกว่าต้องไปไหนต่อ แผนที่เล็กมุมขวาบอกตำแหน่งของคุณ","The yellow goal pill says where to go next; the minimap shows where you are")}</li>
+      <li>${L("ป้ายเหลืองด้านบนบอกว่าต้องไปไหนต่อ กดปุ่มแผนที่ (หรือ M) เพื่อเปิดแผนที่เต็มจอ","The yellow goal pill says where to go next; the map button (or M) opens the full map")}</li>
       <li>${L("ระวังคนที่มีคลื่น Wi-Fi สีแดงลอยออกมา คนนั้นน่าสงสัย","Watch for people giving off red Wi-Fi waves: they're suspects")}</li>
       <li>${L("ส่งเบาะแสให้พี่ภพที่สถานีตำรวจ ยิ่งเยอะ ฉากจบยิ่งดี","Hand clues to Phop at the police station: the more, the better the ending")}</li></ol>`],
     news:[L("📰 อัปเดตล่าสุด","📰 Latest updates"),`<ul class="list">
-      <li>${L("หน้าเข้าเกมใหม่ และแผนที่เล็กมุมขวาบน","New title screen and a minimap in the top-right corner")}</li>
+      <li>${L("หน้าเข้าเกมใหม่ และแผนที่เต็มจอ (ปุ่มแผนที่ หรือกด M)","New title screen and a full-screen map (map button or M)")}</li>
       <li>${L("ถนนหน้าร้านมีต้นไม้ สวนหย่อม และหลังคาทรงไทย","The main street now has trees, gardens and Thai-style roofs")}</li>
       <li>${L("เน็ตมือถือหมดได้ ต้องเติมหรือต่อ Wi-Fi","Mobile data can run out: top up or join Wi-Fi")}</li>
       <li>${L("ขั้นลงมือแก้ในมือถือทุกเคส และเบาะแส 36 ชิ้น","A hands-on fix step for every case, and 36 clues")}</li></ul>`],

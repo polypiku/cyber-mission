@@ -261,7 +261,7 @@ function wireSheet(){
 function resetAll(){ const lang=S.lang, ch=S.char; S=fresh(); S.lang=lang; S.char=ch; save(); setWorld(); buildCast(); drawStatic(); hudKey=""; player.x=432; player.y=500; player.dir="up"; closeSheet(); openStart(); }
 $("phoneBtn").onclick=()=>{ if(!D) openPhone(); };
 $("menuBtn").onclick=()=>{ if(!D) openMenu(); };
-$("mini").onclick=()=>{ if(!D&&!busy()) openZones(); };
+$("mapBtn").onclick=()=>{ if(!D&&!busy()) openBigMap(); };
 $("goal").onclick=()=>{ if(!D&&!busy()) openZones(); };
 $("setBtn").onclick=()=>{ if(!D) openSettings(false); };
 /* DEBUG (temporary): shortcut to preview the 5 endings without changing the save */

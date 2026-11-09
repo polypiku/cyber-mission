@@ -4,7 +4,7 @@ let last=performance.now();
 function frame(now){
   const dt=Math.min(0.05,(now-last)/1000); last=now;
   if(S.char){ step(dt); stepNet(dt); }
-  updateCam(); render(now); hud(); if(now-(frame.gt||0)>250){ frame.gt=now; goalPill(); moneyHint(); } drawMini(now);
+  updateCam(); render(now); hud(); if(now-(frame.gt||0)>250){ frame.gt=now; goalPill(); moneyHint(); }
   requestAnimationFrame(frame);
 }
 document.documentElement.lang=S.lang;

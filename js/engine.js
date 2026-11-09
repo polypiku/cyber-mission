@@ -51,7 +51,7 @@ function render(now){
 const keys=new Set();
 let joy={x:0,y:0,active:false,id:null}, target=null, targetNpc=null, stuckT=0, lastPos=null;
 /* use physical key positions so WASD/E work on a Thai keyboard layout too */
-const KMAP={KeyW:"w",KeyA:"a",KeyS:"s",KeyD:"d",KeyE:"e",KeyQ:"q",ArrowUp:"arrowup",ArrowDown:"arrowdown",ArrowLeft:"arrowleft",ArrowRight:"arrowright",Space:" ",Enter:"enter",NumpadEnter:"enter",Escape:"escape"};
+const KMAP={KeyW:"w",KeyA:"a",KeyS:"s",KeyD:"d",KeyE:"e",KeyQ:"q",KeyM:"m",ArrowUp:"arrowup",ArrowDown:"arrowdown",ArrowLeft:"arrowleft",ArrowRight:"arrowright",Space:" ",Enter:"enter",NumpadEnter:"enter",Escape:"escape"};
 const keyOf=(e)=>KMAP[e.code]||e.key.toLowerCase();
 window.addEventListener("keydown",(e)=>{
   if(e.ctrlKey||e.metaKey||e.altKey) return;
@@ -62,6 +62,8 @@ window.addEventListener("keydown",(e)=>{
     if(!busy()){ interact(); e.preventDefault(); }
   }
   if(k==="q" && !busy()){ sweepLens(); e.preventDefault(); }
+  if(k==="m"){ if(bigMapOpen()) closeBigMap(); else if(!busy()) openBigMap(); e.preventDefault(); }
+  if(k==="escape" && bigMapOpen()){ closeBigMap(); e.preventDefault(); return; }
   if(k==="escape"){ if(!$("veil").hidden && sheetMode!=="case" && sheetMode!=="start") closeSheet(); }
 });
 window.addEventListener("keyup",(e)=>keys.delete(keyOf(e)));
@@ -189,7 +191,6 @@ function goalPill(){
   el.hidden=!show; if(!show) return;
   const txt=`🎯 ${esc(gi.t)}`; if(el.dataset.t!==txt){ el.dataset.t=txt; el.innerHTML=`<span>${txt}</span>`; }
   el.style.top=($("hud").offsetHeight+6)+"px";
-  const mi=$("mini"); if(mi) mi.style.top=($("hud").offsetHeight+6)+"px";
 }
 let hudPrev=null, hudFlash={}, hudFlashT=null;
 function hud(){
@@ -227,7 +228,7 @@ function hud(){
   if(show) $("prompt").innerHTML=`${L("คุยกับ","Talk to")} ${esc(nm(n.id))}${TOUCH?"":"<kbd>E</kbd>"}`;
   else if(showDoor) $("prompt").innerHTML=`${(dn.alley?(dn.soi||ghostOpen()):(!dn.soon&&zoneOpen(dn.zone)))?L("เข้า ","Enter ")+esc(dn.name[S.lang]):L("ล็อกอยู่: ","Locked: ")+esc(dn.name[S.lang])}${TOUCH?"":"<kbd>E</kbd>"}`;
   const act=$("act"); act.disabled=!(show||sp||showDoor||kk||feed||hq||rp||vl); act.textContent=sp?L("ตรวจ","Inspect"):kk?L("เล่น","Play"):feed?L("ให้อาหาร","Feed"):hq?L("เข้า","Enter"):vl?L("สำรวจ","Look"):rp?L("ซ่อม","Repair"):showDoor?L("เข้า","Enter"):L("คุย","Talk");
-  $("keys").innerHTML=L(`<kbd>WASD</kbd>/<kbd>←↑→↓</kbd> เดิน · <kbd>E</kbd> คุย · <kbd>Q</kbd> ส่องแว่น · คลิกพื้นเพื่อเดิน`,`<kbd>WASD</kbd>/<kbd>←↑→↓</kbd> walk · <kbd>E</kbd> talk · <kbd>Q</kbd> lens · click the floor to walk`);
+  $("keys").innerHTML=L(`<kbd>WASD</kbd>/<kbd>←↑→↓</kbd> เดิน · <kbd>E</kbd> คุย · <kbd>Q</kbd> ส่องแว่น · <kbd>M</kbd> แผนที่ · คลิกพื้นเพื่อเดิน`,`<kbd>WASD</kbd>/<kbd>←↑→↓</kbd> walk · <kbd>E</kbd> talk · <kbd>Q</kbd> lens · <kbd>M</kbd> map · click the floor to walk`);
   const hide = sheetMode==="start";
   $("hud").hidden=hide; $("joy").hidden=hide; $("act").hidden=hide; $("keys").hidden=hide;
 }

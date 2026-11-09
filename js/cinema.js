@@ -229,4 +229,4 @@ function talkTo(n){
   const fixCh = r!=="danger" && needsFix(cid) ? [{label:{th:"📱 ลงมือแก้ในมือถือ (รับเบาะแส)",en:"📱 Fix it on the phone (get the clue)"},fn:()=>needNet(()=>openFix(cid,()=>closeSheet()))}] : [];
   say(n.id, lines([sc.after[r],...more]), {choices:[...fixCh,{...CH.again[0],fn:()=>openCase(cid,n)},CH.again[1]]});
 }
-function busy(){ return !!CIN || !!D || !$("veil").hidden || !$("peek").hidden || !!coach || arriving; }
+function busy(){ return !!CIN || !!D || !$("bigmap").hidden || !$("veil").hidden || !$("peek").hidden || !!coach || arriving; }

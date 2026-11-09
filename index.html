@@ -17,12 +17,13 @@
 <div class="glitch" id="glitch" hidden aria-hidden="true"><div class="gscan"></div><i class="gbar"></i></div>
 <div class="title" id="title" hidden></div>
 <button class="goal" id="goal" type="button" hidden></button>
-<button class="mini" id="mini" type="button" hidden aria-label="Map"><canvas id="miniCv"></canvas><span id="miniName"></span></button>
+<div class="bigmap" id="bigmap" hidden role="dialog" aria-modal="true" aria-label="Map"></div>
 <div class="hud" id="hud">
   <div class="bars" id="bars"></div>
   <div class="hud-r">
     <button class="chip zchip" id="prog" type="button"></button>
     <button class="hbtn" id="boardBtn" aria-label="Evidence board"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="15" rx="1"/><path d="M7 9h4M7 13h6M14.5 8.5l3 3"/><circle cx="16" cy="14" r="1.6"/></svg><span class="badge-dot" id="boardDot" hidden>1</span></button>
+    <button class="hbtn mapbtn" id="mapBtn" aria-label="Map (M)"><svg viewBox="0 0 24 24"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2z"/><path d="M9 4v14M15 6v14"/></svg></button>
     <button class="hbtn lensbtn" id="lensBtn" aria-label="Detective lens">🔍<span class="lv" id="lensLv"></span></button>
     <button class="hbtn setbtn" id="setBtn" aria-label="Settings"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.2"/><path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3M5.3 5.3l2.1 2.1M16.6 16.6l2.1 2.1M5.3 18.7l2.1-2.1M16.6 7.4l2.1-2.1"/></svg></button>
     <button class="hbtn" id="menuBtn" aria-label="Menu"><svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>

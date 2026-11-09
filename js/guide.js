@@ -132,24 +132,56 @@ function slapScene(then){
   startCinema(st, ()=>then(), {actors:[A]});
 }
 
-/* ---------- always-on minimap in the top-right corner ---------- */
-let miniT=0;
-function drawMini(now){
-  const el=$("mini"); if(!el) return;
-  const show=!!S.char && !CIN && !sheetMode && bg.width>0;
-  el.hidden=!show; if(!show || now-miniT<120) return; miniT=now;
-  const cvm=$("miniCv"), wide=window.innerWidth>=760, cw=wide?220:128, ch=Math.round(Math.min(cw*H/W, wide?170:110));
-  const sx=cw/W, sy=ch/H;
-  if(cvm.width!==cw*2||cvm.height!==ch*2){ cvm.width=cw*2; cvm.height=ch*2; cvm.style.width=cw+"px"; cvm.style.height=ch+"px"; }
-  const g=cvm.getContext("2d"); g.setTransform(2,0,0,2,0,0); g.clearRect(0,0,cw,ch);
-  g.drawImage(bg,0,0,bg.width,bg.height,0,0,cw,ch);
-  g.fillStyle="rgba(255,255,255,.12)"; g.fillRect(0,0,cw,ch);
-  /* what the screen shows right now */
-  g.strokeStyle="rgba(255,255,255,.95)"; g.lineWidth=1.5; g.strokeRect(camX*sx,camY*sy,(VW/Z)*sx,(VH/Z)*sy);
-  const dot=(x,y,r,fill,ring)=>{ g.beginPath(); g.arc(x*sx,y*sy,r,0,7); g.fillStyle=fill; g.fill(); g.lineWidth=1.5; g.strokeStyle=ring||INK; g.stroke(); };
-  for(const n of npcs){ const c=!n.filler && caseOf(n); if(c && !S.best[c]) dot(n.x,n.y,3.4,"#FFC414"); }
-  for(const e of roomExits()) dot(e.x,e.y,3.4,"#FF8A00","#FFFFFF");
-  if(S.zone===0){ const gi=goalInfo(), d=gi&&gi.z!=null&&doorOf(gi.z); if(d){ const p=RM?1:1+Math.sin(now/220)*.25; dot(d.x,d.y,5*p,"#FF8A00","#FFFFFF"); } }
-  dot(player.x,player.y,4.2,"#2F6DB5","#FFFFFF");
-  $("miniName").textContent=S.zone===0?L("ถนนหน้าร้าน","Main street"):zoneName(S.zone);
+/* ---------- full-screen map, opened with the map button or M ---------- */
+let townC=null, townKey="", bigTab="town";
+function townImage(){
+  const key=S.lang+(S.hqFound?1:0);
+  if(S.zone===0){ townC=document.createElement("canvas"); townC.width=bg.width; townC.height=bg.height; townC.getContext("2d").drawImage(bg,0,0); townKey=key; return townC; }
+  if(townC && townKey===key) return townC;
+  const z=S.zone, f=S.floor, b=S.bld;
+  S.zone=0; setWorld(); drawStatic();
+  townC=document.createElement("canvas"); townC.width=bg.width; townC.height=bg.height; townC.getContext("2d").drawImage(bg,0,0); townKey=key;
+  S.zone=z; S.floor=f; S.bld=b; setWorld(); drawStatic();
+  return townC;
 }
+function openBigMap(tab){
+  if(!S.char) return;
+  bigTab=tab||(S.zone===0?"town":bigTab==="room"?"room":"town");
+  const el=$("bigmap"), town=bigTab==="town", gi=goalInfo();
+  const img=town?townImage():bg, MW=town?OW:W, MH=town?OH:H;
+  const pct=(x,y)=>`left:${x/MW*100}%;top:${y/MH*100}%`;
+  let pins="";
+  if(town){
+    for(const b of BUILDINGS){ if(b.hide) continue;
+      const open=b.alley?(b.soi||ghostOpen()):zoneOpen(b.zone), goal=gi&&gi.z===b.zone, here=S.zone===b.zone;
+      const label=b.alley?(b.zone===5?L("👻 ตรอกมืด","👻 Dark alley"):b.zone===7?L("🚓 สถานีตำรวจ","🚓 Police"):L("🎓 มหาวิทยาลัย","🎓 Campus")):`${b.name[S.lang]}${zno(b.zone)?` · ${L("โซน","Zone")} ${zno(b.zone)}`:""}`;
+      pins+=`<button class="bm-pin${open?"":" locked"}${goal?" tgt":""}${here?" here":""}" style="${pct(b.door,b.alley?150:120)}" ${open?`data-bmgo="${b.zone}"`:"disabled"} aria-label="${esc(label)}">${open?"":"🔒 "}${esc(label)}${goal?" 🎯":""}</button>`; }
+    for(const [i,o] of OFFICES.entries()){ const hq=S.hqFound&&i===hqB();
+      pins+=`<span class="bm-pin office${gi&&gi.z===8?" tgt":""}" style="${pct(o.door,OFF_TOP+120)}">${esc(o.name[S.lang])}${hq?L(" · ⚠️ รังแก๊ง"," · ⚠️ gang"):""}</span>`; }
+    pins+=`<span class="bm-pin small" style="${pct(REPAIR.x,REPAIR.y-40)}">🔧 ${L("หมอโฟน","Phone Dr.")}</span><span class="bm-pin small" style="${pct(KIOSK.x,KIOSK.y-60)}">🕹️ ${L("มินิเกม","Games")}</span>`;
+    const me=S.zone===0?{x:player.x,y:player.y}:(doorOf(S.zone)||{x:OW/2,y:300});
+    pins+=`<span class="bm-me" style="${pct(me.x,me.y)}"><i></i><b>${L("คุณ","You")}</b></span>`;
+    if(S.zone===0) for(const n of npcs){ const c=!n.filler&&caseOf(n); if(c&&!S.best[c]) pins+=`<span class="bm-bang" style="${pct(n.x,n.y-60)}">!</span>`; }
+  } else {
+    for(const n of npcs){ const c=!n.filler&&caseOf(n); if(c&&!S.best[c]) pins+=`<span class="bm-bang" style="${pct(n.x,n.y-60)}">!</span>`; }
+    for(const e of roomExits()) pins+=`<span class="bm-pin small exit" style="${pct(e.x,e.y-40)}">${esc(e.t)}</span>`;
+    if(S.zone!==2 && S.zone!==8 && !(S.zone===7&&cbFloor())) pins+=`<span class="bm-pin small exit" style="${pct(432,RH-30)}">🚪 ${L("ทางออกสู่ถนน","Exit to street")}</span>`;
+    pins+=`<span class="bm-me" style="${pct(player.x,player.y)}"><i></i><b>${L("คุณ","You")}</b></span>`;
+  }
+  el.innerHTML=`<div class="bm-top"><b>🗺️ ${L("แผนที่","Map")}</b>
+      <div class="bm-tabs" role="tablist"><button role="tab" aria-selected="${town}" data-bmtab="town">${L("ทั้งเมือง","Town")}</button>${S.zone!==0?`<button role="tab" aria-selected="${!town}" data-bmtab="room">${L("ที่นี่","Here")} · ${esc(zoneName(S.zone))}</button>`:""}</div>
+      <button class="bm-close" data-bmclose aria-label="${L("ปิดแผนที่","Close map")}">✕</button></div>
+    ${gi?`<div class="bm-goal">🎯 ${esc(gi.t)}</div>`:""}
+    <div class="bm-scroll"><div class="bm-map" style="aspect-ratio:${MW}/${MH}"><canvas id="bmCv"></canvas>${pins}</div></div>
+    <div class="bm-foot"><span><i class="lg me"></i>${L("คุณ","You")}</span><span><i class="lg bang">!</i>${L("คนที่ต้องช่วย","Needs help")}</span><span><i class="lg tgt"></i>${L("ที่ต้องไป","Your goal")}</span>${town?`<span>${L("แตะชื่อสถานที่ที่เปิดแล้วเพื่อไปได้เลย","Tap an open place to go there")}</span>`:""}<button class="bm-list" data-bmlist>${L("📋 รายการภารกิจ","📋 Mission list")}</button></div>`;
+  el.hidden=false; sfx("blip");
+  const cvm=$("bmCv"); cvm.width=img.width; cvm.height=img.height; cvm.getContext("2d").drawImage(img,0,0);
+  el.querySelectorAll("[data-bmtab]").forEach(b=>b.onclick=()=>openBigMap(b.dataset.bmtab));
+  el.querySelector("[data-bmclose]").onclick=closeBigMap;
+  el.querySelector("[data-bmlist]").onclick=()=>{ closeBigMap(); openZones(); };
+  el.querySelectorAll("[data-bmgo]").forEach(b=>b.onclick=()=>{ const z=+b.dataset.bmgo; closeBigMap(); if(z===S.zone) return; goZone(z); });
+  const here=el.querySelector(".bm-me"), sc=el.querySelector(".bm-scroll");
+  if(here && sc.scrollWidth>sc.clientWidth) sc.scrollLeft=here.offsetLeft-sc.clientWidth/2;
+}
+function closeBigMap(){ const el=$("bigmap"); if(el){ el.hidden=true; el.innerHTML=""; } }
+const bigMapOpen=()=>!$("bigmap").hidden;
