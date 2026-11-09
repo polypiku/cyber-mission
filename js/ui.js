@@ -241,7 +241,7 @@ function renderEnding(c){
     C.lastType=e.type;
     const prev=S.best[C.id];
     C.newBest = !prev || RANK[e.type]>RANK[prev];
-    { const RW_={safe:40,warn:15,danger:0}; let cn=0; if(C.newBest) cn+=RW_[e.type]-(prev?RW_[prev]:0); if(e.type==="danger" && !prev) cn-=20; C.coins=addCoins(cn); }
+    { const RW_={safe:40,warn:15,danger:0}; let cn=0; if(C.newBest) cn+=RW_[e.type]-(prev?RW_[prev]:0); if(e.type==="danger" && !prev) cn-=20; if(e.cost) cn-=e.cost; C.coins=addCoins(cn); }
     C.prevBest = prev;
     if(C.newBest) S.best[C.id]=e.type;
     if(C.id==="chat") S.chatSeen=true;

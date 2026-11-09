@@ -185,6 +185,7 @@ function openZones(){
             :`<p class="note">🔒 ${esc(lockMsg(z))}</p>`}
     </div>`; }).join("");
   openSheet("zones", `${top_(L("แผนที่ภารกิจ","Mission map"))}<div class="sh-body">
+    <div class="smapwrap">${streetMapSVG()}<p class="note">${L("🎯 = ที่ต้องไปตอนนี้ · 🔵 = คุณอยู่ตรงนี้ · แตะตึกที่เปิดแล้วเพื่อไปได้เลย","🎯 = where to go now · 🔵 = you · tap an open building to go there")}</p></div>
     <p class="note" style="font-size:.86rem">${L("แต่ละเคสได้ ★★★ = 100 · ★★ = 50 · ★ = 0 คะแนน นับผลที่ดีที่สุด เล่นซ้ำได้เรื่อยๆ","Each case: ★★★ = 100 · ★★ = 50 · ★ = 0 points. Your best result counts, replay any time.")}</p>
     ${cards}${S.zone>0?`<div class="btns"><button class="btn g" data-out><span>${L("ออกไปที่ถนนหน้าร้าน","Go out to the street")}</span></button></div>`:""}</div>`);
 }
@@ -247,13 +248,15 @@ function wireSheet(){
     sh.querySelectorAll("[data-ch]").forEach(x=>{ x.disabled=true; x.classList.add(x===b?"picked":"dim"); });
     setMood(mood);
     let gone=false;
-    const go=()=>{ if(gone) return; gone=true; C.locked=false; C.hist.push({s:C.scene,c:ci}); C.scene=s.choices[ci].to; renderCase(); };
+    const go=()=>{ if(gone) return; gone=true; C.locked=false; C.hist.push({s:C.scene,c:ci}); C.scene=s.choices[ci].to;
+      if(s.choices[ci].act==="slap") slapScene(()=>renderCase()); else renderCase(); };
     C.skip=go;
     setTimeout(go, RM?650:(mood==="bad"?1700:1250));
   });
   on("#actor",()=>{ if(C&&C.locked&&C.skip) C.skip(); });
   on("[data-done]",()=>finishCase());
-  on("[data-fix]",()=>openFix(C.id, ()=>{ if(!C) return; if(S.ev[C.id]){ C.newEv=true; C.needFix=false; } renderEnding(CASES[S.lang][C.id]); }));
+  on("[data-fix]",()=>{ const back=()=>{ if(!C) return; if(S.ev[C.id]){ C.newEv=true; C.needFix=false; } renderEnding(CASES[S.lang][C.id]); };
+    needNet(()=>openFix(C.id, back), back); });
   on("[data-replay]",()=>{ const id=C.id, npc=C.npc; C=null; openCase(id,npc); });
   on("[data-chat]",()=>{ closeSheet(); openCase("chat",null); });
   on("[data-msg]",(b)=>openMsg(b.dataset.msg));

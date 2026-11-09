@@ -902,3 +902,28 @@ body.cin .hud,body.cin #phoneBtn,body.cin #prompt,body.cin #dbgEnd,body.cin #joy
 @keyframes barUp{0%,40%{background:#BFF0D2;transform:scale(1.08)}100%{background:transparent;transform:none}}
 @keyframes barDown{0%,40%{background:#FFD0C7;transform:scale(1.08)}100%{background:transparent;transform:none}}
 @media (prefers-reduced-motion:reduce){.bar-row.flash-up,.bar-row.flash-down{animation:none}}
+/* ---------- money & data rows in the HUD ---------- */
+button.coinrow,button.netrow{font:inherit;color:inherit;background:none;border:none;padding:0 0 4px;cursor:pointer;text-align:left;width:100%}
+button.coinrow:hover b,button.netrow:hover b{text-decoration:underline}
+.netrow{display:flex;align-items:center;gap:6px;font-size:.8rem}.netrow b{font-weight:800}
+.netrow.low b{color:#C77700}.netrow.out b{color:#C0392B}.netrow.wifi b{color:#1F7A4A}
+.moneyopts{display:grid;gap:8px}
+.mopt{display:grid;grid-template-columns:40px 1fr;gap:10px;align-items:center;text-align:left;font:inherit;background:var(--paper);border:var(--bw) solid var(--ink);box-shadow:3px 3px 0 var(--ink);padding:10px 12px;cursor:pointer}
+.mopt.static{box-shadow:none;cursor:default;background:#F6F1E6}
+.mopt>span{font-size:1.6rem;text-align:center}.mopt b{display:block}.mopt small{color:var(--muted);font-size:.8rem;line-height:1.4}
+button.mopt:hover{background:#FFF4CC}
+/* ---------- street map ---------- */
+.smapwrap{display:grid;gap:6px}
+.smap{width:100%;height:auto;border:var(--bw) solid var(--ink);box-shadow:var(--shadow);background:#E9E1D2;display:block}
+.smap .mb[data-zone]{cursor:pointer}.smap .mb[data-zone]:hover rect{filter:brightness(1.08)}
+.smap .mb.locked{opacity:.45}
+.smap .mb.tgt rect{stroke:#FF8A00;stroke-width:14}
+.smap .me circle{animation:mePulse 1.4s ease-in-out infinite}
+@keyframes mePulse{50%{r:44}}
+@media (prefers-reduced-motion:reduce){.smap .me circle{animation:none}}
+/* ---------- bigger phone in the corner ---------- */
+.phonepeek{width:104px;height:200px;bottom:-78px;border-radius:24px;padding:7px}
+.phonepeek:hover,.phonepeek:focus-visible{bottom:-54px}
+.phonepeek .pp-scr{border-radius:18px;padding-top:16px;gap:6px}
+.pp-time{font-size:1.15rem}.pp-ic{font-size:1.6rem}.pp-sw{font-size:.85rem}
+body:not(.desk) .phonepeek{right:calc(max(16px,env(safe-area-inset-right,0px)) + 100px)}

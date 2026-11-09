@@ -40,7 +40,7 @@ function render(now){
   PLANTS.forEach(p=>items.push({y:p.y+14,d:g=>drawPlant(g,p)}));
   if(S.char){ npcs.forEach(n=>items.push({y:n.y,d:g=>drawChar(g,n,now)})); items.push({y:player.y,d:g=>drawChar(g,player,now)}); }
   items.sort((a,b)=>a.y-b.y).forEach(it=>it.d(ctx));
-  drawLibStairSign(ctx,now); drawEscortTalk(ctx); drawSpots(ctx,now); drawGoalArrow(ctx,now); drawCinFx(ctx,now);
+  drawLibStairSign(ctx,now); drawEscortTalk(ctx); drawSpots(ctx,now); drawGoalArrow(ctx,now); drawExits(ctx,now); drawCinFx(ctx,now);
   if(S.char) npcs.forEach(n=>drawMarker(ctx,n,now));
   if(S.char){ drawUrgent(ctx,now); drawChatter(ctx,now); drawVirusArrow(ctx,now); drawCoinFx(ctx,(now-(window._cfx||now))/1000); window._cfx=now; }
   const dn=nearDoor(); if(dn && !busy()){ ctx.beginPath(); ctx.ellipse(dn.door,262,34,10,0,0,7); ctx.strokeStyle="#FF5A1F"; ctx.lineWidth=3; ctx.stroke(); }
@@ -107,6 +107,7 @@ function tapWalk(e){
   stuckT=0;
 }
 $("act").addEventListener("click",()=>{ if(!busy()) interact(); });
+$("bars").addEventListener("click",(e)=>{ if(D||busy()) return; if(e.target.closest(".coinrow,.netrow")) openMoney(); });
 $("lensBtn").addEventListener("click",()=>sweepLens());
 
 /* ---------- movement ---------- */
@@ -194,13 +195,13 @@ function hud(){
   const show = !!n && !busy();
   const dn=nearDoor();
   checkRank();
-  const sp0=nearSpot(); const key=[sp0&&sp0.id,S.lang,S.zone,S.evNew,xp(),nearCat(),nearBirds(),nearHQ(),nearRepair(),nearVillain(),!!S.phoneBroken,S.coins,JSON.stringify(S.items),S.inbox.length,nearKiosk(),dn&&dn.zone,S.zone?zoneScore(S.zone):totalScore(),S.bars.money,S.bars.privacy,S.bars.trust,doneCount(),S.chat,S.chatSeen,!!S.results.chat,show&&n.id,sheetMode].join("|");
+  const sp0=nearSpot(); const key=[sp0&&sp0.id,netLabel().t,S.lang,S.zone,S.evNew,xp(),nearCat(),nearBirds(),nearHQ(),nearRepair(),nearVillain(),!!S.phoneBroken,S.coins,JSON.stringify(S.items),S.inbox.length,nearKiosk(),dn&&dn.zone,S.zone?zoneScore(S.zone):totalScore(),S.bars.money,S.bars.privacy,S.bars.trust,doneCount(),S.chat,S.chatSeen,!!S.results.chat,show&&n.id,sheetMode].join("|");
   if(key===hudKey) return; hudKey=key;
   if(hudPrev && !sheetMode){ let ch=false; for(const k of ["money","privacy","trust"]){ const dv=S.bars[k]-hudPrev[k]; if(dv){ hudFlash[k]=dv>0?"flash-up":"flash-down"; ch=true; } }
     if(ch){ clearTimeout(hudFlashT); hudFlashT=setTimeout(()=>{ hudFlash={}; hudKey=""; },1600); } }
   if(!sheetMode) hudPrev={...S.bars};
   const ri=rankIdx(), nx=RANKS[ri+1];
-  $("bars").innerHTML=`<div class="coinrow" title="${L("เงิน","Money")}"><span>💵</span><b>${BAHT(S.coins)}</b>${S.items.vpn?`<i title="VPN">🛰️</i>`:""}${S.items.cloud?`<i title="Cloud">☁️</i>`:""}${S.items.pwm?`<i title="Password manager">🔑</i>`:""}</div><div class="rankrow" title="XP ${xp()}"><span>🛡</span><b>${esc(rankName(ri))}</b>${nx?`<i style="--p:${Math.min(100,(xp()-RANKS[ri][0])/(nx[0]-RANKS[ri][0])*100)}%"></i>`:""}</div>`+["money","privacy","trust"].map(k=>{ const v=S.bars[k]; return `<div class="bar-row${hudFlash[k]?" "+hudFlash[k]:""}" title="${barName(k)}">${BAR_ICON[k]}<div class="meter ${v<40?"low":""}" role="meter" aria-label="${barName(k)}" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${v}"><i style="width:${v}%"></i></div><b>${v}</b></div>`; }).join("");
+  $("bars").innerHTML=`<button type="button" class="coinrow" title="${L("เงินใช้ทำอะไร","What money is for")}"><span>💵</span><b>${BAHT(S.coins)}</b>${S.items.vpn?`<i title="VPN">🛰️</i>`:""}${S.items.cloud?`<i title="Cloud">☁️</i>`:""}${S.items.pwm?`<i title="Password manager">🔑</i>`:""}</button>${(()=>{ const nl=netLabel(); return `<button type="button" class="netrow ${nl.cls}" title="${L("อินเทอร์เน็ต","Internet")}"><span>${nl.i}</span><b>${nl.t}</b></button>`; })()}<div class="rankrow" title="XP ${xp()}"><span>🛡</span><b>${esc(rankName(ri))}</b>${nx?`<i style="--p:${Math.min(100,(xp()-RANKS[ri][0])/(nx[0]-RANKS[ri][0])*100)}%"></i>`:""}</div>`+["money","privacy","trust"].map(k=>{ const v=S.bars[k]; return `<div class="bar-row${hudFlash[k]?" "+hudFlash[k]:""}" title="${barName(k)}">${BAR_ICON[k]}<div class="meter ${v<40?"low":""}" role="meter" aria-label="${barName(k)}" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${v}"><i style="width:${v}%"></i></div><b>${v}</b></div>`; }).join("");
   $("prog").innerHTML = S.zone===0 ? `<span class="zn">${L("รวม","Total")}</span><span class="st">★</span> ${totalScore()}/${totalMax()}` : (S.zone===8?`<span class="zn">🏢 ${L("ชั้น","Fl.")} ${offFloor()}</span><span class="st">★</span> ${totalScore()}/${totalMax()}`:`<span class="zn">${L("โซน","Zone")} ${ZONES[S.zone]&&ZONES[S.zone].bonus?"👻":zno(S.zone)}</span><span class="st">★</span> ${zoneScore(S.zone)}/${zoneMax(S.zone)}`);
   $("prog").setAttribute("aria-label", S.zone===0 ? L(`คะแนนรวม ${totalScore()} จาก ${totalMax()} เปิดแผนที่ภารกิจ`,`Total score ${totalScore()} of ${totalMax()}. Open mission map`) : L(`โซน ${zno(S.zone)} คะแนน ${zoneScore(S.zone)} จาก ${zoneMax(S.zone)} เปิดแผนที่ภารกิจ`,`Zone ${zno(S.zone)}, score ${zoneScore(S.zone)} of ${zoneMax(S.zone)}. Open mission map`));
   const pending=S.zone===1 && S.chat && !S.results.chat;
@@ -269,3 +270,11 @@ function advance(){
 }
 function closeDlg(){ clearInterval(typer); $("dlg").hidden=true; D=null; talking=null; }
 $("dlg").addEventListener("click",(e)=>{ if(e.target.closest("button")) return; advance(); });
+/* tapping anywhere on the screen moves the story on: the dialogue box, or the next comic panel */
+const TAP_SKIP="button,a,input,textarea,select,label,.fx,.hud,#goal,.phonepeek,.joy,.act";
+document.addEventListener("pointerup",(e)=>{
+  if(e.pointerType==="mouse" && e.button!==0) return;
+  if(e.target.closest(TAP_SKIP) || e.target.closest("#dlg")) return;
+  if(D && !sheetMode){ if(!(D.full && D.i===D.lines.length-1 && D.choices)) { e.preventDefault(); advance(); } return; }
+  if(sheetMode==="cut"){ const nx=$("sheet").querySelector("[data-cnext]"); if(nx) nx.click(); }
+},true);

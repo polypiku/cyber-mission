@@ -108,7 +108,7 @@ function officeCast(){
   return out;
 }
 function inLift(){ return S.zone===8 && player.y<124 && player.x>OFF_LIFT.x0 && player.x<OFF_LIFT.x1; }
-function askLift(){
+function askLift(){ markExitSeen("lift"+S.bld);
   keys.clear(); target=null; targetNpc=null; endJoy&&endJoy(); player.y=154; player.dir="down";
   const f=offFloor();
   if(isScam(S.bld) && !raided() && S.uc && f===1 && !S.ucOk){

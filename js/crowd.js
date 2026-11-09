@@ -202,10 +202,11 @@ function wifiDone(ok, msg, dv){
 }
 function pickWifi(k){
   const z=S.zone, w=WIFI[z];
-  if(k==="data") return wifiDone(true, L("ไม่ต่อ Wi-Fi ที่ไม่รู้ที่มา ใช้เน็ตมือถือตัวเองปลอดภัยที่สุด โดยเฉพาะตอนทำธุรกรรม","Skipping unknown Wi-Fi and using your own data is safest, especially for banking."), 4);
+  S.onWifi=S.onWifi||{};
+  if(k==="data"){ S.onWifi[z]=false; return wifiDone(true, L("ไม่ต่อ Wi-Fi ที่ไม่รู้ที่มา ใช้เน็ตมือถือตัวเองปลอดภัยที่สุด โดยเฉพาะตอนทำธุรกรรม","Skipping unknown Wi-Fi and using your own data is safest, especially for banking."), 4); }
   if(k==="real"){
     $("wifiOut").innerHTML=`<div class="wpw"><b>🔒 ${esc(w.real.n)}</b><p>${w.real.how[EN()?1:0]}</p><div class="btns">${btn(L("ถามร้านแล้วใส่รหัส","Ask the shop & enter it"),'data-pw="1"',"y")}<button class="btn g" data-pw="0"><span>${L("ยกเลิก","Cancel")}</span></button></div></div>`;
-    $("wifiOut").querySelector('[data-pw="1"]').onclick=()=>wifiDone(true, L(`ต่อ ${w.real.n} ที่ร้านแจกรหัสเอง ชื่อตรงกับที่ร้านบอก ใช้งานได้ แต่ถ้าจะโอนเงินก็ยังควรใช้เน็ตมือถือ`,`You joined ${w.real.n} with the password from staff, so the name matches. Still, use mobile data for banking.`), 3);
+    $("wifiOut").querySelector('[data-pw="1"]').onclick=()=>(S.onWifi[z]=true, wifiDone(true, L(`ต่อ ${w.real.n} ที่ร้านแจกรหัสเอง ชื่อตรงกับที่ร้านบอก ใช้งานได้ แต่ถ้าจะโอนเงินก็ยังควรใช้เน็ตมือถือ`,`You joined ${w.real.n} with the password from staff, so the name matches. Still, use mobile data for banking.`), 3));
     $("wifiOut").querySelector('[data-pw="0"]').onclick=()=>{ $("wifiOut").innerHTML=""; };
     return;
   }
@@ -213,7 +214,7 @@ function pickWifi(k){
   $("wifiOut").innerHTML=`<div class="wportal"><div class="wph">📶 ${esc(f.n)} · ${L("เชื่อมต่อแล้ว","connected")}</div><p><b>${L("ยินดีต้อนรับ! เน็ตฟรีไม่จำกัด","Welcome! Unlimited free internet")}</b><br>${f.ask[EN()?1:0]}</p>
     <div class="btns"><button class="btn" data-go="1"><span>${L("ตกลง ทำตามเลย","OK, do it")}</span></button><button class="btn g" data-go="0"><span>${L("ไม่เอา ตัดการเชื่อมต่อ","No, disconnect")}</span></button></div></div>`;
   $("wifiOut").querySelector('[data-go="1"]').onclick=()=>{
-    const lost=addCoins(-30); S.wifi[z]="bad"; S.hack={zone:z,net:f.n,p:0}; S.bars.privacy=Math.max(0,S.bars.privacy-5); save(); hudKey=""; sfx("bad");
+    const lost=addCoins(-30); S.wifi[z]="bad"; S.onWifi[z]=true; S.hack={zone:z,net:f.n,p:0}; S.bars.privacy=Math.max(0,S.bars.privacy-5); save(); hudKey=""; sfx("bad");
     $("sheet").querySelector(".sh-body").innerHTML=`<div class="endcard danger"><b>⚠ ${L("เชื่อมต่อ Wi-Fi ปลอมแล้ว!","You joined a fake Wi-Fi!")}</b><p style="margin:.3em 0 0">${L(`${esc(f.n)} กำลังดักข้อมูลและแอบติดตั้งมัลแวร์ จอจะเริ่มกระตุก ยิ่งปล่อยนานยิ่งหนัก จนเครื่องใช้ไม่ได้`,`${esc(f.n)} is intercepting your data and sneaking in malware. Your screen will start glitching, worse the longer you leave it, until the phone dies.`)}</p>${lost?coinTag(lost):""} <span class="delta down">${barName("privacy")} −5</span></div>
       <div class="box"><h4>${L("รีบทำอย่างใดอย่างหนึ่ง","Act fast, either")}</h4><ul class="list"><li>${L("เปิดมือถือ 📱 แล้วกด “ตัดการเชื่อมต่อ” ทันที","Open your phone 📱 and tap “Disconnect” right away")}</li><li>${L("หาคนที่ปล่อย Wi-Fi ปลอม (คลื่นสีแดงจางๆ) แล้วแจ้งเคาน์เตอร์","Find whoever runs the fake Wi-Fi (faint red ripples) and report them")}</li></ul></div>
       <div class="btns"><button class="btn y" data-close><span>${L("เข้าใจแล้ว","Got it")}</span></button></div>`;

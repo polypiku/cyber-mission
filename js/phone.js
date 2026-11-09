@@ -96,7 +96,7 @@ function phoneScreen(title, inner){
 }
 function phoneApp(k){
   sfx("blip");
-  if(k==="chat") return openChats();
+  if(k==="chat") return needNet(()=>openChats());
   if(k==="wifi"){ if(WIFI[S.zone]) return openWifi();
     return phoneScreen("Wi-Fi", `<div class="clist"><div class="crow wrow"><span class="wfi">📱</span><span class="cb"><b>${L("เน็ตมือถือ 5G · เชื่อมต่ออยู่","Mobile 5G · connected")}</b><small>${L("แถวนี้ไม่มี Wi-Fi ของร้าน ใช้เน็ตตัวเองปลอดภัยกว่า Wi-Fi สาธารณะ","No shop Wi-Fi around here. Your own data is safer than public Wi-Fi")}</small></span><span class="sig">▂▄▆█</span></div></div>`); }
   if(k==="scan") return openScan();

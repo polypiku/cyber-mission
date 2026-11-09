@@ -17,7 +17,7 @@ topup:{id:"topup",level:"ยาก",start:"s1",lateStart:"L1",title:"เพช�
   s2a:{title:"เงินของยาย",
    body:`<p>ภูมิก้มหน้า \"ผมรู้รหัสแอปธนาคารของยาย มันเป็นวันเกิดผมเอง ซื้อไปสี่รอบแล้ว\"</p>${notif(["โอนออก 300 · 300 · 300 · 1,500 บาท (สัปดาห์นี้)"])}<p>\"ห้ามบอกยายนะพี่ ยายต้องโกรธแน่\"</p>`,
    clues:["ยิ่งปิดเป็นความลับ ยิ่งช่วยไม่ได้","เด็กกลัวโดนดุ ต้องชวนเล่าแบบไม่ตำหนิ","คนขายนอกระบบไม่มีวันคืนเงิน"],
-   choices:[{t:"บอกภูมิว่าเราจะไปเล่าให้ยายฟังด้วยกัน และจะช่วยพูดให้",to:"E1",v:"good"},{t:"สัญญาว่าจะเก็บเป็นความลับ ถ้าภูมิสัญญาว่าจะไม่ทำอีก",to:"E2",v:"risky"},{t:"ช่วยภูมิคิดวิธีเก็บเงินค่าขนมคืนยายเอง ยายจะได้ไม่เสียใจ",to:"E3",v:"bad"}]},
+   choices:[{t:"บอกภูมิว่าเราจะไปเล่าให้ยายฟังด้วยกัน และจะช่วยพูดให้",to:"E1",v:"good"},{t:"สัญญาว่าจะเก็บเป็นความลับ ถ้าภูมิสัญญาว่าจะไม่ทำอีก",to:"E2",v:"risky"},{t:"ช่วยภูมิคิดวิธีเก็บเงินค่าขนมคืนยายเอง ยายจะได้ไม่เสียใจ",to:"E3",v:"bad"},{t:"ตบหัวภูมิสั่งสอนซะ โทษฐานแอบเอาเงินยายไปใช้",to:"E5",v:"bad",act:"slap"}]},
   s2b:{title:"แพ็ก VIP ไม่มา",
    body:`${gchat("แชตส่วนตัว · RazerKing99",[["RazerKing99","ระบบติดนิดหน่อย ต้องโอนค่าปลดล็อกอีก 500"],["RazerKing99","ถ้าไม่โอน พี่จะรีพอร์ตไอดีน้องว่าซื้อขายนอกระบบ โดนแบนแน่"]])}<p>ภูมิหน้าซีด \"ไอดีนี้ผมเล่นมาสามปีนะ\"</p>`,
    clues:["ขู่ว่าจะโดนแบน เพื่อให้กลัวจนโอนเพิ่ม","ค่าปลดล็อกจะมีไม่จบ","ต้องให้ผู้ใหญ่รู้ตอนนี้เลย"],
@@ -31,7 +31,8 @@ topup:{id:"topup",level:"ยาก",start:"s1",lateStart:"L1",title:"เพช�
   E1:{type:"safe",label:"ปลอดภัย",title:"ยายได้ยินจากปากภูมิเอง",story:"ยายตกใจแต่ไม่ดุ เพราะภูมิเล่าเอง ยายเปลี่ยนรหัสแอปเป็นเลขที่ไม่เกี่ยวกับวันเกิดใคร และพาภูมิไปรายงานบัญชีคนขาย",lessons:["ของในเกมให้ซื้อผ่านร้านในเกมเท่านั้น","ครั้งแรกที่ได้ของจริง คือเหยื่อล่อ","ช่วยเด็กเล่าให้ผู้ใหญ่ฟัง ดีกว่าช่วยเก็บความลับ"]},
   E2:{type:"warn",label:"เฉียดฉิว",title:"หยุดได้ แต่เงินบางส่วนหายแล้ว",story:"ไม่มีการโอนเพิ่ม แต่เงินของยายที่โอนไปแล้วตามคืนไม่ได้ และถ้าภูมิยังเก็บเป็นความลับ ช่องโหว่ในแอปของยายก็ยังอยู่",lessons:["หยุดเร็วช่วยจำกัดความเสียหาย","ความลับทำให้ผู้ใหญ่แก้ปัญหาต้นเหตุไม่ได้","รายงานผู้เล่นและเก็บหลักฐานไว้"]},
   E3:{type:"danger",label:"เสียหาย",title:"ความลับพาไปไกลกว่าเดิม",story:"ภูมิพยายามหาเงินมาคืนยายด้วยการขายไอดีเกมให้คนแปลกหน้า ถูกโกงซ้ำ และรู้สึกผิดจนไม่กล้าบอกใครอีกเลย",lessons:["อย่าให้เด็กแบกปัญหาคนเดียว","ลบแชตคือลบหลักฐาน","ผู้ใหญ่ที่ไว้ใจได้คือทางออก"]},
-  E4:{type:"danger",label:"เสียหาย",title:"ปลดล็อกไม่มีวันจบ",story:"500 แล้วก็ 1,000 แล้วก็ 2,000 จนเงินในบัญชียายเหลือไม่ถึงร้อย ยายรู้ตอนจะจ่ายค่าไฟ",lessons:["คำขู่แบน คือเครื่องมือให้โอนเพิ่ม","ไม่มีค่าปลดล็อกในระบบเกมจริง","บอกผู้ใหญ่ทันทีที่ถูกขู่"]}
+  E4:{type:"danger",label:"เสียหาย",title:"ปลดล็อกไม่มีวันจบ",story:"500 แล้วก็ 1,000 แล้วก็ 2,000 จนเงินในบัญชียายเหลือไม่ถึงร้อย ยายรู้ตอนจะจ่ายค่าไฟ",lessons:["คำขู่แบน คือเครื่องมือให้โอนเพิ่ม","ไม่มีค่าปลดล็อกในระบบเกมจริง","บอกผู้ใหญ่ทันทีที่ถูกขู่"]},
+  E5:{type:"danger",label:"เสียหาย",cost:30,title:"ตบหัวแล้วยังไงต่อ",story:"ภูมิร้องไห้วิ่งออกจากร้าน มือถือยายหล่นจอแตก คุณต้องจ่ายค่าซ่อม 300 บาท ภูมิไม่ยอมเล่าอะไรให้ใครฟังอีก ส่วนคนขายเพชรก็ยังทักมาหลอกต่อ",lessons:["ความรุนแรงทำให้เด็กกลัวและปิดบังมากขึ้น เด็กที่โดนหลอกต้องการผู้ใหญ่ที่รับฟัง ไม่ใช่คนลงโทษ ชวนเล่าความจริง แล้วช่วยกันแจ้งยายและเปลี่ยนรหัสแอปธนาคาร"]},
  }},
 
 trade:{id:"trade",level:"ยาก",start:"s1",title:"แลกสกินหายาก",
@@ -119,7 +120,7 @@ topup:{id:"topup",level:"ยาก",start:"s1",lateStart:"L1",title:"Cheap diamo
   s2a:{title:"Grandma's money",
    body:`<p>Phum looks down. \"I know Grandma's banking PIN. It's my birthday. I've bought four times.\"</p>${notif(["Sent 300 · 300 · 300 · 1,500 baht (this week)"])}<p>\"Don't tell Grandma, she'll be so angry.\"</p>`,
    clues:["The more secret it stays, the less anyone can help","Kids fear punishment. Invite them to talk without blame","Off-platform sellers never refund"],
-   choices:[{t:"Tell Phum you'll go and tell Grandma together, and you'll help explain",to:"E1",v:"good"},{t:"Promise to keep it secret if Phum promises never to do it again",to:"E2",v:"risky"},{t:"Help Phum plan to repay Grandma from his pocket money so she isn't upset",to:"E3",v:"bad"}]},
+   choices:[{t:"Tell Phum you'll go and tell Grandma together, and you'll help explain",to:"E1",v:"good"},{t:"Promise to keep it secret if Phum promises never to do it again",to:"E2",v:"risky"},{t:"Help Phum plan to repay Grandma from his pocket money so she isn't upset",to:"E3",v:"bad"},{t:"Smack Phum on the head to teach him a lesson for using Grandma's money",to:"E5",v:"bad",act:"slap"}]},
   s2b:{title:"No VIP pack",
    body:`${gchat("Private chat · RazerKing99",[["RazerKing99","System's stuck, pay 500 more to unlock"],["RazerKing99","Or I'll report your ID for off-platform trading. You'll be banned"]])}<p>Phum goes pale. \"I've played this account for three years.\"</p>`,
    clues:["Ban threats are meant to scare you into paying","The unlock fees never end","An adult needs to know now"],
@@ -133,7 +134,8 @@ topup:{id:"topup",level:"ยาก",start:"s1",lateStart:"L1",title:"Cheap diamo
   E1:{type:"safe",label:"Safe",title:"Grandma heard it from Phum",story:"Grandma was shocked but didn't scold, because Phum told her himself. She changed her PIN to something nobody's birthday, and they reported the seller together.",lessons:["Buy in-game items only in the game's own store","A first deal that delivers is bait","Help kids tell an adult instead of keeping secrets"]},
   E2:{type:"warn",label:"Close call",title:"Stopped, but some money's gone",story:"No more payments, but what was sent can't be recovered, and if Phum keeps it secret, Grandma's weak PIN is still there.",lessons:["Stopping early limits damage","Secrets stop adults fixing the real problem","Report the player and keep evidence"]},
   E3:{type:"danger",label:"Harmed",title:"The secret went further",story:"Phum tried to repay Grandma by selling his game account to a stranger, got scammed again, and felt too guilty to tell anyone.",lessons:["Never leave a kid carrying the problem alone","Deleting chats deletes evidence","A trusted adult is the way out"]},
-  E4:{type:"danger",label:"Harmed",title:"The unlock never ends",story:"500, then 1,000, then 2,000, until Grandma's account had under 100 baht. She found out when paying the electricity bill.",lessons:["Ban threats are a tool to get more money","Real games don't charge unlock fees","Tell an adult as soon as you're threatened"]}
+  E4:{type:"danger",label:"Harmed",title:"The unlock never ends",story:"500, then 1,000, then 2,000, until Grandma's account had under 100 baht. She found out when paying the electricity bill.",lessons:["Ban threats are a tool to get more money","Real games don't charge unlock fees","Tell an adult as soon as you're threatened"]},
+  E5:{type:"danger",label:"Harmed",cost:30,title:"You smacked him. Now what?",story:"Phum runs out of the shop in tears and drops Grandma's phone, cracking the screen. You pay ฿300 for the repair. Phum won't tell anyone anything now, and the diamond seller keeps messaging him.",lessons:["Violence makes children scared and more secretive. A kid who was tricked needs an adult who listens, not one who punishes. Get the truth out gently, then tell Grandma together and change the banking PIN."]},
  }},
 
 trade:{id:"trade",level:"ยาก",start:"s1",title:"Trading a rare skin",

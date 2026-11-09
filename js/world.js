@@ -115,7 +115,7 @@ function askStairs(){
   $("sheet").querySelector("[data-floor]").onclick=()=>{ closeSheet(); switchFloor(); };
 }
 function switchCells(into){
-  escort=null; S.floor=into?2:1; save(); setWorld(); buildCast(); drawStatic();
+  escort=null; S.floor=into?2:1; markExitSeen(into?"cells":"station"); save(); setWorld(); buildCast(); drawStatic();
   if(into){ player.x=70; player.y=(CB_TOP+CB_BOT)/2; player.dir="right"; } else { player.x=RW-80; player.y=(PDOOR.y0+PDOOR.y1)/2; player.dir="left"; }
   keys.clear(); target=null; targetNpc=null; endJoy&&endJoy(); sfx("blip"); hudKey=""; hud();
   const jl=jailList().length;

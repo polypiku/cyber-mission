@@ -226,7 +226,7 @@ function talkTo(n){
   const r=S.best[cid];
   if(!r){ say(n.id, lines(sc.intro), {choices:[{...CH.help[0],fn:()=>openCase(cid,n)},CH.help[1]]}); return; }
   const more = r!=="safe" ? [t(`(เคสนี้ได้ ${starStr(r)} ลองใหม่ให้ได้ ★★★ เพื่อเก็บคะแนนเต็ม)`,`(This case is at ${starStr(r)}. Replay for ★★★ to get full points.)`)] : [];
-  const fixCh = r!=="danger" && needsFix(cid) ? [{label:{th:"📱 ลงมือแก้ในมือถือ (รับเบาะแส)",en:"📱 Fix it on the phone (get the clue)"},fn:()=>openFix(cid,()=>closeSheet())}] : [];
+  const fixCh = r!=="danger" && needsFix(cid) ? [{label:{th:"📱 ลงมือแก้ในมือถือ (รับเบาะแส)",en:"📱 Fix it on the phone (get the clue)"},fn:()=>needNet(()=>openFix(cid,()=>closeSheet()))}] : [];
   say(n.id, lines([sc.after[r],...more]), {choices:[...fixCh,{...CH.again[0],fn:()=>openCase(cid,n)},CH.again[1]]});
 }
 function busy(){ return !!CIN || !!D || !$("veil").hidden || !$("peek").hidden || !!coach || arriving; }
