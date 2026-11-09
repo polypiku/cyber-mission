@@ -35,7 +35,7 @@ async def check(browser, name, viewport):
     await page.click("[data-go=new]")
     await page.wait_for_timeout(1000)
     await page.evaluate(SKIP_INTRO)
-    for zone in [1, 2, 3, 4, 6, 7, 9, 10, 11, 12, 13]:
+    for zone in [1, 2, 3, 4, 6, 7, 9, 10, 11, 12, 13, 14]:
         await page.evaluate(f"goZone({zone}); closeDlg(); urgent=null; rush=null")
         await page.wait_for_timeout(300)
     await page.evaluate("goOutside(1); closeDlg(); openPhone()")

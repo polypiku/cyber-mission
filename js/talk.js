@@ -133,7 +133,7 @@ function briefing(){
   const p=npcs.find(n=>n.id==="police"); if(p) face(player,p);
   say("police", lines([t(`ยินดีที่ได้รู้จักนะ ${nm(S.char)} นี่โอ๊ต อาสาสมัครไซเบอร์ เขาจะคอยช่วยน้องตลอดทาง`,`Nice to meet you, ${nm(S.char)}. This is Oat, a cyber volunteer. He'll back you up the whole way.`),
     t("ทุกครั้งที่ช่วยคนได้ จะได้เบาะแสหนึ่งชิ้น เปิดดูได้ที่บอร์ดหลักฐาน","Each person you help gives you a clue. You can see them on the evidence board."),
-    t("รับแว่นนักสืบนี่ไปด้วย กดปุ่ม 🔍 (หรือ Q) เพื่อส่องหาของที่ซ่อนอยู่ในห้อง เจอแล้วเอามาส่งพี่ที่สถานีตำรวจ","Take this detective lens. Press 🔍 (or Q) to sweep for hidden things in a room, and bring what you find to me at the police station."),
+    t("ในห้องต่างๆ อาจมีของแปลกๆ ซ่อนอยู่ ตรงไหนมีเครื่องหมาย ? ให้เดินไปดู ถ้าติดตรงไหน กดปุ่ม 💡 ซื้อคำใบ้ได้","Odd things may be hidden in rooms: walk to any ? mark. If you get stuck, press 💡 to buy a hint."),
     t("เริ่มที่ห้องสมุดเมืองก่อนเลย ออกประตูด้านล่างแล้วเดินลงไปที่สี่แยก ห้องสมุดอยู่ทางซ้าย","Start with the City Library. Go out the bottom door, walk down to the crossroads, and the library is on the left.")]),
     {onEnd:()=>{ S.briefed=true; S.items.lens=Math.max(1,S.items.lens||0); save(); hudKey=""; buildCast(); startTour(); }});
 }

@@ -26,7 +26,7 @@ Object.assign(EVID, {
 });
 const CLUE_SRC = {
   case:{th:"ช่วยคนในเคส",en:"Helping people in cases"},
-  lens:{th:"หาด้วยแว่นนักสืบ",en:"Found with the lens"},
+  lens:{th:"ของแปลกที่ซ่อนอยู่ในห้อง",en:"Odd things hidden in rooms"},
   people:{th:"คนที่เผลอพูด",en:"People who let it slip"},
   ghost:{th:"บ้านผีสิง",en:"Haunted house"},
   hq:{th:"แฝงตัวในตึก",en:"Undercover in the building"}
@@ -41,7 +41,7 @@ function clueWhere(k){
   if(src==="people") return L(k==="npc_it"?"มีคนแปลกหน้าในร้านเน็ต":"มีคนแปลกหน้าในธนาคาร",k==="npc_it"?"A stranger at the net café":"A stranger at the bank");
   if(src==="hq") return L("ข้างในตึกรังแก๊ง","Inside the gang's building");
   const sp=SPOTS.find(s=>s.id===k); const zn=sp.z===8?L("ตึกรังแก๊ง","the gang's building"):ZONES[sp.z].name[S.lang];
-  return L(`ซ่อนอยู่ที่${zn} · แว่นระดับ ${sp.lv}`,`Hidden at ${zn} · lens level ${sp.lv}`);
+  return L(`ซ่อนอยู่ที่${zn} · มองหาเครื่องหมาย ?`,`Hidden at ${zn} · look for the ? mark`);
 }                      /* clues handed in before Phop sends you undercover */
 
 /* ---------- lens spots ---------- */
@@ -63,7 +63,7 @@ function spotHere(s){
   return true;
 }
 const spotsHere = ()=>SPOTS.filter(spotHere);
-const spotShown = (s)=>s.lv===0 || (S.lensSeen&&S.lensSeen[s.id]);
+const spotShown = (s)=>true;
 function nearSpot(){ if(!S.char||busy()) return null; return spotsHere().find(s=>spotShown(s) && Math.hypot(player.x-s.x,player.y-s.y)<60) || null; }
 
 let lensFx=null;
@@ -146,7 +146,7 @@ function nextHint(){
   if(S.uc && !(S.ev.hq_script&&S.ev.hq_dorm)) return t("ขึ้นไปชั้น 2 ถ่ายรูปไวท์บอร์ด แล้วไปคุยกับคนที่ชั้น 3","Go up, photograph the whiteboard on floor 2, and talk to people on floor 3.");
   if(!ghostOpen()) return t(`ได้ยินว่าตรอกมืดข้างร้านกาแฟมีเบาะแส แต่ต้องมีคะแนน ${GHOST_MIN} ★ ก่อนนะ`,`Word is the dark alley by the café hides clues, but you need ${GHOST_MIN} ★ first.`);
   if(["merit","inherit","romance","fortune"].some(k=>!S.ev[k])) return t("ตรอกมืดข้างร้านกาแฟยังมีเบาะแสเหลืออยู่","The dark alley by the café still holds clues.");
-  if(SPOTS.some(s=>s.lv>0 && !S.ev[s.id])) return t("ลองส่องแว่นนักสืบตามมุมห้องต่างๆ ยังมีของซ่อนอยู่ บางชิ้นต้องอัปเกรดแว่นก่อน","Sweep the lens around each room. Some things need an upgraded lens.");
+  if(SPOTS.some(s=>s.lv>0 && !S.ev[s.id])) return t("ยังมีของแปลกๆ ซ่อนอยู่ตามห้องต่างๆ มองหาเครื่องหมาย ? สีเหลือง","There are still odd things hidden in rooms. Look for the yellow ? marks.");
   if(!S.ev.npc_it || !S.ev.npc_admin) return t("มีคนแปลกหน้าในร้านเน็ตกับธนาคาร ลองไปคุยดู","There are strangers at the net café and the bank. Talk to them.");
   return t("เคสไหนยังไม่ได้เบาะแส ลองเล่นใหม่ให้ปลอดภัย","Replay any case that didn't give a clue, and keep everyone safe.");
 }

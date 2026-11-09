@@ -23,7 +23,7 @@ ROOM_PLANTS.forEach(p=>ROOM_SOLIDS.push({x:p.x-20,y:p.y-14,w:40,h:28}));
 const POLICE_SOLIDS=ROOM_SOLIDS.filter(r=>!(r.x===RW-44&&r.y===0)).concat([{x:RW-44,y:0,w:44,h:PDOOR.y0},{x:RW-44,y:PDOOR.y1,w:44,h:RH-PDOOR.y1}]);
 
 /* ---------- outside: the street that links the zones ---------- */
-const OW=72*T, OH=23*T;
+const OW=40*T, OH=23*T;
 const BUILDINGS=[
   {zone:1, x:96,  w:360, door:276, name:{th:"Bean House",en:"Bean House"}, sub:{th:"ร้านกาแฟ",en:"Café"}, wall:"#F3E3C8", roof:"#C2552E", sign:"#2E3B33", signFg:"#FFC414"},
   {zone:2, x:540, w:310, door:695, name:{th:"ห้องสมุดเมือง",en:"CITY LIBRARY"}, sub:{th:"2 ชั้น · Wi-Fi ฟรี",en:"2 floors · Free Wi-Fi"}, wall:"#EFE6D6", roof:"#5B3A24", sign:"#3A2516", signFg:"#F2C14E"},
@@ -32,7 +32,11 @@ const BUILDINGS=[
   {zone:6, alley:true, soi:true, road:true, x:850, w:40, door:870, icon:"🎓", col:"#F2C14E", name:{th:"ถนนไป ม.หัวเฉียวฯ",en:"Road to the university"}, sub:{th:"",en:""}},
   {zone:6, alley:true, soi:true, road:true, hide:true, x:1000, w:40, door:1020, icon:"🎓", col:"#F2C14E", name:{th:"ถนนไป ม.หัวเฉียวฯ",en:"Road to the university"}, sub:{th:"",en:""}},
   {zone:7, alley:true, soi:true, x:1350, w:72, door:1386, icon:"🚓", col:"#9CC3F0", name:{th:"ซอย 2 · สถานีตำรวจ",en:"Soi 2 · Police station"}, sub:{th:"",en:""}},
-  {zone:4, x:1428, w:360, door:1608, name:{th:"NET ZONE",en:"NET ZONE"}, sub:{th:"ร้านเน็ต · เกม",en:"Internet café · games"}, wall:"#2E3350", roof:"#7A5AA6", sign:"#13162A", signFg:"#5EE6D0"},
+  {zone:14, alley:true, soi:true, x:1808, w:80, door:1848, icon:"🛍️", col:"#FFC9A0", name:{th:"ซอยร้านค้า",en:"Shop lane"}, sub:{th:"",en:""}},
+  {zone:4, x:1428, w:360, door:1608, name:{th:"NET ZONE",en:"NET ZONE"}, sub:{th:"ร้านเน็ต · เกม",en:"Internet café · games"}, wall:"#2E3350", roof:"#7A5AA6", sign:"#13162A", signFg:"#5EE6D0"}
+];
+/* the five places up the shop lane (zone 14) */
+const SOI_BLDG=[
   {zone:9, x:1840, w:300, door:1990, name:{th:"ศูนย์อาหาร",en:"FOOD COURT"}, sub:{th:"อร่อย ราคาเบา",en:"Cheap and tasty"}, wall:"#FBEFD9", roof:"#D9822B", sign:"#7A3B12", signFg:"#FFE08A"},
   {zone:11, x:2160, w:300, door:2310, name:{th:"ร้านสะดวกซื้อ",en:"MINI MART"}, sub:{th:"เปิด 24 ชั่วโมง",en:"Open 24 hours"}, wall:"#F4F7F2", roof:"#2E8B57", sign:"#1F6E43", signFg:"#FFFFFF"},
   {zone:12, x:2480, w:300, door:2630, name:{th:"หมอโฟน ไอที",en:"PHONE DR. IT"}, sub:{th:"มือถือ · ซ่อม · อัปเกรด",en:"Phones · repair · upgrades"}, wall:"#E8F1F8", roof:"#2F6DB5", sign:"#173D66", signFg:"#7FD3F7"},
@@ -51,11 +55,11 @@ const OUT_SOLIDS=[{x:0,y:0,w:OW,h:250},{x:0,y:0,w:28,h:OH},{x:OW-28,y:0,w:28,h:O
   ...[0,...XINGS.map(x=>x.x1)].map((a,i)=>({x:a,y:612,w:(i<XINGS.length?XINGS[i].x0:OW)-a,h:154})),
   {x:890,y:250,w:110,h:270},{x:890,y:600,w:110,h:12},{x:890,y:766,w:110,h:12},{x:0,y:858,w:OW,h:OH-858},
   {x:672,y:420,w:96,h:56}];
-const OUT_TREES=[{x:80,y:360},{x:80,y:560},{x:500,y:560},{x:1110,y:560},{x:1290,y:360},{x:1360,y:560},{x:1800,y:560},{x:2150,y:380},{x:2470,y:560},{x:2790,y:380},{x:3110,y:560},{x:3400,y:380}];
-const OUT_BENCHES=[{x:300,y:470},{x:1140,y:470},{x:2310,y:500},{x:2950,y:500}];
-const OUT_LAMPS=[{x:470,y:330},{x:1070,y:330},{x:120,y:600},{x:1240,y:600},{x:2000,y:600},{x:2640,y:600},{x:3260,y:600}];
+const OUT_TREES=[{x:80,y:360},{x:80,y:560},{x:500,y:560},{x:1110,y:560},{x:1290,y:360},{x:1360,y:560},{x:1760,y:400}];
+const OUT_BENCHES=[{x:300,y:470},{x:1140,y:470},{x:1560,y:470}];
+const OUT_LAMPS=[{x:470,y:330},{x:1070,y:330},{x:120,y:600},{x:1240,y:600},{x:1880,y:600}];
 /* bus stops: ride to any open place for a small fare */
-const BUS_STOPS=[{x:330,y:584},{x:1700,y:584},{x:2800,y:584}];
+const BUS_STOPS=[{x:330,y:584},{x:1700,y:584}];
 OUT_TREES.forEach(p=>OUT_SOLIDS.push({x:p.x-22,y:p.y-14,w:44,h:28}));
 OUT_BENCHES.forEach(b=>OUT_SOLIDS.push({x:b.x-40,y:b.y-12,w:80,h:22}));
 OUT_LAMPS.forEach(l=>OUT_SOLIDS.push({x:l.x-6,y:l.y-6,w:12,h:12}));
@@ -244,6 +248,7 @@ function setWorld(){
   else if(S.zone===2){ const L_=LIB[libFloor()]; W=LW; H=LH; SOLIDS=L_.solids; TABLES=L_.props; CHAIRS=L_.chairs; PLANTS=L_.plants; }
   else if(S.zone===8){ W=RW; H=RH; SOLIDS=offSolids(); TABLES=[]; CHAIRS=[]; PLANTS=[]; }
   else if(S.zone===7){ if(cbFloor()){ W=CB_W; H=CB_H; SOLIDS=CB_SOLIDS; TABLES=[]; CHAIRS=[]; PLANTS=[]; } else { W=RW; H=RH; SOLIDS=POLICE_SOLIDS; TABLES=ROOM_TABLES; CHAIRS=ROOM_CHAIRS; PLANTS=ROOM_PLANTS; } }
+  else if(S.zone===14){ W=SOI_W; H=SOI_H; SOLIDS=SOI_SOLIDS; TABLES=[]; CHAIRS=[]; PLANTS=[]; }
   else if(ROOMS2[S.zone]){ W=RW; H=RH; SOLIDS=ROOMS2[S.zone].solids; TABLES=[]; CHAIRS=[]; PLANTS=[]; }
   else { W=RW; H=RH; SOLIDS=ROOM_SOLIDS; TABLES=ROOM_TABLES; CHAIRS=ROOM_CHAIRS; PLANTS=ROOM_PLANTS; }
 }
@@ -265,6 +270,7 @@ function buildCast0(){
     player.id=S.char; return;
   }
   if(S.zone===2){ npcs=libCast(mentor,friend,tips); player.id=S.char; return; }
+  if(S.zone===14){ npcs=[]; player.id=S.char; return; }
   if(ROOMS2[S.zone]){ npcs=cast2(mentor,friend0).map(n=>({...n, home:n.dir})); player.id=S.char; return; }
   if(S.zone===8){ npcs=officeCast().map(n=>({...n, home:n.dir})); player.id=S.char; return; }
   if(S.zone===6){

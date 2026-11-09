@@ -1,7 +1,7 @@
 /* The hands-on last step of every case: you fix things yourself on the phone to earn the clue.
    kind: pw (inbox + new password) · dial (call the right number)
          settings (flip toggles) · order (put steps in order) · pick (choose one) · multi (choose all that apply) · pin (new app PIN) */
-const FIX_TIER = {2:1, 1:2, 4:2, 7:2, 3:3, 6:3, 5:3};
+const FIX_TIER = {2:1, 1:2, 4:2, 7:2, 3:3, 6:3, 5:3, 9:3, 10:3, 11:3, 12:3, 13:3};
 const FIXES = {
   /* ---- library (tier 1) ---- */
   charge:{kind:"settings", app:["ตั้งค่า › USB","Settings › USB"], goal:["ยกเลิกการเชื่อถือตู้ชาร์จ แล้วตั้ง USB เป็นชาร์จอย่างเดียว","Stop trusting the charging kiosk and set USB to charge only"],
@@ -62,4 +62,25 @@ const FIXES = {
     opts:[{t:["ไม่เคยยอมเปิดกล้องวิดีโอคอล","Never agrees to a video call"],ok:true},{t:["ขอยืมเงินค่าตั๋วเครื่องบินมาหา","Asks to borrow money for a plane ticket"],ok:true},{t:["รูปโปรไฟล์ไปเจอในเว็บนายแบบ","Profile photo found on a model's site"],ok:true},{t:["ชอบฟังเพลงแนวเดียวกัน","Likes the same music"]},{t:["ส่งรูปดอกไม้มาให้","Sends pictures of flowers"]}]},
   fortune:{kind:"settings", app:["ตั้งค่า › เพจหมอดู","Settings › Fortune page"], goal:["ตัดขาดจากเพจหมอดูที่เรียกเงินค่าพิธี","Cut off the fortune page demanding ritual fees"],
     items:[{t:["ติดตามเพจ “หมอดูแม่นทันใจ”","Following “Instant Fortune” page"],on:true,want:false},{t:["รับข้อความจากเพจนี้","Receive messages from this page"],on:true,want:false},{t:["รายงานเพจว่าหลอกลวง","Report the page as a scam"],on:false,want:true},{t:["บันทึกบัตรไว้จ่ายในเพจ","Card saved for payments on the page"],on:true,want:false}]},
+  /* ---- new places (tier 3) ---- */
+  pig:{kind:"multi", goal:["ชี้ให้พี่ปุ๊กเห็นว่านี่คือ “หมูตุ๋น”","Show Pook this is a romance-investment scam"], q:["เลือกสัญญาณอันตรายทั้งหมด","Pick every warning sign"],
+    opts:[{t:["รู้จักในแอปหาคู่ แล้วชวนลงทุน","Met on a dating app, then talks investing"],ok:true},{t:["โหลดแอปเทรดจากลิงก์ ไม่ใช่สโตร์","Trading app installed from a link, not a store"],ok:true},{t:["ต้องจ่ายภาษีก่อนถอนเงิน","Must pay tax before withdrawing"],ok:true},{t:["ไม่เคยเจอตัวจริงเลย","Never met in person"],ok:true},{t:["แอปมีกราฟราคาขึ้นลง","The app has price charts"]},{t:["คุยกันทุกวัน","They chat every day"]}]},
+  bec:{kind:"pick", goal:["หาอีเมลของคู่ค้าตัวจริง","Find the supplier's real email"], q:["อีเมลไหนเป็นของบริษัทสยามสตีลจริง","Which address is really Siam Steel's?"],
+    opts:[{t:"finance@siamsteel-co.com"},{t:"finance@siamsteel.co.th",ok:true},{t:"finance@siamstee1.co.th"},{t:"siamsteel.finance@gmail.com"}]},
+  gold:{kind:"pick", goal:["ช่วยป้าจันทร์เลือกที่ซื้อทองที่ปลอดภัย","Help Auntie Jan pick a safe place to buy gold"], q:["ร้านไหนน่าไว้ใจที่สุด","Which seller is safest?"],
+    opts:[{t:["ถูกกว่าตลาดบาทละ 2,000 · โอนเข้าบัญชีผู้จัดการ","2,000 below market · pay the manager's account"]},{t:["ราคาตามสมาคมค้าทองคำ · บัญชีชื่อบริษัท · มีหน้าร้านให้ไปรับ","Association price · company account · pick up at the shop"],ok:true},{t:["ไลฟ์ทุกวัน คนติดตาม 312K · โอนเต็มก่อนส่ง","Live daily, 312K followers · full payment first"]},{t:["ส่งฟรีทั่วไทย · ลดเพิ่มถ้าโอนวันนี้","Free delivery · extra discount if paid today"]}]},
+  share:{kind:"multi", goal:["ชี้ให้เจ๊น้อยเห็นว่าวงนี้คือแชร์ลูกโซ่","Show Jae Noi this circle is a Ponzi"], q:["เลือกสัญญาณแชร์ลูกโซ่ทั้งหมด","Pick every Ponzi sign"],
+    opts:[{t:["ดอก 30–50% ต่องวด","30–50% interest per round"],ok:true},{t:["ต้องหาสมาชิกใหม่ถึงได้เงิน","Paid only after recruiting"],ok:true},{t:["ไม่มีใครเคยเจอแม่ท้าว","Nobody has met the host"],ok:true},{t:["บัญชีรับเงินเปลี่ยนไปเรื่อยๆ","The receiving accounts keep changing"],ok:true},{t:["สมาชิกเป็นแม่ค้าในตลาด","Members are market sellers"]},{t:["คุยกันในกลุ่มไลน์","They chat in a LINE group"]}]},
+  atm:{kind:"order", goal:["ช่วยลุงในชั่วโมงแรก ให้ถูกลำดับ","Help Uncle in the first hour, in order"],
+    steps:[["วางสายคนร้าย","Hang up on the scammer"],["โทรสายด่วนธนาคารให้ระงับบัญชีลุง","Call the bank hotline to lock his account"],["แจ้ง 1441 ให้อายัดบัญชีปลายทาง","Call 1441 to freeze the receiving accounts"],["แจ้งความออนไลน์พร้อมสลิปทั้งหมด","File an online police report with all slips"]]},
+  wrong:{kind:"pick", goal:["จัดการเงินที่โอนผิดเข้ามาให้ถูกวิธี","Handle the wrong transfer the right way"], q:["ควรทำอย่างไร","What should Prang do?"],
+    opts:[{t:["โอนคืนเข้าบัญชีที่คนโทรมาบอก","Send it to the account the caller named"]},{t:["โทรสายด่วนธนาคาร ให้ธนาคารตรวจและคืนให้","Call her bank and let the bank check and return it"],ok:true},{t:["ถอนเป็นเงินสดไปคืนเอง","Withdraw cash and hand it back"]},{t:["โอนคืนต้นทางเองทันที","Send it back to the sender herself"]}]},
+  simswap:{kind:"settings", app:["ตั้งค่า › ความปลอดภัยบัญชี","Settings › Account security"], goal:["กันไม่ให้โดนสลับซิมแล้วขโมย OTP ได้อีก","Make a SIM swap useless next time"],
+    items:[{t:["รับรหัส OTP ทาง SMS อย่างเดียว","OTP by SMS only"],on:true,want:false},{t:["ยืนยันตัวตนผ่านแอป Authenticator","Verify with an authenticator app"],on:false,want:true},{t:["ตั้งรหัส PIN ล็อกซิม","SIM PIN lock"],on:false,want:true},{t:["แสดงเนื้อหา SMS บนหน้าจอล็อก","Show SMS content on the lock screen"],on:true,want:false}]},
+  apk:{kind:"order", goal:["กู้มือถือของลุงชิตให้ถูกลำดับ","Rescue Uncle Chit's phone in order"],
+    steps:[["ตัดอินเทอร์เน็ต (โหมดเครื่องบิน)","Cut the internet (airplane mode)"],["โทรธนาคารจากเครื่องอื่นให้ระงับบัญชี","Call the bank from another phone to lock the account"],["สำรองรูปแล้วล้างเครื่องคืนค่าโรงงาน","Back up photos and factory-reset"],["เปลี่ยนรหัสธนาคารและอีเมลจากเครื่องที่ปลอดภัย","Change bank and email passwords from a safe device"]]},
+  deepfake:{kind:"pick", goal:["ตั้งวิธียืนยันว่าเป็นลูกจริง","Set a way to confirm it's really her son"], q:["คำถามไหนยืนยันได้ดีที่สุด","Which question proves it best?"],
+    opts:[{t:["ลูกชื่ออะไร","What's your name?"]},{t:["ตอนนี้อยู่ที่ไหน","Where are you now?"]},{t:["คำลับที่ครอบครัวตั้งไว้ (ไม่เคยโพสต์ที่ไหน)","The family code word (never posted anywhere)"],ok:true},{t:["วันเกิดลูกวันไหน","When's your birthday?"]}]},
+  task:{kind:"multi", goal:["ชี้ให้แบมเห็นว่างานนี้หลอก","Show Bam the job is a scam"], q:["เลือกสัญญาณงานหลอกทั้งหมด","Pick every scam sign"],
+    opts:[{t:["ต้องเติมเงินก่อนรับงาน","Top up before you get the task"],ok:true},{t:["ให้เงินเล็กๆ ช่วงแรก","Small payouts at first"],ok:true},{t:["“ทำผิดลำดับ ต้องเติมเงินเพิ่ม”","“Out of order, top up more”"],ok:true},{t:["รับสมัครทาง Telegram ไม่มีชื่อบริษัท","Recruited on Telegram, no company name"],ok:true},{t:["ทำงานจากหอได้","You can work from the dorm"]},{t:["ได้เงินเป็นเงินโอน","Paid by bank transfer"]}]}
 };

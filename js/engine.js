@@ -14,14 +14,16 @@ function render(now){
   if(bg.width) ctx.drawImage(bg,0,0,W,H);
   drawAmbientBack(ctx,now);
   if(S.zone===0){ drawDoorBadges(ctx,now); drawOfficesLive(ctx,now); }
+  if(S.zone===14) drawSoiBadges(ctx,now);
   const near=nearest();
   if(near && !busy()){ ctx.beginPath(); ctx.ellipse(near.x,near.y,24,9,0,0,7); ctx.strokeStyle="#FF5A1F"; ctx.lineWidth=3; ctx.stroke(); }
   if(target && !busy()){ ctx.beginPath(); ctx.arc(target.x,target.y,6+(RM?0:Math.sin(now/120)),0,7); ctx.strokeStyle="rgba(20,20,20,.55)"; ctx.lineWidth=2; ctx.stroke(); }
-  const items = (S.zone===0||S.zone===2||S.zone===8||cbFloor()||ROOMS2[S.zone]) ? [] : [{y:186,d:g=>drawCounter(g)}];
+  const items = (S.zone===0||S.zone===2||S.zone===8||cbFloor()||ROOMS2[S.zone]||S.zone===14) ? [] : [{y:186,d:g=>drawCounter(g)}];
   if(cbFloor()){ items.push({y:CB_TOP+1,d:g=>drawCellBlockBars(g,true)}); items.push({y:9000,d:g=>drawCellBlockBars(g,false)}); }
   if(S.zone===0){ items.push({y:(CRUMBS?CRUMBS.y-12:0),d:g=>drawCrumbs(g)}); PIGEONS.forEach(p=>items.push({y:p.y,d:g=>drawPigeon(g,p,now)})); }
   if(vilOn()) items.push({y:9999,d:g=>drawVilFx(g,now)});
   if(S.zone===0) items.push({y:REPAIR.y+12,d:g=>drawRepair(g,now)});
+  if(S.zone===14) soiItems(items,now);
   if(S.zone===1){ items.push({y:CAT.y+1,d:g=>drawBowl(g,now)}); items.push({y:CAT.y,d:g=>drawCat(g,now)}); }
   if(S.zone===0){
     items.push({y:446,d:g=>drawFountain(g,now)});
@@ -51,7 +53,7 @@ function render(now){
 const keys=new Set();
 let joy={x:0,y:0,active:false,id:null}, target=null, targetNpc=null, stuckT=0, lastPos=null;
 /* use physical key positions so WASD/E work on a Thai keyboard layout too */
-const KMAP={KeyW:"w",KeyA:"a",KeyS:"s",KeyD:"d",KeyE:"e",KeyQ:"q",KeyM:"m",ArrowUp:"arrowup",ArrowDown:"arrowdown",ArrowLeft:"arrowleft",ArrowRight:"arrowright",Space:" ",Enter:"enter",NumpadEnter:"enter",Escape:"escape"};
+const KMAP={KeyW:"w",KeyA:"a",KeyS:"s",KeyD:"d",KeyE:"e",KeyQ:"q",KeyH:"h",KeyM:"m",ArrowUp:"arrowup",ArrowDown:"arrowdown",ArrowLeft:"arrowleft",ArrowRight:"arrowright",Space:" ",Enter:"enter",NumpadEnter:"enter",Escape:"escape"};
 const keyOf=(e)=>KMAP[e.code]||e.key.toLowerCase();
 window.addEventListener("keydown",(e)=>{
   if(e.ctrlKey||e.metaKey||e.altKey) return;
@@ -61,7 +63,7 @@ window.addEventListener("keydown",(e)=>{
     if(!$("dlg").hidden && (k==="e"||document.activeElement?.tagName!=="BUTTON")){ advance(); e.preventDefault(); return; }
     if(!busy()){ interact(); e.preventDefault(); }
   }
-  if(k==="q" && !busy()){ sweepLens(); e.preventDefault(); }
+  if((k==="q"||k==="h") && !busy()){ openHintMenu(); e.preventDefault(); }
   if(k==="m"){ if(bigMapOpen()) closeBigMap(); else if(!busy()) openBigMap(); e.preventDefault(); }
   if(k==="escape" && bigMapOpen()){ closeBigMap(); e.preventDefault(); return; }
   if(k==="escape"){ if(!$("veil").hidden && sheetMode!=="case" && sheetMode!=="start") closeSheet(); }
@@ -111,7 +113,7 @@ function tapWalk(e){
 }
 $("act").addEventListener("click",()=>{ if(!busy()) interact(); });
 $("bars").addEventListener("click",(e)=>{ if(D||busy()) return; if(e.target.closest(".coinrow,.netrow")) openMoney(); });
-$("lensBtn").addEventListener("click",()=>sweepLens());
+$("lensBtn").addEventListener("click",()=>openHintMenu());
 
 /* ---------- movement ---------- */
 /* which zebra crossing a point is on, and whether people may walk on it now */
@@ -163,13 +165,14 @@ function step(dt){
   if(S.zone===0){ tlT+=dt; stepCars(dt); stepVCars(dt); }
   if(!busy() && S.char){
     // leaving a shop through its door
-    if(S.zone>0 && (S.zone===2 ? inLibExit() : (player.y>598 && player.x>384 && player.x<480))) goOutside(S.zone);
+    if(S.zone>0 && (S.zone===14 ? soiExit() : S.zone===2 ? inLibExit() : (player.y>598 && player.x>384 && player.x<480))) goOutside(S.zone);
     else if(inLibStairs()) askStairs();
     else if(inLift()) askLift();
     else if(S.zone===7 && !cbFloor() && player.x>RW-60 && player.y>PDOOR.y0 && player.y<PDOOR.y1) switchCells(true);
     else if(cbFloor() && player.x<44) switchCells(false);
     // walking into a shop door on the street
     else if(S.zone===0 && nearHQ() && player.y>846) tryHQ();
+    else if(S.zone===14 && soiDoorHit()) goZone(soiDoorHit().zone);
     else if(S.zone===0 && player.y<268){ const b=BUILDINGS.find(b=>Math.abs(player.x-b.door)<30); if(b) tryEnter(b); }
   }
   // NPCs drift back to their resting direction
@@ -211,7 +214,7 @@ function hud(){
   $("boardDot").hidden=!S.evNew; $("boardDot").textContent=S.evNew||""; $("boardBtn").setAttribute("aria-label",L("บอร์ดหลักฐาน","Evidence board"));
   const pcount=S.inbox.length+(pending?1:0);
   $("phoneDot").hidden=!pcount && !S.phoneBroken; $("phoneDot").textContent=S.phoneBroken?"✕":pcount; $("phoneBtn").classList.toggle("broken",!!S.phoneBroken); $("phoneBtn").classList.toggle("ring", (pending && !S.chatSeen) || S.inbox.length>0);
-  $("phoneBtn").setAttribute("aria-label",L("โทรศัพท์","Phone")); $("lensBtn").hidden=!lensLv(); $("lensLv").textContent=lensLv()||""; $("lensBtn").setAttribute("aria-label",L(`แว่นนักสืบ ระดับ ${lensLv()} (Q)`,`Detective lens level ${lensLv()} (Q)`)); $("menuBtn").setAttribute("aria-label",L("เมนู","Menu"));
+  $("phoneBtn").setAttribute("aria-label",L("โทรศัพท์","Phone")); $("lensBtn").hidden=!S.char; $("lensLv").textContent=""; $("lensBtn").setAttribute("aria-label",L("ซื้อคำใบ้ (H)","Buy a hint (H)")); $("menuBtn").setAttribute("aria-label",L("เมนู","Menu"));
   const kk = !show && !busy() && nearKiosk();
   const fc = !show && !kk && !busy() && nearCat(), fb = !show && !kk && !fc && !busy() && nearBirds(), feed=fc||fb;
   const hq = !show && !kk && !feed && !busy() && nearHQ();
@@ -230,7 +233,7 @@ function hud(){
   if(show) $("prompt").innerHTML=`${L("คุยกับ","Talk to")} ${esc(nm(n.id))}${TOUCH?"":"<kbd>E</kbd>"}`;
   else if(showDoor) $("prompt").innerHTML=`${(dn.alley?(dn.soi||ghostOpen()):(!dn.soon&&zoneOpen(dn.zone)))?L("เข้า ","Enter ")+esc(dn.name[S.lang]):L("ล็อกอยู่: ","Locked: ")+esc(dn.name[S.lang])}${TOUCH?"":"<kbd>E</kbd>"}`;
   const act=$("act"); act.disabled=!(show||sp||bus||showDoor||kk||feed||hq||rp||vl); act.textContent=bus?L("รถเมล์","Bus"):sp?L("ตรวจ","Inspect"):kk?L("เล่น","Play"):feed?L("ให้อาหาร","Feed"):hq?L("เข้า","Enter"):vl?L("สำรวจ","Look"):rp?L("ซ่อม","Repair"):showDoor?L("เข้า","Enter"):L("คุย","Talk");
-  $("keys").innerHTML=L(`<kbd>WASD</kbd>/<kbd>←↑→↓</kbd> เดิน · <kbd>E</kbd> คุย · <kbd>Q</kbd> ส่องแว่น · <kbd>M</kbd> แผนที่ · คลิกพื้นเพื่อเดิน`,`<kbd>WASD</kbd>/<kbd>←↑→↓</kbd> walk · <kbd>E</kbd> talk · <kbd>Q</kbd> lens · <kbd>M</kbd> map · click the floor to walk`);
+  $("keys").innerHTML=L(`<kbd>WASD</kbd>/<kbd>←↑→↓</kbd> เดิน · <kbd>E</kbd> คุย · <kbd>H</kbd> คำใบ้ · <kbd>M</kbd> แผนที่ · คลิกพื้นเพื่อเดิน`,`<kbd>WASD</kbd>/<kbd>←↑→↓</kbd> walk · <kbd>E</kbd> talk · <kbd>H</kbd> hint · <kbd>M</kbd> map · click the floor to walk`);
   const hide = sheetMode==="start";
   $("hud").hidden=hide; $("joy").hidden=hide; $("act").hidden=hide; $("keys").hidden=hide;
 }

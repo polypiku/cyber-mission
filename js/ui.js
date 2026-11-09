@@ -217,7 +217,9 @@ function renderCase(){
   const who=(C.npc&&C.npc.id)||S.char;
   const body=`<h3 class="ktitle">${s.title}</h3>${comicize(s.body, who)}`;
   const panel=`${from}<span class="sect">${L("คุณจะทำอย่างไร","What do you do?")}</span>
-    <div class="cchoices">${C.order.o.map((ci,i)=>`<button class="choice" data-ch="${ci}"><span class="k">${"ABCD"[i]}</span><span>${s.choices[ci].t}</span></button>`).join("")}</div>
+    ${caseHintBox(s)}
+    <div class="cchoices">${C.order.o.map((ci,i)=>{ const x=caseHinted()&&s.choices[ci].v==="bad"&&s.choices.filter(c=>c.v==="bad").indexOf(s.choices[ci])===0; return `<button class="choice${x?" struck":""}" data-ch="${ci}" ${x?"disabled":""}><span class="k">${"ABCD"[i]}</span><span>${s.choices[ci].t}</span></button>`; }).join("")}</div>
+    ${caseHintBtn()}
     <button class="howto" data-howto>❔ ${L("วิธีเล่นเคส","How cases work")}</button>`;
   openSheet("case", c3(actor("think", pickLine(MOOD_LINES.think[S.lang])), bigPhone(c.title, body, true), panel));
   if(!C.hist.length) maybeCoach("case");

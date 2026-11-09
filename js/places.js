@@ -95,18 +95,57 @@ function drawProp(g,p){
 }
 
 /* who is in each new place */
+const NEW_PEOPLE = {
+  pPook:["crowd08","พี่ปุ๊ก","Pook","พนักงานออฟฟิศ","Office worker"],
+  pNok:["crowd02","พี่นก","Nok","ฝ่ายบัญชีบริษัท","Company accountant"],
+  paJan:["crowd06","ป้าจันทร์","Auntie Jan","แม่ค้าผลไม้","Fruit seller"],
+  jeNoi:["crowd12","เจ๊น้อย","Jae Noi","แม่ค้าเสื้อผ้า","Clothes seller"],
+  lungSom:["crowd05","ลุงสมศักดิ์","Uncle Somsak","ข้าราชการเกษียณ","Retired civil servant"],
+  nongPrang:["crowd10","น้องปราง","Prang","พนักงานร้านสะดวกซื้อ","Mini-mart cashier"],
+  pJack:["crowd07","พี่แจ็ค","Jack","เจ้าของร้านอาหาร","Restaurant owner"],
+  lungChit:["crowd17","ลุงชิต","Uncle Chit","เพิ่งขายที่ดิน","Just sold his land"],
+  maeNuan:["crowd18","ป้านวล","Auntie Nuan","แม่ของตั้ม","Tam's mum"],
+  nongBam:["crowd22","น้องแบม","Bam","นักศึกษาปี 2","2nd-year student"]
+};
+for(const [k,[b,th,en,rth,ren]] of Object.entries(NEW_PEOPLE)){ SPRITES[k]=SPRITES[b]; PEOPLE[k]={name:{th,en},role:{th:rth,en:ren}}; }
 function cast2(mentor, friend0){
   const z=S.zone, M={id:mentor, role:"mentor", x:528, y:548, dir:"up"};
+  const P=(id,role,x,y,dir)=>({id,role,x,y,dir:dir||"down"});
   const out={
-    9:[M,{id:"pMay", role:"friend", x:330, y:420, dir:"right"}],
-    10:[M,{id:"grandma", role:"grandma", x:430, y:262, dir:"down"}],
-    11:[M,{id:"maePu", role:"grandma", x:470, y:330, dir:"left"}],
-    12:[M,{id:"techTon", role:"repairman", x:430, y:300, dir:"down"}],
-    13:[M,{id:friend0, role:"friend", x:220, y:300, dir:"right"},{id:"ton", role:"tips", x:650, y:300, dir:"left"}]
+    9:[M,P("pMay","friend",330,420,"right"),P("pPook","c_pig",470,300),P("pNok","c_bec",700,385,"left")],
+    10:[M,P("grandma","grandma",430,262),P("paJan","c_gold",170,290,"right"),P("jeNoi","c_share",700,290,"left")],
+    11:[M,P("maePu","grandma",470,330,"left"),P("lungSom","c_atm",500,210,"up"),P("nongPrang","c_wrong",630,440)],
+    12:[M,P("techTon","repairman",430,300),P("pJack","c_sim",250,330,"right"),P("lungChit","c_apk",690,360,"left"),P("maeNuan","c_deep",330,480,"right")],
+    13:[M,P(friend0,"friend",220,300,"right"),P("ton","tips",650,300,"left"),P("nongBam","c_task",430,480,"up")]
   }[z]||[M];
   if(z===9 && !S.overheard) return [M];
   return out;
 }
+const sc=(a,b,safe,warn,danger)=>({intro:[t(...a),t(...b)], after:{safe:t(...safe),warn:t(...warn),danger:t(...danger)}});
+Object.assign(CASE_SCRIPT,{
+  pig:sc(["เควินบอกว่ากำไรพี่ 3.2 ล้านแล้ว","Kevin says my profit is 3.2 million now."],["แค่จ่ายภาษีก่อน ก็ถอนได้หมดเลย","I just pay the tax first, then I can withdraw it all."],["พี่เลิกคุยกับเควินแล้ว ขอบใจนะ","I've stopped talking to Kevin. Thank you."],["เงินบางส่วนยังตามไม่ได้…","Some of the money still can't be traced…"],["พี่กู้มาจ่ายไปแล้ว…","I already borrowed to pay…"]),
+  bec:sc(["คู่ค้าขอเปลี่ยนเลขบัญชีกะทันหัน","Our supplier suddenly changed their bank account."],["ต้องโอน 12 ล้านก่อนบ่ายสามนะ","I have to send 12 million before 3 pm."],["ตอนนี้บริษัทมีกฎโทรยืนยันทุกครั้งแล้ว","Now we phone to confirm every change."],["รอบนี้รอด แต่ยังไม่ได้เปลี่ยนรหัสเลย","Safe this time, but nobody changed passwords."],["เงิน 12 ล้านหายไปแล้ว…","The 12 million is gone…"]),
+  gold:sc(["ทองถูกกว่าหน้าร้านบาทละสองพันแน่ะ","This gold is 2,000 cheaper per baht-weight."],["ป้าจะซื้อเก็บไว้เป็นค่าเทอมลูก","I'm buying it for my daughter's tuition."],["ป้าไปซื้อที่หน้าร้านจริงแล้วจ้ะ","I bought it at the real shop instead."],["เสียไปนิดหน่อย แต่ก้อนใหญ่ยังอยู่","Lost a little, but the big money is safe."],["เงินค่าเทอมลูกหายหมดแล้ว…","My daughter's tuition is all gone…"]),
+  share:sc(["วงแชร์เปิดวง VIP ดอก 50% แน่ะ","The circle has a VIP round at 50%."],["เจ๊จะลงสามแสนเลย","I'm putting in 300,000."],["แม่ค้าในตลาดรอดกันทุกคน","Everyone in the market got out in time."],["เจ๊รอด แต่เพื่อนที่ชวนมายังเสีย","I'm fine, but the friends I invited lost money."],["แม่ท้าวหายไปพร้อมเงินทุกคน…","The host vanished with everyone's money…"]),
+  atm:sc(["อย่ายุ่ง ตำรวจสั่งห้ามบอกใคร","Stay out of it. The police said tell no one."],["ลุงต้องโอนให้ ปปง. ตรวจ","I have to send it to AMLO for checking."],["ขอบใจนะหนู เงินเกษียณลุงยังอยู่","Thank you. My pension is still there."],["เสียไปสี่แสน แต่ที่เหลือยังอยู่","Lost 400,000, but the rest is safe."],["ลุงโอนไปหมดแล้ว…","I sent it all…"]),
+  wrong:sc(["มีเงินโอนผิดเข้ามาห้าหมื่นค่ะ","Fifty thousand came in by mistake."],["เขาขอให้โอนคืนเข้าอีกบัญชีหนึ่ง","They want it sent back to a different account."],["ธนาคารคืนให้ตามระบบแล้วค่ะ","The bank returned it properly."],["ยังต้องเคลียร์หนี้ในชื่อหนูอยู่เลย","I'm still clearing the debt in my name."],["บัญชีหนูโดนอายัดแล้ว…","My account's been frozen…"]),
+  simswap:sc(["มือถือไม่มีสัญญาณตั้งแต่เมื่อคืน","My phone's had no signal since last night."],["เมื่อวานเจ้าหน้าที่ค่ายเพิ่งโทรมาเอง","A network agent called me just yesterday."],["ตอนนี้ใช้แอปยืนยันตัวตนแล้ว","I use an authenticator app now."],["เสียไปบางส่วน แต่ระงับทัน","Some lost, but locked in time."],["เงินร้านหายหมด…","The restaurant's money is all gone…"]),
+  apk:sc(["จอขึ้นว่ากำลังอัปเดต ห้ามปิดเครื่อง","The screen says updating, don't turn it off."],["ลุงลงแอปคืนภาษีที่สรรพากรส่งมา","I installed the tax-refund app they sent."],["ล้างเครื่องแล้ว ลุงจะเตือนเพื่อนๆ","Phone's clean. I'll warn my friends."],["เสียไปเยอะ แต่ยังพอมีเหลือ","Lost a lot, but there's some left."],["เงินขายที่ดินหายหมด…","All the land money is gone…"]),
+  deepfake:sc(["ตั้มลูกป้าวิดีโอคอลมา หน้าเขาจริงๆ","My son Tam video-called. It was really him."],["เขาบอกว่ารถชน ต้องการเงินด่วน","He says he crashed and needs money fast."],["บ้านเรามีคำลับแล้วจ้ะ","Our family has a code word now."],["รอดรอบนี้ แต่ญาติคนอื่นโดนต่อ","Safe this time, but other relatives were targeted."],["ป้าโอนไปเกือบล้าน…","I sent almost a million…"]),
+  task:sc(["งานกดไลก์ได้เงินจริงนะ ตอนแรก","The like-for-pay job really paid. At first."],["ตอนนี้ต้องเติมอีกสี่แสนห้า","Now I need to top up 450,000."],["บอกพ่อแม่แล้ว เขาช่วยหนูอยู่","I told my parents. They're helping."],["หยุดได้ แต่หนูยังไม่กล้าบอกใคร","I stopped, but I can't tell anyone yet."],["หนูเป็นหนี้เป็นล้านแล้ว…","I owe over a million now…"])
+});
+Object.assign(EVID,{
+  pig:{i:"💘",g:"server",t:["แอปเทรด BitNova Pro","The BitNova Pro app"],d:["ไฟล์แอปโหลดจาก 185.xx.xx.7","The app downloads from 185.xx.xx.7"]},
+  bec:{i:"📧",g:"server",t:["อีเมล siamsteel-co.com","siamsteel-co.com email"],d:["ส่งจากเซิร์ฟเวอร์ 185.xx.xx.7","Sent from 185.xx.xx.7"]},
+  gold:{i:"🪙",g:"acct",t:["เพจร้านทองปลอม","Fake gold-shop page"],d:["เงินเข้าบัญชีนายสมพงษ์ ร.","Money went to Mr Sompong R."]},
+  share:{i:"🪢",g:"acct",t:["บัญชีแม่ท้าวเจน","“Mae Thao Jen” accounts"],d:["วนเงินผ่านบัญชีปวีณาและธนพล","Money cycled via Paweena and Thanaphon"]},
+  atm:{i:"☎️",g:"phone",t:["เบอร์ “ปปง.” ปลอม","Fake “AMLO” number"],d:["ซิมล็อตเดียวกับ 02 xxx 8810","Same SIM batch as 02 xxx 8810"]},
+  wrong:{i:"💸",g:"acct",t:["บัญชีที่ขอให้โอนคืน","The “send it back” account"],d:["ชื่อ น.ส. ปวีณา (อีกแล้ว!)","Ms Paweena (again!)"]},
+  simswap:{i:"📶",g:"phone",t:["ซิมใหม่ในชื่อพี่แจ็ค","Replacement SIM in Jack's name"],d:["ออกด้วยบัตรปลอม ล็อตเดียวกับ 02 xxx 8810","Fake ID, same batch as 02 xxx 8810"]},
+  apk:{i:"📲",g:"server",t:["แอป “สรรพากร Refund”","“Revenue Refund” app"],d:["ควบคุมเครื่องจาก 185.xx.xx.7","Controls phones from 185.xx.xx.7"]},
+  deepfake:{i:"🎭",g:"server",t:["วิดีโอปลอมหน้าตั้ม","Deepfake of Tam"],d:["สร้างจากคลิปที่เก็บไว้บน 185.xx.xx.7","Built from clips on 185.xx.xx.7"]},
+  task:{i:"👍",g:"acct",t:["กลุ่มงานกดไลก์","Like-for-pay group"],d:["เงินมัดจำเข้าบัญชีธนพล ส.","Deposits went to Thanaphon S."]}
+});
 const ZONE_INTRO2 = {
   9:[t("ศูนย์อาหารตรงนี้ คนจากตึกออฟฟิศฝั่งตรงข้ามมากินข้าวกันเยอะ","Office workers from across the road eat here."),t("หูไวไว้นะ บางทีได้ยินอะไรดีๆ","Keep your ears open. You hear things here.")],
   10:[t("ตลาดนัดคนเยอะ ร้านส่วนใหญ่รับโอนผ่าน QR","The market is busy, and most stalls take QR payments."),t("ก่อนจ่าย ดูชื่อบัญชีให้ตรงกับร้านทุกครั้งนะ","Always check the account name matches the stall before paying.")],

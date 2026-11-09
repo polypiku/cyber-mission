@@ -37,7 +37,7 @@ function addFillers(){
   const z=S.zone; if(z===5 || !S.char || cbFloor() || (z===8 && isScam(S.bld) && offFloor()>1)) return;
   const used=new Set([S.char,...npcs.map(n=>PLACEHOLDER_ART[n.id]||n.id)]);
   const pool=Object.keys(FILL_NAMES).filter(b=>!used.has(b) && b!=="guardBoy").sort(()=>Math.random()-.5);
-  const spots=(z===0?FILL_SPOTS.street:z===2?FILL_SPOTS["lib"+libFloor()]:FILL_SPOTS.room).filter(p=>
+  const spots=(z===0?FILL_SPOTS.street:z===14?FILL_SPOTS.soi:z===2?FILL_SPOTS["lib"+libFloor()]:FILL_SPOTS.room).filter(p=>
     !SOLIDS.some(r=>p.x>r.x-14&&p.x<r.x+r.w+14&&p.y>r.y-8&&p.y<r.y+r.h+8) &&
     !npcs.some(n=>Math.hypot(n.x-p.x,n.y-p.y)<80) && Math.hypot(p.x-432,p.y-540)>90 && !(z===7 && p.x>680 && p.y>250 && p.y<430)).sort(()=>Math.random()-.5);
   const want=z===0?6:z===2?9:z===8?3:4, n=Math.min(want, spots.length), out=[]; while(pool.length&&pool.length<n) pool.push(...pool.slice(0,n-pool.length));
@@ -348,7 +348,6 @@ const SHOP=[
   {id:"pwm", i:"🔑", n:["ตัวจัดการรหัสผ่าน","Password manager"], d:["ตอนตั้งรหัสใหม่ในมือถือ กดปุ่มเดียวได้รหัสยาวและเดายาก","When setting a new password, one tap makes a long, unguessable one"], p:150},
   {id:"vpn", i:"🛰️", n:["VPN","VPN"], d:["เข้ารหัสการเชื่อมต่อ ถ้าเผลอต่อ Wi-Fi ปลอม ไวรัสจะลามช้าลงครึ่งหนึ่ง","Encrypts your connection. On a fake Wi-Fi, malware spreads half as fast"], p:120},
   {id:"cloud", i:"☁️", n:["สำรองข้อมูลคลาวด์","Cloud backup"], d:["ถ้ามือถือพังจนกู้ไม่ได้ เงินในกระเป๋าไม่หาย","If the phone is lost to malware, you keep your money"], p:100},
-  {id:"lens", i:"🔍", n:["อัปเกรดแว่นนักสืบ","Detective lens upgrade"], d:["ส่องได้ไกลขึ้น และเห็นเบาะแสที่ซ่อนลึกกว่าเดิม","Sweeps further and reveals better-hidden clues"], lv:[0,0,120,220]}
 ];
 const shopPrice=(it)=>it.lv?it.lv[Math.min(3,(S.items.lens||0)+1)]:it.p;
 const shopOwned=(it)=>it.lv?(S.items.lens||0)>=3:!!S.items[it.id];
