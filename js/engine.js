@@ -12,7 +12,7 @@ function render(now){
   ctx.setTransform(DPR*Z,0,0,DPR*Z,-camX*DPR*Z,-camY*DPR*Z);
   ctx.imageSmoothingQuality="high";
   if(bg.width) ctx.drawImage(bg,0,0,W,H);
-  drawAmbientBack(ctx,now);
+  drawAmbientBack(ctx,now); drawFloodUnder(ctx,now);
   if(S.zone===0){ drawDoorBadges(ctx,now); drawOfficesLive(ctx,now); }
   const near=nearest();
   if(near && !busy()){ ctx.beginPath(); ctx.ellipse(near.x,near.y,24,9,0,0,7); ctx.strokeStyle="#FF5A1F"; ctx.lineWidth=3; ctx.stroke(); }
@@ -40,11 +40,12 @@ function render(now){
   CHAIRS.forEach(c=>items.push({y:c.y+8,d:g=>drawChair(g,c)}));
   PLANTS.forEach(p=>items.push({y:p.y+14,d:g=>drawPlant(g,p)}));
   if(S.char){ npcs.forEach(n=>items.push({y:n.y,d:g=>drawChar(g,n,now)})); items.push({y:player.y,d:g=>drawChar(g,player,now)}); }
-  items.sort((a,b)=>a.y-b.y).forEach(it=>it.d(ctx));
+  items.sort((a,b)=>a.y-b.y).forEach(it=>it.d(ctx)); drawFloodOver(ctx,now);
   drawLibStairSign(ctx,now); drawEscortTalk(ctx); drawSpots(ctx,now); drawGoalArrow(ctx,now); drawExits(ctx,now); drawCinFx(ctx,now);
   if(S.char) npcs.forEach(n=>drawMarker(ctx,n,now));
   if(S.char){ drawUrgent(ctx,now); drawChatter(ctx,now); drawVirusArrow(ctx,now); drawCoinFx(ctx,(now-(window._cfx||now))/1000); window._cfx=now; }
   const dn=nearDoor(); if(dn && !busy()){ ctx.beginPath(); ctx.ellipse(dn.door,262,34,10,0,0,7); ctx.strokeStyle="#FF5A1F"; ctx.lineWidth=3; ctx.stroke(); }
+  drawWeather(ctx,now);
 }
 
 /* ---------- input ---------- */
@@ -152,7 +153,7 @@ function step(dt){
   player.moving=m>0.05;
   if(player.moving){
     const k=Math.min(1,m); vx=vx/m*k; vy=vy/m*k;
-    const sp=SPEED, nx=player.x+vx*sp*dt, ny=player.y+vy*sp*dt;
+    const sp=SPEED*floodSlow(), nx=player.x+vx*sp*dt, ny=player.y+vy*sp*dt;
     if(!blocked(nx,player.y,player)) player.x=nx;
     if(!blocked(player.x,ny,player)) player.y=ny;
     player.dir = Math.abs(vx)>Math.abs(vy)*0.9 ? (vx<0?"left":"right") : (vy<0?"up":"down");
@@ -174,7 +175,7 @@ function step(dt){
   }
   // NPCs drift back to their resting direction
   npcs.forEach(n=>{ if(rush&&rush.n===n) return; n.moving=false; if(!talking||talking!==n){ n.dir=n.home; } });
-  stepRush(dt); stepUrgent(dt); stepInbox(dt); stepWifi(dt); stepVirus(dt); stepHack(dt); stepTension(dt); stepFillers(dt); stepEscort(dt); stepCinema(dt); stepAmbient(dt);
+  stepWeather(dt); stepRush(dt); stepUrgent(dt); stepInbox(dt); stepWifi(dt); stepVirus(dt); stepHack(dt); stepTension(dt); stepFillers(dt); stepEscort(dt); stepCinema(dt); stepAmbient(dt);
 }
 function face(a,b){ const dx=b.x-a.x, dy=b.y-a.y; a.dir=Math.abs(dx)>Math.abs(dy)?(dx<0?"left":"right"):(dy<0?"up":"down"); }
 function nearest(){

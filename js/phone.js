@@ -1,7 +1,7 @@
 /* The phone: home screen, chats, Wi-Fi, scanner and incoming messages. */
 /* ---------- realistic phone screens ---------- */
 const SB_ICONS='<svg viewBox="0 0 54 12" aria-hidden="true"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="5" y="6" width="3" height="6" rx="1"/><rect x="10" y="3" width="3" height="9" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/><path d="M24 4.5a8 8 0 0110 0M26 7a4.6 4.6 0 016 0" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><circle cx="29" cy="10" r="1.3"/><rect x="38" y="1.5" width="13" height="9" rx="2.2" fill="none" stroke="currentColor" stroke-width="1.3"/><rect x="40" y="3.5" width="8" height="5" rx="1"/><rect x="51.6" y="4.5" width="1.6" height="3" rx=".6"/></svg>';
-const nowClock=()=>{ const d=new Date(); return String(d.getHours()).padStart(2,"0")+":"+String(d.getMinutes()).padStart(2,"0"); };
+const nowClock=()=>{ if(typeof clockText==="function") return clockText(); const d=new Date(); return String(d.getHours()).padStart(2,"0")+":"+String(d.getMinutes()).padStart(2,"0"); };
 const sbar=(clock)=>`<div class="sbar"><b>${clock}</b><span class="sic">${SB_ICONS}</span></div>`;
 function phoneize(root){
   root.querySelectorAll(".phone").forEach(ph=>{
