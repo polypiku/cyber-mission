@@ -149,7 +149,7 @@ const ZONES = {
   2:{name:{th:"ห้องสมุดเมือง",en:"City Library"}, cases:["charge","helper","publicpc","airdrop"], roleCase:{grandpa:"charge", grandma:"helper", tips:"publicpc", friend:"airdrop"}},
   3:{name:{th:"ธนาคารนครทอง",en:"Nakhonthong Bank"}, cases:["rush","video","invest","remote"], roleCase:{grandma:"rush", grandpa:"video", friend:"invest", tips:"remote"}},
   4:{name:{th:"ร้านเน็ต NET ZONE",en:"NET ZONE internet café"}, cases:["topup","trade","secret","parent"], roleCase:{friend:"topup", tips:"trade", grandpa:"secret", grandma:"parent"}},
-  6:{name:{th:"มหาวิทยาลัยหัวเฉียวเฉลิมพระเกียรติ",en:"Huachiew Chalermprakiet University"}, cases:["scholar","itmail","parttime","fakeprof","callfund"], roleCase:{friend:"scholar", tips:"itmail", paweena:"parttime", prof:"fakeprof", parent:"callfund"}},
+  6:{name:{th:"มหาวิทยาลัยดาวเหนือ",en:"Dao Nuea University"}, cases:["scholar","itmail","parttime","fakeprof","callfund"], roleCase:{friend:"scholar", tips:"itmail", paweena:"parttime", prof:"fakeprof", parent:"callfund"}},
   7:{name:{th:"สถานีตำรวจ",en:"Police station"}, cases:["report","ransom"], roleCase:{grandpa:"report", visitor:"ransom"}},
   5:{bonus:true, name:{th:"บ้านผีสิงในตรอกมืด",en:"The haunted house in the alley"}, cases:["merit","inherit","romance","fortune"], roleCase:{grandma:"merit", grandpa:"inherit", tips:"romance", friend:"fortune"}}
 };
@@ -174,8 +174,8 @@ const EVID = {
   bank:{i:"🌐",g:"server",t:["โดเมน nakhonthong-verify.co","Domain nakhonthong-verify.co"],d:["ชี้ไปที่เซิร์ฟเวอร์ 185.xx.xx.7","Points to server 185.xx.xx.7"]},
   wifi:{i:"📶",g:"server",t:["หน้าล็อกอิน Wi-Fi ปลอม","Fake Wi-Fi login page"],d:["ส่งรหัสที่ดักได้ไปที่ 185.xx.xx.7","Sends captured passwords to 185.xx.xx.7"]},
   chat:{i:"💬",g:"acct",t:["บัญชี \"พี่สาว\" ของต้นข้าว","Ton Khao's \"sister\" account"],d:["ปลายทาง: น.ส. ปวีณา","Receiving: Ms Paweena"]},
-  scholar:{i:"🎓",g:"server",t:["เว็บทุนปลอม","Fake scholarship site"],d:["hcu-scholar.site อยู่บน 185.xx.xx.7","hcu-scholar.site is on 185.xx.xx.7"]},
-  itmail:{i:"✉️",g:"server",t:["อีเมล IT ปลอม","Fake IT email"],d:["hcu-mail.help ส่งจากเซิร์ฟเวอร์เดียวกัน 185.xx.xx.7","hcu-mail.help sends from the same 185.xx.xx.7"]},
+  scholar:{i:"🎓",g:"server",t:["เว็บทุนปลอม","Fake scholarship site"],d:["daonuea-scholar.site อยู่บน 185.xx.xx.7","daonuea-scholar.site is on 185.xx.xx.7"]},
+  itmail:{i:"✉️",g:"server",t:["อีเมล IT ปลอม","Fake IT email"],d:["daonuea-mail.help ส่งจากเซิร์ฟเวอร์เดียวกัน 185.xx.xx.7","daonuea-mail.help sends from the same 185.xx.xx.7"]},
   parttime:{i:"🗣️",g:"acct",t:["คำให้การของปวีณา","Paweena's statement"],d:["“พี่บอส” สั่งเปิดบัญชีจากตึกฝั่งตรงข้ามถนน","“Boss” ran the accounts from the building across the road"]},
   callfund:{i:"📞",g:"phone",t:["สายปลอมอ้างงานทุน","Fake scholarship-office call"],d:["โทรจากเบอร์ 02 xxx 8810 เบอร์เดียวกับไลน์อาจารย์ปลอม","Came from 02 xxx 8810, the same number as the fake lecturer LINE"]},
   fakeprof:{i:"👩‍🏫",g:"phone",t:["ไลน์อาจารย์ปลอม","Fake lecturer LINE"],d:["สมัครด้วยเบอร์ 02 xxx 8810","Registered with 02 xxx 8810"]},
