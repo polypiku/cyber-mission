@@ -647,7 +647,7 @@ function drawPlant(g,p){
 function spriteFor(c){
   const set=IMG[c.id]; if(!set) return {im:null};
   /* characters with a walking pose step between it and their side pose while moving left or right */
-  if(set.walk && c.moving && !RM && (c.dir==="left"||c.dir==="right") && Math.floor(c.t*5)%2===0) return {im:set.walk, flip:c.dir==="left"};
+  if(set.walk && c.moving && !RM && (c.dir==="left"||c.dir==="right") && Math.floor(c.t*5)%2===0) return c.dir==="left"&&set.walkL?{im:set.walkL}:{im:set.walk, flip:c.dir==="left"};
   if(c.dir==="up") return {im:set.up}; if(c.dir==="left") return {im:set.left}; if(c.dir==="right") return set.right?{im:set.right}:{im:set.left,flip:true};
   return {im:set.down};
 }
