@@ -116,6 +116,32 @@ fakeprof:{id:"fakeprof",level:"กลาง",start:"s1",title:"อาจาร�
   E3:{type:"danger",label:"เสียหาย",title:"โดนกันทั้งคณะ",story:"บัญชีปลอมทักนักศึกษาทีละคน เก็บเงินได้หลายหมื่น และข้อมูลส่วนตัวของอาจารย์ถูกนำไปใช้ต่อ",lessons:["อย่าส่งเอกสารส่วนตัวเพื่อยืนยัน","เตือนแล้วต้องช่วยแก้ต่อ","ปล่อยให้สับสน = คนร้ายได้เปรียบ"]}
  }},
 
+callfund:{id:"callfund",level:"กลาง",start:"s1",title:"สายจาก “งานทุน” ให้ผู้ปกครองโอนด่วน",
+ learn:["ทุนการศึกษาประกาศผ่านคณะเท่านั้น","มหาวิทยาลัยไม่โทรขอให้โอนเงิน","ตั้งสติ ตัดสาย ไม่โอน","ยืนยันกับคณะโดยตรง"],
+ scenes:{
+  s1:{title:"“ลูกได้ทุนแล้วครับคุณแม่”",
+   body:`<p>แม่น้อยรีบเดินเข้ามาในมหาวิทยาลัย มือถือยังแนบหู “เขาบอกว่าเจนลูกแม่ได้ทุนเรียนดี แต่ต้องโอนเงินภายในชั่วโมงนี้”</p>${chat("📞","งานทุนการศึกษา มหาวิทยาลัย","กำลังสนทนา · 06:12",["ยินดีด้วยครับคุณแม่ น้องเจน ปี 1 ได้รับทุนเรียนดี 15,000 บาท","ต้องโอนค่าเปิดบัญชีรับทุน 3,500 บาท ภายใน 1 ชั่วโมง ไม่งั้นสิทธิ์ตกไปคนถัดไปครับ","ขอเลขบัตรประชาชนผู้ปกครองด้วยนะครับ และยังไม่ต้องบอกน้อง เดี๋ยวน้องเครียด"])}`,
+   clues:["มหาวิทยาลัยไม่โทรหาใครเพื่อขอให้โอนเงิน","ทุนจริงประกาศผ่านช่องทางของคณะเท่านั้น","เร่งเวลา ขอเลขบัตร และห้ามบอกลูก = สัญญาณหลอก"],
+   choices:[{t:"ให้แม่น้อยวางสาย ไม่ให้ข้อมูลอะไร แล้วพาไปถามคณะที่กองกิจการนักศึกษาตรงนี้เลย",to:"s2a",v:"good"},{t:"ให้แม่ขอชื่อกับเบอร์ของเจ้าหน้าที่ไว้ แล้วโทรกลับไปเช็กอีกที",to:"s2b",v:"risky"},{t:"โอนไปเลย 3,500 แลกทุน 15,000 คุ้ม เขารู้ชื่อและชั้นปีของลูกด้วย",to:"s2c",v:"bad"}]},
+  s2a:{title:"ถามคณะโดยตรง",
+   body:`${staff("เจ้าหน้าที่คณะ","“ทุนทุกทุนประกาศผ่านคณะเท่านั้นค่ะ และไม่มีค่าธรรมเนียมใดๆ เจ้าหน้าที่ไม่เคยโทรหาผู้ปกครองหรือนักศึกษาเพื่อขอให้โอนเงินเลย”")}<p>แม่น้อยถอนหายใจ “เมื่อเช้าแม่ในกลุ่มไลน์ผู้ปกครองก็บอกว่าได้สายแบบนี้เหมือนกัน”</p>`,
+   clues:["ผู้ปกครองคนอื่นยังเสี่ยงอยู่","เตือนในกลุ่มผู้ปกครองได้ทันที","ให้คณะประกาศเตือนผ่านช่องทางทางการ"],
+   choices:[{t:"ให้แม่เตือนในกลุ่มไลน์ผู้ปกครอง บล็อกและรายงานเบอร์ แล้วขอให้คณะประกาศเตือน",to:"E1",v:"good"},{t:"บล็อกเบอร์อย่างเดียวพอ",to:"E2",v:"risky"},{t:"เก็บเรื่องไว้เงียบๆ ไม่อยากให้ลูกรู้แล้วเครียด",to:"E2",v:"risky"}]},
+  s2b:{title:"โทรกลับเบอร์ที่เขาให้",
+   body:`${chat("📞","“คุณสมชาย งานทุน”","กำลังสนทนา · 00:48",["กองทุนการศึกษา สวัสดีครับ","ยืนยันครับคุณแม่ ทุนจริงแน่นอน เหลือเวลาอีก 40 นาทีนะครับ","ส่งเลขบัตรประชาชนมาก่อนก็ได้ครับ เดี๋ยวผมล็อกสิทธิ์ไว้ให้"])}`,
+   clues:["เบอร์ที่คนร้ายให้ = คนร้ายรับสายเอง","ต้องโทรเบอร์จากเว็บหรือเพจทางการของคณะเอง","ยังไม่โอน ยังหยุดได้ทัน"],
+   choices:[{t:"วางสาย แล้วไปถามคณะ หรือโทรเบอร์ที่หาเองจากเว็บมหาวิทยาลัย",to:"s2a",v:"good"},{t:"ให้เลขบัตรไปก่อน แต่ยังไม่โอน",to:"E2",v:"risky"},{t:"เขายืนยันแล้ว โอนตามที่บอกเลย",to:"s2c",v:"bad"}]},
+  s2c:{title:"โอนแล้ว",
+   body:`${notif(["✅ โอนเงินสำเร็จ 3,500.00 บาท → นาย ส. บุญมี (บัญชีส่วนตัว)","📞 “งานทุน”: ได้รับแล้วครับ เหลือค่าภาษีทุนอีก 4,800 บาท"])}<p>แม่น้อยมองสลิป “ทำไมโอนเข้าชื่อคนล่ะ ไม่ใช่บัญชีมหาวิทยาลัย”</p>`,
+   clues:["ทุนจริงไม่ให้โอนเข้าบัญชีบุคคล","ค่าใช้จ่ายงอกไม่หยุด = มิจฉาชีพ","แจ้ง 1441 และธนาคารเร็ว ยิ่งมีโอกาสอายัดทัน"],
+   choices:[{t:"หยุดโอน โทรธนาคารกับสายด่วน 1441 ทันที เก็บสลิปไว้แจ้งความออนไลน์",to:"E2",v:"good"},{t:"โอนค่าภาษีอีกรอบ เดี๋ยวเสียทุนไปเปล่าๆ",to:"E3",v:"bad"},{t:"รอให้ลูกเลิกเรียนก่อน ค่อยปรึกษากันพรุ่งนี้",to:"E3",v:"risky"}]}
+ },
+ endings:{
+  E1:{type:"safe",label:"ปลอดภัย",title:"ไม่เสียสักบาท และเตือนผู้ปกครองทั้งคณะ",story:"คณะประกาศเตือนผ่านเพจทางการภายในบ่ายนั้น ผู้ปกครองอีกหลายคนที่ได้สายเดียวกันไม่มีใครโอน เจนหัวเราะ “แม่ไม่ต้องห่วง ถ้ามีทุนจริง คณะประกาศเอง”",lessons:["ทุนการศึกษาประกาศผ่านคณะเท่านั้น","มหาวิทยาลัยไม่โทรขอให้โอนเงิน","ตั้งสติ ตัดสาย ไม่โอน แล้วยืนยันกับคณะโดยตรง"]},
+  E2:{type:"warn",label:"เฉียดฉิว",title:"หยุดทัน แต่ยังต้องระวัง",story:"แม่น้อยไม่เสียเงินเพิ่ม แต่เลขบัตรหรือเงินก้อนแรกหลุดไปแล้ว และอาจมีสายหลอกรอบใหม่ตามมา",lessons:["เบอร์ที่คนโทรมาให้ ใช้ยืนยันไม่ได้","ห้ามให้เลขบัตรประชาชนทางโทรศัพท์","ยิ่งแจ้ง 1441 เร็ว ยิ่งมีโอกาสอายัดเงินทัน"]},
+  E3:{type:"danger",label:"เสียหาย",title:"เงินค่าเทอมหายทั้งก้อน",story:"แม่น้อยโอนรวมเกือบ 30,000 บาท ซึ่งเป็นเงินค่าเทอมของเจน ก่อนจะรู้ว่าไม่มีทุนนี้อยู่จริง",lessons:["ห้ามโอนเงินเมื่อมีสายอ้างเรื่องทุน","ค่าธรรมเนียมเพิ่มไม่หยุด = มิจฉาชีพ","สงสัยเมื่อไรให้ถามคณะทันที"]}
+ }},
+
 report:{id:"report",level:"ง่าย",start:"s1",title:"แจ้งความอย่างไรให้ได้เงินคืน",
  learn:["สายด่วน AOC 1441","แจ้งความออนไลน์ thaipoliceonline.go.th","หลักฐานที่ต้องเตรียม","อย่าเตือนคนร้ายก่อนแจ้งอายัด"],
  scenes:{
@@ -275,6 +301,32 @@ fakeprof:{id:"fakeprof",level:"Medium",start:"s1",title:"The “lecturer” asks
   E1:{type:"safe",label:"Safe",title:"The money was caught in time",story:"All three report in time, the receiving account is frozen and the fake LINE is closed. Dr Manee thanks everyone for acting together.",lessons:["Verify through official channels that are hard to fake","Keep evidence and report fast","Report fake accounts"]},
   E2:{type:"warn",label:"Close call",title:"Stopped, slightly late",story:"The fake account is closed, but some money moved before the freeze.",lessons:["Don't argue with scammers","The faster the report, the more you recover","Official announcements are clearest"]},
   E3:{type:"danger",label:"Harmed",title:"The whole faculty got hit",story:"The fake account messaged students one by one, took tens of thousands, and the lecturer's personal data was used again.",lessons:["Don't post personal documents as proof","A warning needs follow-through","Confusion helps the scammer"]}
+ }},
+
+callfund:{id:"callfund",level:"Medium",start:"s1",title:"A “scholarship office” call tells a parent to pay now",
+ learn:["Scholarships are announced through the faculty only","The university never calls asking for money","Stay calm, hang up, don't transfer","Confirm with the faculty directly"],
+ scenes:{
+  s1:{title:"“Your daughter got the scholarship!”",
+   body:`<p>Mae Noi hurries onto campus with her phone pressed to her ear. “They say my Jen won a merit scholarship, but I have to transfer money within the hour.”</p>${chat("📞","University Scholarship Office","On call · 06:12",["Congratulations! Jen, 1st year, has won a 15,000-baht merit scholarship","Please transfer a 3,500-baht account-opening fee within 1 hour, or the place goes to the next student","We'll also need the parent's ID card number. Don't tell Jen yet, she'll only worry"])}`,
+   clues:["The university never calls anyone to ask for a transfer","Real scholarships are announced through the faculty only","A deadline, an ID number and “don't tell your child” = scam signs"],
+   choices:[{t:"Have Mae Noi hang up without giving anything, then take her to ask at the Student Affairs office right here",to:"s2a",v:"good"},{t:"Have her ask for the officer's name and number, then call back to check",to:"s2b",v:"risky"},{t:"Just pay. 3,500 for 15,000 is a good deal, and they know Jen's name and year",to:"s2c",v:"bad"}]},
+  s2a:{title:"Asking the faculty directly",
+   body:`${staff("Faculty officer","“Every scholarship is announced through the faculty, and there are no fees at all. Our staff never call parents or students to ask for money.”")}<p>Mae Noi sighs. “Another mum in the parents' LINE group got the same call this morning.”</p>`,
+   clues:["Other parents are still at risk","She can warn the parents' group right now","Ask the faculty to post an official warning"],
+   choices:[{t:"Warn the parents' LINE group, block and report the number, and ask the faculty to post a warning",to:"E1",v:"good"},{t:"Just block the number",to:"E2",v:"risky"},{t:"Keep quiet so Jen doesn't find out and worry",to:"E2",v:"risky"}]},
+  s2b:{title:"Calling back the number they gave",
+   body:`${chat("📞","“Mr Somchai, Scholarships”","On call · 00:48",["Scholarship Fund, good afternoon","Yes, I can confirm it's real. You have 40 minutes left","Send the ID number first and I'll hold the place for you"])}`,
+   clues:["A number the scammer gives you = the scammer answers","Find the number yourself on the faculty's official site or page","Nothing paid yet, so you can still stop"],
+   choices:[{t:"Hang up, then ask the faculty or call a number she finds herself on the university site",to:"s2a",v:"good"},{t:"Give the ID number but don't transfer yet",to:"E2",v:"risky"},{t:"He confirmed it, so transfer as told",to:"s2c",v:"bad"}]},
+  s2c:{title:"Paid",
+   body:`${notif(["✅ Transfer successful: 3,500.00 baht → Mr S. Boonmee (personal account)","📞 “Scholarships”: Received. There's a 4,800-baht scholarship tax still to pay"])}<p>Mae Noi stares at the slip. “Why is it a person's name and not the university's account?”</p>`,
+   clues:["Real scholarships never go through personal accounts","Fees that keep growing = a scam","Calling 1441 and the bank fast gives the best chance to freeze it"],
+   choices:[{t:"Stop paying, call the bank and the 1441 hotline now, and keep the slip to report online",to:"E2",v:"good"},{t:"Pay the tax too, or the scholarship is wasted",to:"E3",v:"bad"},{t:"Wait until Jen finishes class and talk it over tomorrow",to:"E3",v:"risky"}]}
+ },
+ endings:{
+  E1:{type:"safe",label:"Safe",title:"Not a baht lost, and every parent warned",story:"The faculty posted a warning on its official page that afternoon. Other parents who got the same call didn't pay. Jen laughs: “Don't worry, Mum. If there's a real scholarship, the faculty will announce it.”",lessons:["Scholarships are announced through the faculty only","The university never calls asking for money","Stay calm, hang up, don't transfer, then check with the faculty"]},
+  E2:{type:"warn",label:"Close call",title:"Stopped in time, but stay alert",story:"Mae Noi lost no more money, but her ID number or the first payment is already gone, and another scam call may follow.",lessons:["A number the caller gives you can't confirm anything","Never give your ID number over the phone","The sooner you call 1441, the better the chance to freeze the money"]},
+  E3:{type:"danger",label:"Harmed",title:"The whole term's fees are gone",story:"Mae Noi transferred almost 30,000 baht, Jen's tuition money, before learning the scholarship never existed.",lessons:["Never transfer money when a call is about a scholarship","Fees that never stop = a scam","When in doubt, ask the faculty right away"]}
  }},
 
 report:{id:"report",level:"Easy",start:"s1",title:"How to report so you can get money back",

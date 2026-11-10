@@ -110,6 +110,7 @@ const PEOPLE = {
   paweena:{name:{th:"ปวีณา",en:"Paweena"}, role:{th:"นักศึกษาปี 2",en:"2nd-year student"}},
   prof:{name:{th:"อ.มณี",en:"Dr Manee"}, role:{th:"อาจารย์วิชาความปลอดภัยไซเบอร์",en:"Cyber security lecturer"}},
   visitor:{name:{th:"คุณแก้ว",en:"Kaew"}, role:{th:"คนมาติดต่อที่สถานี",en:"Visitor at the station"}},
+  maeNoi:{name:{th:"แม่น้อย",en:"Mae Noi"}, role:{th:"ผู้ปกครองของเจน · นักศึกษาปี 1",en:"Jen's mum · 1st-year parent"}},
   fon:{name:{th:"พี่ฝน",en:"Fon"}, role:{th:"พนักงานออฟฟิศ · ใกล้คลอดแล้ว",en:"Office worker · expecting soon"}}
 };
 Object.assign(PEOPLE,{ghostChoy:{name:{th:"ผีแม่ช้อย",en:"Mae Choy (ghost)"}, role:{th:"วิญญาณในบ้านเก่า",en:"Spirit of the old house"}},
@@ -134,7 +135,7 @@ Object.assign(PEOPLE,{ghostChoy:{name:{th:"ผีแม่ช้อย",en:"Mae 
   rider:{name:{th:"พี่ไรเดอร์",en:"The rider"}, role:{th:"ไรเดอร์ส่งอาหาร",en:"Food delivery rider"}},
   ghostTong:{name:{th:"ผีพี่โต้ง",en:"Tong (ghost)"}, role:{th:"ผีเจ้าของบ้าน",en:"The house's own ghost"}}
 });
-const PLACEHOLDER_ART={paweena:"studentGirl", prof:"workMom", visitor:"workMom", phum:"kidBoy", baitoey:"kidGirl", chai:"workMan", fon:"workMom", ghostChoy:"grandma", ghostHem:"grandpa", ghostPaeng:"studentGirl", ghostTong:"studentBoy"};
+const PLACEHOLDER_ART={maeNoi:"maePu", paweena:"studentGirl", prof:"workMom", visitor:"workMom", phum:"kidBoy", baitoey:"kidGirl", chai:"workMan", fon:"workMom", ghostChoy:"grandma", ghostHem:"grandpa", ghostPaeng:"studentGirl", ghostTong:"studentBoy"};
 for(const [k,v] of Object.entries(PLACEHOLDER_ART)) if(!SPRITES[k]) SPRITES[k]=SPRITES[v];
 /* filler people: ordinary customers and passers-by the Wi-Fi hacker hides among */
 SPRITES.police=SPRITES.policePhop; PEOPLE.police={name:{th:"พี่ภพ",en:"Phop"}, role:{th:"ตำรวจไซเบอร์",en:"Cyber police"}};
@@ -148,7 +149,7 @@ const ZONES = {
   2:{name:{th:"ห้องสมุดเมือง",en:"City Library"}, cases:["charge","helper","publicpc","airdrop"], roleCase:{grandpa:"charge", grandma:"helper", tips:"publicpc", friend:"airdrop"}},
   3:{name:{th:"ธนาคารนครทอง",en:"Nakhonthong Bank"}, cases:["rush","video","invest","remote"], roleCase:{grandma:"rush", grandpa:"video", friend:"invest", tips:"remote"}},
   4:{name:{th:"ร้านเน็ต NET ZONE",en:"NET ZONE internet café"}, cases:["topup","trade","secret","parent"], roleCase:{friend:"topup", tips:"trade", grandpa:"secret", grandma:"parent"}},
-  6:{name:{th:"มหาวิทยาลัยหัวเฉียวเฉลิมพระเกียรติ",en:"Huachiew Chalermprakiet University"}, cases:["scholar","itmail","parttime","fakeprof"], roleCase:{friend:"scholar", tips:"itmail", paweena:"parttime", prof:"fakeprof"}},
+  6:{name:{th:"มหาวิทยาลัยหัวเฉียวเฉลิมพระเกียรติ",en:"Huachiew Chalermprakiet University"}, cases:["scholar","itmail","parttime","fakeprof","callfund"], roleCase:{friend:"scholar", tips:"itmail", paweena:"parttime", prof:"fakeprof", parent:"callfund"}},
   7:{name:{th:"สถานีตำรวจ",en:"Police station"}, cases:["report","ransom"], roleCase:{grandpa:"report", visitor:"ransom"}},
   5:{bonus:true, name:{th:"บ้านผีสิงในตรอกมืด",en:"The haunted house in the alley"}, cases:["merit","inherit","romance","fortune"], roleCase:{grandma:"merit", grandpa:"inherit", tips:"romance", friend:"fortune"}}
 };
@@ -166,7 +167,7 @@ const ZN = ()=>{ if(S.zone!==0) return ZONES[S.zone]||ZONES[1]; const r=recoverR
   return OUTZ; };
 function applyTS(){ document.documentElement.style.setProperty("--ts", String(S.ts||1)); }
 const totalScore=()=>MAINZ().reduce((a,z)=>a+zoneScore(z),0), totalMax=()=>MAINZ().reduce((a,z)=>a+zoneMax(z),0);
-const BAR_OF = {scholar:"privacy", itmail:"privacy", parttime:"money", fakeprof:"money", report:"money", ransom:"privacy", invest:"money", publicpc:"privacy", charge:"money", helper:"privacy", update:"privacy", airdrop:"privacy", qr:"money", bank:"money", wifi:"privacy", chat:"trust", pkg:"privacy", call:"money", job:"trust", seller:"money", rush:"money", video:"money", mule:"trust", remote:"privacy", merit:"trust", inherit:"money", romance:"trust", fortune:"money", topup:"money", trade:"privacy", secret:"trust", parent:"money"};
+const BAR_OF = {callfund:"money", scholar:"privacy", itmail:"privacy", parttime:"money", fakeprof:"money", report:"money", ransom:"privacy", invest:"money", publicpc:"privacy", charge:"money", helper:"privacy", update:"privacy", airdrop:"privacy", qr:"money", bank:"money", wifi:"privacy", chat:"trust", pkg:"privacy", call:"money", job:"trust", seller:"money", rush:"money", video:"money", mule:"trust", remote:"privacy", merit:"trust", inherit:"money", romance:"trust", fortune:"money", topup:"money", trade:"privacy", secret:"trust", parent:"money"};
 /* ---------- the Shadow gang: evidence collected from each case ---------- */
 const EVID = {
   qr:{i:"🏷️",g:"acct",t:["สติกเกอร์ QR ปลอม","Fake QR sticker"],d:["บัญชีปลายทาง: นาย ธนพล ส.","Receiving account: Mr Thanaphon S."]},
@@ -176,6 +177,7 @@ const EVID = {
   scholar:{i:"🎓",g:"server",t:["เว็บทุนปลอม","Fake scholarship site"],d:["hcu-scholar.site อยู่บน 185.xx.xx.7","hcu-scholar.site is on 185.xx.xx.7"]},
   itmail:{i:"✉️",g:"server",t:["อีเมล IT ปลอม","Fake IT email"],d:["hcu-mail.help ส่งจากเซิร์ฟเวอร์เดียวกัน 185.xx.xx.7","hcu-mail.help sends from the same 185.xx.xx.7"]},
   parttime:{i:"🗣️",g:"acct",t:["คำให้การของปวีณา","Paweena's statement"],d:["“พี่บอส” สั่งเปิดบัญชีจากตึกฝั่งตรงข้ามถนน","“Boss” ran the accounts from the building across the road"]},
+  callfund:{i:"📞",g:"phone",t:["สายปลอมอ้างงานทุน","Fake scholarship-office call"],d:["โทรจากเบอร์ 02 xxx 8810 เบอร์เดียวกับไลน์อาจารย์ปลอม","Came from 02 xxx 8810, the same number as the fake lecturer LINE"]},
   fakeprof:{i:"👩‍🏫",g:"phone",t:["ไลน์อาจารย์ปลอม","Fake lecturer LINE"],d:["สมัครด้วยเบอร์ 02 xxx 8810","Registered with 02 xxx 8810"]},
   report:{i:"🧾",g:"acct",t:["บัญชีที่ถูกอายัด","The frozen account"],d:["เงินของลุงไหลไปบัญชีปวีณา แล้วต่อไปตึกเดียวกัน","The money went to Paweena's account, then to the same building"]},
   ransom:{i:"🔒",g:"phone",t:["ข้อความขู่ของ ShadowLock","ShadowLock's threats"],d:["ไลน์ข่มขู่สมัครด้วยซิมล็อตเดียวกับ 02 xxx 8810","The threatening LINE uses the same SIM batch as 02 xxx 8810"]},
