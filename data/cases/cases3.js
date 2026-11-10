@@ -8,12 +8,12 @@ const vcall=(time,cap,banner,sub)=>`<div class="vcall"><div class="vtop"><span c
 const teller=(q,line)=>`<div class="teller"><div class="tq"><small>Q</small><b>${q}</b></div><p>${line}</p></div>`;
 
 const TH={
-rush:{id:"rush",level:"ยาก",start:"s1",title:"หลานโทรมาขอเงินด่วน",
- learn:["แก๊งอ้างเป็นญาติที่เดือดร้อน","การตรวจสอบผ่านคนในครอบครัว","ทำไมคำว่า \"ห้ามบอกใคร\" คือสัญญาณอันตราย","ข้อมูลในโซเชียลถูกใช้หลอกได้"],
+rush:{id:"rush",level:"ยาก",start:"s1",title:"เสียงหลานขอเงินด่วน (เสียงปลอม AI)",
+ learn:["เสียงปลอมด้วย AI (deepfake) จากคลิปในโซเชียล","แก๊งอ้างเป็นญาติที่เดือดร้อน","การตรวจสอบผ่านคนในครอบครัว","ทำไมคำว่า \"ห้ามบอกใคร\" คือสัญญาณอันตราย","ข้อมูลในโซเชียลถูกใช้หลอกได้"],
  scenes:{
   s1:{title:"ยายวิ่งเข้ามา",
-   body:`<p>ยายศรีมือสั่น ยื่นมือถือให้ดู เมื่อ 10 นาทีก่อนมีสายเข้า เสียงผู้ชายร้องไห้บอกว่าเป็นต้น หลานชายของยาย</p>${call("สายที่ไม่ได้รับ 2 สาย","ไม่ทราบชื่อ","+66 9x xxx 4471","\"ยาย ผมเอง ต้นไง ผมขับรถชนคน ตำรวจจับอยู่… อย่าบอกแม่นะยาย\"")}${chat("ต","ต้น","บัญชีใหม่",["@วันนี้ 10:12","ยาย มือถือผมโดนยึด ใช้ไลน์นี้แทนนะ","จ่าบอกโอนค่าประกันตัว 50,000 เข้าบัญชีนี้ได้เลย นายสมพงษ์ ร. 412-0-55xxx","ภายใน 1 ชม. นะยาย ไม่งั้นผมต้องนอนในห้องขัง 🙏"])}`,
-   clues:["\"อย่าบอกแม่\" ตัดคนที่ตรวจสอบได้ดีที่สุดออกไป","บัญชีชื่อคนอื่น ไม่ใช่ของสถานีตำรวจหรือของต้น","เสียงร้องไห้ในสายแยกไม่ออกว่าเป็นใคร"],
+   body:`<p>ยายศรีมือสั่น ยื่นมือถือให้ดู เมื่อ 10 นาทีก่อนมีสายเข้า เสียงเหมือนต้น หลานชายของยายเป๊ะ ทั้งน้ำเสียงและคำติดปาก แต่ต้นเพิ่งโพสต์คลิปร้องเพลงลงโซเชียลเมื่อวาน</p>${call("สายที่ไม่ได้รับ 2 สาย","ไม่ทราบชื่อ","+66 9x xxx 4471","\"ยาย ผมเอง ต้นไง ผมขับรถชนคน ตำรวจจับอยู่… อย่าบอกแม่นะยาย\"")}${chat("ต","ต้น","บัญชีใหม่",["@วันนี้ 10:12","ยาย มือถือผมโดนยึด ใช้ไลน์นี้แทนนะ","จ่าบอกโอนค่าประกันตัว 50,000 เข้าบัญชีนี้ได้เลย นายสมพงษ์ ร. 412-0-55xxx","ภายใน 1 ชม. นะยาย ไม่งั้นผมต้องนอนในห้องขัง 🙏"])}`,
+   clues:["\"อย่าบอกแม่\" ตัดคนที่ตรวจสอบได้ดีที่สุดออกไป","บัญชีชื่อคนอื่น ไม่ใช่ของสถานีตำรวจหรือของต้น","เสียงเหมือนเป๊ะไม่ได้แปลว่าเป็นตัวจริง AI เลียนเสียงจากคลิปไม่กี่วินาทีได้"],
    choices:[{t:"ปลอบยายก่อน แล้วโทรหาต้นที่เบอร์เดิมที่ยายบันทึกไว้",to:"s2a",v:"good"},{t:"ถามคำถามที่มีแต่ต้นจะรู้ผ่านไลน์ใหม่นั้น ถ้าตอบถูกก็เป็นตัวจริง",to:"s2b",v:"risky"},{t:"พายายไปเคาน์เตอร์ก่อน ถ้าต้นถูกจับจริง ทุกนาทีสำคัญ",to:"s3",v:"bad"}]},
   s2a:{title:"ต้นไม่รับสาย",
    body:`<p>เบอร์เดิมของต้นดังจนตัดไป ไม่มีคนรับ ยายเริ่มร้องไห้ ทันใดนั้นมีสายใหม่เข้ามา</p>${call("สายเรียกเข้า","จ่าสมชาย","+66 8x xxx 0912","\"ป้าครับ อีก 20 นาทีผมต้องส่งตัวหลานเข้าเรือนจำแล้วนะ ถ้าไม่อยากให้เป็นเรื่องใหญ่ อย่าโทรบอกใคร\"")}`,
@@ -114,12 +114,12 @@ remote:{id:"remote",level:"ยาก",start:"s1",title:"คืนเงินค
 };
 
 const EN={
-rush:{id:"rush",level:"ยาก",start:"s1",title:"Grandson's urgent call",
- learn:["Scammers posing as a relative in trouble","Verifying through another family member","Why \"don't tell anyone\" is a red flag","How social media details get used against you"],
+rush:{id:"rush",level:"Hard",start:"s1",title:"Grandson's urgent call (an AI-cloned voice)",
+ learn:["AI-cloned voices (deepfakes) made from social media clips","Scammers posing as a relative in trouble","Verifying through another family member","Why \"don't tell anyone\" is a red flag","How social media details get used against you"],
  scenes:{
   s1:{title:"Grandma rushes over",
-   body:`<p>Grandma Sri's hands are shaking as she shows you her phone. Ten minutes ago a crying man called, saying he was Ton, her grandson.</p>${call("2 missed calls","Unknown","+66 9x xxx 4471","\"Grandma, it's me, Ton. I hit someone with the car, the police have me… don't tell Mum.\"")}${chat("T","Ton","new account",["@Today 10:12","Grandma they took my phone, use this LINE","The sergeant says transfer 50,000 bail to this account: Mr Sompong R. 412-0-55xxx","Within 1 hour please or I sleep in a cell 🙏"])}`,
-   clues:["\"Don't tell Mum\" cuts out the person best placed to check","The account is someone else's, not the police's or Ton's","A crying voice on the phone is hard to recognise"],
+   body:`<p>Grandma Sri's hands are shaking as she shows you her phone. Ten minutes ago a caller sounded exactly like Ton, her grandson, down to his catchphrases. Ton posted a singing clip on social media yesterday.</p>${call("2 missed calls","Unknown","+66 9x xxx 4471","\"Grandma, it's me, Ton. I hit someone with the car, the police have me… don't tell Mum.\"")}${chat("T","Ton","new account",["@Today 10:12","Grandma they took my phone, use this LINE","The sergeant says transfer 50,000 bail to this account: Mr Sompong R. 412-0-55xxx","Within 1 hour please or I sleep in a cell 🙏"])}`,
+   clues:["\"Don't tell Mum\" cuts out the person best placed to check","The account is someone else's, not the police's or Ton's","Sounding exactly right doesn't make it him: AI can clone a voice from a few seconds of video"],
    choices:[{t:"Calm Grandma first, then call Ton on the number she already has saved",to:"s2a",v:"good"},{t:"Ask something only Ton would know through that new LINE. Right answer, it's him",to:"s2b",v:"risky"},{t:"Get Grandma to the counter first. If Ton really is in custody, every minute counts",to:"s3",v:"bad"}]},
   s2a:{title:"Ton doesn't pick up",
    body:`<p>Ton's usual number rings out. Nobody answers. Grandma starts crying. Then a new call comes in.</p>${call("Incoming call","Sgt Somchai","+66 8x xxx 0912","\"Ma'am, in 20 minutes I send your grandson to prison. If you don't want this to get bigger, don't call anyone.\"")}`,

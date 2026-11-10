@@ -207,7 +207,6 @@ function talkTo(n){
       : S.busted ? t("แก๊งเงาถูกทลายแล้ว แต่มิจฉาชีพยังมีอีกเยอะ ระวังตัวด้วยนะ","The Shadow gang is down, but there are plenty more scammers. Stay sharp.")
       : t(`ทุกเรื่องที่เจอเป็นฝีมือแก๊งเดียวกัน ตอนนี้มีหลักฐาน ${evCount()}/${Object.keys(EVID).length} ชิ้น ช่วยให้ครบทุกที่ รวมทั้งมหาวิทยาลัยกับสถานีตำรวจในซอย`,`It's all one gang. You have ${evCount()}/${Object.keys(EVID).length} clues. Help everywhere, including the university and police station down the sois.`));
     if(!(S.bustTier>=1)) ls.push((S.hqFound?t(`${OFFICES[hqB()].name.th} นั่นแหละ มียามกันไม่ให้ขึ้นชั้นบน พี่ว่าใช่รังแก๊งเงาแน่ๆ`,`${OFFICES[hqB()].name.en}, the one with a guard blocking the lift. That has to be the Shadow gang's den.`):t("ได้ข่าวว่าแก๊งเงาซ่อนอยู่ในตึกออฟฟิศสักตึกฝั่งตรงข้ามถนน หน้าตาเหมือนบริษัทธรรมดาเลย ต้องเข้าไปสำรวจเอง","Word is the Shadow gang hides in one of the office buildings across the road. They look like ordinary companies, so we'll have to check them ourselves.")));
-    if(allDone()) ls.push(t("เมื่อกี้พี่ได้ยินเสียงแปลกๆ จากตรอกมืดข้างร้านกาแฟ… ลองไปดูไหม","I just heard strange noises from the dark alley by the café… want to take a look?"));
     if(recoverRole()) ls.push(t("ยายกับตาเพิ่งได้สายแปลกๆ ไปคุยด้วยหน่อยนะ","Grandma and Grandpa just got some strange calls. Go and talk to them."));
     S.seen[0]=true; save();
     say(n.id, lines(ls)); return;

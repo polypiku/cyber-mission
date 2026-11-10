@@ -45,7 +45,7 @@ function showPeek(){
   const el=$("peek");
   el.innerHTML=`<div class="device lockscr"><span class="island"></span><div class="scr">${sbar(nowClock())}
     <div class="lk-date">${esc(date)}</div><div class="lk-time">${nowClock()}</div>
-    <button class="ncard" id="peekOpen"><span class="appic"><svg viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4z"/></svg></span><span class="nb"><span class="nh"><b>${L("ต้นข้าว","Ton Khao")}</b><small>${L("ตอนนี้","now")}</small></span><span>${L("แกๆ ว่างมั้ย ขอยืม 3,000 หน่อย","hey are you free? can I borrow 3,000")}</span></span></button>
+    <button class="ncard" id="peekOpen"><span class="appic"><svg viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4z"/></svg></span><span class="nb"><span class="nh"><b>${L("ต้นข้าว","Ton Khao")}</b><small>${L("ตอนนี้","now")}</small></span><span>${L("แก ส่งรหัส 6 หลักที่เพิ่งเข้าไปให้หน่อย ด่วน","hey, send me the 6-digit code you just got, urgent")}</span></span></button>
     <div class="lk-acts"><button class="lk-btn" id="peekLater">${L("ไว้ทีหลัง","Later")}</button><button class="lk-btn y" id="peekGo">${L("เปิดอ่าน","Open")}</button></div>
     <div class="homebar"></div></div></div>`;
   el.hidden=false; el.classList.remove("in"); void el.offsetWidth; requestAnimationFrame(()=>el.classList.add("in"));
@@ -136,7 +136,7 @@ function openChats(){
   const r=S.best.chat?{type:S.best.chat}:null;
   const row = (ava,name,prev,time,extra,attr)=>`<button class="crow" ${attr}><span class="av">${ava}</span><span class="cb"><span class="nh"><b>${name}</b><small>${time}</small></span><span class="pv">${prev}</span></span>${extra}</button>`;
   const inboxRows = S.inbox.map(id=>{ const m=MSGS.find(x=>x.id===id); return m?row(esc(m.from[EN()?1:0].slice(0,1)),esc(m.from[EN()?1:0]),esc(m.t[EN()?1:0]),L("ตอนนี้","now"),`<i class="unread"></i>`,`data-msg="${id}"`):""; }).join("");
-  const rows = inboxRows + (S.chat ? row(L("ต","T"),L("ต้นข้าว","Ton Khao"),L("แกๆ ว่างมั้ย ขอยืม 3,000 หน่อย","hey are you free? can I borrow 3,000"),L("19:42","19:42"), r?`<span class="badge t-${r.type}">${TL(r.type)}</span>`:`<i class="unread"></i>`,"data-chat") : "")
+  const rows = inboxRows + (S.chat ? row(L("ต","T"),L("ต้นข้าว","Ton Khao"),L("แก ส่งรหัส 6 หลักที่เพิ่งเข้าไปให้หน่อย ด่วน","hey, send me the 6-digit code you just got, urgent"),L("19:42","19:42"), r?`<span class="badge t-${r.type}">${TL(r.type)}</span>`:`<i class="unread"></i>`,"data-chat") : "")
     + row("N","NKT-Bank",L("[นครทอง] บัญชีของท่านถูกระงับชั่วคราว…","[Nakhonthong] Your account has been temporarily suspended…"),L("เมื่อวาน","Yesterday"),"","disabled")
     + row(L("แ","M"),L("แม่","Mum"),L("กินข้าวยังลูก","Have you eaten yet?"),L("จันทร์","Mon"),"","disabled");
   openSheet("phone", `${top_(L("โทรศัพท์ของคุณ","Your phone"))}<div class="sh-body"><div class="device"><span class="island"></span><div class="scr">${sbar(nowClock())}

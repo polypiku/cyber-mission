@@ -5,7 +5,7 @@ const CHAPTERS = [2, 1, 4, 3, 6];
 const GHOST_MIN = 300;                      /* points (★ in the HUD) needed to enter the haunted house */
 const chapterOf = (z)=>CHAPTERS.indexOf(+z);
 const chapter = ()=>S.chapter||0;
-const ghostOpen = ()=>totalScore()>=GHOST_MIN;
+const ghostOpen = ()=>false;                 /* the haunted house is closed: the game keeps 15 cases */
 
 /* can the player walk into this zone? */
 function zoneOpen(z){

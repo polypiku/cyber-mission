@@ -145,18 +145,18 @@ const PLAYABLE=["studentGirl","studentBoy","guardGirl","guardBoy"];
 const nm = (id)=>(id===S.char && S.name) ? S.name : PEOPLE[id].name[S.lang];
 /* ---------- zones + scoring ---------- */
 const ZONES = {
-  1:{name:{th:"ร้านกาแฟ Bean House",en:"Bean House café"}, cases:["qr","bank","wifi","chat"], roleCase:{grandma:"qr", grandpa:"bank", friend:"wifi", phone:"chat"}},
-  2:{name:{th:"ห้องสมุดเมือง",en:"City Library"}, cases:["charge","helper","publicpc","airdrop"], roleCase:{grandpa:"charge", grandma:"helper", tips:"publicpc", friend:"airdrop"}},
-  3:{name:{th:"ธนาคารนครทอง",en:"Nakhonthong Bank"}, cases:["rush","video","invest","remote"], roleCase:{grandma:"rush", grandpa:"video", friend:"invest", tips:"remote"}},
-  4:{name:{th:"ร้านเน็ต NET ZONE",en:"NET ZONE internet café"}, cases:["topup","trade","secret","parent"], roleCase:{friend:"topup", tips:"trade", grandpa:"secret", grandma:"parent"}},
-  6:{name:{th:"มหาวิทยาลัยหัวเฉียวเฉลิมพระเกียรติ",en:"Huachiew Chalermprakiet University"}, cases:["scholar","itmail","parttime","fakeprof","callfund"], roleCase:{friend:"scholar", tips:"itmail", paweena:"parttime", prof:"fakeprof", parent:"callfund"}},
-  7:{name:{th:"สถานีตำรวจ",en:"Police station"}, cases:["report","ransom"], roleCase:{grandpa:"report", visitor:"ransom"}},
-  5:{bonus:true, name:{th:"บ้านผีสิงในตรอกมืด",en:"The haunted house in the alley"}, cases:["merit","inherit","romance","fortune"], roleCase:{grandma:"merit", grandpa:"inherit", tips:"romance", friend:"fortune"}}
+  1:{name:{th:"ร้านกาแฟ Bean House",en:"Bean House café"}, cases:["qr","wifi","chat"], roleCase:{grandma:"qr", friend:"wifi", phone:"chat"}},
+  2:{name:{th:"ห้องสมุดเมือง",en:"City Library"}, cases:["leak","publicpc","airdrop"], roleCase:{grandma:"leak", tips:"publicpc", friend:"airdrop"}},
+  3:{name:{th:"ธนาคารนครทอง",en:"Nakhonthong Bank"}, cases:["rush","video","remote"], roleCase:{grandma:"rush", grandpa:"video", tips:"remote"}},
+  4:{name:{th:"ร้านเน็ต NET ZONE",en:"NET ZONE internet café"}, cases:["topup","loanapp","crypto"], roleCase:{friend:"topup", grandma:"loanapp", grandpa:"crypto"}},
+  6:{name:{th:"มหาวิทยาลัยหัวเฉียวเฉลิมพระเกียรติ",en:"Huachiew Chalermprakiet University"}, cases:["itmail","parttime","callfund"], roleCase:{tips:"itmail", paweena:"parttime", parent:"callfund"}},
+  7:{name:{th:"สถานีตำรวจ",en:"Police station"}, cases:[], roleCase:{}},
+  5:{bonus:true, name:{th:"บ้านผีสิงในตรอกมืด",en:"The haunted house in the alley"}, cases:[], roleCase:{}}   /* closed: the game keeps 15 cases */
 };
 const MAINZ = ()=>Object.keys(ZONES).map(Number).filter(z=>!ZONES[z].bonus);
 const zno = (z)=>{ z=+z; const i=CHAPTERS.indexOf(z); if(i>=0) return i+1; if(z===7) return "🚓"; if(ZONES[z]&&ZONES[z].bonus) return "👻"; return ""; };
 const OUTZ={name:{th:"ถนนหน้าร้าน",en:"The street"}, cases:[], roleCase:{}};
-const VICTIM_CASES={grandma:["qr","rush"], grandpa:["bank","video"]};
+const VICTIM_CASES={grandma:["qr","rush"], grandpa:["video"]};
 function recoverRole(){
   if(S.best.recover==="safe") return null;
   for(const r of ["grandma","grandpa"]) if(VICTIM_CASES[r].some(k=>S.best[k]==="danger")) return r;
@@ -167,31 +167,23 @@ const ZN = ()=>{ if(S.zone!==0) return ZONES[S.zone]||ZONES[1]; const r=recoverR
   return OUTZ; };
 function applyTS(){ document.documentElement.style.setProperty("--ts", String(S.ts||1)); }
 const totalScore=()=>MAINZ().reduce((a,z)=>a+zoneScore(z),0), totalMax=()=>MAINZ().reduce((a,z)=>a+zoneMax(z),0);
-const BAR_OF = {callfund:"money", scholar:"privacy", itmail:"privacy", parttime:"money", fakeprof:"money", report:"money", ransom:"privacy", invest:"money", publicpc:"privacy", charge:"money", helper:"privacy", update:"privacy", airdrop:"privacy", qr:"money", bank:"money", wifi:"privacy", chat:"trust", pkg:"privacy", call:"money", job:"trust", seller:"money", rush:"money", video:"money", mule:"trust", remote:"privacy", merit:"trust", inherit:"money", romance:"trust", fortune:"money", topup:"money", trade:"privacy", secret:"trust", parent:"money"};
+const BAR_OF = {leak:"privacy", loanapp:"privacy", crypto:"money", callfund:"money", scholar:"privacy", itmail:"privacy", parttime:"money", fakeprof:"money", report:"money", ransom:"privacy", invest:"money", publicpc:"privacy", charge:"money", helper:"privacy", update:"privacy", airdrop:"privacy", qr:"money", bank:"money", wifi:"privacy", chat:"trust", pkg:"privacy", call:"money", job:"trust", seller:"money", rush:"money", video:"money", mule:"trust", remote:"privacy", merit:"trust", inherit:"money", romance:"trust", fortune:"money", topup:"money", trade:"privacy", secret:"trust", parent:"money"};
 /* ---------- the Shadow gang: evidence collected from each case ---------- */
 const EVID = {
   qr:{i:"🏷️",g:"acct",t:["สติกเกอร์ QR ปลอม","Fake QR sticker"],d:["บัญชีปลายทาง: นาย ธนพล ส.","Receiving account: Mr Thanaphon S."]},
-  bank:{i:"🌐",g:"server",t:["โดเมน nakhonthong-verify.co","Domain nakhonthong-verify.co"],d:["ชี้ไปที่เซิร์ฟเวอร์ 185.xx.xx.7","Points to server 185.xx.xx.7"]},
   wifi:{i:"📶",g:"server",t:["หน้าล็อกอิน Wi-Fi ปลอม","Fake Wi-Fi login page"],d:["ส่งรหัสที่ดักได้ไปที่ 185.xx.xx.7","Sends captured passwords to 185.xx.xx.7"]},
-  chat:{i:"💬",g:"acct",t:["บัญชี \"พี่สาว\" ของต้นข้าว","Ton Khao's \"sister\" account"],d:["ปลายทาง: น.ส. ปวีณา","Receiving: Ms Paweena"]},
-  scholar:{i:"🎓",g:"server",t:["เว็บทุนปลอม","Fake scholarship site"],d:["hcu-scholar.site อยู่บน 185.xx.xx.7","hcu-scholar.site is on 185.xx.xx.7"]},
+  chat:{i:"💬",g:"server",t:["เครื่องที่ยึดบัญชีแชต","The device taking over chat accounts"],d:["บัญชีที่ถูกยึดทุกบัญชีล็อกอินจาก 185.xx.xx.7","Every hijacked account logged in from 185.xx.xx.7"]},
   itmail:{i:"✉️",g:"server",t:["อีเมล IT ปลอม","Fake IT email"],d:["hcu-mail.help ส่งจากเซิร์ฟเวอร์เดียวกัน 185.xx.xx.7","hcu-mail.help sends from the same 185.xx.xx.7"]},
   parttime:{i:"🗣️",g:"acct",t:["คำให้การของปวีณา","Paweena's statement"],d:["“พี่บอส” สั่งเปิดบัญชีจากตึกฝั่งตรงข้ามถนน","“Boss” ran the accounts from the building across the road"]},
   callfund:{i:"📞",g:"phone",t:["สายปลอมอ้างงานทุน","Fake scholarship-office call"],d:["โทรจากเบอร์ 02 xxx 8810 เบอร์เดียวกับไลน์อาจารย์ปลอม","Came from 02 xxx 8810, the same number as the fake lecturer LINE"]},
-  fakeprof:{i:"👩‍🏫",g:"phone",t:["ไลน์อาจารย์ปลอม","Fake lecturer LINE"],d:["สมัครด้วยเบอร์ 02 xxx 8810","Registered with 02 xxx 8810"]},
-  report:{i:"🧾",g:"acct",t:["บัญชีที่ถูกอายัด","The frozen account"],d:["เงินของลุงไหลไปบัญชีปวีณา แล้วต่อไปตึกเดียวกัน","The money went to Paweena's account, then to the same building"]},
-  ransom:{i:"🔒",g:"phone",t:["ข้อความขู่ของ ShadowLock","ShadowLock's threats"],d:["ไลน์ข่มขู่สมัครด้วยซิมล็อตเดียวกับ 02 xxx 8810","The threatening LINE uses the same SIM batch as 02 xxx 8810"]},
-  charge:{i:"🔌",g:"phone",t:["ตู้ชาร์จปลอม","Fake charging station"],d:["แอปในตู้ส่ง OTP ไปที่เบอร์ 02 xxx 8810","Its app forwards OTPs to 02 xxx 8810"]},
-  helper:{i:"🪪",g:"acct",t:["บัญชีขาย “แพ็ก VIP”","The “VIP pass” account"],d:["ปลายทาง: น.ส. ปวีณา (อีกแล้ว!)","Receiving: Ms Paweena (again!)"]},
   publicpc:{i:"⌨️",g:"server",t:["ตัวดักแป้นพิมพ์","Keyloggers"],d:["ส่งข้อมูลที่ดักได้ไปที่ 185.xx.xx.7","They send what they capture to 185.xx.xx.7"]},
   airdrop:{i:"📄",g:"server",t:["ไฟล์มาโครจาก LIB-Printer","Macro file from LIB-Printer"],d:["มาโครโหลดแรนซัมแวร์จาก 185.xx.xx.7","The macro pulls ransomware from 185.xx.xx.7"]},
   rush:{i:"🏦",g:"acct",t:["บัญชีค่าประกันตัว","The bail account"],d:["ปลายทาง: นายสมพงษ์ ร.","Receiving: Mr Sompong R."]},
   video:{i:"📹",g:"phone",t:["เบอร์ \"จ่าสมชาย\"","\"Sgt Somchai\" number"],d:["+66 8x xxx 0912 ซิมชุดเดียวกับ 02 xxx 8810","+66 8x xxx 0912, same SIM batch as 02 xxx 8810"]},
-  invest:{i:"📈",g:"acct",t:["บัญชีกลุ่มลงทุนปลอม","Fake investment group accounts"],d:["เงินลงทุนโอนเข้าบัญชี ธนพล ปวีณา สมพงษ์","Deposits went to Thanaphon, Paweena, Sompong"]},
-  topup:{i:"💎",g:"acct",t:["QR ขายเพชรนอกระบบ","Off-platform diamond QR"],d:["ปลายทาง: น.ส. ปวีณา (อีกแล้ว!)","Receiving: Ms Paweena (again!)"]},
-  trade:{i:"🎮",g:"server",t:["เว็บ game-trade.site","game-trade.site"],d:["อยู่บนเซิร์ฟเวอร์ 185.xx.xx.7","Hosted on 185.xx.xx.7"]},
-  secret:{i:"🕶️",g:"phone",t:["บัญชี \"พี่บอส\"","\"Big Bro Boss\" account"],d:["ยืนยันบัญชีด้วยเบอร์ 02 xxx 8810","Verified with number 02 xxx 8810"]},
-  parent:{i:"🔎",g:"server",t:["โฆษณาคืนเงินเกมปลอม","Fake game-refund ad"],d:["ลิงก์ไปที่ 185.xx.xx.7","Links to 185.xx.xx.7"]},
+  topup:{i:"💎",g:"server",t:["เว็บเติมเกมปลอม","Fake top-up site"],d:["garena-topup70.shop อยู่บน 185.xx.xx.7","garena-topup70.shop is on 185.xx.xx.7"]},
+  leak:{i:"🔑",g:"server",t:["รหัสที่ถูกลองซ้ำๆ","Passwords tried again and again"],d:["การล็อกอินทุกครั้งมาจาก 185.xx.xx.7","Every login attempt came from 185.xx.xx.7"]},
+  loanapp:{i:"💀",g:"acct",t:["บัญชีรับชำระของแอปกู้เงิน","The loan app's payment account"],d:["ปลายทาง: นาย ธนพล ส. (บัญชีเดียวกับ QR ปลอม)","Receiving: Mr Thanaphon S. (same as the fake QR)"]},
+  crypto:{i:"💔",g:"phone",t:["โปรไฟล์ “เจนนี่”","The “Jenny” profile"],d:["สมัครด้วยเบอร์ 02 xxx 8810","Registered with 02 xxx 8810"]},
   remote:{i:"📱",g:"phone",t:["แอป PEA Refund","The PEA Refund app"],d:["ต่อ 185.xx.xx.7 และให้โทรกลับ 02 xxx 8810","Talks to 185.xx.xx.7, says call 02 xxx 8810"]}
 };
 const EV_GROUPS = {

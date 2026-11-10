@@ -5,11 +5,6 @@ Object.assign(EV_GROUPS, {
   hq:{t:["ข้างในตึกรังแก๊ง","Inside the gang's building"],r:["ชั้น 2 เป็นคอลเซ็นเตอร์ ชั้น 3 มีคนถูกหลอกมาขังไว้","Floor 2 is a call centre; floor 3 holds people tricked into working there"]}
 });
 Object.assign(EVID, {
-  /* haunted house cases (earned like any case) */
-  merit:{i:"🙏",g:"acct",src:"ghost",t:["บัญชีทำบุญปลอม","Fake donation account"],d:["เงินทำบุญเข้าบัญชีนายธนพล ส.","Donations went to Mr Thanaphon S."]},
-  inherit:{i:"📜",g:"acct",src:"ghost",t:["จดหมายมรดกปลอม","Fake inheritance letter"],d:["ค่าธรรมเนียมโอนเข้าบัญชีนายสมพงษ์ ร.","The 'fee' went to Mr Sompong R."]},
-  romance:{i:"💔",g:"phone",src:"ghost",t:["โปรไฟล์หาคู่ปลอม","Fake dating profile"],d:["สมัครด้วยเบอร์ 02 xxx 8810","Registered with 02 xxx 8810"]},
-  fortune:{i:"🔮",g:"server",src:"ghost",t:["เว็บดูดวงเสริมโชค","Lucky-charm fortune site"],d:["อยู่บนเซิร์ฟเวอร์ 185.xx.xx.7","Hosted on 185.xx.xx.7"]},
   /* hidden in rooms, marked with a ? */
   lx_lib:{i:"💾",g:"server",src:"lens",t:["USB แปลกในคอมห้องสมุด","Strange USB in a library PC"],d:["ไฟล์ข้างในส่งข้อมูลไป 185.xx.xx.7","Its files send data to 185.xx.xx.7"]},
   lx_cafe:{i:"📡",g:"server",src:"lens",t:["เราเตอร์ซ่อนใต้ชั้นวาง","Router hidden under a shelf"],d:["ตั้งชื่อ Wi-Fi เหมือนของร้าน","Broadcasts a name copying the café's Wi-Fi"]},
@@ -33,7 +28,7 @@ const CLUE_SRC = {
 };
 const srcOf = (k)=>EVID[k].src||"case";
 const isCaseId = (k)=>!!(CASES.th[k]);
-const UC_MIN = 18;
+const UC_MIN = 12;
 function clueWhere(k){
   const src=srcOf(k), zoneOf=(id)=>Object.keys(ZONES).find(z=>ZONES[z].cases.includes(id));
   if(src==="case"){ const z=zoneOf(k); return `${z?ZONES[z].name[S.lang]:""} · ${CASES[S.lang][k].title}`; }
@@ -121,8 +116,6 @@ function nextHint(){
   if(!S.hqFound) return t("ตึกออฟฟิศ 3 ตึกฝั่งตรงข้ามถนน ตึกไหนมีอะไรแปลกๆ ลองเข้าไปดู","Check the three office buildings across the road for anything odd.");
   if(!S.uc && (S.handed||0)<UC_MIN) return t(`ส่งเบาะแสให้ได้ ${UC_MIN} ชิ้น พี่จะทำบัตรพนักงานให้แฝงตัวขึ้นไปดูชั้นบน`,`Hand in ${UC_MIN} clues and I'll make you a staff pass to sneak upstairs.`);
   if(S.uc && !(S.ev.hq_script&&S.ev.hq_dorm)) return t("ขึ้นไปชั้น 2 ถ่ายรูปไวท์บอร์ด แล้วไปคุยกับคนที่ชั้น 3","Go up, photograph the whiteboard on floor 2, and talk to people on floor 3.");
-  if(!ghostOpen()) return t(`ได้ยินว่าตรอกมืดข้างร้านกาแฟมีเบาะแส แต่ต้องมีคะแนน ${GHOST_MIN} ★ ก่อนนะ`,`Word is the dark alley by the café hides clues, but you need ${GHOST_MIN} ★ first.`);
-  if(["merit","inherit","romance","fortune"].some(k=>!S.ev[k])) return t("ตรอกมืดข้างร้านกาแฟยังมีเบาะแสเหลืออยู่","The dark alley by the café still holds clues.");
   if(SPOTS.some(s=>s.lv>0 && !S.ev[s.id])) return t("ยังมีของแปลกๆ ซ่อนอยู่ตามห้องต่างๆ มองหาเครื่องหมาย ? สีเหลือง","There are still odd things hidden in rooms. Look for the yellow ? marks.");
   if(!S.ev.npc_it || !S.ev.npc_admin) return t("มีคนแปลกหน้าในร้านเน็ตกับธนาคาร ลองไปคุยดู","There are strangers at the net café and the bank. Talk to them.");
   return t("เคสไหนยังไม่ได้เบาะแส ลองเล่นใหม่ให้ปลอดภัย","Replay any case that didn't give a clue, and keep everyone safe.");

@@ -28,7 +28,6 @@ const BUILDINGS=[
   {zone:1, x:96,  w:360, door:276, name:{th:"Bean House",en:"Bean House"}, sub:{th:"ร้านกาแฟ",en:"Café"}, wall:"#F3E3C8", roof:"#C2552E", sign:"#2E3B33", signFg:"#FFC414"},
   {zone:2, x:540, w:310, door:695, name:{th:"ห้องสมุดเมือง",en:"CITY LIBRARY"}, sub:{th:"2 ชั้น · Wi-Fi ฟรี",en:"2 floors · Free Wi-Fi"}, wall:"#EFE6D6", roof:"#5B3A24", sign:"#3A2516", signFg:"#F2C14E"},
   {zone:3, x:1040, w:304, door:1192, name:{th:"ธนาคารนครทอง",en:"NKT BANK"}, sub:{th:"สาขาตลาด",en:"Market branch"}, wall:"#F1ECE0", roof:"#0F5E46", sign:"#0F5E46", signFg:"#F2C14E"},
-  {zone:5, alley:true, x:462, w:72, door:498, name:{th:"ตรอกมืด",en:"Dark alley"}, sub:{th:"",en:""}},
   {zone:6, alley:true, soi:true, road:true, x:850, w:40, door:870, icon:"🎓", col:"#F2C14E", name:{th:"ถนนไป ม.หัวเฉียวฯ",en:"Road to the university"}, sub:{th:"",en:""}},
   {zone:6, alley:true, soi:true, road:true, hide:true, x:1000, w:40, door:1020, icon:"🎓", col:"#F2C14E", name:{th:"ถนนไป ม.หัวเฉียวฯ",en:"Road to the university"}, sub:{th:"",en:""}},
   {zone:7, alley:true, soi:true, x:1350, w:72, door:1386, icon:"🚓", col:"#9CC3F0", name:{th:"ซอย 2 · สถานีตำรวจ",en:"Soi 2 · Police station"}, sub:{th:"",en:""}},
@@ -90,7 +89,7 @@ for(const f of [1,2]){
   L_.plants.forEach(p=>L_.solids.push({x:p.x-20,y:p.y-14,w:40,h:28}));
   (L_.rooms||[]).forEach(r=>L_.solids.push({x:r.x,y:r.y,w:r.w,h:r.h}));
 }
-const LIB_ROLES={1:["mentor","grandpa","grandma"],2:["tips","friend"]};
+const LIB_ROLES={1:["mentor","grandma"],2:["tips","friend"]};
 const libFloor=()=>S.floor===2?2:1;
 function libCast(mentor, friend, tips){
   const f=libFloor();
@@ -242,7 +241,10 @@ const bOf=(z)=>BUILDINGS.find(b=>b.zone===z);
 
 let player={id:"studentGirl",x:432,y:500,dir:"down",moving:false,t:0};
 let npcs=[];
-function buildCast(){ buildCast0(); addFillers(); }
+function buildCast(){ buildCast0(); dropCaseless(); addFillers(); }
+/* inside a zone, people whose case was cut from the game are not shown (tips-givers and story characters stay) */
+const CASE_ROLES=["grandma","grandpa","friend","visitor","prof","paweena","parent"];
+function dropCaseless(){ if(S.zone===0||S.zone===5||S.zone===8||!ZONES[S.zone]) return; const rc=ZONES[S.zone].roleCase; npcs=npcs.filter(n=>!CASE_ROLES.includes(n.role)||rc[n.role]); }
 function buildCast0(){
   const others=PLAYABLE.filter(c=>c!==S.char);
   const mentor = "volOat";
