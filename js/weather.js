@@ -1,7 +1,8 @@
 /* Day and night, and rain.
    One in-game day takes DAY_LEN real seconds. Rain comes now and then. When it rains everyone
    outside opens an umbrella; you only get one by helping the person whose case gives it to you. */
-const DAY_LEN=420;                 /* seconds for a whole day */
+const DAY_LEN=420;
+if(!S.umbV){ const ok=S.umbCase&&UMB_CASES[S.umbCase]&&S.best[S.umbCase]; if(S.items&&S.items.umbrella&&!ok) delete S.items.umbrella; if(S.umbCase&&!UMB_CASES[S.umbCase]) S.umbCase=null; S.umbV=2; save(); }                 /* seconds for a whole day */
 const WX={t:(S.wxT!=null?S.wxT:0.33), rain:0, rainOn:false, heavy:false, rainLeft:0, nextRain:70+Math.random()*60,
   drops:[], flash:0, saveT:0};
 
@@ -32,7 +33,8 @@ function stepWeather(dt){
   }
   WX.rain+=((WX.rainOn?(WX.heavy?1:.55):0)-WX.rain)*Math.min(1,dt*.8);
   WX.flash=Math.max(0,WX.flash-dt*3);
-  if(S.umbCase && !hasUmbrella() && S.best[S.umbCase]) giveUmbrella();
+  if(S.umbCase && UMB_CASES[S.umbCase] && !hasUmbrella() && S.best[S.umbCase]) giveUmbrella();
+  if(!hasUmbrella() && S.char && (!S.umbCase || !UMB_CASES[S.umbCase])) pickUmbrellaCase();
   /* rain streaks in screen space */
   const want=Math.round(WX.rain*(outdoors()?220:0));
   while(WX.drops.length<want) WX.drops.push({x:Math.random()*VW,y:Math.random()*VH,v:700+Math.random()*400,l:10+Math.random()*14});
@@ -46,14 +48,18 @@ function stepWeather(dt){
 const hasUmbrella=()=>!!(S.items&&S.items.umbrella);
 const caseZone=(k)=>+Object.keys(ZONES).find(z=>ZONES[z].cases.includes(k));
 /* when it starts raining and you have no umbrella, pick someone at random: help them and they give you theirs */
+/* pick (quietly) which street person will give you an umbrella; their ! and 🌂 show from the start */
+function pickUmbrellaCase(){
+  const rr_=recoverRole(), pool=Object.keys(UMB_CASES).filter(k=>!S.best[k] && UMB_CASES[k]!==rr_);
+  if(!pool.length){ giveUmbrella(); return; }
+  S.umbCase=pool[Math.floor(Math.random()*pool.length)]; save();
+}
+/* when it starts raining and you still have no umbrella, say who to help */
 function umbrellaQuest(){
   if(hasUmbrella()) return;
-  if(!S.umbCase || !UMB_CASES[S.umbCase] || S.best[S.umbCase]){
-    const rr_=recoverRole(), pool=Object.keys(UMB_CASES).filter(k=>!S.best[k] && UMB_CASES[k]!==rr_);
-    if(!pool.length){ giveUmbrella(); return; }
-    S.umbCase=pool[Math.floor(Math.random()*pool.length)]; save();
-  }
-  const k=S.umbCase, who=nm(UMB_CASES[k]);
+  if(!S.umbCase || !UMB_CASES[S.umbCase] || S.best[S.umbCase]) pickUmbrellaCase();
+  if(hasUmbrella()) return;
+  const who=nm(UMB_CASES[S.umbCase]);
   toast(L(`☔ ไม่มีร่ม เปียกหมดเลย! ${who}ที่ถนนหน้าร้านกำลังมีปัญหา ไปช่วยแล้วจะได้ร่ม (มองหา 🌂)`,
           `☔ No umbrella, you're soaked! ${who} on the street needs help. Help them and you'll get an umbrella (look for 🌂)`));
 }
