@@ -646,7 +646,7 @@ function drawPlant(g,p){
 }
 function spriteFor(c){
   const set=IMG[c.id]; if(!set) return {im:null};
-  if(c.dir==="up") return {im:set.up}; if(c.dir==="left") return {im:set.left}; if(c.dir==="right") return {im:set.left,flip:true};
+  if(c.dir==="up") return {im:set.up}; if(c.dir==="left") return {im:set.left}; if(c.dir==="right") return set.right?{im:set.right}:{im:set.left,flip:true};
   return {im:set.down};
 }
 function drawChar(g,c,now){
