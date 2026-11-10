@@ -11,6 +11,7 @@ const SPRITES={"guardGirl":{"down":{"w":70,"h":167,"src":"assets/sprites/guardGi
 "face":{"w":118,"h":140,"src":"assets/sprites/guardBoy/face.webp"}},
 "studentGirl":{"down":{"w":72,"h":167,"src":"assets/sprites/studentGirl/down.webp"},
 "q":{"w":72,"h":167,"src":"assets/sprites/studentGirl/q.webp"},
+"walk":{"w":72,"h":167,"src":"assets/sprites/studentGirl/walk.webp"},
 "left":{"w":63,"h":167,"src":"assets/sprites/studentGirl/left.webp"},
 "right":{"w":62,"h":167,"src":"assets/sprites/studentGirl/right.webp"},
 "up":{"w":63,"h":167,"src":"assets/sprites/studentGirl/up.webp"},
