@@ -1064,3 +1064,4 @@ body.cin .wxchip{display:none}
 @media (max-width:480px){
   .hbtn.bagbtn{position:fixed;left:max(12px,env(safe-area-inset-left,0px));bottom:calc(196px + env(safe-area-inset-bottom,0px));z-index:6}
 }
+.ar-photo{display:block;width:100%;height:100%;object-fit:cover;object-position:50% 40%}
