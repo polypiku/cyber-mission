@@ -180,7 +180,7 @@ function talkTo(n){
   if(n.role==="clue_it"){ const first=!S.clueIT; S.clueIT=true; save();
     say(n.id, lines([t("มาซ่อมเน็ตให้ร้านครับ เดี๋ยวเสียบกล่องนี้ไว้ เน็ตจะแรงขึ้น","I'm here to fix the shop's internet. I'll plug this box in and it'll be faster."),
       t("ใครถามก็บอกว่าช่างจากบริษัทนะ ไม่ต้องไปถามเจ้าของร้านหรอก","If anyone asks, I'm from the company. No need to bother the owner.")]),{onEnd:()=>{ if(casesOpen(S.zone)) setTimeout(()=>gainClue("npc_it"),2900); if(first) setTimeout(()=>toast(L("🕵️ เจ้าของร้านไม่ได้เรียกช่าง… กล่องนั้นอาจเป็นตัวปล่อย Wi-Fi ปลอม","🕵️ The owner never called a technician… that box could be a fake Wi-Fi hotspot")),300); }}); return; }
-  if(n.role==="fon"){
+  if(n.role==="fon" && !caseOf(n)){   /* Fon chats unless she has the umbrella case */
     const FON=[
       [t("พี่ใกล้คลอดแล้ว ช่วงนี้มีคนทักมาขายของเด็กอ่อนถูกมาก ให้โอนก่อนแล้วค่อยส่ง… พี่เลยเช็กชื่อบัญชีกับเลขบัญชีก่อนทุกครั้ง","I'm due soon. People keep messaging me cheap baby gear, pay first and they'll ship… so I always check the account name and number first."),t("ถ้าร้านไม่ยอมเก็บเงินปลายทาง ไม่มีรีวิวจริง พี่ไม่ซื้อเลย","If a shop won't do cash on delivery and has no real reviews, I don't buy.")],
       [t("เมื่อวานมี SMS บอกว่าได้เงินอุดหนุนเด็กแรกเกิด ให้กดลิงก์ไปกรอกเลขบัญชี","Yesterday an SMS said I'd get a newborn grant and to enter my bank details at a link."),t("สิทธิ์จริงต้องลงทะเบียนกับหน่วยงานรัฐโดยตรง ไม่มีใครส่งลิงก์มาให้กรอกหรอก","Real benefits are registered with the government office directly. Nobody texts you a form link.")],
