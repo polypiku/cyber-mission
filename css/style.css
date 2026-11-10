@@ -828,9 +828,7 @@ body.phone-open .phonepeek{bottom:-170px}
 .pwallet small{opacity:.85;font-size:.82rem}.pwallet b{display:block;font-size:2.1rem;margin:.1em 0;color:#fff}.pwallet p{margin:0;font-size:.82rem;opacity:.9}
 .sheet.asphone .scanpad .btn,.sheet.asphone #scanOut .endcard{margin-left:10px;margin-right:10px}
 @media (prefers-reduced-motion: reduce){.hs-scan{animation:none}.radar.on i{animation:none}}
-#dbgEnd{position:fixed;z-index:6;left:50%;top:max(12px,env(safe-area-inset-top,0px));transform:translateX(-50%);width:46px;height:46px;border-radius:50%;border:2.5px solid #000;background:#FFC414;font-size:1.3rem;cursor:pointer;box-shadow:3px 3px 0 #000}
-body.phone-open #dbgEnd{display:none}
-#cinNight{position:fixed;inset:0;pointer-events:none;z-index:3;transition:background .8s}
+body.phone-open #cinNight{position:fixed;inset:0;pointer-events:none;z-index:3;transition:background .8s}
 #cinNight.night{background:rgba(8,14,46,.58)}#cinNight.dawn{background:linear-gradient(180deg,rgba(255,170,90,.22),rgba(255,210,150,.06))}
 #cin{position:fixed;inset:0;z-index:40;pointer-events:none}
 .cin-bar{position:absolute;left:0;right:0;height:9vh;background:#000;animation:cinBar .5s ease-out}
@@ -843,7 +841,7 @@ body.phone-open #dbgEnd{display:none}
 .cin-skip{position:absolute;right:14px;top:calc(9vh + 12px);pointer-events:auto;padding:8px 14px;border-radius:999px;border:2.5px solid #000;background:#FFC414;font:inherit;font-weight:800;cursor:pointer;box-shadow:3px 3px 0 #000}
 #cinFade{position:fixed;inset:0;background:#000;opacity:0;pointer-events:none;z-index:41;transition:opacity .42s}
 #cinFade.on{opacity:1}
-body.cin .hud,body.cin #phoneBtn,body.cin #prompt,body.cin #dbgEnd,body.cin #joy,body.cin #keys{display:none!important}
+body.cin .hud,body.cin #phoneBtn,body.cin #prompt,body.cin #joy,body.cin #keys{display:none!important}
 
 /* ---------- hands-on fix step ---------- */
 .fixbox{display:grid;grid-template-columns:44px 1fr;gap:8px 10px;align-items:center;background:#FFF4CC;border:var(--bw) solid var(--ink);box-shadow:var(--shadow);padding:10px 12px}

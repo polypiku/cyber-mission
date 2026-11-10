@@ -264,18 +264,6 @@ $("menuBtn").onclick=()=>{ if(!D) openMenu(); };
 $("mapBtn").onclick=()=>{ if(!D&&!busy()) openBigMap(); };
 $("goal").onclick=()=>{ if(!D&&!busy()) openZones(); };
 $("setBtn").onclick=()=>{ if(!D) openSettings(false); };
-/* DEBUG (temporary): shortcut to preview the 5 endings without changing the save */
-(function(){
-  const b=document.createElement("button"); b.id="dbgEnd"; b.textContent="🎬"; b.title="ดูฉากจบ (ทางลัดชั่วคราว)";
-  document.body.appendChild(b);
-  b.onclick=()=>{ if(D) return;
-    openSheet("menu", `${top_(L("ทางลัดฉากจบ (ชั่วคราว)","Ending shortcuts (temporary)"))}<div class="sh-body"><p class="note">${L("ดูอย่างเดียว ไม่บันทึกผลลงเซฟ","Preview only. Your save isn't changed.")}</p>
-      <div class="btns" style="grid-template-columns:1fr">${[1,2,3,4,5].map(n=>`<button class="btn ${n===5?"y":n===1?"":"g"}" data-dbgend="${n}"><span>${L("ฉากจบ","Ending")} ${n} · ${esc(ENDINGS[n].t[EN()?1:0])}</span></button>`).join("")}
-      <button class="btn g" data-close><span>${L("ปิด","Close")}</span></button></div></div>`);
-    $("sheet").querySelectorAll("[data-dbgend]").forEach(x=>x.onclick=()=>{ const n=+x.dataset.dbgend, E=ENDINGS[n]; closeSheet();
-      playEndingScene(n,false); });
-  };
-})();
 $("prog").onclick=()=>{ if(!D && $("peek").hidden) openZones(); };
 $("boardBtn").onclick=()=>{ if(!D && $("peek").hidden) openBoard(); };
 $("bagBtn").onclick=()=>{ if(!D && $("peek").hidden && !busy()) openBag(); };

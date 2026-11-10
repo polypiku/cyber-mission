@@ -150,7 +150,7 @@ function takenScript(){
   return {steps:st, opt:{noCars:true, night:true, actors:[A.phop,A.t1,A.t2]}};
 }
 function playEndingScene(n, persist){
-  const E=ENDINGS[n], title=`${L("ฉากจบ","Ending")} ${n}/5 · ${E.t[EN()?1:0]}`;
+  const E=ENDINGS[n], title=`${L("ฉากจบ","Ending")} ${endDisp(n)}/3 · ${E.t[EN()?1:0]}`;
   const sc=n===1?takenScript():raidScript(n), skip=n===1?2:1;
   startCinema(sc.steps, ()=>{ player.hide=false; openCutscene(title, E.panels().slice(skip), ()=>endingCard(n)); }, sc.opt);
 }

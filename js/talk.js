@@ -120,7 +120,7 @@ function gameTour(){
     {who:M, sel:"#boardBtn", t:["บอร์ดหลักฐาน","Evidence board"], d:["ทุกเคสที่ช่วยจนจบและลงมือแก้ในมือถือสำเร็จ จะได้เบาะแสหนึ่งชิ้น ยังมีเบาะแสซ่อนอยู่อีก มองหาเครื่องหมาย ? ในห้อง","Every case you finish, including the hands-on fix on the phone, gives a clue. More clues are hidden in rooms; look for the ? marks."]},
     {who:M, world:{x:372,y:560,w:120,h:70}, t:["ออกไปข้างนอก","Going outside"], d:["ประตูด้านล่างพาลงไปที่ถนน เดินลงไปจนถึงสี่แยก ห้องสมุดอยู่ทางซ้าย ซอย 2 ทางขวาไปสถานีตำรวจของพี่ภพ ที่อื่นจะเปิดเมื่อได้เบาะแสชี้ไป","The bottom door leads down to the street. Walk to the crossroads: the library is on the left, Soi 2 on the right goes to Phop's police station. Other places open as leads point to them."]},
     {who:M, sel:"#menuBtn", t:["เมนู","Menu"], d:["เปลี่ยนภาษา เปิดปิดเสียง เปิดสมุดกลโกง และดูทัวร์นี้ซ้ำได้ที่นี่","Change language, toggle sound, open the scam book, or replay this tour here."]},
-    {who:M, t:["เป้าหมาย","The goal"], d:["ตามเบาะแสไปทีละที่ แล้วเอาไปส่งพี่ภพ ยิ่งมีเบาะแสมาก ตอนบุกยิ่งจับได้ครบ ฉากจบมี 5 แบบ จำสามคำ: หยุด คิด ตรวจสอบ","Follow the leads place by place and hand them to Phop. The more clues, the more of the gang gets caught. There are 5 endings. Remember: stop, think, check."]}
+    {who:M, t:["เป้าหมาย","The goal"], d:["ตามเบาะแสไปทีละที่ แล้วเอาไปส่งพี่ภพ ยิ่งมีเบาะแสมาก ตอนบุกยิ่งจับได้ครบ ฉากจบมี 3 แบบ จำสามคำ: หยุด คิด ตรวจสอบ","Follow the leads place by place and hand them to Phop. The more clues, the more of the gang gets caught. There are 3 endings. Remember: stop, think, check."]}
   ].filter(Boolean);
 }
 function startTour(){

@@ -1,5 +1,5 @@
-/* Prologue, the police station, the raid and the five endings. */
-/* ---------- story: prologue, Phop at the station, the raid and the five endings ---------- */
+/* Prologue, the police station, the raid and the three endings. */
+/* ---------- story: prologue, Phop at the station, the raid and the three endings ---------- */
 const P=(bg,art,cap,say)=>({bg,art,cap,say:say||[]});
 function face_(id){ const sp=SPRITES[id]; return sp&&sp.face?`<img src="${sp.face.src}" alt="">`:"🙂"; }
 function openCutscene(title, panels, onDone){
@@ -29,34 +29,26 @@ function PROLOGUE(){ return [
 function endingFrom(handed){
   const pct=handed/clueTotal(), witness=S.best.parttime==="safe";
   if(pct>=.9 && witness) return 5;
-  if(pct>=.72) return 4; if(pct>=.5) return 3; if(pct>=.3) return 2; return 1;
+  if(pct>=.5) return 4; return 1;
 }
 function endingNo(){ return endingFrom(S.handed||0); }
+/* there are three endings, stored as 1, 4 and 5 (the old numbers), shown to players as 1, 2 and 3 */
+const endDisp=(n)=>n>=5?3:n>=4?2:1;
 const ENDINGS={
- 5:{t:["ทลายรัง","Nest destroyed"],c:"#2BB673",panels:()=>[
+ 5:{t:["จับได้บอส","The boss is caught"],c:"#2BB673",panels:()=>[
    P("#22344A","🚓🚓🚓🌅",["รุ่งเช้า ตำรวจล้อมตึกฝั่งตรงข้ามถนนเงียบๆ ทุกทางออก","At dawn, police quietly surround every exit of the building across the road."],[["police","หลักฐานครบทุกสาย มีพยาน มีคนแฝงตัวถูกจับครบ บุกได้!","Every thread is covered, we have a witness, every hidden hacker is caught. Go!"]]),
    P("#2A231C","🚪💥👮👮",["ประตูเปิด ข้างในมีคอมพิวเตอร์หลายสิบเครื่อง ซิมการ์ดเป็นกล่องๆ และบทพูดหลอกคนติดผนัง","The door opens: dozens of computers, boxes of SIM cards, scam scripts pinned to the walls."]),
    P("#3A0606","🕴️😱🔗",["“เฮียเงา” หัวหน้าแก๊งกำลังจะลบข้อมูล แต่คำให้การของปวีณาทำให้ตำรวจรู้ทางหนีไฟลับ จับได้คาที่","“Boss Shadow” tries to wipe the servers, but Paweena's statement revealed the secret fire exit. Caught red-handed."]),
    P("#173E3C","🏦🔒💸➡️👵👴",["บัญชีม้าทั้งหมดถูกอายัด เงินจำนวนมากถูกคืนให้ผู้เสียหาย ตาบุญกับยายศรีได้เงินคืน","Every mule account is frozen. Much of the money goes back to victims, Grandpa Boon and Grandma Sri included."]),
    P("#5B3A24","🎓🙇‍♀️💐",["ปวีณาได้รับการคุ้มครองในฐานะพยาน และกลับไปเรียนต่อ","Paweena is protected as a witness and goes back to her studies."],[["paweena","ขอบคุณที่ไม่ปล่อยให้เราอยู่คนเดียวนะ","Thank you for not leaving me alone in this."]]),
    P("#2BB673","🏆🛡️✨",["พี่ภพยื่นบัตรอาสาสมัครตำรวจไซเบอร์ให้คุณ ย่านนี้ปลอดภัยขึ้นจริงๆ","Phop hands you a cyber police volunteer badge. The district really is safer."],[["police","คุณคือเหตุผลที่เราจับได้ทั้งแก๊ง","You're the reason we caught the whole gang."]])]},
- 4:{t:["จับลูกน้อง หัวหน้าหนี","Crew caught, boss escaped"],c:"#2F6DB5",panels:()=>[
+ 4:{t:["จับได้แต่ลูกน้อง","Only the crew is caught"],c:"#2F6DB5",panels:()=>[
    P("#22344A","🚓🚓🌅",["รุ่งเช้า ตำรวจล้อมตึกฝั่งตรงข้ามถนน","At dawn, police surround the building across the road."],[["police","หลักฐานแน่นพอ บุก!","The evidence is solid. Go!"]]),
    P("#2A231C","🚪💥👮👥",["คนโทรหลอกหลายสิบคนถูกควบคุมตัว เครื่องคอมและซิมถูกยึดหมด","Dozens of scam callers are detained, computers and SIMs seized."]),
    P("#3A0606","🕴️🏃💨🚤",["แต่ “เฮียเงา” หนีออกทางลับ ไปขึ้นเรือข้ามแดนได้ทัน","But “Boss Shadow” slips out a secret way and escapes across the border by boat."]),
    P("#173E3C","🏦🔒",["บัญชีม้าส่วนใหญ่ถูกอายัด ผู้เสียหายหลายคนได้เงินคืนบางส่วน","Most mule accounts are frozen, and many victims get part of their money back."]),
    P("#1a1a1a","📱🕶️…",["คืนนั้นมือถือคุณสั่น ข้อความจากเบอร์ไม่รู้จัก: “เจอกันใหม่นะ การ์ดไซเบอร์”","That night your phone buzzes. Unknown number: “See you again, Cyber Guard.”"],[["police","ถ้ามีพยานและจับคนแฝงตัวได้ครบกว่านี้ เราคงไม่พลาดเขา","With a witness and every hidden hacker caught, we wouldn't have missed him."]])]},
- 3:{t:["ปิดเซิร์ฟเวอร์ได้","Servers shut down"],c:"#F2C14E",panels:()=>[
-   P("#22344A","🚓🌅",["ตำรวจบุกตึกฝั่งตรงข้ามถนน","Police raid the building across the road."]),
-   P("#2A231C","🖥️🔌📦",["เจอเซิร์ฟเวอร์ 185.xx.xx.7 ที่ใช้ทำเว็บปลอมทั้งหมด ยึดได้ทันที","They find the 185.xx.xx.7 server behind every fake site and seize it."]),
-   P("#3A0606","🚪🕳️👣",["แต่คนส่วนใหญ่หนีไปก่อนแล้ว เหลือแค่ลูกน้องไม่กี่คน","But most of the crew had already fled. Only a few small fry remain."]),
-   P("#1a1a1a","🌐➡️🏚️",["ไม่กี่สัปดาห์ต่อมา เว็บปลอมชุดใหม่ก็โผล่มาจากที่อื่น","A few weeks later, new fake sites pop up from somewhere else."],[["police","เราตัดแขนเขาได้ข้างหนึ่ง แต่ยังไม่ถึงหัว ต้องมีหลักฐานมากกว่านี้","We cut off one arm, not the head. We need more evidence."]])]},
- 2:{t:["ห้องว่างเปล่า","An empty room"],c:"#F2994A",panels:()=>[
-   P("#22344A","🚓🌅",["ตำรวจบุกตึกฝั่งตรงข้ามถนน","Police raid the building across the road."]),
-   P("#2A231C","🚪🕳️🪑",["ห้องว่างเปล่า เหลือแค่โต๊ะ สายไฟ และกล่องซิมที่ถูกเผา","The room is empty: desks, cables and a box of burned SIM cards."]),
-   P("#3A0606","📱🕵️",["แก๊งเงารู้ตัวก่อน มีคนแจ้งข่าวว่าหลักฐานของเรายังไม่แน่นพอ","The Shadow gang was tipped off that our evidence wasn't solid enough."]),
-   P("#1a1a1a","👵💸😢",["ผู้เสียหายหลายคนยังไม่ได้เงินคืน","Many victims never get their money back."],[["police","ยังไม่จบ กลับไปช่วยคนให้ดีกว่านี้ แล้วเรามาลองใหม่","It's not over. Go back, help people better, and we'll try again."]])]},
- 1:{t:["ถูกจับเข้าแก๊ง","Taken by the gang"],c:"#E5402F",panels:()=>[
+ 1:{t:["ถูกจับตัว","Kidnapped"],c:"#E5402F",panels:()=>[
    P("#22344A","🚓…⏳",["หลักฐานยังไม่พอ ตำรวจต้องรอหมายค้น การบุกถูกเลื่อนออกไป","The evidence isn't enough. Police must wait for a warrant, and the raid is delayed."]),
    P("#1a1a1a","🌙🚐👥",["คืนนั้นระหว่างทางกลับ รถตู้สีดำจอดข้างคุณ","That night, on your way home, a black van pulls up beside you."],[["me","เดี๋ยว… พวกคุณเป็นใคร","Wait… who are you?"]]),
    P("#3A0606","🏢🔒💻",["คุณตื่นขึ้นในตึกฝั่งตรงข้ามถนน มือถือถูกยึด ประตูล็อกจากข้างนอก","You wake inside the building across the road. Phone taken, door locked from outside."]),
@@ -74,11 +66,11 @@ function endingCard(n){
   const E=ENDINGS[n], h=S.handed||0, pct=Math.round(h/clueTotal()*100), bd=clueBreakdown();
   const tick=(ok)=>ok?"✅":"⬜";
   const rows=Object.entries(CLUE_SRC).map(([k,v])=>bd[k]?`<li>${tick(bd[k][0]===bd[k][1])} ${v[S.lang]} ${bd[k][0]}/${bd[k][1]}</li>`:"").join("");
-  openSheet("unlock", `<div class="unlockhero" style="background:${E.c}"><span class="eyebrow">${L("ฉากจบ","Ending")} ${n} / 5</span><div class="ubig">${E.t[EN()?1:0]}</div><p>${L("ฉากจบที่ดีที่สุดที่เคยได้","Best ending so far")}: ${S.bestEnding}/5</p></div>
+  openSheet("unlock", `<div class="unlockhero" style="background:${E.c}"><span class="eyebrow">${L("ฉากจบ","Ending")} ${endDisp(n)} / 3</span><div class="ubig">${E.t[EN()?1:0]}</div><p>${L("ฉากจบที่ดีที่สุดที่เคยได้","Best ending so far")}: ${endDisp(S.bestEnding)}/3</p></div>
     <div class="sh-body"><div class="box"><h4>${L("สิ่งที่ส่งผลต่อฉากจบ","What decides the ending")}</h4><ul class="list">
-      <li>🧩 ${L("เบาะแสที่ส่งตำรวจ","Clues handed to Phop")} ${h}/${clueTotal()} (${pct}%) · ${L("ฉาก 2: 30% · 3: 50% · 4: 72% · 5: 90%","Ending 2: 30% · 3: 50% · 4: 72% · 5: 90%")}</li>
+      <li>🧩 ${L("เบาะแสที่ส่งตำรวจ","Clues handed to Phop")} ${h}/${clueTotal()} (${pct}%) · ${L("ฉากจบ 2 (จับได้แต่ลูกน้อง): 50% · ฉากจบ 3 (จับได้บอส): 90%","Ending 2 (crew only): 50% · Ending 3 (the boss): 90%")}</li>
       ${rows}
-      <li>${tick(S.best.parttime==="safe")} ${L("ปวีณายอมเป็นพยาน (ต้องได้ฉาก 5)","Paweena agrees to testify (needed for ending 5)")}</li></ul></div>
+      <li>${tick(S.best.parttime==="safe")} ${L("ปวีณายอมเป็นพยาน (ต้องมีสำหรับฉากจบ 3)","Paweena agrees to testify (needed for ending 3)")}</li></ul></div>
     ${n<5?`<p>${L("หาเบาะแสเพิ่ม ส่งให้พี่ภพ แล้วบุกใหม่ได้ทุกเมื่อ","Find more clues, hand them to Phop, and raid again any time.")}</p>`:`<p>${L("ทุกเคสในเกมมาจากกลโกงที่เกิดขึ้นจริงในไทย จำไว้: หยุด คิด ตรวจสอบ","Every case is based on real scams in Thailand. Remember: stop, think, check.")}</p>`}
     <div class="btns">${btn(L("กลับไปเล่นต่อ","Back to the game"),"data-close","y")}</div></div>`);
 }

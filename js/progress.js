@@ -74,7 +74,7 @@ function goalInfo(){
   if(evCount()>(S.handed||0)) return {t:L(`เอาเบาะแส ${evCount()-(S.handed||0)} ชิ้นไปส่งพี่ภพที่สถานีตำรวจ`,`Take ${evCount()-(S.handed||0)} clue(s) to Phop at the police station`), z:7, here:S.zone===7};
   if(S.uc && !raided() && !(S.ev.hq_script&&S.ev.hq_dorm)) return {t:L("แฝงตัวขึ้นชั้น 2–3 ของตึกแก๊ง หาเบาะแส","Sneak up to floors 2–3 of the gang's building for clues"), z:8};
   if(!S.ending) return {t:L("ไปหาพี่ภพที่สถานีตำรวจ วางแผนบุกรังแก๊ง","See Phop at the police station to plan the raid"), z:7, here:S.zone===7};
-  if(S.ending<5) return {t:L(`ได้ฉากจบ ${S.ending}/5 · หาเบาะแสเพิ่มแล้วบุกใหม่ได้`,`Ending ${S.ending}/5 · find more clues and raid again`), z:7, here:S.zone===7};
+  if(S.ending<5) return {t:L(`ได้ฉากจบ ${endDisp(S.ending)}/3 · หาเบาะแสเพิ่มแล้วบุกใหม่ได้`,`Ending ${endDisp(S.ending)}/3 · find more clues and raid again`), z:7, here:S.zone===7};
   return {t:L("ทลายแก๊งเงาสำเร็จ! เดินเล่นต่อได้เลย","The Shadow gang is finished! Explore as you like")};
 }
 function drawGoalArrow(g,now){

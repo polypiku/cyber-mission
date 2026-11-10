@@ -129,7 +129,7 @@ function nextHint(){
 }
 function forecastLine(){
   const n=endingFrom(S.handed||0);
-  return t(`ถ้าบุกตอนนี้ คาดว่าจะได้ฉากจบ ${n}/5 “${ENDINGS[n].t[0]}”`,`If we raided now: ending ${n}/5, “${ENDINGS[n].t[1]}”`);
+  return t(`ถ้าบุกตอนนี้ คาดว่าจะได้ฉากจบ ${endDisp(n)}/3 “${ENDINGS[n].t[0]}”`,`If we raided now: ending ${endDisp(n)}/3, “${ENDINGS[n].t[1]}”`);
 }
 const raidReady = ()=>allDone() && S.hqFound;
 function handIn(n){
@@ -157,6 +157,6 @@ function talkPolice(n){
     say(n.id, lines([status, left&&left.length?t(`ยังมีคนรอให้ช่วยที่: ${left.map(([z,c])=>ZONES[z].name.th+" ("+c+")").join(", ")}`,`People still need help at: ${left.map(([z,c])=>ZONES[z].name.en+" ("+c+")").join(", ")}`):nextHint(), forecastLine()])); return;
   }
   const again=S.ending && S.ending<5;
-  say(n.id, lines([status, again?t(`ครั้งก่อนได้ฉากจบ ${S.ending}/5 อยากบุกใหม่ไหม`,`Last time we got ending ${S.ending}/5. Raid again?`):t("ทุกคนในย่านได้รับการช่วยแล้ว และเรารู้ว่าแก๊งอยู่ตึกไหน","Everyone has been helped, and we know which building it is."), forecastLine(), nextHint()]),
+  say(n.id, lines([status, again?t(`ครั้งก่อนได้ฉากจบ ${endDisp(S.ending)}/3 อยากบุกใหม่ไหม`,`Last time we got ending ${endDisp(S.ending)}/3. Raid again?`):t("ทุกคนในย่านได้รับการช่วยแล้ว และเรารู้ว่าแก๊งอยู่ตึกไหน","Everyone has been helped, and we know which building it is."), forecastLine(), nextHint()]),
     {choices:[{label:{th:"🚓 วางแผนบุก",en:"🚓 Plan the raid"},fn:()=>openCase("bust",n)},{label:{th:"หาเบาะแสเพิ่มก่อน",en:"Find more clues first"},ghost:true}]});
 }

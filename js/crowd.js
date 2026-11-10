@@ -278,7 +278,7 @@ function rewindBreak(){
 }
 function playPhoneLoss(){
   const lostCoins=S.coins;
-  openCutscene(L("ฉากจบพิเศษ · เสียทุกอย่าง","Special ending · Everything lost"),[
+  openCutscene(L("มือถือพัง · เสียทุกอย่าง","Phone lost · Everything gone"),[
     P("#0A0B0F","📱☠️⏰",["คุณไม่ได้เอามือถือไปซ่อม… มัลแวร์ทำงานต่อทั้งคืน","You never got the phone fixed… the malware ran all night."]),
     P("#3A0606","🏦➡️💸💸💸",[`แอปธนาคารถูกเปิดเอง เงินในบัญชีถูกโอนออกจนหมด เงิน ${BAHT(lostCoins)} ในกระเป๋าหายไปด้วย`,`Your bank app opened by itself and the account was drained. Your ${BAHT(lostCoins)} are gone too.`]),
     P("#2A231C","🖼️💬📤",["รูปส่วนตัว แชต และรายชื่อเพื่อนถูกส่งออกไป เพื่อนๆ ได้ข้อความจากบัญชีของคุณ “ขอยืมเงินด่วน”","Private photos, chats and contacts were copied out. Friends got messages from your account: “urgent, can I borrow money?”"]),
