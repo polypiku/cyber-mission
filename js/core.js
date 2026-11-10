@@ -161,7 +161,9 @@ function recoverRole(){
   for(const r of ["grandma","grandpa"]) if(VICTIM_CASES[r].some(k=>S.best[k]==="danger")) return r;
   return null;
 }
-const ZN = ()=>{ if(S.zone!==0) return ZONES[S.zone]||ZONES[1]; const r=recoverRole(); OUTZ.roleCase=r?{[r]:"recover"}:{}; return OUTZ; };
+const ZN = ()=>{ if(S.zone!==0) return ZONES[S.zone]||ZONES[1]; const r=recoverRole(); OUTZ.roleCase=r?{[r]:"recover"}:{};
+  if(S.umbCase && UMB_CASES[S.umbCase] && !(S.items&&S.items.umbrella)) OUTZ.roleCase[UMB_CASES[S.umbCase]]=S.umbCase;   /* the rainy-day case gives you an umbrella */
+  return OUTZ; };
 function applyTS(){ document.documentElement.style.setProperty("--ts", String(S.ts||1)); }
 const totalScore=()=>MAINZ().reduce((a,z)=>a+zoneScore(z),0), totalMax=()=>MAINZ().reduce((a,z)=>a+zoneMax(z),0);
 const BAR_OF = {scholar:"privacy", itmail:"privacy", parttime:"money", fakeprof:"money", report:"money", ransom:"privacy", invest:"money", publicpc:"privacy", charge:"money", helper:"privacy", update:"privacy", airdrop:"privacy", qr:"money", bank:"money", wifi:"privacy", chat:"trust", pkg:"privacy", call:"money", job:"trust", seller:"money", rush:"money", video:"money", mule:"trust", remote:"privacy", merit:"trust", inherit:"money", romance:"trust", fortune:"money", topup:"money", trade:"privacy", secret:"trust", parent:"money"};

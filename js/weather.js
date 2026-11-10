@@ -48,15 +48,24 @@ const caseZone=(k)=>+Object.keys(ZONES).find(z=>ZONES[z].cases.includes(k));
 /* when it starts raining and you have no umbrella, pick someone at random: help them and they give you theirs */
 function umbrellaQuest(){
   if(hasUmbrella()) return;
-  if(!S.umbCase || S.best[S.umbCase]){
-    const pool=Object.keys(ZONES).filter(z=>casesOpen(+z)).flatMap(z=>ZONES[z].cases).filter(k=>!S.best[k] && CASES[S.lang][k]);
+  if(!S.umbCase || !UMB_CASES[S.umbCase] || S.best[S.umbCase]){
+    const rr_=recoverRole(), pool=Object.keys(UMB_CASES).filter(k=>!S.best[k] && UMB_CASES[k]!==rr_);
     if(!pool.length){ giveUmbrella(); return; }
     S.umbCase=pool[Math.floor(Math.random()*pool.length)]; save();
   }
-  const k=S.umbCase, z=caseZone(k);
-  toast(L(`☔ ไม่มีร่ม เปียกหมดเลย! ไปช่วยเคส “${CASES.th[k].title}” ที่${zoneName(z)} แล้วเจ้าของเคสจะให้ร่มเรา (มองหา 🌂)`,
-          `☔ No umbrella, you're soaked! Help with “${CASES.en[k].title}” at ${zoneName(z)} and they'll give you theirs (look for 🌂)`));
+  const k=S.umbCase, who=nm(UMB_CASES[k]);
+  toast(L(`☔ ไม่มีร่ม เปียกหมดเลย! ${who}ที่ถนนหน้าร้านกำลังมีปัญหา ไปช่วยแล้วจะได้ร่ม (มองหา 🌂)`,
+          `☔ No umbrella, you're soaked! ${who} on the street needs help. Help them and you'll get an umbrella (look for 🌂)`));
 }
+/* what the umbrella owners say before and after */
+const UMB_SCRIPT={
+  u_parcel:{intro:[t("ฝนตกแบบนี้ พัสดุของใช้ลูกพี่ก็ยังไม่มาเลย","With all this rain, the baby things still haven't arrived."),t("เพิ่งมี SMS มาบอกให้จ่ายค่าส่งเพิ่ม ช่วยดูหน่อยได้ไหม","A text just asked me to pay extra. Can you take a look?")],
+    after:{safe:t("ของมาถึงแล้ว ขอบใจนะ! เอาร่มพี่ไปเลย พี่มีอีกคัน","It arrived, thank you! Take my umbrella, I have another."),warn:t("เกือบไปแล้ว ขอบใจนะ เอาร่มนี่ไปใช้เถอะ","That was close. Thanks, take this umbrella."),danger:t("บัตรพี่โดนรูดไปแล้ว… แต่ขอบใจที่อยู่ด้วยนะ เอาร่มไปเถอะ","My card got charged… but thanks for staying. Take the umbrella.")}},
+  u_alert:{intro:[t("หลานเอ๊ย กรมอุตุฯ แอดไลน์มา บอกพายุเข้า","Kid, the Met Department added me on LINE. A storm's coming."),t("ให้ลงแอปรับเงินชดเชย ตาลงเลยดีไหม","They want me to install an app for compensation. Should I?")],
+    after:{safe:t("ดีนะที่หลานเตือน เอาร่มตาไปกันฝนเถอะ","Good thing you warned me. Take my umbrella."),warn:t("ตาจะระวังกว่านี้ เอาร่มไปใช้นะหลาน","I'll be more careful. Here, take the umbrella."),danger:t("เงินบำนาญตา… เฮ้อ เอาร่มไปเถอะหลาน อย่าเปียกเลย","My pension… sigh. Take the umbrella, don't get wet.")}},
+  u_shop:{intro:[t("ร่มยายพังเพราะลมแรง","The wind broke my umbrella."),t("ไลฟ์นี้ขายร่มกับเสื้อกันฝนแค่ 59 บาท ยายจะโอนเลย","This live sale has an umbrella and raincoat for 59 baht. I'll pay now.")],
+    after:{safe:t("ยายได้ร่มใหม่จากร้านจริงแล้ว คันเก่าที่ซ่อมได้ยายให้หลาน","I got a new one at a real shop. You have my old one, it's fixed."),warn:t("ยายจะดูรีวิวก่อนทุกครั้ง เอาร่มคันนี้ไปนะ","I'll check reviews from now on. Take this umbrella."),danger:t("ยายโดนบล็อกแล้ว… เอาร่มเก่ายายไปใช้ก่อนนะ","I got blocked… take my old umbrella for now.")}}
+};
 function giveUmbrella(){
   S.items=S.items||{}; S.items.umbrella=true; S.umbCase=null; save(); sfx("good"); hudKey="";
   toast(L("🌂 ได้ร่มแล้ว! “ขอบคุณที่ช่วยนะ เอาร่มคันนี้ไปใช้เถอะ”","🌂 You got an umbrella! “Thanks for helping. Take this one.”"));

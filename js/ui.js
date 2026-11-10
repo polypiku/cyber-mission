@@ -271,8 +271,8 @@ function renderEnding(c){
   maybeCoach("end");
 }
 function finishCase(){
-  const ty=C.lastType||S.best[C.id], npc=C.npc; C=null; closeSheet();
-  const sc=npc && scriptFor(npc.role);
+  const ty=C.lastType||S.best[C.id], npc=C.npc, cid=C.id; C=null; closeSheet();
+  const sc=npc && (UMB_SCRIPT[cid]||scriptFor(npc.role));
   const onEnd = (npc && npc.ghost && ty!=="danger") ? ()=>{ startAscend(npc); afterCaseCheck(); } : afterCaseCheck;
   if(sc?.after){ talking=npc; face(npc,player); say(npc.id, lines([sc.after[ty]]), {onEnd}); }
   else afterCaseCheck();

@@ -221,7 +221,7 @@ function talkTo(n){
     say(n.id, lines([t(`ยังเหลืออีก ${left} เรื่องที่ต้องช่วย ดูที่เครื่องหมาย ! นะ`,`${left} more to go. Look for the ! markers.`),...extra])); return;
   }
   if(n.role==="tips" && !caseOf(n)){ const tip=SCRIPT.tips[S.tip%SCRIPT.tips.length]; S.tip++; save(); say(n.id, lines([tip])); return; }
-  const cid=caseOf(n), sc=scriptFor(n.role);
+  const cid=caseOf(n), sc=(cid&&UMB_SCRIPT[cid])||scriptFor(n.role);
   if(!cid){ say(n.id, lines([thanksLine(n.role,n.id)])); return; }
   const r=S.best[cid];
   if(!r){ say(n.id, lines(sc.intro), {choices:[{...CH.help[0],fn:()=>openCase(cid,n)},CH.help[1]]}); return; }
