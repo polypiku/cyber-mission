@@ -52,7 +52,7 @@ function render(now){
 const keys=new Set();
 let joy={x:0,y:0,active:false,id:null}, target=null, targetNpc=null, stuckT=0, lastPos=null;
 /* use physical key positions so WASD/E work on a Thai keyboard layout too */
-const KMAP={KeyW:"w",KeyA:"a",KeyS:"s",KeyD:"d",KeyE:"e",KeyQ:"q",KeyM:"m",ArrowUp:"arrowup",ArrowDown:"arrowdown",ArrowLeft:"arrowleft",ArrowRight:"arrowright",Space:" ",Enter:"enter",NumpadEnter:"enter",Escape:"escape"};
+const KMAP={KeyW:"w",KeyA:"a",KeyS:"s",KeyD:"d",KeyE:"e",KeyM:"m",ArrowUp:"arrowup",ArrowDown:"arrowdown",ArrowLeft:"arrowleft",ArrowRight:"arrowright",Space:" ",Enter:"enter",NumpadEnter:"enter",Escape:"escape"};
 const keyOf=(e)=>KMAP[e.code]||e.key.toLowerCase();
 window.addEventListener("keydown",(e)=>{
   if(e.ctrlKey||e.metaKey||e.altKey) return;
@@ -62,7 +62,6 @@ window.addEventListener("keydown",(e)=>{
     if(!$("dlg").hidden && (k==="e"||document.activeElement?.tagName!=="BUTTON")){ advance(); e.preventDefault(); return; }
     if(!busy()){ interact(); e.preventDefault(); }
   }
-  if(k==="q" && !busy()){ sweepLens(); e.preventDefault(); }
   if(k==="m"){ if(bigMapOpen()) closeBigMap(); else if(!busy()) openBigMap(); e.preventDefault(); }
   if(k==="escape" && bigMapOpen()){ closeBigMap(); e.preventDefault(); return; }
   if(k==="escape"){ if(!$("veil").hidden && sheetMode!=="case" && sheetMode!=="start") closeSheet(); }
@@ -112,7 +111,6 @@ function tapWalk(e){
 }
 $("act").addEventListener("click",()=>{ if(!busy()) interact(); });
 $("bars").addEventListener("click",(e)=>{ if(D||busy()) return; if(e.target.closest(".coinrow,.netrow")) openMoney(); });
-$("lensBtn").addEventListener("click",()=>sweepLens());
 
 /* ---------- movement ---------- */
 /* which zebra crossing a point is on, and whether people may walk on it now */
@@ -216,7 +214,7 @@ function hud(){
   $("boardDot").hidden=!S.evNew; $("boardDot").textContent=S.evNew||""; $("boardBtn").setAttribute("aria-label",L("บอร์ดหลักฐาน","Evidence board"));
   const pcount=S.inbox.length+(pending?1:0);
   $("phoneDot").hidden=!pcount && !S.phoneBroken; $("phoneDot").textContent=S.phoneBroken?"✕":pcount; $("phoneBtn").classList.toggle("broken",!!S.phoneBroken); $("phoneBtn").classList.toggle("ring", (pending && !S.chatSeen) || S.inbox.length>0);
-  $("phoneBtn").setAttribute("aria-label",L("โทรศัพท์","Phone")); $("lensBtn").hidden=!lensLv(); $("lensLv").textContent=lensLv()||""; $("lensBtn").setAttribute("aria-label",L(`แว่นนักสืบ ระดับ ${lensLv()} (Q)`,`Detective lens level ${lensLv()} (Q)`)); $("menuBtn").setAttribute("aria-label",L("เมนู","Menu"));
+  $("phoneBtn").setAttribute("aria-label",L("โทรศัพท์","Phone")); $("menuBtn").setAttribute("aria-label",L("เมนู","Menu"));
   const kk = !show && !busy() && nearKiosk();
   const fc = !show && !kk && !busy() && nearCat(), fb = !show && !kk && !fc && !busy() && nearBirds(), feed=fc||fb;
   const hq = !show && !kk && !feed && !busy() && nearHQ();
@@ -233,7 +231,7 @@ function hud(){
   if(show) $("prompt").innerHTML=`${L("คุยกับ","Talk to")} ${esc(nm(n.id))}${TOUCH?"":"<kbd>E</kbd>"}`;
   else if(showDoor) $("prompt").innerHTML=`${(dn.alley?(dn.soi||ghostOpen()):(!dn.soon&&zoneOpen(dn.zone)))?L("เข้า ","Enter ")+esc(dn.name[S.lang]):L("ล็อกอยู่: ","Locked: ")+esc(dn.name[S.lang])}${TOUCH?"":"<kbd>E</kbd>"}`;
   const act=$("act"); act.disabled=!(show||sp||showDoor||kk||feed||hq||rp||vl); act.textContent=sp?L("ตรวจ","Inspect"):kk?L("เล่น","Play"):feed?L("ให้อาหาร","Feed"):hq?L("เข้า","Enter"):vl?L("สำรวจ","Look"):rp?L("ซ่อม","Repair"):showDoor?L("เข้า","Enter"):L("คุย","Talk");
-  $("keys").innerHTML=L(`<kbd>WASD</kbd>/<kbd>←↑→↓</kbd> เดิน · <kbd>E</kbd> คุย · <kbd>Q</kbd> ส่องแว่น · <kbd>M</kbd> แผนที่ · คลิกพื้นเพื่อเดิน`,`<kbd>WASD</kbd>/<kbd>←↑→↓</kbd> walk · <kbd>E</kbd> talk · <kbd>Q</kbd> lens · <kbd>M</kbd> map · click the floor to walk`);
+  $("keys").innerHTML=L(`<kbd>WASD</kbd>/<kbd>←↑→↓</kbd> เดิน · <kbd>E</kbd> คุย · <kbd>M</kbd> แผนที่ · คลิกพื้นเพื่อเดิน`,`<kbd>WASD</kbd>/<kbd>←↑→↓</kbd> walk · <kbd>E</kbd> talk · <kbd>M</kbd> map · click the floor to walk`);
   const hide = sheetMode==="start";
   $("hud").hidden=hide; $("joy").hidden=hide; $("act").hidden=hide; $("keys").hidden=hide;
 }

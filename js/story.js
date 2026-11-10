@@ -359,6 +359,12 @@ function drawDoorBadges(g,now){
 function drawAlleyBadge(g,b,now){
   if(b.hide) return;
   if(b.road){ b={...b, door:(IC.x0+IC.x1)/2}; }
+  if(b.road){   /* the university sign is bigger, and sits a little lower so the top bar never covers it */
+    g.font="800 19px 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', Tahoma, sans-serif"; g.textAlign="center"; g.textBaseline="middle";
+    const label=`${b.icon} ${b.name[S.lang]}`, tw=g.measureText(label).width+30, by=104+(RM?0:Math.sin(now/300+b.door)*3);
+    rr(g,b.door-tw/2,by-19,tw,38,19); g.fillStyle=b.col; g.fill(); g.lineWidth=3; g.strokeStyle=INK; g.stroke(); g.fillStyle=INK; g.fillText(label,b.door,by+1);
+    return;
+  }
   if(b.soi){
     g.font="800 12px 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', Tahoma, sans-serif"; g.textAlign="center"; g.textBaseline="middle";
     const label=`${b.icon} ${b.name[S.lang]}`, tw=g.measureText(label).width+20, by=26+(RM?0:Math.sin(now/300+b.door)*3);

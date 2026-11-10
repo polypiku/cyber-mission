@@ -352,12 +352,11 @@ const SHOP=[
   {id:"pwm", i:"🔑", n:["ตัวจัดการรหัสผ่าน","Password manager"], d:["ตอนตั้งรหัสใหม่ในมือถือ กดปุ่มเดียวได้รหัสยาวและเดายาก","When setting a new password, one tap makes a long, unguessable one"], p:150},
   {id:"vpn", i:"🛰️", n:["VPN","VPN"], d:["เข้ารหัสการเชื่อมต่อ ถ้าเผลอต่อ Wi-Fi ปลอม ไวรัสจะลามช้าลงครึ่งหนึ่ง","Encrypts your connection. On a fake Wi-Fi, malware spreads half as fast"], p:120},
   {id:"cloud", i:"☁️", n:["สำรองข้อมูลคลาวด์","Cloud backup"], d:["ถ้ามือถือพังจนกู้ไม่ได้ เงินในกระเป๋าไม่หาย","If the phone is lost to malware, you keep your money"], p:100},
-  {id:"lens", i:"🔍", n:["อัปเกรดแว่นนักสืบ","Detective lens upgrade"], d:["ส่องได้ไกลขึ้น และเห็นเบาะแสที่ซ่อนลึกกว่าเดิม","Sweeps further and reveals better-hidden clues"], lv:[0,0,120,220]}
 ];
-const shopPrice=(it)=>it.lv?it.lv[Math.min(3,(S.items.lens||0)+1)]:it.p;
-const shopOwned=(it)=>it.lv?(S.items.lens||0)>=3:!!S.items[it.id];
+const shopPrice=(it)=>it.p;
+const shopOwned=(it)=>!!S.items[it.id];
 function openShop(msg){
-  const card=(it)=>{ const own=shopOwned(it), pr=shopPrice(it), poor=S.coins<pr, lv=it.lv?(S.items.lens||0):0;
+  const card=(it)=>{ const own=shopOwned(it), pr=shopPrice(it), poor=S.coins<pr, lv=0;
     return `<div class="shopit ${own?"own":""}"><span class="si">${it.i}</span><div class="sb"><b>${it.n[EN()?1:0]}${it.lv?` <em>${L("ระดับ","Lv")} ${lv}${own?"":" → "+(lv+1)}</em>`:""}</b><small>${it.d[EN()?1:0]}</small></div>
       <button class="buy" data-buy="${it.id}" ${own||poor||(it.lv&&!lv)?"disabled":""}>${own?L(it.lv?"สูงสุด":"มีแล้ว",it.lv?"Max":"Owned"):it.lv&&!lv?L("รับจากพี่ภพ","From Phop"):BAHT(pr)}</button></div>`; };
   openSheet("shop", `${top_(L("หมอโฟน · อัปเกรดมือถือ","Phone Dr. · phone upgrades"))}<div class="sh-body">
@@ -367,9 +366,9 @@ function openShop(msg){
     <p class="note">${L("ของช่วยได้ แต่ไม่ได้ทำให้ไม่โดนหลอก ยังต้องคิดเองทุกครั้ง · หาเงินได้จากการช่วยคน ส่งเบาะแส ตอบข้อความถูก และเล่นมินิเกม","Upgrades help, but they don't make you scam-proof. Earn money by helping people, handing in clues, judging messages and mini-games.")}</p></div>`);
   $("sheet").querySelectorAll("[data-buy]").forEach(b=>b.onclick=()=>{
     const it=SHOP.find(x=>x.id===b.dataset.buy), pr=shopPrice(it); if(S.coins<pr||shopOwned(it)) return;
-    S.coins-=pr; if(it.lv) S.items.lens=Math.min(3,(S.items.lens||0)+1); else S.items[it.id]=true;
+    S.coins-=pr; S.items[it.id]=true;
     save(); hudKey=""; sfx("good"); toast(L(`ได้ ${it.n[0]} แล้ว`,`Got ${it.n[1]}`));
-    openShop(it.lv?L(`“แว่นระดับ ${S.items.lens} แล้ว ส่องได้ไกลขึ้นเยอะ”`,`“Level ${S.items.lens} lens. Sweeps much further now”`):L(`“${it.n[0]} ติดตั้งให้แล้ว”`,`“${it.n[1]}, installed”`));
+    openShop(L(`“${it.n[0]} ติดตั้งให้แล้ว”`,`“${it.n[1]}, installed”`));
   });
 }
 /* ---------- virus mode: the whole game glitches until you reach the repair stall ---------- */

@@ -102,7 +102,7 @@ function phoneApp(k){
   if(k==="scan") return openScan();
   if(k==="wallet") return phoneScreen(L("กระเป๋าเงิน","Wallet"), `<div class="pwallet"><small>${L("ยอดเงินคงเหลือ","Balance")}</small><b>${BAHT(S.coins)}</b>
       <p>${L("ได้เงินจากการช่วยคนในแต่ละเคส และตัดสินข้อความหลอกได้ถูก","Earn money by helping people in cases and spotting scam messages")}</p></div>
-    <div class="clist">${SHOP.filter(it=>S.items[it.id]).map(it=>`<div class="crow"><span class="av">${it.i}</span><span class="cb"><b>${esc(it.n[EN()?1:0])}${it.lv?` · ${L("ระดับ","Lv")} ${S.items.lens}`:""}</b><small>${esc(it.d[EN()?1:0])}</small></span></div>`).join("")||`<p class="cempty">${L("ยังไม่มีของอัปเกรด ซื้อได้ที่ร้านซ่อมมือถือริมถนน","No upgrades yet. Buy them at the phone stall on the street")}</p>`}</div><div class="btns"><button class="btn y" data-shop><span>🛒 ${L("ร้านอัปเกรด","Upgrade shop")}</span></button></div>`);
+    <div class="clist">${SHOP.filter(it=>S.items[it.id]).map(it=>`<div class="crow"><span class="av">${it.i}</span><span class="cb"><b>${esc(it.n[EN()?1:0])}</b><small>${esc(it.d[EN()?1:0])}</small></span></div>`).join("")||`<p class="cempty">${L("ยังไม่มีของอัปเกรด ซื้อได้ที่ร้านซ่อมมือถือริมถนน","No upgrades yet. Buy them at the phone stall on the street")}</p>`}</div><div class="btns"><button class="btn y" data-shop><span>🛒 ${L("ร้านอัปเกรด","Upgrade shop")}</span></button></div>`);
   if(k==="board") return openBoard();
   if(k==="dex") return openDex();
   if(k==="map") return openZones();

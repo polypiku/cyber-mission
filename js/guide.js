@@ -49,7 +49,7 @@ function openMoney(){
     <div class="wallet"><span>${L("เงินในกระเป๋า","Your wallet")}</span><b>${BAHT(S.coins)}</b></div>
     <div class="moneyopts">
       <button class="mopt" data-netbuy><span>📶</span><div><b>${L(`เติมเน็ตมือถือ ${NET_PACK} MB`,`Mobile data ${NET_PACK} MB`)}</b><small>${BAHT(NET_PRICE)} · ${L(`เหลือ ${Math.ceil(netMB())} MB`,`${Math.ceil(netMB())} MB left`)}</small></div></button>
-      <button class="mopt" data-shop><span>🛒</span><div><b>${L("อัปเกรดมือถือ","Phone upgrades")}</b><small>${L("ตัวจัดการรหัสผ่าน · VPN · สำรองคลาวด์ · แว่นนักสืบ","Password manager · VPN · cloud backup · lens")}${isFinite(cheapest)?` · ${L("เริ่ม","from")} ${BAHT(cheapest)}`:""}</small></div></button>
+      <button class="mopt" data-shop><span>🛒</span><div><b>${L("อัปเกรดมือถือ","Phone upgrades")}</b><small>${L("ตัวจัดการรหัสผ่าน · VPN · สำรองคลาวด์","Password manager · VPN · cloud backup")}${isFinite(cheapest)?` · ${L("เริ่ม","from")} ${BAHT(cheapest)}`:""}</small></div></button>
       <div class="mopt static"><span>🔧</span><div><b>${L("ซ่อมมือถือที่ติดไวรัส","Repair a phone with malware")}</b><small>${L("ร้านหมอโฟนริมถนน","Phone Dr. on the street")} · ${BAHT(40)}</small></div></div>
       <div class="mopt static"><span>⚠️</span><div><b>${L("เสียเงินเมื่อพลาด","Lost when you slip up")}</b><small>${L("โดนหลอกในเคส ต่อ Wi-Fi ปลอม","Getting scammed in a case, joining a fake Wi-Fi")}</small></div></div>
     </div>

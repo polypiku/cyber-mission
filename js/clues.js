@@ -1,4 +1,4 @@
-/* Clues beyond the cases: hidden spots found with the detective lens, people who let things slip,
+/* Clues beyond the cases: hidden spots marked with a ?, people who let things slip,
    the haunted house, and what you see undercover inside the gang's building. Also handing clues to Phop. */
 
 Object.assign(EV_GROUPS, {
@@ -10,7 +10,7 @@ Object.assign(EVID, {
   inherit:{i:"📜",g:"acct",src:"ghost",t:["จดหมายมรดกปลอม","Fake inheritance letter"],d:["ค่าธรรมเนียมโอนเข้าบัญชีนายสมพงษ์ ร.","The 'fee' went to Mr Sompong R."]},
   romance:{i:"💔",g:"phone",src:"ghost",t:["โปรไฟล์หาคู่ปลอม","Fake dating profile"],d:["สมัครด้วยเบอร์ 02 xxx 8810","Registered with 02 xxx 8810"]},
   fortune:{i:"🔮",g:"server",src:"ghost",t:["เว็บดูดวงเสริมโชค","Lucky-charm fortune site"],d:["อยู่บนเซิร์ฟเวอร์ 185.xx.xx.7","Hosted on 185.xx.xx.7"]},
-  /* found with the detective lens */
+  /* hidden in rooms, marked with a ? */
   lx_lib:{i:"💾",g:"server",src:"lens",t:["USB แปลกในคอมห้องสมุด","Strange USB in a library PC"],d:["ไฟล์ข้างในส่งข้อมูลไป 185.xx.xx.7","Its files send data to 185.xx.xx.7"]},
   lx_cafe:{i:"📡",g:"server",src:"lens",t:["เราเตอร์ซ่อนใต้ชั้นวาง","Router hidden under a shelf"],d:["ตั้งชื่อ Wi-Fi เหมือนของร้าน","Broadcasts a name copying the café's Wi-Fi"]},
   lx_net:{i:"🗑️",g:"phone",src:"lens",t:["ซองซิมในถังขยะ","SIM packets in the bin"],d:["เลขล็อตเดียวกับ 02 xxx 8810","Same batch as 02 xxx 8810"]},
@@ -26,7 +26,7 @@ Object.assign(EVID, {
 });
 const CLUE_SRC = {
   case:{th:"ช่วยคนในเคส",en:"Helping people in cases"},
-  lens:{th:"หาด้วยแว่นนักสืบ",en:"Found with the lens"},
+  lens:{th:"ของแปลกที่ซ่อนอยู่ในห้อง",en:"Odd things hidden in rooms"},
   people:{th:"คนที่เผลอพูด",en:"People who let it slip"},
   ghost:{th:"บ้านผีสิง",en:"Haunted house"},
   hq:{th:"แฝงตัวในตึก",en:"Undercover in the building"}
@@ -41,10 +41,10 @@ function clueWhere(k){
   if(src==="people") return L(k==="npc_it"?"มีคนแปลกหน้าในร้านเน็ต":"มีคนแปลกหน้าในธนาคาร",k==="npc_it"?"A stranger at the net café":"A stranger at the bank");
   if(src==="hq") return L("ข้างในตึกรังแก๊ง","Inside the gang's building");
   const sp=SPOTS.find(s=>s.id===k); const zn=sp.z===8?L("ตึกรังแก๊ง","the gang's building"):ZONES[sp.z].name[S.lang];
-  return L(`ซ่อนอยู่ที่${zn} · แว่นระดับ ${sp.lv}`,`Hidden at ${zn} · lens level ${sp.lv}`);
+  return L(`ซ่อนอยู่ที่${zn} · มองหาเครื่องหมาย ?`,`Hidden at ${zn} · look for the ? mark`);
 }                      /* clues handed in before Phop sends you undercover */
 
-/* ---------- lens spots ---------- */
+/* ---------- hidden spots ---------- */
 const SPOTS = [
   {id:"lx_lib",  z:2, floor:2, x:118, y:520, lv:1},
   {id:"lx_cafe", z:1, x:792, y:300, lv:1},
@@ -63,28 +63,10 @@ function spotHere(s){
   return true;
 }
 const spotsHere = ()=>SPOTS.filter(spotHere);
-const spotShown = (s)=>s.lv===0 || (S.lensSeen&&S.lensSeen[s.id]);
+const spotShown = (s)=>true;   /* hidden things are always marked with a ? now */
 function nearSpot(){ if(!S.char||busy()) return null; return spotsHere().find(s=>spotShown(s) && Math.hypot(player.x-s.x,player.y-s.y)<60) || null; }
 
-let lensFx=null;
 const LENS_R=[0,170,260,380];
-function lensLv(){ return Math.min(3,S.items&&S.items.lens||0); }
-function sweepLens(){
-  if(busy()) return;
-  const lv=lensLv();
-  if(!lv){ toast(L("ยังไม่มีแว่นนักสืบ ไปรับจากพี่ภพก่อน","No detective lens yet. Get one from Phop first")); return; }
-  lensFx={t0:performance.now(), r:LENS_R[lv]}; sfx("ping");
-  S.lensSeen=S.lensSeen||{};
-  const near=spotsHere().filter(s=>s.lv>0 && Math.hypot(player.x-s.x,player.y-s.y)<LENS_R[lv]+40);
-  const ok=near.filter(s=>s.lv<=lv), weak=near.filter(s=>s.lv>lv);
-  ok.forEach(s=>S.lensSeen[s.id]=true); save();
-  setTimeout(()=>{
-    if(ok.length){ sfx("ev"); toast(L("🔍 เจออะไรบางอย่าง! เดินไปดูตรงที่มีเครื่องหมาย ?","🔍 Something's there! Walk to the ? mark")); }
-    else if(weak.length) toast(L(`🔍 เหมือนมีอะไรแถวนี้ แต่แว่นระดับ ${lv} มองไม่ชัด ต้องอัปเกรดเป็นระดับ ${weak[0].lv}`,`🔍 Something's nearby, but a level ${lv} lens can't make it out. Upgrade to level ${weak[0].lv}`));
-    else if(spotsHere().some(s=>s.lv>0)) toast(L("🔍 ยังไม่เจอ ลองเดินไปอีกมุมของห้องแล้วส่องใหม่","🔍 Nothing here. Try another corner of the room"));
-    else toast(L("🔍 ที่นี่ไม่มีเบาะแสซ่อนอยู่แล้ว","🔍 No hidden clues left here"));
-  },700);
-}
 function gainClue(id, who){
   if(S.ev[id]) return;
   S.ev[id]=true; S.evNew=(S.evNew||0)+1; save(); hudKey=""; sfx("ev");
@@ -105,12 +87,7 @@ function drawSpots(g,now){
     rr(g,s.x-15,s.y-46+b,30,30,15); g.fillStyle="#FFC414"; g.fill(); g.lineWidth=2.5; g.strokeStyle=INK; g.stroke();
     g.fillStyle=INK; g.font="800 18px 'Noto Sans Thai', sans-serif"; g.textAlign="center"; g.textBaseline="middle"; g.fillText("?",s.x,s.y-30+b);
   }
-  if(lensFx){
-    const k=Math.max(0,(now-lensFx.t0)/900); if(k>1.4){ lensFx=null; return; }
-    const r=lensFx.r*Math.min(1,k);
-    g.save(); g.globalAlpha=Math.max(0,1-k*.7); g.beginPath(); g.arc(player.x,player.y-30,r,0,7); g.lineWidth=4; g.strokeStyle="#FFC414"; g.stroke();
-    g.setLineDash([10,8]); g.lineWidth=2; g.strokeStyle=INK; g.stroke(); g.restore();
-  }
+
 }
 
 /* ---------- gang members in the cells after the raid ---------- */
@@ -146,7 +123,7 @@ function nextHint(){
   if(S.uc && !(S.ev.hq_script&&S.ev.hq_dorm)) return t("ขึ้นไปชั้น 2 ถ่ายรูปไวท์บอร์ด แล้วไปคุยกับคนที่ชั้น 3","Go up, photograph the whiteboard on floor 2, and talk to people on floor 3.");
   if(!ghostOpen()) return t(`ได้ยินว่าตรอกมืดข้างร้านกาแฟมีเบาะแส แต่ต้องมีคะแนน ${GHOST_MIN} ★ ก่อนนะ`,`Word is the dark alley by the café hides clues, but you need ${GHOST_MIN} ★ first.`);
   if(["merit","inherit","romance","fortune"].some(k=>!S.ev[k])) return t("ตรอกมืดข้างร้านกาแฟยังมีเบาะแสเหลืออยู่","The dark alley by the café still holds clues.");
-  if(SPOTS.some(s=>s.lv>0 && !S.ev[s.id])) return t("ลองส่องแว่นนักสืบตามมุมห้องต่างๆ ยังมีของซ่อนอยู่ บางชิ้นต้องอัปเกรดแว่นก่อน","Sweep the lens around each room. Some things need an upgraded lens.");
+  if(SPOTS.some(s=>s.lv>0 && !S.ev[s.id])) return t("ยังมีของแปลกๆ ซ่อนอยู่ตามห้องต่างๆ มองหาเครื่องหมาย ? สีเหลือง","There are still odd things hidden in rooms. Look for the yellow ? marks.");
   if(!S.ev.npc_it || !S.ev.npc_admin) return t("มีคนแปลกหน้าในร้านเน็ตกับธนาคาร ลองไปคุยดู","There are strangers at the net café and the bank. Talk to them.");
   return t("เคสไหนยังไม่ได้เบาะแส ลองเล่นใหม่ให้ปลอดภัย","Replay any case that didn't give a clue, and keep everyone safe.");
 }
@@ -171,7 +148,6 @@ function handIn(n){
 function talkPolice(n){
   const jl=jailList().length; if(jl && (S.jailSeen||0)<jl){ S.jailSeen=jl; save(); toast(L(`🔒 คนร้ายที่จับได้ ${jl} คน อยู่ในห้องขัง (ประตูขวามือ)`,`🔒 ${jl} ${jl>1?"suspects":"suspect"} in the cell block (door on the right)`)); }
   if(!S.seen[7]){ say(n.id, lines(ZONE_INTRO[7]), {onEnd:()=>{ S.seen[7]=true; save(); zoneEvent(); }}); return; }
-  if(!lensLv()){ S.items.lens=1; save(); hudKey=""; }
   const fresh=evCount()-(S.handed||0);
   if(fresh>0){ say(n.id, lines([t(`มีเบาะแสใหม่ ${fresh} ชิ้นใช่ไหม ส่งมาเลย`,`You've got ${fresh} new clue${fresh>1?"s":""}? Let's see.`)]),
     {choices:[{label:{th:`🗂️ ส่งเบาะแส ${fresh} ชิ้น`,en:`🗂️ Hand in ${fresh} clue${fresh>1?"s":""}`},fn:()=>handIn(n)},{label:{th:"ยังก่อน",en:"Not yet"},ghost:true}]}); return; }

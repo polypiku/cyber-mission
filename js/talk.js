@@ -115,7 +115,7 @@ function gameTour(){
     {who:M, sel:"#bars", t:["หลอดสถานะและเงิน","Status bars & money"], d:["เงิน ความเป็นส่วนตัว และความไว้ใจ ขึ้นลงตามการตัดสินใจ เงิน 💵 ได้จากการช่วยคน เอาไปซื้อของที่ร้านหมอโฟน แต่ถ้าโดนหลอกเงินจะหายจริง","Money, privacy and trust rise and fall with your choices. Money 💵 comes from helping people and buy upgrades at Phone Dr., but scams really take it."]},
     {who:M, sel:"#prog", t:["คะแนนและแผนที่","Score & map"], d:["ดาวที่เก็บได้ในที่นี้ แตะเพื่อเปิดแผนที่ภารกิจ ดูว่าบทไหนเปิดแล้ว และยังเหลือใครต้องช่วย","Stars collected here. Tap it for the mission map: see which chapters are open and who still needs help."]},
     {who:M, sel:"#phoneBtn", t:["มือถือของคุณ","Your phone"], d:["จะมี SMS เด้งเข้ามาระหว่างเล่น ตัดสินว่าจริงหรือหลอก และระวัง Wi-Fi ฟรีในร้าน ถ้าต่อผิด มือถือจะโดนแฮก!","Messages arrive as you play: decide real or scam. And beware free Wi-Fi in the shops. Join the wrong one and your phone gets hacked!"]},
-    {who:M, sel:"#boardBtn", t:["บอร์ดหลักฐาน","Evidence board"], d:["ทุกเคสที่ช่วยจนจบและลงมือแก้ในมือถือสำเร็จ จะได้เบาะแสหนึ่งชิ้น ยังมีเบาะแสซ่อนอยู่อีก ต้องใช้แว่นนักสืบหา","Every case you finish, including the hands-on fix on the phone, gives a clue. More clues are hidden around; the detective lens finds them."]},
+    {who:M, sel:"#boardBtn", t:["บอร์ดหลักฐาน","Evidence board"], d:["ทุกเคสที่ช่วยจนจบและลงมือแก้ในมือถือสำเร็จ จะได้เบาะแสหนึ่งชิ้น ยังมีเบาะแสซ่อนอยู่อีก มองหาเครื่องหมาย ? ในห้อง","Every case you finish, including the hands-on fix on the phone, gives a clue. More clues are hidden in rooms; look for the ? marks."]},
     {who:M, world:{x:372,y:560,w:120,h:70}, t:["ออกไปข้างนอก","Going outside"], d:["ประตูด้านล่างพาลงไปที่ถนน เดินลงไปจนถึงสี่แยก ห้องสมุดอยู่ทางซ้าย ซอย 2 ทางขวาไปสถานีตำรวจของพี่ภพ ที่อื่นจะเปิดเมื่อได้เบาะแสชี้ไป","The bottom door leads down to the street. Walk to the crossroads: the library is on the left, Soi 2 on the right goes to Phop's police station. Other places open as leads point to them."]},
     {who:M, sel:"#menuBtn", t:["เมนู","Menu"], d:["เปลี่ยนภาษา เปิดปิดเสียง เปิดสมุดกลโกง และดูทัวร์นี้ซ้ำได้ที่นี่","Change language, toggle sound, open the scam book, or replay this tour here."]},
     {who:M, t:["เป้าหมาย","The goal"], d:["ตามเบาะแสไปทีละที่ แล้วเอาไปส่งพี่ภพ ยิ่งมีเบาะแสมาก ตอนบุกยิ่งจับได้ครบ ฉากจบมี 5 แบบ จำสามคำ: หยุด คิด ตรวจสอบ","Follow the leads place by place and hand them to Phop. The more clues, the more of the gang gets caught. There are 5 endings. Remember: stop, think, check."]}
@@ -133,9 +133,9 @@ function briefing(){
   const p=npcs.find(n=>n.id==="police"); if(p) face(player,p);
   say("police", lines([t(`ยินดีที่ได้รู้จักนะ ${nm(S.char)} นี่โอ๊ต อาสาสมัครไซเบอร์ เขาจะคอยช่วยน้องตลอดทาง`,`Nice to meet you, ${nm(S.char)}. This is Oat, a cyber volunteer. He'll back you up the whole way.`),
     t("ทุกครั้งที่ช่วยคนได้ จะได้เบาะแสหนึ่งชิ้น เปิดดูได้ที่บอร์ดหลักฐาน","Each person you help gives you a clue. You can see them on the evidence board."),
-    t("รับแว่นนักสืบนี่ไปด้วย กดปุ่ม 🔍 (หรือ Q) เพื่อส่องหาของที่ซ่อนอยู่ในห้อง เจอแล้วเอามาส่งพี่ที่สถานีตำรวจ","Take this detective lens. Press 🔍 (or Q) to sweep for hidden things in a room, and bring what you find to me at the police station."),
+    t("ในห้องต่างๆ อาจมีของแปลกๆ ซ่อนอยู่ ตรงไหนมีเครื่องหมาย ? ให้เดินไปดู เจอแล้วเอามาส่งพี่ที่สถานีตำรวจ","Odd things may be hidden in rooms. Walk to any ? mark, and bring what you find to me at the police station."),
     t("เริ่มที่ห้องสมุดเมืองก่อนเลย ออกประตูด้านล่างแล้วเดินลงไปที่สี่แยก ห้องสมุดอยู่ทางซ้าย","Start with the City Library. Go out the bottom door, walk down to the crossroads, and the library is on the left.")]),
-    {onEnd:()=>{ S.briefed=true; S.items.lens=Math.max(1,S.items.lens||0); save(); hudKey=""; buildCast(); startTour(); }});
+    {onEnd:()=>{ S.briefed=true; save(); hudKey=""; buildCast(); startTour(); }});
 }
 function mentorIntro(){
   const n=npcs.find(x=>x.role==="mentor");
