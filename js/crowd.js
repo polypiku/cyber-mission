@@ -33,6 +33,10 @@ const FL=()=>FILL_LINES_||(FILL_LINES_={
     [t("จะไปถามรหัสที่เคาน์เตอร์ทำไม","Why bother asking the counter for a password?"),t("มีตัวที่เปิดฟรีอยู่ ต่อได้เลย","There's an open one, just join it.")],
     [t("ต่อเน็ตไม่ได้เหรอ","Can't get online?"),t("ส่งมือถือมาสิ เดี๋ยวพี่ตั้งค่าให้","Hand me your phone, I'll set it up for you.")]]
 });
+/* is this crowd person a man, a woman, or a teen we won't guess about? */
+function fillerSex(id){ const n=(FILL_NAMES[String(id).replace(/^f_/,"")]||[""])[0]; return /ผู้หญิง|สาว|ป้า/.test(n)?"f":/ผู้ชาย|หนุ่ม|ลุง/.test(n)?"m":"x"; }
+const susLine=(n)=>{ const s=fillerSex(n.id); return L(s==="f"?"เอ่อ… ฉันแค่…":s==="m"?"เอ่อ… ผมแค่…":"เอ่อ… หนูแค่…","Uh… I was just…"); };
+const themEn=(n)=>{ const s=fillerSex(n&&n.id); return s==="f"?"her":s==="m"?"him":"them"; };
 function addFillers(){
   const z=S.zone; if(z===5 || !S.char || cbFloor() || (z===8 && isScam(S.bld) && offFloor()>1)) return;
   const used=new Set([S.char,...npcs.map(n=>PLACEHOLDER_ART[n.id]||n.id)]);
@@ -82,9 +86,9 @@ function stepEscort(dt){
     const arrived=moveTo(pol,e.d.x,e.d.y,120,dt);
     moveTo(sus,pol.x+(sus.x<pol.x?-22:22)*0, pol.y-30,125,dt);
     if(arrived){ npcs=npcs.filter(x=>x!==sus); if(!e.back) npcs=npcs.filter(x=>x!==pol); else { e.phase="back"; return; }
-      escort=null; toast(L("🚓 พี่ภพพาตัวไปขังที่สถานีตำรวจ (ซอย 2) แล้ว Wi-Fi ปลอมในที่นี้ถูกปิด","🚓 Phop has taken him to the cell at the police station (Soi 2). The fake Wi-Fi here is shut down")); }
+      escort=null; toast(L("🚓 พี่ภพพาตัวไปขังที่สถานีตำรวจ (ซอย 2) แล้ว Wi-Fi ปลอมในที่นี้ถูกปิด",`🚓 Phop has taken ${themEn(e.sus)} to the cell at the police station (Soi 2). The fake Wi-Fi here is shut down`)); }
     return; }
-  if(e.phase==="back"){ if(moveTo(pol,e.back.x,e.back.y,150,dt)){ pol.leaving=false; pol.home=e.back.dir; pol.dir=e.back.dir; escort=null; toast(L("🚓 พี่ภพพาตัวไปขังที่สถานีตำรวจ (ซอย 2) แล้ว Wi-Fi ปลอมในที่นี้ถูกปิด","🚓 Phop has taken him to the cell at the police station (Soi 2). The fake Wi-Fi here is shut down")); } }
+  if(e.phase==="back"){ if(moveTo(pol,e.back.x,e.back.y,150,dt)){ pol.leaving=false; pol.home=e.back.dir; pol.dir=e.back.dir; escort=null; toast(L("🚓 พี่ภพพาตัวไปขังที่สถานีตำรวจ (ซอย 2) แล้ว Wi-Fi ปลอมในที่นี้ถูกปิด",`🚓 Phop has taken ${themEn(e.sus)} to the cell at the police station (Soi 2). The fake Wi-Fi here is shut down`)); } }
 }
 function drawEscortTalk(g){
   if(!escort || escort.phase!=="talk") return;
@@ -92,7 +96,7 @@ function drawEscortTalk(g){
   const bub=(n,txt,col)=>{ const h=CHAR_H*(SCALE[n.id]||1); g.font="700 12px 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', Tahoma, sans-serif"; g.textAlign="center"; g.textBaseline="middle";
     const tw=g.measureText(txt).width+18, x=n.x, y=n.y-h-22; rr(g,x-tw/2,y-12,tw,24,10); g.fillStyle=col; g.fill(); g.lineWidth=2; g.strokeStyle=INK; g.stroke(); g.fillStyle=INK; g.fillText(txt,x,y); };
   bub(e.pol, L("ตำรวจไซเบอร์ครับ ขอตรวจเครื่องหน่อย","Cyber police. I need to check your device."),"#DCE8FF");
-  if(k>1.2) bub(e.sus, L("เอ่อ… ผมแค่…","Uh… I was just…"),"#FFFFFF");
+  if(k>1.2) bub(e.sus, susLine(e.sus),"#FFFFFF");
 }
 function reportFiller(n){
   const z=S.zone;
@@ -119,7 +123,7 @@ const COACH_VIL=(M)=>[
   {who:M, i:"🕵️", t:["มีคนแฝงตัวอยู่","Someone is hiding here"], d:["คนที่ปล่อย Wi-Fi ปลอมไม่ได้แต่งตัวแปลกๆ นะ เขาแฝงตัวเป็นลูกค้าธรรมดาปนอยู่กับคนอื่นในทุกร้าน","The person running fake Wi-Fi doesn't look strange. He blends in as an ordinary customer in every shop."]},
   {who:M, i:"📶", demo:true, focus:()=>npcs.find(n=>n.vil)||null, world:()=>{ const v=npcs.find(n=>n.vil); return v?{x:v.x-70,y:v.y-CHAR_H*(SCALE[v.id]||1)-50,w:140,h:CHAR_H*(SCALE[v.id]||1)+70}:null; }, t:["ใครมีคลื่น Wi-Fi ออกมา = น่าสงสัย!","Wi-Fi waves coming off someone = suspicious!"], d:["ดูคนในวงนี้ เห็นคลื่น Wi-Fi สีแดงลอยออกมาจากตัวไหม? จำไว้เลย ใครมีคลื่นแบบนี้ คนนั้นน่าสงสัย! ร้านต่อไปจะไม่บอกแล้ว คลื่นขึ้นทุกไม่กี่วินาที ต้องยืนสังเกตเอง","See the red Wi-Fi waves coming off the person in the circle? Remember: whoever gives off waves like that is your suspect! In later shops nobody will point him out. The waves pop up every few seconds, so stand and watch."]},
   {who:M, i:"👂", t:["ฟังคำพูด","Listen"], d:["ลองเข้าไปคุย คนร้ายมักชวนให้ต่อ Wi-Fi ที่ไม่ต้องใส่รหัส หรืออาสาตั้งค่ามือถือให้ ส่วนคนทั่วไปจะบอกให้ถามรหัสที่เคาน์เตอร์","Chat with people. The hacker pushes a no-password network or offers to set up your phone. Ordinary people tell you to ask the counter."]},
-  {who:M, i:"🚩", t:["แจ้งเคาน์เตอร์","Report him"], d:["มั่นใจแล้วกด “🚩 แจ้งเคาน์เตอร์” แจ้งถูก พี่ภพ ตำรวจไซเบอร์ จะมารับตัวไป ได้เงินรางวัล 300 บาท และ Wi-Fi ปลอมในร้านนั้นจะหายไป แจ้งผิดคน ความไว้ใจลด อย่าตัดสินจากหน้าตา","When you're sure, tap “🚩 Report”. Right: Phop from the cyber police takes him away, +฿300, and that shop's fake Wi-Fi is gone. Wrong: trust drops. Never judge by looks."]},
+  {who:M, i:"🚩", t:["แจ้งเคาน์เตอร์","Report them"], d:["มั่นใจแล้วกด “🚩 แจ้งเคาน์เตอร์” แจ้งถูก พี่ภพ ตำรวจไซเบอร์ จะมารับตัวไป ได้เงินรางวัล 300 บาท และ Wi-Fi ปลอมในร้านนั้นจะหายไป แจ้งผิดคน ความไว้ใจลด อย่าตัดสินจากหน้าตา","When you're sure, tap “🚩 Report”. Right: Phop from the cyber police takes them away, +฿300, and that shop's fake Wi-Fi is gone. Wrong: trust drops. Never judge by looks."]},
   {who:M, i:"📱", t:["ถ้าหาไม่ทัน","If you're too slow"], d:["ถ้าเผลอต่อ Wi-Fi ปลอม จอจะเริ่มกระตุกแปลกๆ ยิ่งปล่อยนานยิ่งหนัก รีบเปิดมือถือกด “ตัดการเชื่อมต่อ” หรือจับคนร้ายให้ทัน ไม่งั้นเครื่องพังทั้งเครื่อง","Join a fake Wi-Fi by mistake and the screen starts glitching, worse the longer you wait. Open your phone and tap “Disconnect”, or catch the hacker in time, or the whole phone dies."]}
 ];
 function stepWifi(dt){
@@ -226,7 +230,7 @@ function pickWifi(k){
 }
 function talkVillain(){
   target=null; keys.clear();
-  if(S.wifi[S.zone] || S.phoneBroken){ sfx("blip"); toast(S.phoneBroken?L("ชายฮู้ดดำหัวเราะเบาๆ “ขอบใจสำหรับรหัสนะ”","The hooded man chuckles: “Thanks for the password.”"):L("ชายฮู้ดดำหันหน้าหนี พิมพ์อะไรรัวๆ ในโน้ตบุ๊ก","The hooded man turns away and types fast on his laptop.")); return; }
+  if(S.wifi[S.zone] || S.phoneBroken){ sfx("blip"); toast(S.phoneBroken?L("คนแปลกหน้าหัวเราะเบาๆ “ขอบใจสำหรับรหัสนะ”","The stranger chuckles: “Thanks for the password.”"):L("คนแปลกหน้าหันหน้าหนี พิมพ์อะไรรัวๆ ในโน้ตบุ๊ก","The stranger turns away and types fast on a laptop.")); return; }
   openWifi();
 }
 /* ---------- a fake-Wi-Fi infection grows: glitches get worse until the phone dies ---------- */

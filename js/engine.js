@@ -133,7 +133,11 @@ function blocked(x,y,self){
   const b={x:x-12,y:y-7,w:24,h:14};
   if(self===player && redLight(x,y)) return true;
   for(const s of SOLIDS) if(b.x<s.x+s.w&&b.x+b.w>s.x&&b.y<s.y+s.h&&b.y+b.h>s.y) return true;
-  for(const n of npcs){ if(n===self||n.leaving) continue; if(Math.abs(n.x-x)<26&&Math.abs(n.y-y)<14) return true; }
+  for(const n of npcs){ if(n===self||n.leaving) continue;
+    if(Math.abs(n.x-x)<26&&Math.abs(n.y-y)<14){
+      /* already overlapping (someone walked into us, or we spawned on them)? walk free of them in any direction */
+      if(self && Math.abs(n.x-self.x)<26&&Math.abs(n.y-self.y)<14) continue;
+      return true; } }
   return false;
 }
 function step(dt){
