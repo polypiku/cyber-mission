@@ -167,7 +167,6 @@ function tryEnter(b){
   toast(b.soon ? L("ยังไม่เปิด","Not open yet") : lockMsg(b.zone));
 }
 /* the university front: a picture by the author (the old SVG scene below is kept as a fallback) */
-const UNI_FRONT="assets/scenes/uni-front.webp";
 /* the university front, drawn as an SVG scene (no image files) */
 function hcuSVG(){
   const ink="#3A2A22", br="#E8906F", brD="#CF7457", brL="#F2A688", win="#5F7C8C", winL="#BFE0EE";
