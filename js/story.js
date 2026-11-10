@@ -670,6 +670,7 @@ function drawChar(g,c,now){
   g.drawImage(im,-w/2,-h,w,h); g.restore();
   if(c!==player && crying(c) && !c.moving) drawTears(g,c,w,bob,now);
   if(c===player && performance.now()<cryUntil) drawTears(g,c,w,bob,now);
+  if(typeof drawUmbrellaFor==="function") drawUmbrellaFor(g,c,h,now);
   if(S.zone===3 && c.role==="grandpa" && !S.best.video) drawVideoPhone(g,c,now);
   if(S.zone===3 && c.role==="grandma" && rush && rush.n===c) drawPanic(g,c,now);
 }
