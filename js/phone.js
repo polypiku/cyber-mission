@@ -75,7 +75,7 @@ const PH_APPS=()=>[
   {k:"board",i:"🗂️",n:L("หลักฐาน","Evidence"),bg:"linear-gradient(160deg,#A98BE0,#6A45B0)",badge:S.evNew||0},
   {k:"dex",i:"📖",n:L("สมุดกลโกง","Handbook"),bg:"linear-gradient(160deg,#F08A5D,#B8481E)"},
   {k:"map",i:"🗺️",n:L("แผนที่","Map"),bg:"linear-gradient(160deg,#6FD18B,#2E8B4A)"},
-  {k:"set",i:"⚙️",n:L("ตั้งค่า","Settings"),bg:"linear-gradient(160deg,#B8BEC6,#6E7780)"}
+  {k:"set",i:"⚙️",n:L("ตั้งค่า","Settings"),bg:"linear-gradient(160deg,#B8BEC6,#6E7780)",badge:(()=>{const [a,b]=psScore();return b-a;})()}
 ];
 function openPhone(){
   if(S.phoneBroken) return openHacked();
@@ -106,7 +106,7 @@ function phoneApp(k){
   if(k==="board") return openBoard();
   if(k==="dex") return openDex();
   if(k==="map") return openZones();
-  if(k==="set") return openMenu();
+  if(k==="set") return openPhoneSettings();
 }
 /* the scan app is a plain virus scanner */
 let scanAt=-99;

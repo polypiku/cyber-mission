@@ -41,7 +41,7 @@ function stepWeather(dt){
   if(WX.drops.length>want) WX.drops.length=want;
   for(const d of WX.drops){ d.y+=d.v*dt; d.x-=d.v*.18*dt; if(d.y>VH){ d.y=-20; d.x=Math.random()*(VW+80); } }
   const c=$("wxChip"); if(c){ const n=nightAmt(), ic=WX.rainOn?(WX.heavy?"⛈️":"🌧️"):n>.5?"🌙":n>.1?"🌇":"☀️";
-    const txt=`${ic} ${clockText()}${WX.rainOn?" · "+L("ฝนตก","Rain")+(hasUmbrella()?" ☂️":""):""}`; if(c.textContent!==txt) c.textContent=txt; c.hidden=!S.char; }
+    const txt=`${ic} ${clockText()}${WX.rainOn?" · "+L("ฝนตก","Rain")+(umbOpen()?" ☂️":""):""}`; if(c.textContent!==txt) c.textContent=txt; c.hidden=!S.char; }
 }
 
 /* ---------- umbrellas ---------- */
@@ -73,8 +73,8 @@ const UMB_SCRIPT={
     after:{safe:t("ยายได้ร่มใหม่จากร้านจริงแล้ว คันเก่าที่ซ่อมได้ยายให้หลาน","I got a new one at a real shop. You have my old one, it's fixed."),warn:t("ยายจะดูรีวิวก่อนทุกครั้ง เอาร่มคันนี้ไปนะ","I'll check reviews from now on. Take this umbrella."),danger:t("ยายโดนบล็อกแล้ว… เอาร่มเก่ายายไปใช้ก่อนนะ","I got blocked… take my old umbrella for now.")}}
 };
 function giveUmbrella(){
-  S.items=S.items||{}; S.items.umbrella=true; S.umbCase=null; save(); sfx("good"); hudKey="";
-  toast(L("🌂 ได้ร่มแล้ว! “ขอบคุณที่ช่วยนะ เอาร่มคันนี้ไปใช้เถอะ”","🌂 You got an umbrella! “Thanks for helping. Take this one.”"));
+  S.items=S.items||{}; S.items.umbrella=true; S.umbOn=true; S.umbCase=null; save(); sfx("good"); hudKey="";
+  toast(L("🌂 ได้ร่มแล้ว! เก็บไว้ใน 🎒 กระเป๋า กดกางหรือหุบได้ (ปุ่ม U)","🌂 You got an umbrella! It's in your 🎒 bag. Tap to put it up or fold it (key U)"));
 }
 const UMB_COL=["#E5402F","#2F6DB5","#FFC414","#2E9A6E","#E77FA0","#7A5AA6","#FF8A50"];
 /* drawn right after each character: an open umbrella in the rain, a 🌂 over the person who'll give you one,
@@ -87,8 +87,8 @@ function drawUmbrellaFor(g,c,h,now){
     g.beginPath(); g.arc(c.x+26,by,15,0,7); g.fillStyle="#FFFFFF"; g.fill(); g.lineWidth=2.5; g.strokeStyle=INK; g.stroke();
     g.font="18px sans-serif"; g.textAlign="center"; g.textBaseline="middle"; g.fillText("🌂",c.x+26,by+1);
   }
-  if(!raining) return;
-  if(c===player && !hasUmbrella()){
+  if(!raining && !(c===player && umbOpen())) return;
+  if(c===player && !umbOpen()){
     if(RM) return;
     g.fillStyle="rgba(120,180,230,.85)";
     for(let i=0;i<6;i++){ const p=((now/500)+i/6)%1, x=c.x-18+((i*13)%36), y=c.y-h-6+p*(h*.7); g.beginPath(); g.ellipse(x,y,1.6,4,0,0,7); g.fill(); }

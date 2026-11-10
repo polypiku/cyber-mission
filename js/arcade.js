@@ -278,6 +278,7 @@ $("setBtn").onclick=()=>{ if(!D) openSettings(false); };
 })();
 $("prog").onclick=()=>{ if(!D && $("peek").hidden) openZones(); };
 $("boardBtn").onclick=()=>{ if(!D && $("peek").hidden) openBoard(); };
+$("bagBtn").onclick=()=>{ if(!D && $("peek").hidden && !busy()) openBag(); };
 $("veil").addEventListener("click",(e)=>{ if(e.target===$("veil") && (sheetMode==="phone"||sheetMode==="menu"||sheetMode==="settings")) closeSheet(); });
 
 /* start or resume from the character screen (or the title screen's play button) */

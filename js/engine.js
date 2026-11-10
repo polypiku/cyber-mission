@@ -177,7 +177,7 @@ function step(dt){
   }
   // NPCs drift back to their resting direction
   npcs.forEach(n=>{ if(rush&&rush.n===n) return; n.moving=false; if(!talking||talking!==n){ n.dir=n.home; } });
-  stepWeather(dt); stepRush(dt); stepUrgent(dt); stepInbox(dt); stepWifi(dt); stepVirus(dt); stepHack(dt); stepTension(dt); stepFillers(dt); stepEscort(dt); stepCinema(dt); stepAmbient(dt);
+  stepWeather(dt); stepBag(); stepRush(dt); stepUrgent(dt); stepInbox(dt); stepWifi(dt); stepVirus(dt); stepHack(dt); stepTension(dt); stepFillers(dt); stepEscort(dt); stepCinema(dt); stepAmbient(dt);
 }
 function face(a,b){ const dx=b.x-a.x, dy=b.y-a.y; a.dir=Math.abs(dx)>Math.abs(dy)?(dx<0?"left":"right"):(dy<0?"up":"down"); }
 function nearest(){
@@ -211,7 +211,7 @@ function hud(){
   $("prog").innerHTML = S.zone===0 ? `<span class="zn">${L("รวม","Total")}</span><span class="st">★</span> ${totalScore()}/${totalMax()}` : (S.zone===8?`<span class="zn">🏢 ${L("ชั้น","Fl.")} ${offFloor()}</span><span class="st">★</span> ${totalScore()}/${totalMax()}`:`<span class="zn">${L("โซน","Zone")} ${ZONES[S.zone]&&ZONES[S.zone].bonus?"👻":zno(S.zone)}</span><span class="st">★</span> ${zoneScore(S.zone)}/${zoneMax(S.zone)}`);
   $("prog").setAttribute("aria-label", S.zone===0 ? L(`คะแนนรวม ${totalScore()} จาก ${totalMax()} เปิดแผนที่ภารกิจ`,`Total score ${totalScore()} of ${totalMax()}. Open mission map`) : L(`โซน ${zno(S.zone)} คะแนน ${zoneScore(S.zone)} จาก ${zoneMax(S.zone)} เปิดแผนที่ภารกิจ`,`Zone ${zno(S.zone)}, score ${zoneScore(S.zone)} of ${zoneMax(S.zone)}. Open mission map`));
   const pending=S.zone===1 && S.chat && !S.results.chat;
-  $("boardDot").hidden=!S.evNew; $("boardDot").textContent=S.evNew||""; $("boardBtn").setAttribute("aria-label",L("บอร์ดหลักฐาน","Evidence board"));
+  $("bagBtn").setAttribute("aria-label",L("กระเป๋า","Bag")); $("boardDot").hidden=!S.evNew; $("boardDot").textContent=S.evNew||""; $("boardBtn").setAttribute("aria-label",L("บอร์ดหลักฐาน","Evidence board"));
   const pcount=S.inbox.length+(pending?1:0);
   $("phoneDot").hidden=!pcount && !S.phoneBroken; $("phoneDot").textContent=S.phoneBroken?"✕":pcount; $("phoneBtn").classList.toggle("broken",!!S.phoneBroken); $("phoneBtn").classList.toggle("ring", (pending && !S.chatSeen) || S.inbox.length>0);
   $("phoneBtn").setAttribute("aria-label",L("โทรศัพท์","Phone")); $("menuBtn").setAttribute("aria-label",L("เมนู","Menu"));
