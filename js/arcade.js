@@ -8,8 +8,9 @@ function openArcade(){
     <p class="note" style="font-size:.86rem">${L("ฝึกความไวก่อนออกไปช่วยคนจริง ทำคะแนนสูงสุดเก็บไว้แข่งกับตัวเอง","Sharpen your reflexes before helping real people. Beat your own high score.")}</p>
     <button class="mgcard" data-mg="sms"><span class="mgi">📩</span><span><b>${L("ข้อความจริงหรือหลอก","Real or scam?")}</b><small>${L("45 วินาที ตัดสินให้เร็วและแม่นที่สุด","45 seconds. Judge fast and accurately")}</small></span><em>${L("สูงสุด","Best")} ${S.mg.sms}</em></button>
     <button class="mgcard" data-mg="url"><span class="mgi">🔗</span><span><b>${L("จับผิดลิงก์","Spot the fake link")}</b><small>${L("แตะส่วนที่ผิดปกติของลิงก์ หรือกด \"ปลอดภัย\"","Tap the suspicious part of each link, or press \"Safe\"")}</small></span><em>${L("สูงสุด","Best")} ${S.mg.url}</em></button>
+    <button class="mgcard" data-mg="quiz"><span class="mgi">🏆</span><span><b>${L("แข่งตอบปัญหากับเพื่อน","Quiz race with friends")}</b><small>${L("5 ข้อ ทุกคนตอบพร้อมกัน ใครเร็วและถูกได้คะแนนมากสุด","5 questions, everyone answers at once, fast and right wins")}</small></span></button>
   </div>`);
-  $("sheet").querySelectorAll("[data-mg]").forEach(b=>b.onclick=()=>b.dataset.mg==="sms"?startSmsGame():startUrlGame());
+  $("sheet").querySelectorAll("[data-mg]").forEach(b=>b.onclick=()=>b.dataset.mg==="sms"?startSmsGame():b.dataset.mg==="quiz"?openQuizTable():startUrlGame());
 }
 const shuffled=(a)=>{ const r=[...a]; for(let i=r.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [r[i],r[j]]=[r[j],r[i]]; } return r; };
 function startSmsGame(){
@@ -61,7 +62,7 @@ function endMG(){
     <div class="score"><span class="mgi" style="font-size:2.4rem">${kind==="sms"?"📩":"🔗"}</span><div><span class="eyebrow">${L("คะแนน","Score")}</span><b>${score}</b><p>${nb?L("สถิติใหม่!","New best!"):L(`สูงสุด ${best}`,`Best ${best}`)}</p>${mgc?coinTag(mgc):""}</div></div>
     ${missList?`<div class="box"><h4>${L("ข้อที่พลาด","What you missed")}</h4><ul class="list">${missList}</ul></div>`:`<p>${L("ไม่พลาดเลย เยี่ยม!","No mistakes. Brilliant!")}</p>`}
     <div class="btns">${btn(L("เล่นอีกครั้ง","Play again"),`data-mg="${kind}"`,"y")}<button class="btn g" data-arcade><span>${L("กลับไปที่ตู้","Back to kiosk")}</span></button></div></div>`);
-  $("sheet").querySelectorAll("[data-mg]").forEach(b=>b.onclick=()=>b.dataset.mg==="sms"?startSmsGame():startUrlGame());
+  $("sheet").querySelectorAll("[data-mg]").forEach(b=>b.onclick=()=>b.dataset.mg==="sms"?startSmsGame():b.dataset.mg==="quiz"?openQuizTable():startUrlGame());
   $("sheet").querySelectorAll("[data-arcade]").forEach(b=>b.onclick=()=>openArcade());
 }
 

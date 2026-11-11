@@ -39,7 +39,7 @@ function render(now){
   TABLES.forEach(t=>items.push({y:S.zone===2?t.y+LIB_SIZE[t.item][1]/2:t.y+18,d:g=>drawTable(g,t)}));
   CHAIRS.forEach(c=>items.push({y:c.y+8,d:g=>drawChair(g,c)}));
   PLANTS.forEach(p=>items.push({y:p.y+14,d:g=>drawPlant(g,p)}));
-  if(S.char){ npcs.forEach(n=>items.push({y:n.y,d:g=>drawChar(g,n,now)})); items.push({y:player.y,d:g=>drawChar(g,player,now)}); }
+  if(S.char){ npcs.forEach(n=>items.push({y:n.y,d:g=>drawChar(g,n,now)})); items.push({y:player.y,d:g=>drawChar(g,player,now)}); mpDrawItems(items,now); }
   items.sort((a,b)=>a.y-b.y).forEach(it=>it.d(ctx)); drawFloodOver(ctx,now);
   drawLibStairSign(ctx,now); drawEscortTalk(ctx); drawSpots(ctx,now); drawGoalArrow(ctx,now); drawExits(ctx,now); drawCinFx(ctx,now);
   if(S.char) npcs.forEach(n=>drawMarker(ctx,n,now));
@@ -201,7 +201,7 @@ function hud(){
   const show = !!n && !busy();
   const dn=nearDoor();
   checkRank();
-  const sp0=nearSpot(); const key=[sp0&&sp0.id,netLabel().t,S.lang,S.zone,S.evNew,xp(),nearCat(),nearBirds(),nearHQ(),nearRepair(),nearVillain(),!!S.phoneBroken,S.coins,JSON.stringify(S.items),S.inbox.length,nearKiosk(),dn&&dn.zone,S.zone?zoneScore(S.zone):totalScore(),S.bars.money,S.bars.privacy,S.bars.trust,doneCount(),S.chat,S.chatSeen,!!S.results.chat,show&&n.id,sheetMode].join("|");
+  const sp0=nearSpot(); const key=[sp0&&sp0.id,netLabel().t,S.lang,S.zone,S.evNew,xp(),nearCat(),nearBirds(),nearHQ(),nearRepair(),nearVillain(),!!S.phoneBroken,S.coins,JSON.stringify(S.items),S.inbox.length,nearKiosk(),nearQuizTable(),dn&&dn.zone,S.zone?zoneScore(S.zone):totalScore(),S.bars.money,S.bars.privacy,S.bars.trust,doneCount(),S.chat,S.chatSeen,!!S.results.chat,show&&n.id,sheetMode].join("|");
   if(key===hudKey) return; hudKey=key;
   if(hudPrev && !sheetMode){ let ch=false; for(const k of ["money","privacy","trust"]){ const dv=S.bars[k]-hudPrev[k]; if(dv){ hudFlash[k]=dv>0?"flash-up":"flash-down"; ch=true; } }
     if(ch){ clearTimeout(hudFlashT); hudFlashT=setTimeout(()=>{ hudFlash={}; hudKey=""; },1600); } }
@@ -215,7 +215,7 @@ function hud(){
   const pcount=S.inbox.length+(pending?1:0);
   $("phoneDot").hidden=!pcount && !S.phoneBroken; $("phoneDot").textContent=S.phoneBroken?"✕":pcount; $("phoneBtn").classList.toggle("broken",!!S.phoneBroken); $("phoneBtn").classList.toggle("ring", (pending && !S.chatSeen) || S.inbox.length>0);
   $("phoneBtn").setAttribute("aria-label",L("โทรศัพท์","Phone")); $("menuBtn").setAttribute("aria-label",L("เมนู","Menu"));
-  const kk = !show && !busy() && nearKiosk();
+  const qk = !show && !busy() && nearQuizTable(), kk = qk || (!show && !busy() && nearKiosk());
   const fc = !show && !kk && !busy() && nearCat(), fb = !show && !kk && !fc && !busy() && nearBirds(), feed=fc||fb;
   const hq = !show && !kk && !feed && !busy() && nearHQ();
   const rp = !show && !kk && !feed && !hq && !busy() && nearRepair(), vl = !show && !kk && !feed && !hq && !rp && !busy() && nearVillain();
@@ -227,7 +227,7 @@ function hud(){
   if(vl) $("prompt").innerHTML=`${L("ชายใส่ฮู้ดดำ…","The hooded man…")}${TOUCH?"":"<kbd>E</kbd>"}`;
   if(hq) $("prompt").innerHTML=`${L("เข้า ","Enter ")}${esc(OFFICES[nearOffice()].name[S.lang])}${TOUCH?"":"<kbd>E</kbd>"}`;
   if(feed) $("prompt").innerHTML=`${fc?L("ให้อาหารแมว 🐟","Feed the cat 🐟"):L("ให้อาหารนก 🌾","Feed the pigeons 🌾")}${TOUCH?"":"<kbd>E</kbd>"}`;
-  if(kk) $("prompt").innerHTML=`${L("เล่นมินิเกม","Play mini-games")}${TOUCH?"":"<kbd>E</kbd>"}`;
+  if(kk) $("prompt").innerHTML=`${qk?L("🏆 แข่งตอบปัญหาไซเบอร์","🏆 Cyber quiz race"):L("เล่นมินิเกม","Play mini-games")}${TOUCH?"":"<kbd>E</kbd>"}`;
   if(show) $("prompt").innerHTML=`${L("คุยกับ","Talk to")} ${esc(nm(n.id))}${TOUCH?"":"<kbd>E</kbd>"}`;
   else if(showDoor) $("prompt").innerHTML=`${(dn.alley?(dn.soi||ghostOpen()):(!dn.soon&&zoneOpen(dn.zone)))?L("เข้า ","Enter ")+esc(dn.name[S.lang]):L("ล็อกอยู่: ","Locked: ")+esc(dn.name[S.lang])}${TOUCH?"":"<kbd>E</kbd>"}`;
   const act=$("act"); act.disabled=!(show||sp||showDoor||kk||feed||hq||rp||vl); act.textContent=sp?L("ตรวจ","Inspect"):kk?L("เล่น","Play"):feed?L("ให้อาหาร","Feed"):hq?L("เข้า","Enter"):vl?L("สำรวจ","Look"):rp?L("ซ่อม","Repair"):showDoor?L("เข้า","Enter"):L("คุย","Talk");

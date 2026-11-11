@@ -154,7 +154,7 @@ function mentorIntro(){
 }
 
 /* ---------- talking ---------- */
-function interact(){ const n=nearest(); const sp=nearSpot(); if(sp && (!n || Math.hypot(sp.x-player.x,sp.y-player.y)<Math.hypot(n.x-player.x,n.y-player.y))){ collectSpot(sp); return; } if(n){ face(player,n); talkTo(n); return; } if(nearKiosk()){ openArcade(); return; } if(nearCat()){ feedCat(); return; } if(nearBirds()){ feedBirds(); return; } if(nearHQ()){ hqT=0; tryHQ(); return; } if(nearRepair()){ openRepair(); return; } if(nearVillain()){ talkVillain(); return; } const d=nearDoor(); if(d) tryEnter(d); }
+function interact(){ const n=nearest(); const sp=nearSpot(); if(sp && (!n || Math.hypot(sp.x-player.x,sp.y-player.y)<Math.hypot(n.x-player.x,n.y-player.y))){ collectSpot(sp); return; } if(n){ face(player,n); talkTo(n); return; } if(nearKiosk()){ openArcade(); return; } if(nearQuizTable()){ openQuizTable(); return; } if(nearCat()){ feedCat(); return; } if(nearBirds()){ feedBirds(); return; } if(nearHQ()){ hqT=0; tryHQ(); return; } if(nearRepair()){ openRepair(); return; } if(nearVillain()){ talkVillain(); return; } const d=nearDoor(); if(d) tryEnter(d); }
 function nearKiosk(){ return S.zone===0 && S.char && Math.hypot(player.x-KIOSK.x,player.y-(KIOSK.y+18))<58; }
 function nearDoor(){ if(S.zone!==0||!S.char) return null; return BUILDINGS.find(b=>Math.abs(player.x-b.door)<46 && player.y<300) || null; }
 let lockToastT=0;

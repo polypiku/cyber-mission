@@ -91,3 +91,11 @@ python3 tools/smoke_test.py
 เขียนโค้ดร่วมกับ Claude (Anthropic)
 
 ชื่อธนาคาร ร้านค้า บุคคล และเว็บไซต์ในเกมเป็นเรื่องสมมติทั้งหมด
+
+## Play together (online)
+
+- Other players in the same place show up walking around with their name above them. Cases stay on each player's own device.
+- The 🏆 quiz table (the dice table at the university, or the mini-game kiosk) runs a 5-question race. Everyone at the table gets the same questions at the same time, and the scoreboard is live.
+- Only presence is shared: nickname, character, position and quiz score. Nothing is stored.
+- **Link:** Supabase Realtime when `SUPA.url` and `SUPA.key` are filled in at the top of `js/mp.js` (for the public website). Otherwise the Claude artifact room. Otherwise single-player.
+- **Testing on one computer:** open `index.html?mpdev` in two tabs.
