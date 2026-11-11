@@ -41,7 +41,7 @@ function stepWeather(dt){
   if(WX.drops.length>want) WX.drops.length=want;
   for(const d of WX.drops){ d.y+=d.v*dt; d.x-=d.v*.18*dt; if(d.y>VH){ d.y=-20; d.x=Math.random()*(VW+80); } }
   const c=$("wxChip"); if(c){ const ic=wxIcon();
-    const txt=`${ic} ${clockText()}${WX.rainOn?" · "+L("ฝนตก","Rain")+(umbOpen()?" ☂️":""):""} · ⏱ ${playTime()}`; if(c.textContent!==txt) c.textContent=txt; c.hidden=!S.char; }
+    const txt=`⏱ ${playTime()}`; void ic; if(c.textContent!==txt) c.textContent=txt; c.hidden=!S.char; }
 }
 
 /* the weather/time-of-day icon, shared by the HUD chip and the phone */
