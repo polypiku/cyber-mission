@@ -7,3 +7,5 @@ const HEROES={"guardGirl":{"hero":{"w":298,"h":717,"src":"assets/heroes/guardGir
 const UNI_FRONT="assets/scenes/uni-front.webp";
 /* the game logo on the title screen */
 const LOGO_SRC="assets/scenes/logo.webp";
+/* the title screen background (night city) */
+const TITLE_BG="assets/scenes/title-bg.webp";

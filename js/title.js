@@ -1,22 +1,11 @@
-/* The title screen shown when the game opens: a night cyber-city backdrop with Mind and Non, the logo, and the play button.
+/* The title screen shown when the game opens: a night cyber-city picture, the logo, and the play button.
    LOGO_SRC (the picture logo) is set in data/heroes.js so the single-file build can inline it. */
 const GAME_VER = "v0.3";
 let titleOn=false;
 
-/* a night city in the logo's blues: glowing skyline, a circuit grid, floating pixels and the two heroes */
+/* the night-city background picture, with a soft glow behind the logo */
 function cyberScene(){
-  const r=(a,b)=>a+Math.random()*(b-a);
-  let win=""; const bld=[[0,150,90],[95,230,70],[170,120,110],[285,260,80],[370,170,95],[470,300,70],[545,190,120],[670,240,85],[760,140,100],[865,280,75],[945,200,110],[1060,250,90],[1155,160,100],[1260,230,80],[1345,180,95]];
-  const city=bld.map(([x,h,w],k)=>{ let ws=""; for(let yy=380-h+16; yy<370; yy+=22) for(let xx=x+10; xx<x+w-12; xx+=18) if(Math.random()<.42) ws+=`<rect x="${xx}" y="${yy}" width="8" height="10" rx="1.5" fill="${Math.random()<.7?"#5FD4FF":"#FFD34D"}" opacity="${(.45+Math.random()*.5).toFixed(2)}"/>`;
-    return `<rect x="${x}" y="${380-h}" width="${w}" height="${h}" fill="${k%2?"#0B2563":"#0E2D74"}"/>${k%3===0?`<rect x="${x+w/2-2}" y="${380-h-26}" width="4" height="26" fill="#0E2D74"/><circle cx="${x+w/2}" cy="${380-h-28}" r="4" fill="#FF5A6E"/>`:""}${ws}`; }).join("");
-  const px=Array.from({length:14},(_,k)=>`<i class="t-bit ${k%3===0?"y":k%3===1?"c":"b"}" style="left:${r(3,95).toFixed(1)}%;top:${r(6,62).toFixed(1)}%;--d:${r(0,4).toFixed(2)}s;--s:${(r(.7,1.3)).toFixed(2)}"></i>`).join("");
-  const hero=(id,side)=>HEROES[id]?`<img class="t-hero ${side}" src="${HEROES[id].hero.src}" alt="">`:"";
-  return `<div class="t-cyber" aria-hidden="true">
-    <div class="t-glow"></div>${px}
-    <svg class="t-city" viewBox="0 0 1440 380" preserveAspectRatio="xMidYMax slice"><defs><linearGradient id="tcG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2E8BFF" stop-opacity=".0"/><stop offset="1" stop-color="#2E8BFF" stop-opacity=".35"/></linearGradient></defs><rect width="1440" height="380" fill="url(#tcG)"/>${city}<rect y="370" width="1440" height="10" fill="#49C8FF" opacity=".55"/></svg>
-    <div class="t-floor"></div>
-    ${hero(S.char==="studentBoy"?"studentBoy":"studentGirl","left")}${hero(S.char==="studentBoy"?"studentGirl":"studentBoy","right")}
-  </div>`;
+  return `<div class="t-cyber" aria-hidden="true" style="background-image:url('${TITLE_BG}')"><div class="t-glow"></div></div>`;
 }
 function logoHTML(){
   if(LOGO_SRC) return `<img class="t-logoimg" src="${LOGO_SRC}" alt="Cyber Mission">`;

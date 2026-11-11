@@ -1066,17 +1066,8 @@ body.cin .wxchip{display:none}
 
 /* ---------- title screen v2: night cyber city matching the logo ---------- */
 .title{color:#EAF6FF;background:radial-gradient(120% 70% at 50% 108%,#2F8DFF 0%,rgba(47,141,255,0) 60%),linear-gradient(180deg,#050F2E 0%,#0A2160 46%,#1446A8 100%);background-color:#0A2160}
-.t-cyber{position:absolute;inset:0;pointer-events:none;overflow:hidden}
-.t-cyber::before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(73,200,255,.07) 1px,transparent 1px) 0 0/56px 56px,linear-gradient(0deg,rgba(73,200,255,.07) 1px,transparent 1px) 0 0/56px 56px;mask-image:linear-gradient(180deg,#000 0%,rgba(0,0,0,.35) 70%,transparent 100%);-webkit-mask-image:linear-gradient(180deg,#000 0%,rgba(0,0,0,.35) 70%,transparent 100%)}
-.t-glow{position:absolute;left:50%;top:34%;width:min(900px,120vw);height:min(560px,70vh);transform:translate(-50%,-50%);background:radial-gradient(closest-side,rgba(73,200,255,.32),rgba(73,200,255,0));filter:blur(6px)}
-.t-city{position:absolute;left:0;right:0;bottom:84px;width:100%;height:min(34vh,300px)}
-.t-floor{position:absolute;left:0;right:0;bottom:0;height:86px;background:linear-gradient(180deg,#0B2A6E,#071A47);border-top:3px solid #49C8FF;box-shadow:0 -6px 24px rgba(73,200,255,.45)}
-.t-floor::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(90deg,rgba(73,200,255,.18) 0 2px,transparent 2px 64px)}
-.t-bit{position:absolute;width:calc(14px * var(--s));height:calc(14px * var(--s));border:2.5px solid #0C1A3A;border-radius:3px;animation:tBit 4.5s ease-in-out infinite;animation-delay:calc(var(--d) * -1)}
-.t-bit.y{background:#FFC93C}.t-bit.c{background:#49C8FF}.t-bit.b{background:#2F6DE0}
-@keyframes tBit{50%{transform:translateY(-10px);opacity:.6}}
-.t-hero{position:absolute;bottom:40px;height:min(58vh,520px);width:auto;filter:drop-shadow(0 0 14px rgba(73,200,255,.55)) drop-shadow(0 6px 0 rgba(5,15,46,.6))}
-.t-hero.left{left:max(2vw,env(safe-area-inset-left,0px))}.t-hero.right{right:max(2vw,env(safe-area-inset-right,0px))}
+.t-cyber{position:absolute;inset:0;pointer-events:none;overflow:hidden;background-color:#0A2160;background-size:cover;background-position:center bottom;background-repeat:no-repeat}
+.t-glow{position:absolute;left:50%;top:34%;width:min(900px,120vw);height:min(560px,70vh);transform:translate(-50%,-50%);background:radial-gradient(closest-side,rgba(73,200,255,.22),rgba(73,200,255,0))}
 .t-logoimg{max-width:min(86vw,560px);max-height:38vh;filter:drop-shadow(0 0 22px rgba(73,200,255,.45))}
 .t-chip{color:#EAF6FF;background:rgba(8,24,64,.75);border:2.5px solid #49C8FF;box-shadow:0 0 12px rgba(73,200,255,.35)}
 .t-top .langsw{background:rgba(8,24,64,.75);border:2.5px solid #49C8FF;box-shadow:0 0 12px rgba(73,200,255,.35)}
@@ -1098,6 +1089,4 @@ body.cin .wxchip{display:none}
 .t-foot{color:#BFEBFF;background:none}
 .t-foot button{color:#EAF6FF}.t-foot i{color:#FFC93C}
 .t-center{padding-bottom:110px}
-@media (max-width:900px){ .t-hero{height:min(40vh,360px);opacity:.9} }
-@media (max-width:600px){ .t-hero{height:24vh;bottom:46px} .t-city{height:24vh;bottom:84px} .t-logoimg{max-height:30vh} .t-center{padding-bottom:26vh} }
-@media (prefers-reduced-motion:reduce){ .t-bit{animation:none} }
+@media (max-width:600px){ .t-logoimg{max-height:30vh} }
