@@ -85,7 +85,7 @@ function openPhone(){
   openSheet("phone", `${top_(L("โทรศัพท์ของคุณ","Your phone"))}<div class="sh-body"><div class="device homescr"><span class="island"></span><div class="scr">${sbar(nowClock())}
     <div class="hs-clock"><b>${nowClock()}</b><small>${date}</small></div>
     <div class="hs-widget"><span>📍 ${esc(placeName())}</span><span>💵 ${BAHT(S.coins)}</span></div>
-    <div class="hs-widget hs-wx"><span>${wxIcon()} ${WX.rainOn?L("ฝนตก","Raining")+(umbOpen()?" · ☂️":""):nightAmt()>.5?L("กลางคืน","Night"):nightAmt()>.1?L("ใกล้ค่ำ","Evening"):L("ท้องฟ้าแจ่มใส","Clear sky")}</span><span>🕒 ${nowClock()}</span></div>
+    <div class="hs-widget hs-wx"><span>${wxIcon()} ${WX.rainOn?L("ฝนตก","Raining")+(umbOpen()?" · ☂️":""):nightAmt()>.5?L("กลางคืน","Night"):nightAmt()>.1?L("ใกล้ค่ำ","Evening"):L("ท้องฟ้าแจ่มใส","Clear sky")}</span><span>🕒 <b class="hs-now">${nowClock()}</b></span></div>
     <div class="hs-grid">${apps}</div>
     <button class="hs-scan" data-app="scan"><span class="hs-scan-ic">🛡️</span><span><b>${L("สแกนไวรัส","Virus scan")}</b><small>${L("ตรวจหามัลแวร์ในเครื่อง แล้วลบทิ้ง","Find malware on the phone and remove it")}</small></span></button>
     <div class="homebar"></div></div></div></div>`);
