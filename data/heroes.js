@@ -5,3 +5,5 @@ const HEROES={"guardGirl":{"hero":{"w":298,"h":717,"src":"assets/heroes/guardGir
 "studentBoy":{"hero":{"w":327,"h":715,"src":"assets/heroes/studentBoy/hero.webp"}}};
 /* the university front picture shown when you arrive on campus */
 const UNI_FRONT="assets/scenes/uni-front.webp";
+/* the game logo on the title screen */
+const LOGO_SRC="assets/scenes/logo.webp";
