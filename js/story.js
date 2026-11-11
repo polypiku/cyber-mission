@@ -8,7 +8,7 @@ function openCutscene(title, panels, onDone){
     const pn=panels[i], last=i===panels.length-1;
     const says=pn.say.map(([who,th,en])=>`<div class="cs-say"><span class="cs-face">${who==="me"?face_(S.char):face_(who)}</span><div><b>${who==="me"?L("คุณ","You"):nm(who)}</b><p>${EN()?en:th}</p></div></div>`).join("");
     openSheet("cut", `<div class="cs"><div class="cs-top"><span>${title}</span><small>${i+1} / ${panels.length}</small></div>
-      <div class="cs-panel" style="--bg:${pn.bg}"><div class="cs-art">${pn.art}</div><div class="cs-cap">${pn.cap[EN()?1:0]}</div></div>
+      ${pn.img?`<div class="cs-panel photo" style="--bg:${pn.bg}"><img class="cs-photo" src="${pn.img}" alt="" style="object-position:${pn.pos||"center"}"><div class="cs-cap">${pn.cap[EN()?1:0]}</div></div>`:`<div class="cs-panel" style="--bg:${pn.bg}"><div class="cs-art">${pn.art}</div><div class="cs-cap">${pn.cap[EN()?1:0]}</div></div>`}
       <div class="cs-says">${says}</div>
       <div class="btns"><button class="btn g" data-cskip><span>${L("ข้าม","Skip")}</span></button><button class="btn y" data-cnext><span>${last?L("ต่อไป","Continue"):L("ถัดไป ›","Next ›")}</span></button></div></div>`);
     $("sheet").querySelector("[data-cnext]").onclick=()=>{ sfx("blip"); if(last){ closeSheet(); onDone&&onDone(); } else { i++; show(); } };
@@ -17,7 +17,9 @@ function openCutscene(title, panels, onDone){
   show();
 }
 const mentorId=()=>"volOat";
-function PROLOGUE(){ return [
+/* the prologue panels use the author's pictures when they exist (PROLOGUE_ART in data/heroes.js), emoji otherwise */
+function PROLOGUE(){ return PROLOGUE0().map((p,i)=>{ const a=typeof PROLOGUE_ART!=="undefined"&&PROLOGUE_ART[i]; return a?Object.assign(p,{img:a[0],pos:a[1]}):p; }); }
+function PROLOGUE0(){ return [
   P("#5B1A20","🎓📚☀️",["มหาวิทยาลัยหัวเฉียวเฉลิมพระเกียรติ วันธรรมดาอีกวันของนักศึกษาอย่างเรา","Huachiew Chalermprakiet University. Just another ordinary day for a student like you."],[["me","วันนี้เรียนเสร็จเร็ว ไปนั่งห้องสมุดดีกว่า","Classes finished early. Maybe I'll go sit in the library."]]),
   P("#2A231C","📱💸😨",["แต่ช่วงนี้เพื่อนในคณะโดนหลอกติดกันหลายคน ทั้งทุนปลอม งานพาร์ทไทม์ปลอม Wi-Fi ปลอม","But lately friends in your faculty keep getting scammed: fake scholarships, fake part-time jobs, fake Wi-Fi."]),
   P("#22344A","🚓👮👮",["รถตำรวจจอดหน้าตึกกิจการนักศึกษา ทีมตำรวจไซเบอร์เดินตรงมาหาเรา","A police car stops outside Student Affairs. The cyber police team walks straight towards you."],[["police","สวัสดีครับ ผมภพ ตำรวจไซเบอร์ แถวมหาลัยตอนนี้มีแก๊งมิจฉาชีพใหญ่ เราเรียกมันว่า “แก๊งเงา”","Hello, I'm Phop, cyber police. There's a big scam gang around campus right now. We call it the “Shadow gang”."]]),

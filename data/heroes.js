@@ -9,3 +9,5 @@ const UNI_FRONT="assets/scenes/uni-front.webp";
 const LOGO_SRC="assets/scenes/logo.webp";
 /* the title screen background (night city) */
 const TITLE_BG="assets/scenes/title-bg.webp";
+/* prologue pictures, one per panel: [image, which part to keep when cropped] */
+const PROLOGUE_ART=[["assets/scenes/prologue/p1.webp","center"],["assets/scenes/prologue/p2.webp","center"],["assets/scenes/prologue/p3.webp","center"],["assets/scenes/prologue/p4.webp","center"],["assets/scenes/prologue/p5.webp","72% center"]];

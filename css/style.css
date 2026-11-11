@@ -1090,3 +1090,8 @@ body.cin .wxchip{display:none}
 .t-foot button{color:#EAF6FF}.t-foot i{color:#FFC93C}
 .t-center{padding-bottom:110px}
 @media (max-width:600px){ .t-logoimg{max-height:30vh} }
+
+/* prologue panels with a picture: the image fills the panel, the caption sits under it */
+.cs-panel.photo{padding:0;overflow:hidden;min-height:0;justify-content:flex-start}
+.cs-photo{display:block;width:100%;aspect-ratio:2.56/1;object-fit:cover}
+.cs-panel.photo .cs-cap{border:0;border-top:var(--bw) solid var(--ink)}
