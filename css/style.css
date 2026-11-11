@@ -1093,5 +1093,5 @@ body.cin .wxchip{display:none}
 
 /* prologue panels with a picture: the image fills the panel, the caption sits under it */
 .cs-panel.photo{padding:0;overflow:hidden;min-height:0;justify-content:flex-start}
-.cs-photo{display:block;width:100%;aspect-ratio:2.56/1;object-fit:cover}
+.cs-photo{display:block;width:100%;aspect-ratio:2.92/1;object-fit:cover}
 .cs-panel.photo .cs-cap{border:0;border-top:var(--bw) solid var(--ink)}
