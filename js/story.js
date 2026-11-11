@@ -63,6 +63,7 @@ function playEnding(){
   const n=endingNo(), E=ENDINGS[n];
   S.endStats={n, ms:S.playMs||0, stars:starTotal(), ev:evCount(), cases:ALLCASES().filter(k=>S.best[k]).length, safe:ALLCASES().filter(k=>S.best[k]==="safe").length};
   if(!S.firstClear || n>S.firstClear.n) S.firstClear={...S.endStats};
+  S.endsSeen=S.endsSeen||{}; S.endsSeen[n]=1;
   S.ending=n; S.bestEnding=Math.max(S.bestEnding||0,n); if(n>=2){ S.bustTier=Math.max(S.bustTier||0,n); S.busted=true; } if(n>=3){ jailGang(Math.max(n,S.bestEnding)); S.freed=Object.fromEntries(DORM_ROOMS.map((_,k)=>[k,true])); S.freedAll=true; } save();
   playEndingScene(n,true);
 }
@@ -78,6 +79,8 @@ function endStatsHtml(){
     ${cell("⏱",playTime(st.ms),L("เวลาที่ใช้","Time taken"))}</div>
     ${S.firstClear&&S.firstClear.ms!==st.ms?`<p class="es-best">${L("จบครั้งแรกใน","First finished in")} ${playTime(S.firstClear.ms)}</p>`:""}</div>`;
 }
+/* endings you've reached can be watched again from the menu (open the game with ?endings to unlock all, for checking pictures) */
+function endSeen(n){ if(/[?&]endings/.test(location.search)) return true; S.endsSeen=S.endsSeen||{}; if(S.bestEnding) S.endsSeen[S.bestEnding]=1; if(S.ending) S.endsSeen[S.ending]=1; return !!S.endsSeen[n]; }
 function endingCard(n){
   const E=ENDINGS[n], h=S.handed||0, pct=Math.round(h/clueTotal()*100), bd=clueBreakdown();
   const tick=(ok)=>ok?"✅":"⬜";

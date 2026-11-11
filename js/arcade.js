@@ -85,6 +85,7 @@ function openMenu(){
     <div class="box"><h4>${L("ขนาดตัวอักษร","Text size")}</h4>${tsSw()}</div>
     <div class="btns"><button class="btn g" data-sound aria-pressed="${S.sound}"><span>${S.sound?L("เสียง: เปิด","Sound: on"):L("เสียง: ปิด","Sound: off")}</span></button><button class="btn g" data-dex><span>📖 ${L("สมุดกลโกง","Scam handbook")}</span></button></div>
     <div class="btns"><button class="btn y" data-tour><span>🧭 ${L("ดูทัวร์วิธีเล่นอีกครั้ง","Replay the how-to-play tour")}</span></button></div>
+    <div class="box"><h4>🎬 ${L("ดูฉากจบอีกครั้ง","Watch an ending again")}</h4><div class="endreplay">${[1,4,5].map(n=>{ const ok=endSeen(n); return `<button class="btn ${ok?"g":"g"}" data-endrp="${n}" ${ok?"":"disabled"}><span>${ok?"":"🔒 "}${L("ฉากจบ","Ending")} ${endDisp(n)} · ${ok?esc(ENDINGS[n].t[EN()?1:0]):L("ยังไม่ปลดล็อก","locked")}</span></button>`; }).join("")}</div></div>
     <div class="box"><h4>${L("วิธีเล่น","How to play")}</h4><ul class="list">
       <li>${TOUCH?L("ใช้จอยสติ๊กซ้ายล่างหรือแตะที่พื้นเพื่อเดิน","Use the joystick or tap the floor to walk"):L("ใช้ WASD หรือปุ่มลูกศรเดิน หรือคลิกที่พื้น","Walk with WASD, arrow keys, or click the floor")}</li>
       <li>${TOUCH?L("เข้าใกล้คนที่มีเครื่องหมาย ! แล้วกดปุ่ม \"คุย\" หรือแตะที่ตัวละครโดยตรง","Get close to someone with a ! and press \"Talk\", or tap them directly"):L("เข้าใกล้คนที่มีเครื่องหมาย ! แล้วกด E หรือคลิกที่ตัวละคร","Get close to someone with a ! and press E, or click them")}</li>
@@ -223,6 +224,7 @@ function wireSheet(){
   on("[data-close]",()=>closeSheet());
   on("[data-shop]",()=>openShop());
   on("[data-phhome]",()=>openPhone());
+  document.querySelectorAll("[data-endrp]").forEach(b=>b.onclick=()=>{ if(b.disabled) return; closeSheet(); playEndingScene(+b.dataset.endrp,false); });
   on("[data-tour]",()=>{ closeSheet(); if(S.zone!==1||!npcs.find(n=>n.role==="mentor")){ startCoach(gameTour().filter(st=>!st.world)); } else setTimeout(startTour,100); });
   on("[data-howto]",()=>setTimeout(()=>startCoach(COACH_CASE),50));
   on("[data-zone]",(b)=>goZone(+b.dataset.zone));

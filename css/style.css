@@ -1150,3 +1150,5 @@ body.cin .wxchip{display:none}
 
 .pp-wx{font-size:.9rem;font-weight:700;white-space:nowrap;opacity:.95;margin-top:-2px}
 .hs-wx{margin-top:-4px}
+.endreplay{display:grid;gap:8px}
+.endreplay .btn:disabled{opacity:.5;cursor:default}
