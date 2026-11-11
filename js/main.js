@@ -3,7 +3,7 @@
 let last=performance.now();
 function frame(now){
   const dt=Math.min(0.05,(now-last)/1000); last=now;
-  if(S.char){ step(dt); stepNet(dt); }
+  if(S.char){ step(dt); stepNet(dt); if(!titleOn && !document.hidden){ S.playMs=(S.playMs||0)+dt*1000; } }
   stepMp();
   updateCam(); render(now); hud(); if(now-(frame.gt||0)>250){ frame.gt=now; goalPill(); moneyHint(); }
   requestAnimationFrame(frame);

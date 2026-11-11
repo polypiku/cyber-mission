@@ -61,15 +61,29 @@ const ENDINGS={
 const RAID_OPEN=()=>[P("#22344A","👮🗂️🧩",["ที่สถานีตำรวจ พี่ภพกางหลักฐานทุกชิ้นบนโต๊ะ","At the station, Phop lays every piece of evidence on the table."],[["police","บัญชีม้า เซิร์ฟเวอร์ ซิมการ์ด ทุกสายชี้ไปที่ตึกเดียวกัน","Mule accounts, server, SIM cards: every thread points to one building."]])];
 function playEnding(){
   const n=endingNo(), E=ENDINGS[n];
+  S.endStats={n, ms:S.playMs||0, stars:starTotal(), ev:evCount(), cases:ALLCASES().filter(k=>S.best[k]).length, safe:ALLCASES().filter(k=>S.best[k]==="safe").length};
+  if(!S.firstClear || n>S.firstClear.n) S.firstClear={...S.endStats};
   S.ending=n; S.bestEnding=Math.max(S.bestEnding||0,n); if(n>=2){ S.bustTier=Math.max(S.bustTier||0,n); S.busted=true; } if(n>=3){ jailGang(Math.max(n,S.bestEnding)); S.freed=Object.fromEntries(DORM_ROOMS.map((_,k)=>[k,true])); S.freedAll=true; } save();
   playEndingScene(n,true);
+}
+/* the result card: stars, clues, cases and the time it took */
+function endStatsHtml(){
+  const st=S.endStats||{ms:S.playMs||0, stars:starTotal(), ev:evCount(), cases:ALLCASES().filter(k=>S.best[k]).length, safe:ALLCASES().filter(k=>S.best[k]==="safe").length};
+  const N=ALLCASES().length, f=starTotal()/starMax(), rank=f>=.85?"S":f>=.6?"A":f>=.4?"B":"C";
+  const cell=(i,v,l,w)=>`<div class="es-cell"><span class="es-i">${i}</span><b>${v}</b><small>${l}</small>${w!=null?`<div class="meter"><i style="width:${Math.round(w*100)}%"></i></div>`:""}</div>`;
+  return `<div class="endstats"><div class="es-rank" aria-label="${L("เกรด","Grade")} ${rank}"><small>${L("เกรด","Grade")}</small><b>${rank}</b></div>
+    <div class="es-grid">${cell("⭐",`${st.stars}/${starMax()}`,L("ดาวที่เก็บได้","Stars"),st.stars/starMax())}
+    ${cell("🔍",`${st.ev}/${clueTotal()}`,L("เบาะแสที่เจอ","Clues found"),st.ev/clueTotal())}
+    ${cell("🛡️",`${st.safe}/${N}`,L("ช่วยรอดปลอดภัย","People kept safe"),st.safe/N)}
+    ${cell("⏱",playTime(st.ms),L("เวลาที่ใช้","Time taken"))}</div>
+    ${S.firstClear&&S.firstClear.ms!==st.ms?`<p class="es-best">${L("จบครั้งแรกใน","First finished in")} ${playTime(S.firstClear.ms)}</p>`:""}</div>`;
 }
 function endingCard(n){
   const E=ENDINGS[n], h=S.handed||0, pct=Math.round(h/clueTotal()*100), bd=clueBreakdown();
   const tick=(ok)=>ok?"✅":"⬜";
   const rows=Object.entries(CLUE_SRC).map(([k,v])=>bd[k]?`<li>${tick(bd[k][0]===bd[k][1])} ${v[S.lang]} ${bd[k][0]}/${bd[k][1]}</li>`:"").join("");
   openSheet("unlock", `<div class="unlockhero" style="background:${E.c}"><span class="eyebrow">${L("ฉากจบ","Ending")} ${endDisp(n)} / 3</span><div class="ubig">${E.t[EN()?1:0]}</div><p>${L("ฉากจบที่ดีที่สุดที่เคยได้","Best ending so far")}: ${endDisp(S.bestEnding)}/3</p></div>
-    <div class="sh-body"><div class="box"><h4>${L("สิ่งที่ส่งผลต่อฉากจบ","What decides the ending")}</h4><ul class="list">
+    <div class="sh-body">${endStatsHtml()}<div class="box"><h4>${L("สิ่งที่ส่งผลต่อฉากจบ","What decides the ending")}</h4><ul class="list">
       <li>🧩 ${L("เบาะแสที่ส่งตำรวจ","Clues handed to Phop")} ${h}/${clueTotal()} (${pct}%) · ${L("ฉากจบ 2 (จับได้แต่ลูกน้อง): 50% · ฉากจบ 3 (จับได้บอส): 90%","Ending 2 (crew only): 50% · Ending 3 (the boss): 90%")}</li>
       ${rows}
       <li>${tick(S.best.parttime==="safe")} ${L("ปวีณายอมเป็นพยาน (ต้องมีสำหรับฉากจบ 3)","Paweena agrees to testify (needed for ending 3)")}</li></ul></div>

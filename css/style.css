@@ -1133,3 +1133,17 @@ body.cin .wxchip{display:none}
 .qt .btn{margin-top:12px}
 .qt.sh-body{justify-content:flex-start}
 .qt .btn{flex:none}
+
+/* ---------- end-of-game result card ---------- */
+.endstats{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:center;background:#FFF8E8;border:var(--bw) solid var(--ink);box-shadow:var(--shadow);padding:12px}
+.es-rank{display:grid;place-items:center;width:78px;height:78px;border-radius:50%;background:#FFC93C;border:3px solid var(--ink);line-height:1}
+.es-rank small{font-size:.7rem;font-weight:700}
+.es-rank b{font-family:var(--f-display);font-size:2.4rem}
+.es-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.es-cell{display:grid;grid-template-columns:auto 1fr;column-gap:6px;align-items:center;background:var(--paper);border:2px solid var(--ink);padding:6px 8px}
+.es-cell .es-i{grid-row:span 2;font-size:1.3rem}
+.es-cell b{font-size:1.05rem;line-height:1.1}
+.es-cell small{font-size:.72rem;color:var(--muted)}
+.es-cell .meter{grid-column:1/-1;margin-top:4px;height:6px}
+.es-best{grid-column:1/-1;margin:0;font-size:.8rem;text-align:center;color:var(--muted)}
+@media (max-width:420px){ .endstats{grid-template-columns:1fr} .es-rank{margin:auto} }

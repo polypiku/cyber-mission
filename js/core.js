@@ -40,6 +40,8 @@ let S = fresh();
 try{ const v=JSON.parse(localStorage.getItem(SAVE_KEY)||"null"); if(v&&v.bars) S=Object.assign(fresh(),v); }catch(e){}
 for(const [k,r] of Object.entries(S.results)) if(!S.best[k]) S.best[k]=r.type;
 if(!S.late) S.late={}; if(!S.ev) S.ev={}; if(!S.inbox) S.inbox=[]; if(!S.msgSeen) S.msgSeen=[]; if(!S.msgStats) S.msgStats={ok:0,bad:0}; if(!S.mg) S.mg={sms:0,url:0}; if(S.rank==null) S.rank=0; if(S.sound==null) S.sound=true; if(!S.seenCases) S.seenCases=[]; if(!S.fed) S.fed={cat:0,birds:0}; if(!S.wifi) S.wifi={}; if(S.coins==null) S.coins=100; if(!S.items) S.items={shield:0,lens:0,ins:0,data:false,shoes:false}; if(S.phoneBroken===undefined) S.phoneBroken=null; S.items.lens=Math.min(3,S.items.lens||0); if(!S.ts) S.ts=1; applyTS(); if(S.briefed&&!S.items.lens) S.items.lens=1;
+/* real time spent playing (paused on the title screen and when the tab is hidden) */
+const playTime=(ms=S.playMs||0)=>{ const s=Math.floor(ms/1000), h=Math.floor(s/3600), m=Math.floor(s/60)%60, x=String(s%60).padStart(2,"0"); return h?`${h}:${String(m).padStart(2,"0")}:${x}`:`${m}:${x}`; };
 const save = ()=>{ try{ localStorage.setItem(SAVE_KEY, JSON.stringify(S)); }catch(e){} };
 const EN = ()=>S.lang==="en";
 const L = (th,en)=>EN()?en:th;

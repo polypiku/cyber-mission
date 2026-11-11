@@ -41,7 +41,7 @@ function stepWeather(dt){
   if(WX.drops.length>want) WX.drops.length=want;
   for(const d of WX.drops){ d.y+=d.v*dt; d.x-=d.v*.18*dt; if(d.y>VH){ d.y=-20; d.x=Math.random()*(VW+80); } }
   const c=$("wxChip"); if(c){ const n=nightAmt(), ic=WX.rainOn?(WX.heavy?"⛈️":"🌧️"):n>.5?"🌙":n>.1?"🌇":"☀️";
-    const txt=`${ic} ${clockText()}${WX.rainOn?" · "+L("ฝนตก","Rain")+(umbOpen()?" ☂️":""):""}`; if(c.textContent!==txt) c.textContent=txt; c.hidden=!S.char; }
+    const txt=`${ic} ${clockText()}${WX.rainOn?" · "+L("ฝนตก","Rain")+(umbOpen()?" ☂️":""):""} · ⏱ ${playTime()}`; if(c.textContent!==txt) c.textContent=txt; c.hidden=!S.char; }
 }
 
 /* ---------- umbrellas ---------- */
