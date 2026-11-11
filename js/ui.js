@@ -44,7 +44,7 @@ function showPhPage(i){
 }
 addEventListener("resize",()=>{ if(sheetMode==="case") paginatePhone(true); });
 $("veil").addEventListener("click",e=>{ if(e.target===$("veil") && $("sheet").classList.contains("asphone")) closeSheet(); });
-const ppTick=()=>{ const el=$("ppTime"); if(el && el.textContent!==nowClock()) el.textContent=nowClock(); const w=$("ppWx"); if(w){ const t=S.char&&typeof wxIcon==="function"?`${wxIcon()} ${playTime()}`:""; if(w.textContent!==t) w.textContent=t; } }; setTimeout(ppTick,0); setInterval(ppTick,1000);
+const ppTick=()=>{ if(typeof nowClock!=="function") return; const el=$("ppTime"); if(el && el.textContent!==nowClock()) el.textContent=nowClock(); const w=$("ppWx"); if(w){ const t=S.char&&typeof wxIcon==="function"?`${wxIcon()} ${playTime()}`:""; if(w.textContent!==t) w.textContent=t; } }; setTimeout(ppTick,0); setInterval(ppTick,1000);
 addEventListener("keydown",e=>{ if(sheetMode!=="case"||!$("phBody")?._pages) return; if(e.key==="ArrowRight"){ showPhPage(phPage+1); e.preventDefault(); } if(e.key==="ArrowLeft"){ showPhPage(phPage-1); e.preventDefault(); } });
 function openSheet(mode, html){
   sheetMode=mode; $("sheet").innerHTML=html; $("veil").hidden=false; $("veil").scrollTop=0; keys.clear(); endJoy(); target=null;
