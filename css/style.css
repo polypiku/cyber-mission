@@ -1007,7 +1007,7 @@ button.bm-pin:not(:disabled):hover{background:#FFF4CC}
 /* clock and weather chip */
 .wxchip{position:fixed;left:12px;top:206px;z-index:6;background:#FFFFFF;border:2px solid var(--ink);border-radius:999px;padding:3px 12px;font:800 .82rem var(--f-display,sans-serif);color:var(--ink);box-shadow:2px 2px 0 var(--ink);pointer-events:none}
 body.cin .wxchip{display:none}
-@media (max-width:700px){ .wxchip{top:auto;bottom:150px} }
+@media (max-width:700px){ .wxchip{top:64px;right:10px;left:auto;bottom:auto;font-size:.76rem;padding:2px 10px} }
 
 /* ---------- bag ---------- */
 .bagtabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
