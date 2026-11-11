@@ -1064,30 +1064,30 @@ body.cin .wxchip{display:none}
 }
 .ar-photo{display:block;width:100%;height:100%;object-fit:cover;object-position:50% 40%}
 
-/* ---------- title screen v2: night cyber city matching the logo ---------- */
-.title{color:#EAF6FF;background:radial-gradient(120% 70% at 50% 108%,#2F8DFF 0%,rgba(47,141,255,0) 60%),linear-gradient(180deg,#050F2E 0%,#0A2160 46%,#1446A8 100%);background-color:#0A2160}
-.t-cyber{position:absolute;inset:0;pointer-events:none;overflow:hidden;background-color:#0A2160;background-size:cover;background-position:center bottom;background-repeat:no-repeat}
-.t-glow{position:absolute;left:50%;top:34%;width:min(900px,120vw);height:min(560px,70vh);transform:translate(-50%,-50%);background:radial-gradient(closest-side,rgba(73,200,255,.22),rgba(73,200,255,0))}
-.t-logoimg{max-width:min(86vw,560px);max-height:38vh;filter:drop-shadow(0 0 22px rgba(73,200,255,.45))}
-.t-chip{color:#EAF6FF;background:rgba(8,24,64,.75);border:2.5px solid #49C8FF;box-shadow:0 0 12px rgba(73,200,255,.35)}
-.t-top .langsw{background:rgba(8,24,64,.75);border:2.5px solid #49C8FF;box-shadow:0 0 12px rgba(73,200,255,.35)}
-.t-top .langsw button{background:transparent;color:#EAF6FF}
-.t-top .langsw button[aria-pressed=true]{background:#49C8FF;color:#071A47}
-.t-plank{color:#EAF6FF;background:linear-gradient(180deg,#123A86,#0B2563);border:3px solid #49C8FF;box-shadow:0 0 16px rgba(73,200,255,.4),0 4px 0 #050F2E}
-.t-play{color:#fff;background:linear-gradient(180deg,#FFE45C 0%,#FFC93C 48%,#FF9F1C 100%);border:4px solid #0C1A3A;box-shadow:inset 0 3px 0 rgba(255,255,255,.55),0 6px 0 #0C1A3A,0 0 26px rgba(255,201,60,.55)}
-.t-play b{-webkit-text-stroke:2.5px #0C1A3A;text-shadow:0 3px 0 #0C1A3A}
-.t-play small{color:#fff;-webkit-text-stroke:1.5px #0C1A3A}
-.t-play i{background:#1446A8;border:3.5px solid #0C1A3A;box-shadow:inset 0 0 0 3px #49C8FF;color:#fff}
+/* ---------- title screen v2: night cyber city, black / orange / yellow ---------- */
+.title{color:#FFF7E8;background:radial-gradient(120% 70% at 50% 108%,#FF8A1C 0%,rgba(255,138,28,0) 60%),linear-gradient(180deg,#0B0805 0%,#1A120A 46%,#3A2410 100%);background-color:#1A120A}
+.t-cyber{position:absolute;inset:0;pointer-events:none;overflow:hidden;background-color:#1A120A;background-size:cover;background-position:center bottom;background-repeat:no-repeat}
+.t-glow{position:absolute;left:50%;top:34%;width:min(900px,120vw);height:min(560px,70vh);transform:translate(-50%,-50%);background:radial-gradient(closest-side,rgba(255,170,40,.22),rgba(255,170,40,0))}
+.t-logoimg{max-width:min(86vw,560px);max-height:38vh;filter:drop-shadow(0 0 22px rgba(255,170,40,.45))}
+.t-chip{color:#FFF7E8;background:rgba(20,14,8,.75);border:2.5px solid #FFB02E;box-shadow:0 0 12px rgba(255,170,40,.35)}
+.t-top .langsw{background:rgba(20,14,8,.75);border:2.5px solid #FFB02E;box-shadow:0 0 12px rgba(255,170,40,.35)}
+.t-top .langsw button{background:transparent;color:#FFF7E8}
+.t-top .langsw button[aria-pressed=true]{background:#FFB02E;color:#1A1006}
+.t-plank{color:#FFF7E8;background:linear-gradient(180deg,#2A1C0E,#140D06);border:3px solid #FFB02E;box-shadow:0 0 16px rgba(255,170,40,.4),0 4px 0 #0B0805}
+.t-play{color:#fff;background:linear-gradient(180deg,#FFE45C 0%,#FFC93C 48%,#FF9F1C 100%);border:4px solid #1A1006;box-shadow:inset 0 3px 0 rgba(255,255,255,.55),0 6px 0 #1A1006,0 0 26px rgba(255,201,60,.55)}
+.t-play b{-webkit-text-stroke:2.5px #1A1006;text-shadow:0 3px 0 #1A1006}
+.t-play small{color:#fff;-webkit-text-stroke:1.5px #1A1006}
+.t-play i{background:#3A2410;border:3.5px solid #1A1006;box-shadow:inset 0 0 0 3px #FFB02E;color:#fff}
 .t-play em{opacity:.25}
-.t-play:active{box-shadow:inset 0 3px 0 rgba(255,255,255,.4),0 2px 0 #0C1A3A}
-.t-play:focus-visible,.t-row button:focus-visible,.t-again:focus-visible{outline:4px solid #49C8FF;outline-offset:3px}
-.t-again{color:#EAF6FF;background:rgba(8,24,64,.8);border:2.5px solid #49C8FF;box-shadow:0 3px 0 #050F2E}
-.t-row button{color:#EAF6FF;background:rgba(8,24,64,.82);border:3px solid #49C8FF;box-shadow:0 4px 0 #050F2E,0 0 12px rgba(73,200,255,.3)}
-.t-row button svg{stroke:#BFEBFF}
-.t-row button:hover{background:rgba(20,70,168,.9)}
-.t-row button:active{box-shadow:0 2px 0 #050F2E}
-.t-foot{color:#BFEBFF;background:none}
-.t-foot button{color:#EAF6FF}.t-foot i{color:#FFC93C}
+.t-play:active{box-shadow:inset 0 3px 0 rgba(255,255,255,.4),0 2px 0 #1A1006}
+.t-play:focus-visible,.t-row button:focus-visible,.t-again:focus-visible{outline:4px solid #FFB02E;outline-offset:3px}
+.t-again{color:#FFF7E8;background:rgba(20,14,8,.8);border:2.5px solid #FFB02E;box-shadow:0 3px 0 #0B0805}
+.t-row button{color:#FFF7E8;background:rgba(20,14,8,.82);border:3px solid #FFB02E;box-shadow:0 4px 0 #0B0805,0 0 12px rgba(255,170,40,.3)}
+.t-row button svg{stroke:#FFD9A0}
+.t-row button:hover{background:rgba(70,42,14,.9)}
+.t-row button:active{box-shadow:0 2px 0 #0B0805}
+.t-foot{color:#FFD9A0;background:none}
+.t-foot button{color:#FFF7E8}.t-foot i{color:#FFC93C}
 .t-center{padding-bottom:110px}
 @media (max-width:600px){ .t-logoimg{max-height:30vh} }
 

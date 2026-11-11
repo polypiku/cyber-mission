@@ -6,9 +6,9 @@ const HEROES={"guardGirl":{"hero":{"w":298,"h":717,"src":"assets/heroes/guardGir
 /* the university front picture shown when you arrive on campus */
 const UNI_FRONT="assets/scenes/uni-front.webp";
 /* the game logo on the title screen */
-const LOGO_SRC="assets/scenes/logo.webp";
+const LOGO_SRC="assets/scenes/logo-warm.webp";
 /* the title screen background (night city) */
-const TITLE_BG="assets/scenes/title-bg.webp";
+const TITLE_BG="assets/scenes/title-bg-warm.webp";
 /* prologue pictures, one per panel: [image, which part to keep when cropped] */
 const PROLOGUE_ART=[["assets/scenes/prologue/p1.webp","center"],["assets/scenes/prologue/p2.webp","center"],["assets/scenes/prologue/p3.webp","center"],["assets/scenes/prologue/p4.webp","center"],["assets/scenes/prologue/p5.webp","center"]];
 /* case illustrations: CASE_ART[case][scene] replaces the first comic panel of that scene */
