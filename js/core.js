@@ -135,7 +135,7 @@ Object.assign(PEOPLE,{ghostChoy:{name:{th:"ผีแม่ช้อย",en:"Mae 
   rider:{name:{th:"พี่ไรเดอร์",en:"The rider"}, role:{th:"ไรเดอร์ส่งอาหาร",en:"Food delivery rider"}},
   ghostTong:{name:{th:"ผีพี่โต้ง",en:"Tong (ghost)"}, role:{th:"ผีเจ้าของบ้าน",en:"The house's own ghost"}}
 });
-const PLACEHOLDER_ART={maeNoi:"maePu", paweena:"studentGirl", prof:"workMom", visitor:"workMom", phum:"kidBoy", baitoey:"kidGirl", chai:"workMan", fon:"workMom", ghostChoy:"grandma", ghostHem:"grandpa", ghostPaeng:"studentGirl", ghostTong:"studentBoy"};
+const PLACEHOLDER_ART={paweena:"studentGirl", prof:"workMom", visitor:"workMom", phum:"kidBoy", baitoey:"kidGirl", chai:"workMan", fon:"workMom", ghostChoy:"grandma", ghostHem:"grandpa", ghostPaeng:"studentGirl", ghostTong:"studentBoy"};
 for(const [k,v] of Object.entries(PLACEHOLDER_ART)) if(!SPRITES[k]) SPRITES[k]=SPRITES[v];
 /* filler people: ordinary customers and passers-by the Wi-Fi hacker hides among */
 SPRITES.police=SPRITES.policePhop; PEOPLE.police={name:{th:"พี่ภพ",en:"Phop"}, role:{th:"ตำรวจไซเบอร์",en:"Cyber police"}};

@@ -96,7 +96,7 @@ function libCast(mentor, friend, tips){
   const all=[
     {id:mentor, role:"mentor", x:620, y:850, dir:"up", f:1},
     {id:"uncleYoon", role:"grandpa", x:250, y:206, dir:"left", f:1},
-    {id:"auntDaeng", role:"grandma", x:1140, y:600, dir:"up", f:1},
+    {id:"auntDaeng", role:"grandma", x:1140, y:600, dir:"left", f:1},
     {id:tips, role:"tips", x:930, y:560, dir:"left", f:2},
     {id:"praeGirl", role:"friend", x:1100, y:700, dir:"right", f:2}
   ];
