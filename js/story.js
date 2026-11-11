@@ -80,7 +80,9 @@ function endStatsHtml(){
     ${S.firstClear&&S.firstClear.ms!==st.ms?`<p class="es-best">${L("จบครั้งแรกใน","First finished in")} ${playTime(S.firstClear.ms)}</p>`:""}</div>`;
 }
 /* endings you've reached can be watched again from the menu (open the game with ?endings to unlock all, for checking pictures) */
-function endSeen(n){ if(/[?&]endings/.test(location.search)) return true; S.endsSeen=S.endsSeen||{}; if(S.bestEnding) S.endsSeen[S.bestEnding]=1; if(S.ending) S.endsSeen[S.ending]=1; return !!S.endsSeen[n]; }
+/* while testing pictures every ending is open; set TEST_ENDINGS=false before release so only reached endings show */
+const TEST_ENDINGS=true;
+function endSeen(n){ if(TEST_ENDINGS || /[?&]endings/.test(location.search)) return true; S.endsSeen=S.endsSeen||{}; if(S.bestEnding) S.endsSeen[S.bestEnding]=1; if(S.ending) S.endsSeen[S.ending]=1; return !!S.endsSeen[n]; }
 function endingCard(n){
   const E=ENDINGS[n], h=S.handed||0, pct=Math.round(h/clueTotal()*100), bd=clueBreakdown();
   const tick=(ok)=>ok?"✅":"⬜";
