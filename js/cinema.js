@@ -152,7 +152,7 @@ function takenScript(){
 function playEndingScene(n, persist){
   const E=ENDINGS[n], title=`${L("ฉากจบ","Ending")} ${endDisp(n)}/3 · ${E.t[EN()?1:0]}`;
   const sc=n===1?takenScript():raidScript(n), skip=n===1?2:1;
-  startCinema(sc.steps, ()=>{ player.hide=false; openCutscene(title, E.panels().slice(skip), ()=>endingCard(n)); }, sc.opt);
+  startCinema(sc.steps, ()=>{ player.hide=false; openCutscene(title, E.panels().slice(skip).map(p=>typeof ENDING_ART!=="undefined"&&ENDING_ART[p.art]?Object.assign(p,{img:ENDING_ART[p.art],pos:"center"}):p), ()=>endingCard(n)); }, sc.opt);
 }
 
 function goOutside(fromZone){
