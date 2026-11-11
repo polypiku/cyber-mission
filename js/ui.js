@@ -10,12 +10,16 @@ function paginatePhone(keep){
   kids.forEach(k=>{ k.style.display=""; k.style.zoom=""; });
   const cs=getComputedStyle(body), avail=body.clientHeight-parseFloat(cs.paddingTop)-parseFloat(cs.paddingBottom)-2, gap=parseFloat(cs.rowGap)||12;
   const pages=[]; let cur=[], used=0;
+  /* an illustrated panel shrinks its picture (not the text) so it fits on the first page with the title */
+  kids.filter(k=>k.classList.contains("kphoto")).forEach(k=>{ const im=k.querySelector(".kimg"); if(!im) return; im.style.height=""; im.style.aspectRatio="";
+    const t=kids[0]&&kids[0].classList.contains("ktitle")?kids[0].offsetHeight+gap:0, over=k.offsetHeight-(avail-t);
+    if(over>0){ im.style.aspectRatio="auto"; im.style.height=Math.max(120,im.offsetHeight-over)+"px"; } });
   for(const k of kids){
     let h=k.offsetHeight;
     if(h>avail){ k.style.zoom=Math.max(.55,avail/h).toFixed(3); h=k.offsetHeight; }
     if(cur.length && used+gap+h>avail){
       const lone=cur.length===1 && cur[0].classList.contains("ktitle"), room=avail-used-gap;
-      if(lone && room/h>=.5){ k.style.zoom=(room/h).toFixed(3); h=k.offsetHeight; }   // keep the title with its first panel
+      if(lone && room/h>=.5){ k.style.zoom=((parseFloat(k.style.zoom)||1)*room/h).toFixed(3); h=k.offsetHeight; }   // keep the title with its first panel
       else { pages.push(cur); cur=[]; used=0; }
     }
     used+=(cur.length?gap:0)+h; cur.push(k);
@@ -120,9 +124,15 @@ function makePanel(text, who, i, end){
   const fx = end==="danger" ? '<i class="ktear t1"></i><i class="ktear t2"></i>' : end==="safe" ? '<i class="kspark s1"></i><i class="kspark s2"></i>' : "";
   return `<div class="kp ${flip?"flip":""} ${end?"kend k-"+end:""}" style="--kbg:${bg}">${cap}<div class="krow">${bubbles?`<div class="kbubs">${bubbles}</div>`:`<div class="kbubs"></div>`}<div class="kchar"><img src="${sprOf(who).src}" alt="" ${String(who).startsWith("ghost")?'class="kghost"':""}>${fx}</div></div>${sticker}</div>`;
 }
-function comicize(html, who){
+/* a scene's first story panel can be a full illustration (CASE_ART in data/heroes.js) with the caption laid over it */
+function photoPanel(text, art){
+  const parts=text.split(/"([^"]+)"/), nar=[], says=[];
+  parts.forEach((p,k)=>{ p=p.trim(); if(!p) return; (k%2?says:nar).push(p); });
+  return `<div class="kp kphoto"><img class="kimg" src="${art}" alt="" onload="if(document.getElementById('phBody'))paginatePhone(true)">${nar.length?`<div class="kcap">${linkify(nar.join(" "))}</div>`:""}${says.length?`<div class="kbubs">${says.slice(0,3).map(s=>`<div class="kbub">${linkify(s)}</div>`).join("")}</div>`:""}</div>`;
+}
+function comicize(html, who, art){
   const box=document.createElement("div"); box.innerHTML=html; let i=0;
-  [...box.children].forEach(el=>{ if(el.tagName==="P"){ const d=document.createElement("div"); d.innerHTML=makePanel(el.textContent, who, i++); el.replaceWith(d.firstChild); } });
+  [...box.children].forEach(el=>{ if(el.tagName==="P"){ const d=document.createElement("div"); d.innerHTML=(art&&i===0)?photoPanel(el.textContent, art):makePanel(el.textContent, who, i); i++; el.replaceWith(d.firstChild); } });
   return box.innerHTML;
 }
 function actor(mood, line){
@@ -215,7 +225,8 @@ function renderCase(){
   const hint=c.level==="ง่าย"&&s.clues&&s.clues.length;
   const from = C.npc ? `<div class="step eyebrow"><span class="checker"></span>${L("ช่วย","Helping")} ${esc(nm(C.npc.id))} · ${L("ทางแยกที่","Decision")} ${C.hist.length+1}</div>` : `<div class="step eyebrow"><span class="checker"></span>${L("ทางแยกที่","Decision")} ${C.hist.length+1}</div>`;
   const who=(C.npc&&C.npc.id)||S.char;
-  const body=`<h3 class="ktitle">${s.title}</h3>${comicize(s.body, who)}`;
+  const art=typeof CASE_ART!=="undefined"&&CASE_ART[C.id]&&CASE_ART[C.id][C.scene];
+  const body=`<h3 class="ktitle">${s.title}</h3>${comicize(s.body, who, art)}`;
   const panel=`${from}<span class="sect">${L("คุณจะทำอย่างไร","What do you do?")}</span>
     <div class="cchoices">${C.order.o.map((ci,i)=>`<button class="choice" data-ch="${ci}"><span class="k">${"ABCD"[i]}</span><span>${s.choices[ci].t}</span></button>`).join("")}</div>
     <button class="howto" data-howto>❔ ${L("วิธีเล่นเคส","How cases work")}</button>`;
