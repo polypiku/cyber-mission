@@ -40,11 +40,13 @@ async function mpInit(){
   try{ await mpClaude(); }catch(e){ MP.kind=null; }
 }
 function mpFlush(){
-  if(!MP.on || !MP.dirty) return;
-  const now=performance.now(), gap=MP.kind==="supa"?300:120; if(now-MP.sent<gap) return;
+  if(!MP.on) return;
+  const now=performance.now(), gap=MP.kind==="supa"?300:120;
+  if(!MP.dirty && now-MP.sent<4000) return;   /* resend every few seconds anyway, so a dropped update heals */
+  if(now-MP.sent<gap) return;
   MP.sent=now; MP.dirty=false; const st={...MP.me};
   if(MP.kind==="claude") MP.room.presence(st).catch(()=>{});
-  else if(MP.kind==="supa") MP.ch.track(st).catch(()=>{});
+  else if(MP.kind==="supa") MP.ch.track(st).then(r=>{ if(r!=="ok"){ MP.dirty=true; MP.err="track "+r; } }).catch(e=>{ MP.dirty=true; MP.err="track "+(e&&e.message||e); });
 }
 /* which room of the town you're standing in: zone, plus library floor / office building+floor / police floor */
 const mpZone=()=>S.zone+"."+(S.zone===2?libFloor():S.zone===8?(S.bld||0)+"-"+offFloor():S.zone===7?(S.floor||1):0);
