@@ -3,7 +3,7 @@
    quiz score), it lives only while the game is open, and nothing is stored on a server.
    The link: Supabase Realtime when SUPA has a url and key (for the public website), otherwise the Claude
    artifact room, otherwise single-player. */
-const SUPA={url:"", key:""};   /* Supabase → Project Settings → API: Project URL and the anon public key */
+const SUPA={url:"https://mhxcivjgcobzrosgjupu.supabase.co", key:"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1oeGNpdmpnY29ienJvc2dqdXB1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTQ0OTI1NjEsImV4cCI6MjExMDA2ODU2MX0.poafJhGL6zQxCEZaC7FihrScjNpY0OekDEI1zTX2mP4"};   /* Supabase → Project Settings → API: Project URL and the anon public key */
 const MP={on:false, kind:null, peers:[], me:{}, dirty:false, sent:0, shown:{}};
 const mpId=(()=>{ const r=()=>Math.random().toString(36).slice(2,10); try{ let v=sessionStorage.getItem("cm-mp"); if(!v){ v=r(); sessionStorage.setItem("cm-mp",v); } return v; }catch(e){ return r(); } })();
 function mpSet(patch){ let ch=false; for(const k in patch){ if(JSON.stringify(MP.me[k])!==JSON.stringify(patch[k])){ MP.me[k]=patch[k]; ch=true; } } if(ch) MP.dirty=true; }
