@@ -4,7 +4,7 @@
    The link: Supabase Realtime when SUPA has a url and key (for the public website), otherwise the Claude
    artifact room, otherwise single-player. */
 const SUPA={url:"https://mhxcivjgcobzrosgjupu.supabase.co", key:"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1oeGNpdmpnY29ienJvc2dqdXB1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTQ0OTI1NjEsImV4cCI6MjExMDA2ODU2MX0.poafJhGL6zQxCEZaC7FihrScjNpY0OekDEI1zTX2mP4"};   /* Supabase → Project Settings → API: Project URL and the anon public key */
-const MP={on:false, kind:null, peers:[], me:{}, dirty:false, sent:0, shown:{}};
+const MP={st:"…", err:"", on:false, kind:null, peers:[], me:{}, dirty:false, sent:0, shown:{}};
 const mpId=(()=>{ const r=()=>Math.random().toString(36).slice(2,10); try{ let v=sessionStorage.getItem("cm-mp"); if(!v){ v=r(); sessionStorage.setItem("cm-mp",v); } return v; }catch(e){ return r(); } })();
 function mpSet(patch){ let ch=false; for(const k in patch){ if(JSON.stringify(MP.me[k])!==JSON.stringify(patch[k])){ MP.me[k]=patch[k]; ch=true; } } if(ch) MP.dirty=true; }
 const mpOthers=()=>MP.peers.filter(p=>!p.me && p.p && p.p.v===1);
@@ -12,10 +12,11 @@ const mpName=()=>(S.name||(S.char&&PEOPLE[S.char]?PEOPLE[S.char].name[S.lang]:""
 
 function mpLoad(src){ return new Promise((ok,no)=>{ const s=document.createElement("script"); s.src=src; s.onload=ok; s.onerror=no; document.head.appendChild(s); }); }
 async function mpSupa(){
-  await mpLoad("https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js");
+  MP.st="load"; await mpLoad("https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js");
+  MP.st="join";
   const sb=window.supabase.createClient(SUPA.url,SUPA.key), ch=sb.channel("cyber-mission-town",{config:{presence:{key:mpId}}});
   ch.on("presence",{event:"sync"},()=>{ const st=ch.presenceState(); MP.peers=Object.entries(st).map(([k,a])=>({id:k, me:k===mpId, p:(a&&a[a.length-1])||{}})); });
-  await new Promise((ok,no)=>{ const t=setTimeout(()=>no("timeout"),10000); ch.subscribe(s=>{ if(s==="SUBSCRIBED"){ clearTimeout(t); ok(); } else if(s==="CHANNEL_ERROR"||s==="TIMED_OUT"){ clearTimeout(t); no(s); } }); });
+  await new Promise((ok,no)=>{ const t=setTimeout(()=>no("timeout"),10000); ch.subscribe((s,err)=>{ MP.st=s; if(err) MP.err=String(err&&err.message||err); console.log("[mp] supabase",s,err||""); if(s==="SUBSCRIBED"){ clearTimeout(t); ok(); } else if(s==="CHANNEL_ERROR"||s==="TIMED_OUT"){ clearTimeout(t); no(s); } }); });
   MP.ch=ch; MP.kind="supa"; MP.on=true; MP.dirty=true;
 }
 async function mpClaude(){
@@ -35,7 +36,7 @@ function mpTabs(){
 }
 async function mpInit(){
   if(/[?&]mpdev/.test(location.search) && window.BroadcastChannel){ mpTabs(); return; }
-  if(SUPA.url && SUPA.key){ try{ await mpSupa(); return; }catch(e){ MP.kind=null; } }
+  if(SUPA.url && SUPA.key){ try{ await mpSupa(); return; }catch(e){ MP.kind=null; MP.err=MP.err||String(e&&e.message||e||"load"); console.warn("[mp] supabase failed",e); } }
   try{ await mpClaude(); }catch(e){ MP.kind=null; }
 }
 function mpFlush(){
@@ -87,10 +88,11 @@ function mpDrawTableSign(g,now){
 /* small "players online" pill */
 function mpPill(){
   let el=document.getElementById("mpPill");
-  const n=MP.on?mpOthers().length:0, show=MP.on && !!S.char && sheetMode!=="start";
-  if(!el){ if(!show) return; el=document.createElement("div"); el.id="mpPill"; el.setAttribute("aria-live","polite"); document.body.appendChild(el); }
+  const n=MP.on?mpOthers().length:0, show=!!S.char && sheetMode!=="start" && (MP.on || !!SUPA.url);
+  if(!el){ if(!show) return; el=document.createElement("button"); el.id="mpPill"; el.setAttribute("aria-live","polite");
+    el.onclick=()=>toast(`MP: ${MP.kind||"-"} · ${MP.st}${MP.err?" · "+MP.err:""} · peers ${MP.peers.length} · ${L("ห้อง","room")} ${mpZone()}`); document.body.appendChild(el); }
   el.hidden=!show; if(!show) return;
-  const t=`👥 ${n+1} ${L("คนออนไลน์","online")}`; if(el.textContent!==t) el.textContent=t;
+  const t=MP.on?`👥 ${n+1} ${L("คนออนไลน์","online")}${MP.kind==="supa"?"":" ·"+MP.kind}`:`⚠️ ${L("ยังไม่เชื่อมต่อ","Not connected")}`; if(el.textContent!==t) el.textContent=t;
 }
 
 /* ---------- the quiz table ---------- */

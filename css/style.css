@@ -1104,7 +1104,7 @@ body.cin .wxchip{display:none}
 @media (max-width:600px){ .kimg{aspect-ratio:1/1;object-position:center 30%} .kp.kphoto .kcap{position:absolute;left:6px;right:6px;bottom:6px;border:2px solid #1E1A16;background:rgba(255,248,217,.94);font-size:.8rem;line-height:1.45;padding:5px 8px} }
 
 /* ---------- play together: players-online pill + the cyber quiz table ---------- */
-#mpPill{position:fixed;left:50%;top:10px;transform:translateX(-50%);z-index:6;background:#1E1A16;color:#FFF4E0;font-weight:700;font-size:.8rem;padding:4px 12px;border-radius:999px;border:2px solid #FFC93C;pointer-events:none}
+#mpPill{position:fixed;left:50%;top:10px;transform:translateX(-50%);z-index:6;background:#1E1A16;color:#FFF4E0;font-weight:700;font-size:.8rem;padding:4px 12px;border-radius:999px;border:2px solid #FFC93C;pointer-events:auto;cursor:pointer;font-family:inherit}
 #mpPill[hidden]{display:none}
 @media (max-width:600px){ #mpPill{top:auto;bottom:86px} }
 .qt .qt-who{font-size:.85rem;margin:0 0 10px;display:flex;flex-wrap:wrap;gap:6px;align-items:center}
