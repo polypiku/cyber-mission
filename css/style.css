@@ -1271,3 +1271,17 @@ a.cl-opt.dl-real{display:block;margin:10px 14px 0;text-align:center;font-weight:
 .room .rm-now .btn{grid-template-columns:1fr;min-height:40px;padding:0 12px}
 .room .rm-join .btn{min-width:150px}
 .room .rm-join input::placeholder{letter-spacing:normal;font-size:1rem;font-weight:600}
+/* title: big but quiet "play together" button under Play */
+.t-mp{display:flex;align-items:center;justify-content:center;gap:12px;font:inherit;font-weight:700;font-size:1.25rem;cursor:pointer;color:#EAF6FF;background:rgba(8,24,64,.82);border:3px solid #49C8FF;border-radius:999px;padding:10px 22px;width:min(86vw,420px);min-height:58px;box-shadow:0 5px 0 #050F2E,0 0 14px rgba(73,200,255,.25)}
+.t-mp svg{width:30px;height:30px;fill:none;stroke:#BFEBFF;stroke-width:1.8;stroke-linejoin:round;stroke-linecap:round}
+.t-mp:hover{background:rgba(20,70,168,.9)}.t-mp:active{transform:translateY(2px);box-shadow:0 3px 0 #050F2E}
+.t-mp:focus-visible{outline:4px solid #49C8FF;outline-offset:3px}
+@media (max-width:600px){ .t-mp{font-size:1.08rem;min-height:50px} }
+/* quiz table lobby */
+.qt-seats{list-style:none;padding:0;margin:6px 0;display:grid;gap:6px}
+.qt-seats li{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;background:#FFF8E8;border:2px solid var(--ink);padding:7px 12px;font-weight:700}
+.qt-seats li.me{background:#FFE7A0}
+.qt-seats li i{font-style:normal;font-size:.85rem}
+.qt-seats li.rdy i{color:#1F7A3A}
+.qt-wait{text-align:center;font-weight:700;margin:6px 0}
+.qt-btn-ready.on{background:#BFEBC9}

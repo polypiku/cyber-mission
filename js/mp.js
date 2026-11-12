@@ -72,7 +72,7 @@ function mpFlush(){
 /* which room of the town you're standing in: zone, plus library floor / office building+floor / police floor */
 const mpZone=()=>S.zone+"."+(S.zone===2?libFloor():S.zone===8?(S.bld||0)+"-"+offFloor():S.zone===7?(S.floor||1):0);
 function stepMp(){
-  if(S.char) mpSet({v:1, nm:mpName(), ch:S.char, zk:mpZone(), x:Math.round(player.x), y:Math.round(player.y), d:player.dir, mv:player.moving?1:0});
+  if(S.char) mpSet({v:1, pid:mpId, nm:mpName(), ch:S.char, zk:mpZone(), x:Math.round(player.x), y:Math.round(player.y), d:player.dir, mv:player.moving?1:0});
   mpFlush(); mpPill();
 }
 
@@ -139,80 +139,90 @@ function openRoomSheet(){
 }
 
 /* ---------- the quiz table ---------- */
-const QT_N=5, QT_COUNT=3, QT_Q=15, QT_REV=3;   /* 5 questions; seconds for countdown, question, reveal */
-let QT={cur:null, played:{}, iv:null, key:""};
+const QT_N=5, QT_COUNT=5, QT_Q=15, QT_REV=3;   /* 5 questions; seconds for countdown, question, reveal */
+/* How a round runs: everyone at the table presses Ready; when all are ready the leader (the seated player
+   with the smallest id) starts a 5-second countdown. The leader alone moves the round on (question →
+   reveal → next) and shares it as `qr`; a question ends early once everyone in the round has answered.
+   If the leader leaves, the next one picks the round up from where it was. */
+let QT={cur:null, last:null, iv:null, key:""};
 function qtRand(seed){ let s=seed>>>0||1; return ()=>{ s=(s*1664525+1013904223)>>>0; return s/4294967296; }; }
 function qtBuild(r){
   const rnd=qtRand(r.seed), idx=[...QT_QS.keys()];
   for(let i=idx.length-1;i>0;i--){ const j=Math.floor(rnd()*(i+1)); [idx[i],idx[j]]=[idx[j],idx[i]]; }
   return {id:r.id, qs:idx.slice(0,QT_N).map(k=>{ const o=[0,1,2,3]; for(let i=3;i>0;i--){ const j=Math.floor(rnd()*(i+1)); [o[i],o[j]]=[o[j],o[i]]; } return {k,o}; }),
-    t0:performance.now(), score:0, right:0, ans:{}, at:{}};
+    score:0, right:0, ans:{}};
 }
-function qtPhase(c){
-  const el=(performance.now()-c.t0)/1000; if(el<QT_COUNT) return {ph:"count", left:QT_COUNT-el};
-  const k=Math.floor((el-QT_COUNT)/(QT_Q+QT_REV)), inq=(el-QT_COUNT)-k*(QT_Q+QT_REV);
-  if(k>=QT_N) return {ph:"end"};
-  return inq<QT_Q ? {ph:"q", k, left:QT_Q-inq} : {ph:"rev", k, left:QT_Q+QT_REV-inq};
+/* everyone sitting at the table, you first */
+function qtSeatList(){
+  const me={me:true, pid:mpId, p:MP.me};
+  return [me].concat(MP.on?mpOthers().filter(o=>o.p.qt).map(o=>({me:false, pid:String(o.p.pid||o.id), p:o.p})):[]);
 }
-/* the round in play: the newest one any seated player started */
-function qtLive(){
-  let best=null; for(const o of MP.peers.concat(MP.on?[]:[{me:true,p:MP.me}])){ const r=o.p&&o.p.qt&&o.p.qr; if(r&&typeof r.id==="string"&&(!best||r.id>best.id)) best=r; }
-  if(!best && MP.me.qr) best=MP.me.qr; return best;
-}
-function qtSeated(){
-  const list=[{id:"me", me:true, p:MP.me}].concat(MP.on?mpOthers().filter(o=>o.p.qt):[]);
-  return list.map(o=>({me:o.me, nm:String(o.p.nm||"?").slice(0,16), ch:o.p.ch, sc:o.p.qri===(QT.cur&&QT.cur.id)?(o.p.qs|0):null}));
+const qtNewer=(a,b)=>!b || a.id>b.id || (a.id===b.id && (a.t||0)>(b.t||0));
+function qtLead(list, r, now){
+  const inRound=r?list.filter(x=>x.p.qri===r.id):[]; let n=null;
+  if(!r || r.ph==="end"){
+    if(list.every(x=>x.p.rd)) n={id:now.toString(36)+"-"+mpId.slice(0,4), seed:Math.floor(Math.random()*2**31), k:0, ph:"count", t:now};
+  } else if(r.ph==="count"){ if(now-r.t>=QT_COUNT*1000) n={...r, ph:"q", k:0, t:now}; }
+  else if(r.ph==="q"){ const all=inRound.length>0 && inRound.every(x=>(x.p.qak??-1)>=r.k); if(all || now-r.t>=QT_Q*1000) n={...r, ph:"rev", t:now}; }
+  else if(r.ph==="rev"){ if(now-r.t>=QT_REV*1000) n=r.k+1>=QT_N?{...r, ph:"end", t:now}:{...r, ph:"q", k:r.k+1, t:now}; }
+  if(n){ mpSet({qr:n}); return n; } return r;
 }
 function openQuizTable(){
-  stopMG(); mpSet({qt:1, nm:mpName()}); QT.key="";
+  stopMG(); mpSet({qt:1, rd:0, qr:null, pid:mpId, nm:mpName()}); QT.key=""; QT.cur=null; QT.last=null;
   openSheet("quiz", `${top_("🏆 "+L("โต๊ะแข่งตอบปัญหาไซเบอร์","Cyber quiz race"))}<div class="sh-body qt" id="qtBody"></div>`);
   clearInterval(QT.iv); QT.iv=setInterval(qtTick,150); qtTick();
 }
-function qtLeave(){ clearInterval(QT.iv); QT.iv=null; mpSet({qt:0}); }
-function qtStart(){
-  const r={id:Date.now().toString(36)+"-"+mpId.slice(0,4), seed:Math.floor(Math.random()*2**31)};
-  mpSet({qr:r}); QT.played[r.id]=true; QT.cur=qtBuild(r); mpSet({qri:r.id, qs:0}); QT.key="";
-}
+function qtLeave(){ clearInterval(QT.iv); QT.iv=null; mpSet({qt:0, rd:0, qr:null}); }
 function qtTick(){
   if(sheetMode!=="quiz"){ qtLeave(); return; }
-  const live=qtLive(), c=QT.cur;
-  /* join a round someone else started (or a newer one that beat ours during the countdown) */
-  if(live && !QT.played[live.id] && (!c || qtPhase(c).ph==="end" || (qtPhase(c).ph==="count" && live.id>c.id))){ QT.played[live.id]=true; QT.cur=qtBuild(live); mpSet({qri:live.id, qs:0}); QT.key=""; }
-  qtRender();
+  const list=qtSeatList(), now=Date.now(), ld=list.reduce((a,b)=>b.pid<a.pid?b:a);
+  let live=null; for(const x of list){ const r=x.p.qr; if(r&&typeof r.id==="string"&&qtNewer(r,live)) live=r; }
+  if(QT.last && QT.last.ph!=="end" && qtNewer(QT.last,live) && !list.some(x=>x.p.qr)) live=QT.last;   /* the leader just left */
+  if(ld.me){ if(live && (!MP.me.qr || qtNewer(live,MP.me.qr))) mpSet({qr:live}); live=qtLead(list, live, now); }
+  else if(MP.me.qr) mpSet({qr:null});
+  if(live) QT.last=live;
+  if(live && live.ph!=="end" && (!QT.cur || QT.cur.id!==live.id)){ QT.cur=qtBuild(live); mpSet({qri:live.id, qs:0, qak:-1, rd:0}); QT.key=""; }
+  qtRender(live, list, now);
 }
 function qtAnswer(i){
-  const c=QT.cur; if(!c) return; const ph=qtPhase(c); if(ph.ph!=="q" || c.ans[ph.k]!=null) return;
-  c.ans[ph.k]=i; const right=c.qs[ph.k].o[i]===0;
-  if(right){ c.right++; c.score+=100+Math.round(ph.left*10); }
-  mpSet({qs:c.score}); QT.key="";
+  const c=QT.cur, r=QT.last; if(!c||!r||r.id!==c.id||r.ph!=="q"||c.ans[r.k]!=null) return;
+  c.ans[r.k]=i; const left=Math.max(0,QT_Q-(Date.now()-r.t)/1000);
+  if(c.qs[r.k].o[i]===0){ c.right++; c.score+=100+Math.round(left*10); }
+  mpSet({qs:c.score, qak:r.k}); QT.key="";
 }
-function qtBoard(final){
-  const rows=qtSeated().filter(r=>r.sc!=null).sort((a,b)=>b.sc-a.sc);
+function qtBoard(list, id, final){
+  const rows=list.filter(x=>x.p.qri===id).map(x=>({me:x.me, nm:x.me?mpName():String(x.p.nm||"?").slice(0,16), sc:x.p.qs|0})).sort((a,b)=>b.sc-a.sc);
   if(!rows.length) return "";
   const medal=["🥇","🥈","🥉"];
   return `<ol class="qt-board${final?" final":""}">${rows.slice(0,final?10:6).map((r,i)=>`<li class="${r.me?"me":""}"><span>${medal[i]||(i+1)}</span><b>${esc(r.nm)}${r.me?` (${L("คุณ","you")})`:""}</b><i>${r.sc}</i></li>`).join("")}</ol>`;
 }
-function qtRender(){
+function qtRender(live, list, now){
   const body=$("qtBody"); if(!body) return;
-  const c=QT.cur, ph=c?qtPhase(c):{ph:"lobby"}, seated=qtSeated();
-  const key=[ph.ph,ph.k,c&&c.id,c&&JSON.stringify(c.ans),S.lang,MP.on,seated.map(s=>s.nm+":"+s.sc).join(",")].join("|");
-  const bar=$("qtBar"); if(bar && ph.left!=null){ const tot=ph.ph==="q"?QT_Q:ph.ph==="rev"?QT_REV:QT_COUNT; bar.style.width=Math.max(0,ph.left/tot*100)+"%"; const tt=$("qtT"); if(tt) tt.textContent=Math.ceil(ph.left); }
+  const c=QT.cur, ph=live&&live.ph!=="end"?live.ph:(live&&c&&c.id===live.id?"end":"lobby");
+  const dur=ph==="count"?QT_COUNT:ph==="q"?QT_Q:ph==="rev"?QT_REV:0, left=dur?Math.max(0,dur-(now-live.t)/1000):0;
+  const inRound=live?list.filter(x=>x.p.qri===live.id):[], answered=live?inRound.filter(x=>(x.p.qak??-1)>=live.k).length:0;
+  const bar=$("qtBar"); if(bar && dur){ bar.style.width=(left/dur*100)+"%"; const tt=$("qtT"); if(tt) tt.textContent=Math.ceil(left); }
+  const key=[ph, live&&live.k, live&&live.id, c&&JSON.stringify(c.ans), S.lang, MP.on, answered, inRound.map(x=>x.p.qs|0).join(","), list.map(x=>x.pid+":"+(x.p.rd?1:0)+(x.me?"":x.p.nm)).join(",")].join("|");
   if(key===QT.key) return; QT.key=key;
-  const who=`<p class="qt-who">${MP.on?`👥 ${L("ที่โต๊ะตอนนี้","At the table")}: ${seated.map(s=>`<span class="${s.me?"me":""}">${esc(s.nm)}</span>`).join("")}`:L("ตอนนี้เล่นคนเดียว · เปิดเกมพร้อมเพื่อนเพื่อแข่งกันสด","Playing solo · open the game with friends at the same time to race live")}</p>`;
-  if(ph.ph==="lobby" || ph.ph==="end"){
-    body.innerHTML=`${who}${ph.ph==="end"?`<div class="qt-end"><h3>${L("จบรอบ!","Round over!")}</h3><p>${L(`คุณตอบถูก ${c.right}/${QT_N} ข้อ · ${c.score} คะแนน`,`You got ${c.right}/${QT_N} · ${c.score} points`)}</p></div>${qtBoard(true)}`:
-      `<p class="note">${L(`คำถาม ${QT_N} ข้อ ข้อละ ${QT_Q} วินาที ตอบถูกได้ 100 คะแนน ยิ่งตอบเร็วยิ่งได้โบนัส ทุกคนที่นั่งโต๊ะจะได้คำถามเดียวกันพร้อมกัน`,`${QT_N} questions, ${QT_Q} seconds each. A right answer is 100 points plus a speed bonus. Everyone at the table gets the same questions at the same time.`)}</p>`}
-      ${btn(ph.ph==="end"?L("เริ่มรอบใหม่","New round"):L("เริ่มแข่ง!","Start the race!"),"data-qtgo","y")}`;
-    body.querySelector("[data-qtgo]").onclick=()=>{ qtStart(); qtTick(); };
+  if(ph==="lobby" || ph==="end"){
+    const meReady=!!MP.me.rd, ready=list.filter(x=>x.p.rd).length;
+    const seats=`<ul class="qt-seats">${list.map(x=>`<li class="${x.me?"me":""} ${x.p.rd?"rdy":""}"><b>${esc(x.me?mpName():String(x.p.nm||"?").slice(0,16))}${x.me?` (${L("คุณ","you")})`:""}</b><i>${x.p.rd?"✅ "+L("พร้อม","Ready"):"⏳ "+L("ยังไม่พร้อม","Not ready")}</i></li>`).join("")}</ul>`;
+    body.innerHTML=`${ph==="end"?`<div class="qt-end"><h3>${L("จบรอบ!","Round over!")}</h3><p>${L(`คุณตอบถูก ${c.right}/${QT_N} ข้อ · ${c.score} คะแนน`,`You got ${c.right}/${QT_N} · ${c.score} points`)}</p></div>${qtBoard(list, live.id, true)}`:
+      `<p class="note">${L(`คำถาม ${QT_N} ข้อ ข้อละ ${QT_Q} วินาที ตอบถูกได้ 100 คะแนน ยิ่งเร็วยิ่งได้โบนัส ถ้าทุกคนตอบครบจะไปข้อถัดไปทันที`,`${QT_N} questions, ${QT_Q} seconds each. A right answer is 100 points plus a speed bonus. Once everyone has answered, the next question comes straight away.`)}</p>`}
+      <p class="qt-wait">👥 ${L(`ที่โต๊ะ ${list.length} คน · พร้อมแล้ว ${ready}/${list.length}`,`${list.length} at the table · ${ready}/${list.length} ready`)}</p>${seats}
+      <p class="note">${list.length>1?L("เมื่อทุกคนกดพร้อม เกมจะเริ่มใน 5 วินาที","When everyone is ready, the race starts in 5 seconds"):L("รอเพื่อนมานั่งโต๊ะได้ หรือกดพร้อมเพื่อเล่นคนเดียว","Wait for friends to sit down, or press Ready to play solo")}</p>
+      ${btn(meReady?L("✅ พร้อมแล้ว (กดเพื่อยกเลิก)","✅ Ready (tap to cancel)"):L("✋ พร้อม!","✋ I'm ready!"),"data-qtrdy",meReady?"g qt-btn-ready on":"y")}`;
+    body.querySelector("[data-qtrdy]").onclick=()=>{ mpSet({rd:MP.me.rd?0:1}); QT.key=""; qtTick(); };
     return;
   }
-  if(ph.ph==="count"){ body.innerHTML=`${who}<div class="qt-count"><small>${L("เตรียมตัว…","Get ready…")}</small><b id="qtT">${Math.ceil(ph.left)}</b></div><div class="mgbar"><i id="qtBar"></i></div>`; return; }
-  const qd=c.qs[ph.k], Q=QT_QS[qd.k], li=EN()?1:0, mine=c.ans[ph.k], rev=ph.ph==="rev";
-  body.innerHTML=`<div class="mghud"><span>${L("ข้อ","Q")} <b>${ph.k+1}/${QT_N}</b></span><span>⏱ <b id="qtT">${Math.ceil(ph.left)}</b></span><span>${L("คะแนน","Score")} <b>${c.score}</b></span></div>
+  if(ph==="count"){ body.innerHTML=`<p class="qt-wait">👥 ${inRound.length||list.length} ${L("คนในรอบนี้","players this round")}</p><div class="qt-count"><small>${L("เตรียมตัว…","Get ready…")}</small><b id="qtT">${Math.ceil(left)}</b></div><div class="mgbar"><i id="qtBar"></i></div>`; return; }
+  const qd=c.qs[live.k], Q=QT_QS[qd.k], li=EN()?1:0, mine=c.ans[live.k], rev=ph==="rev";
+  body.innerHTML=`<div class="mghud"><span>${L("ข้อ","Q")} <b>${live.k+1}/${QT_N}</b></span><span>⏱ <b id="qtT">${Math.ceil(left)}</b></span><span>${L("คะแนน","Score")} <b>${c.score}</b></span></div>
     <div class="mgbar"><i id="qtBar"></i></div>
     <p class="qt-q">${esc(Q.q[li])}</p>
     <div class="qt-opts">${qd.o.map((oi,i)=>`<button class="qt-opt${rev&&oi===0?" ok":""}${mine===i&&oi!==0&&rev?" no":""}${mine===i?" qpick":""}" data-qa="${i}" ${mine!=null||rev?"disabled":""}><span>${"ABCD"[i]}</span><em>${esc(Q.a[oi][li])}</em></button>`).join("")}</div>
-    ${rev?`<p class="qt-msg ${mine!=null&&qd.o[mine]===0?"ok":"no"}">${mine==null?L("หมดเวลา!","Time's up!"):qd.o[mine]===0?L("ถูกต้อง! 🎉","Correct! 🎉"):L("ยังไม่ถูก","Not quite")}</p>${qtBoard(false)}`:mine!=null?`<p class="qt-msg">${L("ตอบแล้ว รอเพื่อน…","Answered, waiting for the others…")}</p>`:""}`;
-  body.querySelectorAll("[data-qa]").forEach(b=>b.onclick=()=>{ qtAnswer(+b.dataset.qa); qtRender(); });
+    ${rev?`<p class="qt-msg ${mine!=null&&qd.o[mine]===0?"ok":"no"}">${mine==null?L("หมดเวลา!","Time's up!"):qd.o[mine]===0?L("ถูกต้อง! 🎉","Correct! 🎉"):L("ยังไม่ถูก","Not quite")}</p>${qtBoard(list, live.id, false)}`
+      :`<p class="qt-msg">${mine!=null?L("ตอบแล้ว รอเพื่อน… ","Answered, waiting… "):""}${L(`ตอบแล้ว ${answered}/${inRound.length} คน`,`${answered}/${inRound.length} answered`)}</p>`}`;
+  body.querySelectorAll("[data-qa]").forEach(b=>b.onclick=()=>{ qtAnswer(+b.dataset.qa); qtTick(); });
 }
 mpInit();

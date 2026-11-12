@@ -22,13 +22,13 @@ function openTitle(){
     <div class="t-top"><span class="t-chip">${L("เวอร์ชันทดสอบ","Test build")} ${GAME_VER}</span>${langSw()}</div>
     <main class="t-center">
       ${logoHTML()}
-      <div class="t-plank">${resume&&S.name?L(`ยินดีต้อนรับกลับ ${esc(S.name)}`,`Welcome back, ${esc(S.name)}`):L("ยินดีต้อนรับ","Welcome")}</div>
+      <div class="t-plank">${resume?L("ยินดีต้อนรับกลับ","Welcome back"):L("ยินดีต้อนรับ","Welcome")}</div>
       <button class="t-play" data-tplay><em aria-hidden="true"></em><span><b>${resume?L("เล่นต่อ","Continue"):L("เริ่มเล่น","Play")}</b><small>${resume?"CONTINUE":"PLAY"}</small></span><i aria-hidden="true">›</i></button>
+      <button class="t-mp" data-troom><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="8.5" cy="8" r="3.2"/><circle cx="16" cy="9" r="2.6"/><path d="M2.8 19.5c.6-3.6 3-5.3 5.7-5.3s5.1 1.7 5.7 5.3zM14.2 14.4c.6-.3 1.2-.4 1.8-.4 2.3 0 4.3 1.4 4.8 4.6h-5.5"/></svg><span>${L("เล่นด้วยกัน","Play together")}${typeof mpRoom!=="undefined"&&mpRoom?` · ${L("ห้อง","Room")} ${mpRoom}`:""}</span></button>
       ${resume?`<button class="t-again" data-tnew>${L("เริ่มเกมใหม่ / เปลี่ยนตัวละคร","New game / change character")}</button>`:""}
       <div class="t-row">
         <button data-thow><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5h7a2 2 0 0 1 2 2v12a2 2 0 0 0-2-2H3z" fill="#DCEBFA"/><path d="M21 5h-7a2 2 0 0 0-2 2v12a2 2 0 0 1 2-2h7z" fill="#DCEBFA"/><path d="M3 5h7a2 2 0 0 1 2 2v12a2 2 0 0 0-2-2H3zM21 5h-7a2 2 0 0 0-2 2v12a2 2 0 0 1 2-2h7zM5.5 9h4M5.5 12h4M14.5 9h4M14.5 12h4"/></svg>${L("วิธีเล่น","How to play")}</button>
         <button data-tnews><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="8" width="18" height="12" rx="2" fill="#FFF6E3"/><path d="M3 8l2.5-4.5L21 5.5 20 8" fill="#3A3F46"/><rect x="3" y="8" width="18" height="12" rx="2"/><path d="M3 8l2.5-4.5L21 5.5 20 8M8 4.2l2 3.6M13 4.6l2 3.4M10.5 11.5v5l4-2.5z"/></svg>${L("อัปเดต","Updates")}</button>
-        <button data-troom><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="8.5" cy="8" r="3.2" fill="#FFF6E3"/><circle cx="16" cy="9" r="2.6" fill="#DCEBFA"/><path d="M2.8 19.5c.6-3.6 3-5.3 5.7-5.3s5.1 1.7 5.7 5.3z" fill="#FFF6E3"/><path d="M14.2 14.4c.6-.3 1.2-.4 1.8-.4 2.3 0 4.3 1.4 4.8 4.6h-5.5"/></svg>${L("เล่นด้วยกัน","Play together")}${typeof mpRoom!=="undefined"&&mpRoom?` · ${mpRoom}`:""}</button>
         <button data-tset><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.8l1.6 2.3 2.7-.7.6 2.7 2.6 1-.8 2.7 1.9 2-1.9 2 .8 2.7-2.6 1-.6 2.7-2.7-.7L12 21.2l-1.6-2.3-2.7.7-.6-2.7-2.6-1 .8-2.7L3.4 11l1.9-2-.8-2.7 2.6-1 .6-2.7 2.7.7z" fill="#3B7FD0"/><circle cx="12" cy="12" r="3.4" fill="#FFF6E3"/></svg>${L("ตั้งค่า","Settings")}</button>
       </div>
     </main>
@@ -60,7 +60,7 @@ function titleSheet(k){
       <li>${L("ถนนหน้าร้านมีต้นไม้ สวนหย่อม และหลังคาทรงไทย","The main street now has trees, gardens and Thai-style roofs")}</li>
       <li>${L("เน็ตมือถือหมดได้ ต้องเติมหรือต่อ Wi-Fi","Mobile data can run out: top up or join Wi-Fi")}</li>
       <li>${L("ขั้นลงมือแก้ในมือถือทุกเคส และเบาะแส 36 ชิ้น","A hands-on fix step for every case, and 36 clues")}</li></ul>`],
-    cred:[L("ผู้จัดทำ","Credits"),`<p>${L("ออกแบบเกม เนื้อเรื่อง และกำกับ: ฑิตยา คูณศรี (พริ้ง) · วิทยาการคอมพิวเตอร์ มหาวิทยาลัยหัวเฉียวเฉลิมพระเกียรติ","Game design, story and direction: Thittaya Koonsee (Prink) · Computer Science, Huachiew Chalermprakiet University")}</p><p>${L("เขียนโค้ดร่วมกับ Claude (Anthropic)","Coded together with Claude (Anthropic)")}</p>`],
+    cred:[L("ผู้จัดทำ","Credits"),`<p>${L("ออกแบบเกม เนื้อเรื่อง และกำกับ: ฑิตยา คูณศรี (พริ้ง) · วิทยาการคอมพิวเตอร์ มหาวิทยาลัยหัวเฉียวเฉลิมพระเกียรติ","Game design, story and direction: Thittaya Koonsee (Prink) · Computer Science, Huachiew Chalermprakiet University")}</p><p>${L("ตรวจสอบตรรกะและความถูกต้องของเกม: ปวริศ คงดี","Game logic and accuracy review: Pawarit Kongdee")}</p><p>${L("เขียนโค้ดร่วมกับ Claude (Anthropic)","Coded together with Claude (Anthropic)")}</p>`],
     priv:[L("ข้อมูลส่วนตัว","Privacy"),`<p>${L("เกมนี้ไม่ส่งข้อมูลออกไปไหน ชื่อและความคืบหน้าเก็บไว้ในเบราว์เซอร์ของเครื่องนี้เท่านั้น","This game sends nothing anywhere. Your name and progress stay in this browser only.")}</p>`]
   }[k];
   openSheet("tinfo", `${top_(C2[0],false)}<div class="sh-body">${C2[1]}<div class="btns"><button class="btn y" data-tback><span>${L("กลับ","Back")}</span></button></div></div>`);
