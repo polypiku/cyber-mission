@@ -1260,3 +1260,14 @@ a.cl-opt.dl-real{display:block;margin:10px 14px 0;text-align:center;font-weight:
 .dl-hot .cb b,.dl-hot .cb small,.dl-rec .cb b,.dl-rec .cb small{display:block}
 .dl-hot .cb b{font-size:.98rem}
 .device.incall .scr{padding-bottom:34px}
+/* play-together room sheet */
+.room .rm-now{display:flex;flex-direction:column;gap:4px;align-items:flex-start;background:#FFF4E0;border:2.5px solid #1E1A16;border-radius:12px;padding:12px 14px;margin:10px 0}
+.room .rm-now b{font-size:1.25rem}.room .rm-now small{color:#5b5048}
+.room .rm-now .btn{margin-top:6px}
+.room .rm-join{display:flex;gap:8px;align-items:stretch;margin:10px 0}
+.room .rm-join input{flex:1;min-width:0;font:inherit;font-size:1.3rem;font-weight:800;letter-spacing:.3em;text-align:center;border:2.5px solid #1E1A16;border-radius:10px;padding:6px 8px}
+.room .rm-join .btn{flex:none}
+.room .btn{flex:0 0 auto}
+.room .rm-now .btn{grid-template-columns:1fr;min-height:40px;padding:0 12px}
+.room .rm-join .btn{min-width:150px}
+.room .rm-join input::placeholder{letter-spacing:normal;font-size:1rem;font-weight:600}

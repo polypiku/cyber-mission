@@ -1,5 +1,5 @@
 /* Play together: other players walk around the same town, and everyone can race at the cyber quiz table.
-   Each player's cases stay on their own device. Only "presence" is shared (name, character, position,
+   Each player's cases stay on their own device. Only a small state is shared (name, character, position,
    quiz score), it lives only while the game is open, and nothing is stored on a server.
    The link: Supabase Realtime when SUPA has a url and key (for the public website), otherwise the Claude
    artifact room, otherwise single-player. */
@@ -11,13 +11,34 @@ const mpOthers=()=>MP.peers.filter(p=>!p.me && p.p && p.p.v===1);
 const mpName=()=>(S.name||(S.char&&PEOPLE[S.char]?PEOPLE[S.char].name[S.lang]:"")||L("ผู้เล่น","Player")).slice(0,16);
 
 function mpLoad(src){ return new Promise((ok,no)=>{ const s=document.createElement("script"); s.src=src; s.onload=ok; s.onerror=no; document.head.appendChild(s); }); }
+/* Each player sends their own state by broadcast (a few times a second while moving, every 2 s while still);
+   a player not heard from for 7 s has left. Rooms: "" is the shared town, a 4-digit code is a private room
+   (a class), and ?room=1234 in the link joins it straight away. */
+const MP_ROOM_KEY="cm-room";
+let mpRoom=(()=>{ const q=(location.search.match(/[?&]room=(\d{4})/)||[])[1]; if(q){ try{ localStorage.setItem(MP_ROOM_KEY,q); }catch(e){} return q; } try{ return localStorage.getItem(MP_ROOM_KEY)||""; }catch(e){ return ""; } })();
+const mpHeard={};
+function mpPeersFromHeard(){ const now=Date.now(); for(const k in mpHeard) if(now-mpHeard[k].t>7000) delete mpHeard[k];
+  MP.peers=[{id:mpId, me:true, p:MP.me}].concat(Object.entries(mpHeard).map(([k,v])=>({id:k, me:false, p:v.p}))); }
 async function mpSupa(){
-  MP.st="load"; await mpLoad("https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js");
-  MP.st="join";
-  const sb=window.supabase.createClient(SUPA.url,SUPA.key), ch=sb.channel("cyber-mission-town",{config:{presence:{key:mpId}}});
-  ch.on("presence",{event:"sync"},()=>{ const st=ch.presenceState(); MP.peers=Object.entries(st).map(([k,a])=>({id:k, me:k===mpId, p:(a&&a[a.length-1])||{}})); });
-  await new Promise((ok,no)=>{ const t=setTimeout(()=>no("timeout"),10000); ch.subscribe((s,err)=>{ MP.st=s; if(err) MP.err=String(err&&err.message||err); console.log("[mp] supabase",s,err||""); if(s==="SUBSCRIBED"){ clearTimeout(t); ok(); } else if(s==="CHANNEL_ERROR"||s==="TIMED_OUT"){ clearTimeout(t); no(s); } }); });
-  MP.ch=ch; MP.kind="supa"; MP.on=true; MP.dirty=true;
+  MP.st="load";
+  if(!window.supabase) await mpLoad("https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js");
+  MP.sb=MP.sb||window.supabase.createClient(SUPA.url,SUPA.key);
+  if(MP.ch){ try{ await MP.sb.removeChannel(MP.ch); }catch(e){} MP.ch=null; }
+  for(const k in mpHeard) delete mpHeard[k]; MP.on=false; MP.st="join";
+  const ch=MP.sb.channel("cyber-mission-"+(mpRoom||"town"),{config:{broadcast:{self:false, ack:false}}});
+  ch.on("broadcast",{event:"st"},({payload})=>{ if(payload&&payload.id&&payload.id!==mpId){ mpHeard[payload.id]={p:payload.p||{}, t:Date.now()}; mpPeersFromHeard(); } });
+  ch.on("broadcast",{event:"bye"},({payload})=>{ if(payload&&payload.id){ delete mpHeard[payload.id]; mpPeersFromHeard(); } });
+  await new Promise((ok,no)=>{ const t=setTimeout(()=>no("timeout"),10000); ch.subscribe((s,err)=>{ MP.st=s; if(err) MP.err=String(err&&err.message||err); console.log("[mp] supabase",s,err||"");
+    if(s==="SUBSCRIBED"){ clearTimeout(t); MP.on=true; MP.dirty=true; ok(); } else if(s==="CHANNEL_ERROR"||s==="TIMED_OUT"){ clearTimeout(t); MP.on=false; no(s); } else if(s==="CLOSED") MP.on=false; }); });
+  MP.ch=ch; MP.kind="supa"; mpPeersFromHeard();
+  if(!MP.iv) MP.iv=setInterval(mpPeersFromHeard,1000);
+}
+addEventListener("pagehide",()=>{ if(MP.kind==="supa"&&MP.ch) try{ MP.ch.send({type:"broadcast", event:"bye", payload:{id:mpId}}); }catch(e){} });
+/* switch room: "" = shared town, or a 4-digit code */
+async function mpJoin(code){
+  mpRoom=code||""; try{ localStorage.setItem(MP_ROOM_KEY,mpRoom); }catch(e){}
+  if(MP.ch) try{ MP.ch.send({type:"broadcast", event:"bye", payload:{id:mpId}}); }catch(e){}
+  if(SUPA.url && SUPA.key){ try{ await mpSupa(); }catch(e){ MP.err=e instanceof Event?L("โหลดตัวเชื่อมต่อไม่ได้","couldn't load the connector"):String(e&&e.message||e); } }
 }
 async function mpClaude(){
   if(!(window.claude && typeof claude.use==="function")) return;
@@ -36,17 +57,17 @@ function mpTabs(){
 }
 async function mpInit(){
   if(/[?&]mpdev/.test(location.search) && window.BroadcastChannel){ mpTabs(); return; }
-  if(SUPA.url && SUPA.key){ try{ await mpSupa(); return; }catch(e){ MP.kind=null; MP.err=MP.err||String(e&&e.message||e||"load"); console.warn("[mp] supabase failed",e); } }
+  if(SUPA.url && SUPA.key){ try{ await mpSupa(); return; }catch(e){ MP.kind=null; MP.err=MP.err||(e instanceof Event?L("โหลดตัวเชื่อมต่อไม่ได้","couldn't load the connector"):String(e&&e.message||e)); console.warn("[mp] supabase failed",e); } }
   try{ await mpClaude(); }catch(e){ MP.kind=null; }
 }
 function mpFlush(){
   if(!MP.on) return;
   const now=performance.now(), gap=MP.kind==="supa"?300:120;
-  if(!MP.dirty && now-MP.sent<4000) return;   /* resend every few seconds anyway, so a dropped update heals */
+  if(!MP.dirty && now-MP.sent<2000) return;   /* resend every few seconds anyway, so a dropped update heals */
   if(now-MP.sent<gap) return;
   MP.sent=now; MP.dirty=false; const st={...MP.me};
   if(MP.kind==="claude") MP.room.presence(st).catch(()=>{});
-  else if(MP.kind==="supa") MP.ch.track(st).then(r=>{ if(r!=="ok"){ MP.dirty=true; MP.err="track "+r; } }).catch(e=>{ MP.dirty=true; MP.err="track "+(e&&e.message||e); });
+  else if(MP.kind==="supa" && MP.ch) MP.ch.send({type:"broadcast", event:"st", payload:{id:mpId, p:st}}).then(r=>{ if(r!=="ok"){ MP.dirty=true; MP.err="send "+r; } }).catch(e=>{ MP.dirty=true; MP.err="send "+(e&&e.message||e); });
 }
 /* which room of the town you're standing in: zone, plus library floor / office building+floor / police floor */
 const mpZone=()=>S.zone+"."+(S.zone===2?libFloor():S.zone===8?(S.bld||0)+"-"+offFloor():S.zone===7?(S.floor||1):0);
@@ -92,9 +113,29 @@ function mpPill(){
   let el=document.getElementById("mpPill");
   const n=MP.on?mpOthers().length:0, show=!!S.char && sheetMode!=="start" && (MP.on || !!SUPA.url);
   if(!el){ if(!show) return; el=document.createElement("button"); el.id="mpPill"; el.setAttribute("aria-live","polite");
-    el.onclick=()=>toast(`MP: ${MP.kind||"-"} · ${MP.st}${MP.err?" · "+MP.err:""} · peers ${MP.peers.length} · ${L("ห้อง","room")} ${mpZone()}`); document.body.appendChild(el); }
+    el.onclick=()=>{ if(!busy()) openRoomSheet(); }; document.body.appendChild(el); }
   el.hidden=!show; if(!show) return;
-  const t=MP.on?`👥 ${n+1} ${L("คนออนไลน์","online")}${MP.kind==="supa"?"":" ·"+MP.kind}`:`⚠️ ${L("ยังไม่เชื่อมต่อ","Not connected")}`; if(el.textContent!==t) el.textContent=t;
+  const t=MP.on?`👥 ${n+1} ${L("คนออนไลน์","online")}${mpRoom?` · ${L("ห้อง","Room")} ${mpRoom}`:""}`:`⚠️ ${L("ยังไม่เชื่อมต่อ","Not connected")}`; if(el.textContent!==t) el.textContent=t;
+}
+
+/* the room sheet: shared town, make a room (a new 4-digit code), or type a code to join */
+function openRoomSheet(){
+  const link=location.origin+location.pathname+"?room="+mpRoom;
+  openSheet("room",`${top_("👥 "+L("ห้องเล่นด้วยกัน","Play together"))}<div class="sh-body room">
+    <p class="note">${L("ทุกคนในห้องเดียวกันจะเห็นกันเดินในเมือง และแข่งตอบที่โต๊ะ 🏆 ได้ เคสของแต่ละคนยังแยกกันเหมือนเดิม","Everyone in the same room sees each other walking around town and can race at the 🏆 table. Each player's cases stay their own.")}</p>
+    <div class="rm-now"><small>${L("ตอนนี้อยู่","You're in")}</small><b>${mpRoom?L("ห้อง ","Room ")+mpRoom:L("เมืองรวม (ทุกคน)","Shared town (everyone)")}</b><small>${MP.on?`🟢 ${L("เชื่อมต่อแล้ว","Connected")} · ${mpOthers().length+1} ${L("คน","players")}`:`⚠️ ${L("ยังไม่เชื่อมต่อ","Not connected")} ${esc(MP.st||"")} ${esc(MP.err||"")}`}</small>
+      ${mpRoom?`<button class="btn g" data-rmcopy><span>🔗 ${L("คัดลอกลิงก์เชิญ","Copy invite link")}</span></button>`:""}</div>
+    ${btn("➕ "+L("สร้างห้องใหม่ (ได้รหัส 4 หลัก)","Make a new room (4-digit code)"),"data-rmnew","y")}
+    <div class="rm-join"><input id="rmCode" inputmode="numeric" maxlength="4" placeholder="${L("รหัส 4 หลัก","4-digit code")}" aria-label="${L("รหัสห้อง","Room code")}">${btn(L("เข้าห้อง","Join"),"data-rmjoin","")}</div>
+    ${mpRoom?btn("🏙️ "+L("กลับเมืองรวม","Back to the shared town"),"data-rmtown",""):""}
+  </div>`);
+  const go=async c=>{ closeSheet(); toast(c?L(`🔑 เข้าห้อง ${c}…`,`🔑 Joining room ${c}…`):L("🏙️ กลับเมืองรวม…","🏙️ Back to the shared town…")); await mpJoin(c); toast(MP.on?L("เชื่อมต่อแล้ว","Connected"):L("เชื่อมต่อไม่ได้ ลองใหม่อีกครั้ง","Couldn't connect, try again")); };
+  const sh=$("sheet");
+  sh.querySelector("[data-rmnew]").onclick=()=>go(String(1000+Math.floor(Math.random()*9000)));
+  sh.querySelector("[data-rmjoin]").onclick=()=>{ const c=($("rmCode").value||"").replace(/\D/g,""); if(c.length!==4){ toast(L("ใส่รหัสให้ครบ 4 หลัก","Type all 4 digits")); return; } go(c); };
+  $("rmCode").onkeydown=e=>{ e.stopPropagation(); if(e.key==="Enter") sh.querySelector("[data-rmjoin]").click(); };
+  const cp=sh.querySelector("[data-rmcopy]"); if(cp) cp.onclick=()=>{ try{ navigator.clipboard.writeText(link); toast(L("คัดลอกลิงก์แล้ว ส่งให้เพื่อนได้เลย","Link copied, send it to your friends")); }catch(e){ toast(link); } };
+  const tw=sh.querySelector("[data-rmtown]"); if(tw) tw.onclick=()=>go("");
 }
 
 /* ---------- the quiz table ---------- */
