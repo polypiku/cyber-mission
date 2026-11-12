@@ -28,6 +28,7 @@ function openTitle(){
       <div class="t-row">
         <button data-thow><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5h7a2 2 0 0 1 2 2v12a2 2 0 0 0-2-2H3z" fill="#DCEBFA"/><path d="M21 5h-7a2 2 0 0 0-2 2v12a2 2 0 0 1 2-2h7z" fill="#DCEBFA"/><path d="M3 5h7a2 2 0 0 1 2 2v12a2 2 0 0 0-2-2H3zM21 5h-7a2 2 0 0 0-2 2v12a2 2 0 0 1 2-2h7zM5.5 9h4M5.5 12h4M14.5 9h4M14.5 12h4"/></svg>${L("วิธีเล่น","How to play")}</button>
         <button data-tnews><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="8" width="18" height="12" rx="2" fill="#FFF6E3"/><path d="M3 8l2.5-4.5L21 5.5 20 8" fill="#3A3F46"/><rect x="3" y="8" width="18" height="12" rx="2"/><path d="M3 8l2.5-4.5L21 5.5 20 8M8 4.2l2 3.6M13 4.6l2 3.4M10.5 11.5v5l4-2.5z"/></svg>${L("อัปเดต","Updates")}</button>
+        <button data-troom><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="8.5" cy="8" r="3.2" fill="#FFF6E3"/><circle cx="16" cy="9" r="2.6" fill="#DCEBFA"/><path d="M2.8 19.5c.6-3.6 3-5.3 5.7-5.3s5.1 1.7 5.7 5.3z" fill="#FFF6E3"/><path d="M14.2 14.4c.6-.3 1.2-.4 1.8-.4 2.3 0 4.3 1.4 4.8 4.6h-5.5"/></svg>${L("เล่นด้วยกัน","Play together")}${typeof mpRoom!=="undefined"&&mpRoom?` · ${mpRoom}`:""}</button>
         <button data-tset><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.8l1.6 2.3 2.7-.7.6 2.7 2.6 1-.8 2.7 1.9 2-1.9 2 .8 2.7-2.6 1-.6 2.7-2.7-.7L12 21.2l-1.6-2.3-2.7.7-.6-2.7-2.6-1 .8-2.7L3.4 11l1.9-2-.8-2.7 2.6-1 .6-2.7 2.7.7z" fill="#3B7FD0"/><circle cx="12" cy="12" r="3.4" fill="#FFF6E3"/></svg>${L("ตั้งค่า","Settings")}</button>
       </div>
     </main>
@@ -39,6 +40,7 @@ function openTitle(){
   q("[data-thow]",()=>titleSheet("how")); q("[data-thow2]",()=>titleSheet("how"));
   q("[data-tnews]",()=>titleSheet("news"));
   q("[data-tset]",()=>openSettings(true));
+  q("[data-troom]",()=>{ if(typeof openRoomSheet==="function") openRoomSheet(); });
   q("[data-tcred]",()=>titleSheet("cred"));
   q("[data-tpriv]",()=>titleSheet("priv"));
   el.querySelectorAll("[data-lang]").forEach(b=>b.onclick=()=>{ S.lang=b.dataset.lang; save(); document.documentElement.lang=S.lang; openTitle(); });

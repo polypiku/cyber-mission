@@ -123,13 +123,13 @@ function openRoomSheet(){
   const link=location.origin+location.pathname+"?room="+mpRoom;
   openSheet("room",`${top_("👥 "+L("ห้องเล่นด้วยกัน","Play together"))}<div class="sh-body room">
     <p class="note">${L("ทุกคนในห้องเดียวกันจะเห็นกันเดินในเมือง และแข่งตอบที่โต๊ะ 🏆 ได้ เคสของแต่ละคนยังแยกกันเหมือนเดิม","Everyone in the same room sees each other walking around town and can race at the 🏆 table. Each player's cases stay their own.")}</p>
-    <div class="rm-now"><small>${L("ตอนนี้อยู่","You're in")}</small><b>${mpRoom?L("ห้อง ","Room ")+mpRoom:L("เมืองรวม (ทุกคน)","Shared town (everyone)")}</b><small>${MP.on?`🟢 ${L("เชื่อมต่อแล้ว","Connected")} · ${mpOthers().length+1} ${L("คน","players")}`:`⚠️ ${L("ยังไม่เชื่อมต่อ","Not connected")} ${esc(MP.st||"")} ${esc(MP.err||"")}`}</small>
+    <div class="rm-now"><small>${L("ตอนนี้อยู่","You're in")}</small><b>${mpRoom?L("ห้อง ","Room ")+mpRoom:L("เมืองรวม (ทุกคน)","Shared town (everyone)")}</b><small>${MP.on?`🟢 ${L("เชื่อมต่อแล้ว","Connected")} · ${mpOthers().length+1} ${L("คน","players")}`:`⚠️ ${L("ยังไม่เชื่อมต่อ","Not connected")}${MP.err?" · "+esc(MP.err):""}`}</small>
       ${mpRoom?`<button class="btn g" data-rmcopy><span>🔗 ${L("คัดลอกลิงก์เชิญ","Copy invite link")}</span></button>`:""}</div>
     ${btn("➕ "+L("สร้างห้องใหม่ (ได้รหัส 4 หลัก)","Make a new room (4-digit code)"),"data-rmnew","y")}
     <div class="rm-join"><input id="rmCode" inputmode="numeric" maxlength="4" placeholder="${L("รหัส 4 หลัก","4-digit code")}" aria-label="${L("รหัสห้อง","Room code")}">${btn(L("เข้าห้อง","Join"),"data-rmjoin","")}</div>
     ${mpRoom?btn("🏙️ "+L("กลับเมืองรวม","Back to the shared town"),"data-rmtown",""):""}
   </div>`);
-  const go=async c=>{ closeSheet(); toast(c?L(`🔑 เข้าห้อง ${c}…`,`🔑 Joining room ${c}…`):L("🏙️ กลับเมืองรวม…","🏙️ Back to the shared town…")); await mpJoin(c); toast(MP.on?L("เชื่อมต่อแล้ว","Connected"):L("เชื่อมต่อไม่ได้ ลองใหม่อีกครั้ง","Couldn't connect, try again")); };
+  const go=async c=>{ closeSheet(); toast(c?L(`🔑 เข้าห้อง ${c}…`,`🔑 Joining room ${c}…`):L("🏙️ กลับเมืองรวม…","🏙️ Back to the shared town…")); await mpJoin(c); toast(MP.on?L("เชื่อมต่อแล้ว","Connected"):L("เชื่อมต่อไม่ได้ ลองใหม่อีกครั้ง","Couldn't connect, try again")); if(titleOn) openTitle(); };
   const sh=$("sheet");
   sh.querySelector("[data-rmnew]").onclick=()=>go(String(1000+Math.floor(Math.random()*9000)));
   sh.querySelector("[data-rmjoin]").onclick=()=>{ const c=($("rmCode").value||"").replace(/\D/g,""); if(c.length!==4){ toast(L("ใส่รหัสให้ครบ 4 หลัก","Type all 4 digits")); return; } go(c); };
