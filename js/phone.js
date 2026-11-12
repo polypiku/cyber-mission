@@ -69,6 +69,7 @@ function placeName(){
 }
 /* flat white glyphs for the home-screen icons, so every app looks like it came from the same phone */
 const PH_GLYPH={
+  phone:'<path d="M6.6 3.5h3l1.5 4-2 1.3a11 11 0 005.6 5.6l1.3-2 4 1.5v3a2 2 0 01-2.2 2A16.5 16.5 0 014.6 5.7a2 2 0 012-2.2z" fill="#fff" stroke="none"/>',
   chat:'<path d="M4 5.5h16v10.5H10l-6 4.5z" fill="#fff" stroke="none"/>',
   wifi:'<path d="M2.5 9a14 14 0 0119 0M5.8 12.4a9.5 9.5 0 0112.4 0M9 15.7a5 5 0 016 0"/><circle cx="12" cy="19" r="1.4" fill="#fff" stroke="none"/>',
   scan:'<path d="M12 3l8 3v6c0 4.8-3.4 8-8 9-4.6-1-8-4.2-8-9V6z"/><path d="M8.5 12l2.4 2.4 4.6-4.8"/>',
@@ -80,9 +81,10 @@ const PH_GLYPH={
   set:'<circle cx="12" cy="12" r="3.2"/><path d="M12 2.8v2.6M12 18.6v2.6M2.8 12h2.6M18.6 12h2.6M5.5 5.5l1.9 1.9M16.6 16.6l1.9 1.9M5.5 18.5l1.9-1.9M16.6 7.4l1.9-1.9"/>'
 };
 const phIcon=k=>`<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${PH_GLYPH[k]||""}</svg>`;
-const PH_DOCK=["chat","feed","wallet","set"];
+const PH_DOCK=["phone","chat","feed","set"];
 const PH_APPS=()=>[
-  {k:"chat",n:L("แชต","Chats"),bg:"linear-gradient(160deg,#5BE07A,#1FA34A)",badge:S.inbox.length+(S.chat&&!S.best.chat?1:0)},
+  {k:"phone",n:L("โทรศัพท์","Phone"),bg:"linear-gradient(160deg,#5BE07A,#1FA34A)",badge:S.missedNew||0},
+  {k:"chat",n:L("แชต","Chats"),bg:"linear-gradient(160deg,#5AC8FA,#1F7AE0)",badge:S.inbox.length+(S.chat&&!S.best.chat?1:0)},
   {k:"wifi",n:"Wi-Fi",bg:"linear-gradient(160deg,#5AA9F0,#1F5FB5)"},
   {k:"scan",n:L("สแกนไวรัส","Virus scan"),bg:"linear-gradient(160deg,#FF6B5A,#C82A1C)"},
   {k:"wallet",n:L("กระเป๋าเงิน","Wallet"),bg:"linear-gradient(160deg,#2E2E36,#111116)"},
@@ -125,6 +127,7 @@ function phoneApp(k){
   if(k==="dex") return openDex();
   if(k==="map") return openZones();
   if(k==="set") return openPhoneSettings();
+  if(k==="phone") return openDialer();
   if(k==="feed") return needNet(()=>openFeed());
 }
 /* the scan app is a plain virus scanner */

@@ -42,6 +42,7 @@ function scIncoming(k){
 function scEnd(how){
   if(!scRing) return; const k=scRing.k; clearTimeout(scRing.t); scRing=null; hidePeek();
   const st=scState(), now=S.playMs||0;
+  if(typeof logCall==="function") logCall(SCAM_CALLS[k].num, how==="answer"?"answered":how==="block"?"blocked":how);
   if(how==="block"){ scBlock(k); return; }
   st.next=now+scWait();
   if(how==="missed") toast(L(`📞 สายที่ไม่ได้รับจาก ${SCAM_CALLS[k].num} · เดี๋ยวเขาโทรมาอีก`,`📞 Missed call from ${SCAM_CALLS[k].num} · they'll call again`));

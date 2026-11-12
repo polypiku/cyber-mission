@@ -1233,3 +1233,30 @@ body.cin .wxchip{display:none}
 .hs-grid{flex:1;align-content:start}
 .hs-dock{display:grid;grid-template-columns:repeat(4,1fr);justify-items:center;margin:8px 8px 22px;padding:12px 6px 8px;border-radius:26px;background:rgba(255,255,255,.2);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px)}
 .ph-sbar .sic svg{width:54px;height:12px;fill:currentColor;display:block}
+
+/* ---------- Phone app: keypad, hotlines, recents ---------- */
+.dl{flex:1;display:flex;flex-direction:column}
+.dl-num{text-align:center;font-size:2rem;font-weight:300;letter-spacing:2px;min-height:48px;padding:8px 12px 0;overflow-wrap:anywhere}
+.dl-hint{text-align:center;font-size:.76rem;color:#2E9A6E;min-height:18px;padding:0 12px}
+.dl-pad{display:grid;grid-template-columns:repeat(3,64px);justify-content:center;gap:12px 22px;padding:10px 0}
+.dl-key{width:64px;height:64px;border-radius:50%;border:0;background:#EDEEF1;display:grid;place-content:center;font:inherit;cursor:pointer;line-height:1.05;color:#111}
+.dl-key b{font-size:1.5rem;font-weight:400}.dl-key small{font-size:.55rem;letter-spacing:1.5px;color:#555}
+.dl-key:active{background:#D3D5DA}
+.dl-row{display:grid;grid-template-columns:64px 64px 64px;justify-content:center;gap:22px;align-items:center;padding:4px 0 10px}
+.dl-row .cl-btn span{width:64px;height:64px}
+.dl-del{border:0;background:none;font-size:1.5rem;color:#555;cursor:pointer}
+.dl-tabs{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid #E6E6E6;margin-top:auto}
+.dl-tabs button{border:0;background:#FAFAFA;padding:10px 4px;font:inherit;font-size:.78rem;color:#8E8E93;cursor:pointer}
+.dl-tabs button.on{color:#1FA34A;font-weight:700}
+.dl-note{margin:4px 16px 8px;font-size:.78rem;color:#555;line-height:1.5}
+.dl-av{background:#EDEEF1;font-size:1.1rem}
+.dl-go{font-size:1.1rem}
+.dl-rec.miss b{color:#E8443A}
+.dl-blk{border:1px solid #E8443A;color:#E8443A;background:none;border-radius:999px;padding:3px 10px;font:inherit;font-size:.74rem;cursor:pointer}
+.cl-av.dl-big{display:grid;place-items:center;font-size:1.6rem;background:#3E4254}
+.dl-ivr{display:grid;gap:8px;padding:6px 14px}
+.dl-ivr b{display:inline-grid;place-items:center;width:22px;height:22px;border-radius:50%;background:#F2F3F7;color:#2E3140;margin-right:4px}
+a.cl-opt.dl-real{display:block;margin:10px 14px 0;text-align:center;font-weight:700;background:#2EB65A;border-color:#2EB65A;color:#fff;text-decoration:none}
+.dl-hot .cb b,.dl-hot .cb small,.dl-rec .cb b,.dl-rec .cb small{display:block}
+.dl-hot .cb b{font-size:.98rem}
+.device.incall .scr{padding-bottom:34px}
