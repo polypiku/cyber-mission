@@ -155,7 +155,7 @@ const ZONES = {
   2:{name:{th:"ห้องสมุดเมือง",en:"City Library"}, cases:["leak","publicpc","airdrop"], roleCase:{grandma:"leak", tips:"publicpc", friend:"airdrop"}},
   3:{name:{th:"ธนาคารนครทอง",en:"Nakhonthong Bank"}, cases:["rush","video","remote"], roleCase:{grandma:"rush", grandpa:"video", tips:"remote"}},
   4:{name:{th:"ร้านเน็ต NET ZONE",en:"NET ZONE internet café"}, cases:["topup","loanapp","crypto"], roleCase:{friend:"topup", grandma:"loanapp", grandpa:"crypto"}},
-  6:{name:{th:"มหาวิทยาลัยหัวเฉียวเฉลิมพระเกียรติ",en:"Huachiew Chalermprakiet University"}, cases:["itmail","parttime","callfund"], roleCase:{tips:"itmail", paweena:"parttime", parent:"callfund"}},
+  6:{name:{th:"มหาวิทยาลัยอิฐแดง",en:"Red Brick University"}, cases:["itmail","parttime","callfund"], roleCase:{tips:"itmail", paweena:"parttime", parent:"callfund"}},
   7:{name:{th:"สถานีตำรวจ",en:"Police station"}, cases:[], roleCase:{}},
   5:{bonus:true, name:{th:"บ้านผีสิงในตรอกมืด",en:"The haunted house in the alley"}, cases:[], roleCase:{}}   /* closed: the game keeps 15 cases */
 };
@@ -179,7 +179,7 @@ const EVID = {
   qr:{i:"🏷️",g:"acct",t:["สติกเกอร์ QR ปลอม","Fake QR sticker"],d:["บัญชีปลายทาง: นาย ธนพล ส.","Receiving account: Mr Thanaphon S."]},
   wifi:{i:"📶",g:"server",t:["หน้าล็อกอิน Wi-Fi ปลอม","Fake Wi-Fi login page"],d:["ส่งรหัสที่ดักได้ไปที่ 185.xx.xx.7","Sends captured passwords to 185.xx.xx.7"]},
   chat:{i:"💬",g:"server",t:["เครื่องที่ยึดบัญชีแชต","The device taking over chat accounts"],d:["บัญชีที่ถูกยึดทุกบัญชีล็อกอินจาก 185.xx.xx.7","Every hijacked account logged in from 185.xx.xx.7"]},
-  itmail:{i:"✉️",g:"server",t:["อีเมล IT ปลอม","Fake IT email"],d:["hcu-mail.help ส่งจากเซิร์ฟเวอร์เดียวกัน 185.xx.xx.7","hcu-mail.help sends from the same 185.xx.xx.7"]},
+  itmail:{i:"✉️",g:"server",t:["อีเมล IT ปลอม","Fake IT email"],d:["rbu-mail.help ส่งจากเซิร์ฟเวอร์เดียวกัน 185.xx.xx.7","rbu-mail.help sends from the same 185.xx.xx.7"]},
   parttime:{i:"🗣️",g:"acct",t:["คำให้การของปวีณา","Paweena's statement"],d:["“พี่บอส” สั่งเปิดบัญชีจากตึกฝั่งตรงข้ามถนน","“Boss” ran the accounts from the building across the road"]},
   callfund:{i:"📞",g:"phone",t:["สายปลอมอ้างงานทุน","Fake scholarship-office call"],d:["โทรจากเบอร์ 02 xxx 8810 เบอร์เดียวกับไลน์อาจารย์ปลอม","Came from 02 xxx 8810, the same number as the fake lecturer LINE"]},
   publicpc:{i:"⌨️",g:"server",t:["ตัวดักแป้นพิมพ์","Keyloggers"],d:["ส่งข้อมูลที่ดักได้ไปที่ 185.xx.xx.7","They send what they capture to 185.xx.xx.7"]},

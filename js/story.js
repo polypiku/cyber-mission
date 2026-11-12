@@ -20,7 +20,7 @@ const mentorId=()=>"volOat";
 /* the prologue panels use the author's pictures when they exist (PROLOGUE_ART in data/heroes.js), emoji otherwise */
 function PROLOGUE(){ return PROLOGUE0().map((p,i)=>{ const a=typeof PROLOGUE_ART!=="undefined"&&PROLOGUE_ART[i]; return a?Object.assign(p,{img:a[0],pos:a[1]}):p; }); }
 function PROLOGUE0(){ return [
-  P("#5B1A20","🎓📚☀️",["มหาวิทยาลัยหัวเฉียวเฉลิมพระเกียรติ วันธรรมดาอีกวันของนักศึกษาอย่างเรา","Huachiew Chalermprakiet University. Just another ordinary day for a student like you."],[["me","วันนี้เรียนเสร็จเร็ว ไปนั่งห้องสมุดดีกว่า","Classes finished early. Maybe I'll go sit in the library."]]),
+  P("#5B1A20","🎓📚☀️",["มหาวิทยาลัยอิฐแดง วันธรรมดาอีกวันของนักศึกษาอย่างเรา","Red Brick University. Just another ordinary day for a student like you."],[["me","วันนี้เรียนเสร็จเร็ว ไปนั่งห้องสมุดดีกว่า","Classes finished early. Maybe I'll go sit in the library."]]),
   P("#2A231C","📱💸😨",["แต่ช่วงนี้เพื่อนในคณะโดนหลอกติดกันหลายคน ทั้งทุนปลอม งานพาร์ทไทม์ปลอม Wi-Fi ปลอม","But lately friends in your faculty keep getting scammed: fake scholarships, fake part-time jobs, fake Wi-Fi."]),
   P("#22344A","🚓👮👮",["รถตำรวจจอดหน้าตึกกิจการนักศึกษา ทีมตำรวจไซเบอร์เดินตรงมาหาเรา","A police car stops outside Student Affairs. The cyber police team walks straight towards you."],[["police","สวัสดีครับ ผมภพ ตำรวจไซเบอร์ แถวมหาลัยตอนนี้มีแก๊งมิจฉาชีพใหญ่ เราเรียกมันว่า “แก๊งเงา”","Hello, I'm Phop, cyber police. There's a big scam gang around campus right now. We call it the “Shadow gang”."]]),
   P("#173E3C","🕵️🎓🤝",["ตำรวจเดินเข้าไปถามใครก็มีแต่คนระแวง แต่นักศึกษาอย่างเราเข้าได้ทุกที่โดยไม่มีใครสงสัย","When police ask around, people clam up. A student can go anywhere without raising suspicion."],[["police","ผมอยากให้น้องช่วย คอยช่วยคนที่กำลังจะโดนหลอก แล้วเก็บเบาะแสมาให้ผม","I'd like your help: look out for people about to be scammed, and bring me every clue you find."],["me","ได้ครับ/ค่ะ เริ่มจากตรงไหนดี","Count me in. Where do I start?"]]),
@@ -115,7 +115,7 @@ function drawUniStatic(g){
   const notes=[["#FFFFFF",S.lang==="en"?"Scholarships":"ทุนการศึกษา"],["#FFE9A8",S.lang==="en"?"Part-time!":"รับพาร์ทไทม์!"],["#D6F0FF",S.lang==="en"?"Exam timetable":"ตารางสอบ"],["#FFD3D3",S.lang==="en"?"Club fair":"รับสมัครชมรม"]];
   notes.forEach(([c,tx],k)=>{ const x=52+k*72, y=20+(k%2)*6; g.save(); g.translate(x+30,y+22); g.rotate((k%2?.05:-.04)); rr(g,-30,-20,60,40,2); g.fillStyle=c; g.fill(); g.lineWidth=2; g.strokeStyle=INK; g.stroke(); g.fillStyle=INK; g.font="700 9px 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', Tahoma, sans-serif"; g.textAlign="center"; g.textBaseline="middle"; g.fillText(tx,0,0); g.fillStyle="#E5402F"; g.beginPath(); g.arc(0,-16,3,0,7); g.fill(); g.restore(); });
   rr(g,400,10,420,66,4); g.fillStyle="#8E1B2B"; g.fill(); g.lineWidth=3; g.strokeStyle=INK; g.stroke();
-  g.fillStyle="#F7D7A8"; g.font="800 16px 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', Tahoma, sans-serif"; g.textAlign="center"; g.textBaseline="middle"; g.fillText(S.lang==="en"?"Huachiew Chalermprakiet University":"มหาวิทยาลัยหัวเฉียวเฉลิมพระเกียรติ",610,34);
+  g.fillStyle="#F7D7A8"; g.font="800 16px 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', Tahoma, sans-serif"; g.textAlign="center"; g.textBaseline="middle"; g.fillText(S.lang==="en"?"Red Brick University":"มหาวิทยาลัยอิฐแดง",610,34);
   g.fillStyle="#FFFFFF"; g.font="600 11px 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', Tahoma, sans-serif"; g.fillText(S.lang==="en"?"Student services building":"อาคารบริการนักศึกษา",610,58);
 }
 function drawCellDoor(g){
@@ -292,7 +292,7 @@ function drawCrossroads(g){
   g.fillRect(IC.x0+2,494,53,6);
   // signpost at the top
   rr(g,858,6,174,26,6); g.fillStyle="#2F6D3A"; g.fill(); g.lineWidth=2.5; g.strokeStyle=INK; g.stroke();
-  g.fillStyle="#FFFFFF"; g.font="800 12px 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', Tahoma, sans-serif"; g.textAlign="center"; g.textBaseline="middle"; g.fillText(S.lang==="en"?"↑ HCU University":"↑ ม.หัวเฉียวฯ",945,19);
+  g.fillStyle="#FFFFFF"; g.font="800 12px 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', Tahoma, sans-serif"; g.textAlign="center"; g.textBaseline="middle"; g.fillText(S.lang==="en"?"↑ Red Brick University":"↑ ม.อิฐแดง",945,19);
 }
 function drawSouthRoad(g){
   g.fillStyle="#4A4D52"; g.fillRect(IC.x0,760,IC.x1-IC.x0,OH-760);

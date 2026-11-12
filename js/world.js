@@ -28,8 +28,8 @@ const BUILDINGS=[
   {zone:1, x:96,  w:360, door:276, name:{th:"Bean House",en:"Bean House"}, sub:{th:"ร้านกาแฟ",en:"Café"}, wall:"#F3E3C8", roof:"#C2552E", sign:"#2E3B33", signFg:"#FFC414"},
   {zone:2, x:540, w:310, door:695, name:{th:"ห้องสมุดเมือง",en:"CITY LIBRARY"}, sub:{th:"2 ชั้น · Wi-Fi ฟรี",en:"2 floors · Free Wi-Fi"}, wall:"#EFE6D6", roof:"#5B3A24", sign:"#3A2516", signFg:"#F2C14E"},
   {zone:3, x:1040, w:304, door:1192, name:{th:"ธนาคารนครทอง",en:"NKT BANK"}, sub:{th:"สาขาตลาด",en:"Market branch"}, wall:"#F1ECE0", roof:"#0F5E46", sign:"#0F5E46", signFg:"#F2C14E"},
-  {zone:6, alley:true, soi:true, road:true, x:850, w:40, door:870, icon:"🎓", col:"#F2C14E", name:{th:"ถนนไป ม.หัวเฉียวฯ",en:"Road to the university"}, sub:{th:"",en:""}},
-  {zone:6, alley:true, soi:true, road:true, hide:true, x:1000, w:40, door:1020, icon:"🎓", col:"#F2C14E", name:{th:"ถนนไป ม.หัวเฉียวฯ",en:"Road to the university"}, sub:{th:"",en:""}},
+  {zone:6, alley:true, soi:true, road:true, x:850, w:40, door:870, icon:"🎓", col:"#F2C14E", name:{th:"ถนนไป ม.อิฐแดง",en:"Road to the university"}, sub:{th:"",en:""}},
+  {zone:6, alley:true, soi:true, road:true, hide:true, x:1000, w:40, door:1020, icon:"🎓", col:"#F2C14E", name:{th:"ถนนไป ม.อิฐแดง",en:"Road to the university"}, sub:{th:"",en:""}},
   {zone:7, alley:true, soi:true, x:1350, w:72, door:1386, icon:"🚓", col:"#9CC3F0", name:{th:"ซอย 2 · สถานีตำรวจ",en:"Soi 2 · Police station"}, sub:{th:"",en:""}},
   {zone:4, x:1428, w:360, door:1608, name:{th:"NET ZONE",en:"NET ZONE"}, sub:{th:"ร้านเน็ต · เกม",en:"Internet café · games"}, wall:"#2E3350", roof:"#7A5AA6", sign:"#13162A", signFg:"#5EE6D0"}
 ];

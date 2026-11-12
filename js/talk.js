@@ -88,7 +88,7 @@ const SCRIPT7 = {
 };
 const scriptFor=(role)=>({0:SCRIPT0,2:SCRIPT2,3:SCRIPT3,4:SCRIPT4,5:SCRIPT5,6:SCRIPT6,7:SCRIPT7}[S.zone]||SCRIPT)[role];
 const ZONE_INTRO = {
-  6:[t("ถนนจากสี่แยกพาเรามาถึงมหาวิทยาลัยหัวเฉียวเฉลิมพระเกียรติ","The road from the crossroads brings us to Huachiew Chalermprakiet University."),t("แก๊งเงาชอบเล็งนักศึกษา เพราะทุกคนออนไลน์ทั้งวัน และบางคนกำลังหาเงิน","The Shadow gang targets students: everyone's online all day, and some need money."),t("ได้ยินว่ามีนักศึกษาชื่อปวีณาเกี่ยวข้องด้วย ลองหาเธอดูนะ","I've heard a student called Paweena is mixed up in this. Try to find her.")],
+  6:[t("ถนนจากสี่แยกพาเรามาถึงมหาวิทยาลัยอิฐแดง","The road from the crossroads brings us to Red Brick University."),t("แก๊งเงาชอบเล็งนักศึกษา เพราะทุกคนออนไลน์ทั้งวัน และบางคนกำลังหาเงิน","The Shadow gang targets students: everyone's online all day, and some need money."),t("ได้ยินว่ามีนักศึกษาชื่อปวีณาเกี่ยวข้องด้วย ลองหาเธอดูนะ","I've heard a student called Paweena is mixed up in this. Try to find her.")],
   7:[t("นี่คือสถานีตำรวจ ฐานของพี่ภพ ตำรวจไซเบอร์","This is the police station, Phop's base. He's cyber police."),t("ที่นี่เราจะได้เรียนวิธีแจ้งความที่ถูกต้อง และเอาหลักฐานทั้งหมดมาส่ง","Here you'll learn how to report properly, and hand in all the evidence."),t("ช่วยคนให้ครบทุกที่ แล้วกลับมาคุยกับพี่ภพ เราจะบุกตึกแก๊งเงาด้วยกัน","Help everyone everywhere, then come back to Phop. We'll raid the Shadow gang's building together.")],
   2:[t("โซน 1 ห้องสมุดเมือง ที่นี่ใหญ่กว่าที่อื่น มีสองชั้น บันไดอยู่มุมขวาบน","Zone 2, the City Library. It's bigger than the others and has two floors. The stairs are top right."),t("คนเยอะ Wi-Fi ฟรี ปลั๊กฟรี คอมสาธารณะ มิจฉาชีพชอบที่แบบนี้มาก","Crowds, free Wi-Fi, free charging, public computers. Scammers love it here."),t("ป้ายที่บันไดจะบอกว่าอีกชั้นยังมีคนรอความช่วยเหลืออยู่กี่คน","The sign by the stairs shows how many people still need help on the other floor.")],
   5:[t("ขนลุกจัง… ที่นี่คือบ้านร้างในตรอก","Spooky… this is the abandoned house in the alley."),t("ผีที่นี่ก็โดนแก๊งหลอกเหมือนกัน เรื่องค้างคาใจเลยไปไหนไม่ได้","Even the ghosts here were scammed. With business left unfinished, they can't move on."),t("ช่วยผีให้ได้ไปต่อนะ พี่รอตรงประตูนี่แหละ ไม่เข้าไปลึกกว่านี้แล้ว","Help them move on. I'll wait right here by the door. I'm not going any further.")],
@@ -175,7 +175,7 @@ function hcuSVG(){
   const rowWins=(x,y,w,n,h)=>{ let s=""; const gap=w/n; for(let i=0;i<n;i++) s+=`<rect x="${x+i*gap+5}" y="${y}" width="${gap-10}" height="${h}" rx="2" fill="${win}" stroke="${ink}" stroke-width="3"/><rect x="${x+i*gap+9}" y="${y+4}" width="${(gap-18)*.35}" height="${h-8}" fill="${winL}" opacity=".55"/>`; return s; };
   const band=(x,y,w,h)=>`<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="3" fill="${win}" stroke="${ink}" stroke-width="3"/><rect x="${x+6}" y="${y+4}" width="${w*.25}" height="${h-8}" fill="${winL}" opacity=".45"/>`;
   const student=(cls,c1,c2,hair)=>`<g class="${cls}"><ellipse cx="0" cy="46" rx="10" ry="3" fill="rgba(0,0,0,.18)"/><rect x="-7" y="22" width="5" height="22" rx="2" fill="${ink}"/><rect x="2" y="22" width="5" height="22" rx="2" fill="${ink}" class="legb"/><path d="M-10 4 h20 v20 h-20z" fill="${c1}" stroke="${ink}" stroke-width="2.5"/><path d="M-10 18 h20 v8 h-20z" fill="${c2}" stroke="${ink}" stroke-width="2.5"/><circle cx="0" cy="-6" r="10" fill="#F6D6B8" stroke="${ink}" stroke-width="2.5"/><path d="M-10 -8 Q-9 -18 0 -17 Q10 -18 10 -8 Q4 -12 -10 -8Z" fill="${hair}" stroke="${ink}" stroke-width="2"/></g>`;
-  return `<svg class="hcu-svg" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Huachiew Chalermprakiet University">
+  return `<svg class="hcu-svg" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Red Brick University">
   <defs><linearGradient id="hsky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7EC3F2"/><stop offset="1" stop-color="#CDEBFF"/></linearGradient>
   <linearGradient id="hlawn" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#9CD46B"/><stop offset="1" stop-color="#7DBE52"/></linearGradient></defs>
   <rect width="1600" height="900" fill="url(#hsky)"/>
@@ -198,8 +198,8 @@ function hcuSVG(){
   <!-- central tower -->
   <path d="M705 600 L705 235 L800 168 L895 235 L895 600 Z" fill="${br}" stroke="${ink}" stroke-width="6"/>
   <path d="M785 200 L800 212 L815 200" fill="none" stroke="${brD}" stroke-width="5" stroke-linecap="round"/>
-  <text x="800" y="262" text-anchor="middle" font-family="'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', Tahoma, sans-serif" font-weight="800" font-size="30" fill="${ink}">หัวเฉียว</text>
-  <text x="800" y="298" text-anchor="middle" font-family="'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', Tahoma, sans-serif" font-weight="800" font-size="24" fill="${ink}">เฉลิมพระเกียรติ</text>
+  <text x="800" y="262" text-anchor="middle" font-family="'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', Tahoma, sans-serif" font-weight="800" font-size="30" fill="${ink}">มหาวิทยาลัย</text>
+  <text x="800" y="298" text-anchor="middle" font-family="'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', Tahoma, sans-serif" font-weight="800" font-size="24" fill="${ink}">อิฐแดง</text>
   <rect x="740" y="318" width="120" height="104" fill="${brD}" stroke="${ink}" stroke-width="5"/><rect x="750" y="328" width="100" height="34" fill="${winL}" stroke="${ink}" stroke-width="3"/><rect x="750" y="378" width="100" height="34" fill="${winL}" stroke="${ink}" stroke-width="3"/>
   ${band(735,440,130,26)}${band(735,490,130,26)}
   <path d="M760 600 Q800 556 840 600 Z" fill="#3FA85A" stroke="${ink}" stroke-width="4"/>
@@ -232,7 +232,7 @@ function showArrive(go){
   const el=document.createElement("div"); el.className="arrive"; el.setAttribute("role","dialog");
   const first=!S.seen[6];
   el.innerHTML=`<div class="ar-img"><img class="ar-photo" src="${UNI_FRONT}" alt="${L("หน้ามหาวิทยาลัย","The university front")}"></div><div class="ar-shade"></div>
-    <div class="ar-box"><small>${L("ถนนจากสี่แยก","From the crossroads")}</small><b>${L("มหาวิทยาลัยหัวเฉียวเฉลิมพระเกียรติ","Huachiew Chalermprakiet University")}</b>
+    <div class="ar-box"><small>${L("ถนนจากสี่แยก","From the crossroads")}</small><b>${L("มหาวิทยาลัยอิฐแดง","Red Brick University")}</b>
     <p>${first?L("ได้ยินว่ามีนักศึกษาหลายคนโดนแก๊งเงาหลอก… และมีคนชื่อปวีณาเกี่ยวข้องด้วย","Word is the Shadow gang has been targeting students here… and someone called Paweena is involved."):L("กลับมาที่มหาวิทยาลัยอีกครั้ง","Back at the university.")}</p>
     <div class="ar-btns"><button class="btn g" data-back><span>${L("กลับไปที่ถนน","Back to the street")}</span></button><button class="btn y" data-in><span>🚶 ${L("เดินเข้าไป","Walk in")}</span></button></div></div>`;
   document.body.appendChild(el); sfx("ping");
