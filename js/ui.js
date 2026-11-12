@@ -55,7 +55,7 @@ function openSheet(mode, html){
   phoneize($("sheet"));
   const asPhone = mode==="phone"||mode==="wifi";
   $("sheet").classList.toggle("asphone",asPhone); $("veil").classList.toggle("vphone",asPhone); document.body.classList.toggle("phone-open",asPhone);
-  if(asPhone){ $("sheet").insertAdjacentHTML("afterbegin",`<div class="ph-sbar"><span>${nowClock()}</span><span>▂▄▆ 📶 🔋</span></div>`); $("sheet").insertAdjacentHTML("beforeend",`<button class="ph-home" data-close aria-label="${L("ปิดมือถือ","Put the phone away")}"></button>`); }
+  if(asPhone){ $("sheet").insertAdjacentHTML("afterbegin",`<div class="ph-sbar"><span>${nowClock()}</span><span class="sic">${typeof SB_ICONS!=="undefined"?SB_ICONS:""}</span></div>`); $("sheet").insertAdjacentHTML("beforeend",`<button class="ph-home" data-close aria-label="${L("ปิดมือถือ","Put the phone away")}"></button>`); }
   wireSheet(); hud();
   if(mode==="case"){ requestAnimationFrame(()=>paginatePhone(false)); setTimeout(()=>paginatePhone(true),400); }
 }

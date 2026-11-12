@@ -67,28 +67,44 @@ function placeName(){
   if(S.zone===7 && S.floor===2) return L("ห้องขัง สน.","Police cells");
   const z=ZONES[S.zone]; return z?z.name[S.lang]:"";
 }
+/* flat white glyphs for the home-screen icons, so every app looks like it came from the same phone */
+const PH_GLYPH={
+  chat:'<path d="M4 5.5h16v10.5H10l-6 4.5z" fill="#fff" stroke="none"/>',
+  wifi:'<path d="M2.5 9a14 14 0 0119 0M5.8 12.4a9.5 9.5 0 0112.4 0M9 15.7a5 5 0 016 0"/><circle cx="12" cy="19" r="1.4" fill="#fff" stroke="none"/>',
+  scan:'<path d="M12 3l8 3v6c0 4.8-3.4 8-8 9-4.6-1-8-4.2-8-9V6z"/><path d="M8.5 12l2.4 2.4 4.6-4.8"/>',
+  wallet:'<rect x="3" y="6" width="18" height="13" rx="2.5"/><path d="M3 10h18"/><circle cx="16.5" cy="14.5" r="1.3" fill="#fff" stroke="none"/>',
+  board:'<path d="M3 7.5a1.5 1.5 0 011.5-1.5H9l2 2h8.5A1.5 1.5 0 0121 9.5v8a1.5 1.5 0 01-1.5 1.5h-15A1.5 1.5 0 013 17.5z"/>',
+  dex:'<path d="M4 5.5C6.5 4 9.5 4 12 5.5 14.5 4 17.5 4 20 5.5V19c-2.5-1.5-5.5-1.5-8 0-2.5-1.5-5.5-1.5-8 0z"/><path d="M12 5.5V19"/>',
+  feed:'<path d="M3.5 10v4h3.5l7 4.5v-13L7 10z" fill="#fff"/><path d="M17.5 9a4.5 4.5 0 010 6M19.8 6.6a8 8 0 010 10.8"/>',
+  map:'<path d="M3 6.5l6-2.5 6 2.5 6-2.5v13.5l-6 2.5-6-2.5-6 2.5z"/><path d="M9 4v13.5M15 6.5V20"/>',
+  set:'<circle cx="12" cy="12" r="3.2"/><path d="M12 2.8v2.6M12 18.6v2.6M2.8 12h2.6M18.6 12h2.6M5.5 5.5l1.9 1.9M16.6 16.6l1.9 1.9M5.5 18.5l1.9-1.9M16.6 7.4l1.9-1.9"/>'
+};
+const phIcon=k=>`<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${PH_GLYPH[k]||""}</svg>`;
+const PH_DOCK=["chat","feed","wallet","set"];
 const PH_APPS=()=>[
-  {k:"chat",i:"💬",n:L("แชต","Chats"),bg:"linear-gradient(160deg,#4CD964,#1FA34A)",badge:S.inbox.length+(S.chat&&!S.best.chat?1:0)},
-  {k:"wifi",i:"📶",n:"Wi-Fi",bg:"linear-gradient(160deg,#5AA9F0,#1F5FB5)"},
-  {k:"scan",i:"🛡️",n:L("สแกนไวรัส","Virus scan"),bg:"linear-gradient(160deg,#FF6B5A,#C82A1C)"},
-  {k:"wallet",i:"💵",n:L("กระเป๋าเงิน","Wallet"),bg:"linear-gradient(160deg,#FFD25A,#E89A1C)"},
-  {k:"board",i:"🗂️",n:L("หลักฐาน","Evidence"),bg:"linear-gradient(160deg,#A98BE0,#6A45B0)",badge:S.evNew||0},
-  {k:"dex",i:"📖",n:L("สมุดกลโกง","Handbook"),bg:"linear-gradient(160deg,#F08A5D,#B8481E)"},
-  {k:"feed",i:"📣",n:L("เตือนภัยกัน","Scam Alert"),bg:"linear-gradient(160deg,#F9CE34,#EE2A7B 55%,#6228D7)",badge:feedUnread()},
-  {k:"map",i:"🗺️",n:L("แผนที่","Map"),bg:"linear-gradient(160deg,#6FD18B,#2E8B4A)"},
-  {k:"set",i:"⚙️",n:L("ตั้งค่า","Settings"),bg:"linear-gradient(160deg,#B8BEC6,#6E7780)",badge:(()=>{const [a,b]=psScore();return b-a;})()}
+  {k:"chat",n:L("แชต","Chats"),bg:"linear-gradient(160deg,#5BE07A,#1FA34A)",badge:S.inbox.length+(S.chat&&!S.best.chat?1:0)},
+  {k:"wifi",n:"Wi-Fi",bg:"linear-gradient(160deg,#5AA9F0,#1F5FB5)"},
+  {k:"scan",n:L("สแกนไวรัส","Virus scan"),bg:"linear-gradient(160deg,#FF6B5A,#C82A1C)"},
+  {k:"wallet",n:L("กระเป๋าเงิน","Wallet"),bg:"linear-gradient(160deg,#2E2E36,#111116)"},
+  {k:"board",n:L("หลักฐาน","Evidence"),bg:"linear-gradient(160deg,#A98BE0,#6A45B0)",badge:S.evNew||0},
+  {k:"dex",n:L("สมุดกลโกง","Handbook"),bg:"linear-gradient(160deg,#F5A25D,#D2601E)"},
+  {k:"feed",n:L("เตือนภัยกัน","Scam Alert"),bg:"linear-gradient(160deg,#F9CE34,#EE2A7B 55%,#6228D7)",badge:feedUnread()},
+  {k:"map",n:L("แผนที่","Map"),bg:"linear-gradient(160deg,#6FD18B,#2E8B4A)"},
+  {k:"set",n:L("ตั้งค่า","Settings"),bg:"linear-gradient(160deg,#9AA1AA,#5E656E)",badge:(()=>{const [a,b]=psScore();return b-a;})()}
 ];
 function openPhone(){
   if(S.phoneBroken) return openHacked();
   if(S.hack) return openHackWarn();
   const d=new Date(), date=L(`วัน${TH_DAYS[d.getDay()]}ที่ ${d.getDate()} ${TH_MON[d.getMonth()]}`, d.toLocaleDateString("en-GB",{weekday:"long",day:"numeric",month:"long"}));
-  const apps=PH_APPS().map(a=>`<button class="happ" data-app="${a.k}"><span class="hic" style="background:${a.bg}">${a.i}${a.badge?`<i class="hbadge">${a.badge}</i>`:""}</span><small>${esc(a.n)}</small></button>`).join("");
+  const app=(a,dock)=>`<button class="happ" data-app="${a.k}"><span class="hic" style="background:${a.bg}">${phIcon(a.k)}${a.badge?`<i class="hbadge">${a.badge>9?"9+":a.badge}</i>`:""}</span><small>${esc(a.n)}</small></button>`;
+  const all=PH_APPS(), grid=all.filter(a=>!PH_DOCK.includes(a.k)).map(a=>app(a)).join(""), dock=PH_DOCK.map(k=>app(all.find(a=>a.k===k),true)).join("");
+  const wx=WX.rainOn?L("ฝนตก","Raining")+(umbOpen()?" · ☂️":""):nightAmt()>.5?L("กลางคืน","Night"):nightAmt()>.1?L("ใกล้ค่ำ","Evening"):L("ท้องฟ้าแจ่มใส","Clear sky");
   openSheet("phone", `${top_(L("โทรศัพท์ของคุณ","Your phone"))}<div class="sh-body"><div class="device homescr"><span class="island"></span><div class="scr">${sbar(nowClock())}
     <div class="hs-clock"><b>${nowClock()}</b><small>${date}</small></div>
-    <div class="hs-widget"><span>📍 ${esc(placeName())}</span><span>💵 ${BAHT(S.coins)}</span></div>
-    <div class="hs-widget hs-wx"><span>${wxIcon()} ${WX.rainOn?L("ฝนตก","Raining")+(umbOpen()?" · ☂️":""):nightAmt()>.5?L("กลางคืน","Night"):nightAmt()>.1?L("ใกล้ค่ำ","Evening"):L("ท้องฟ้าแจ่มใส","Clear sky")}</span><span>🕒 <b class="hs-now">${nowClock()}</b></span></div>
-    <div class="hs-grid">${apps}</div>
-    <button class="hs-scan" data-app="scan"><span class="hs-scan-ic">🛡️</span><span><b>${L("สแกนไวรัส","Virus scan")}</b><small>${L("ตรวจหามัลแวร์ในเครื่อง แล้วลบทิ้ง","Find malware on the phone and remove it")}</small></span></button>
+    <div class="hs-widget"><div class="hs-place"><small>${L("ตอนนี้อยู่ที่","You are at")}</small><b>${esc(placeName())}</b></div>
+      <div class="hs-row"><span>${wxIcon()} ${wx}</span><span class="hs-money">${BAHT(S.coins)}</span></div></div>
+    <div class="hs-grid">${grid}</div>
+    <div class="hs-dock">${dock}</div>
     <div class="homebar"></div></div></div></div>`);
   $("sheet").querySelectorAll("[data-app]").forEach(b=>b.onclick=()=>phoneApp(b.dataset.app));
 }
