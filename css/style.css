@@ -1153,27 +1153,71 @@ body.cin .wxchip{display:none}
 .endreplay{display:grid;gap:8px}
 .endreplay .btn:disabled{opacity:.5;cursor:default}
 
-/* ---------- scam calls: incoming-call screen and the call talk ---------- */
-.callscr .scr{background:linear-gradient(180deg,#1E2A3A,#0E1520);color:#fff}
-.cl-top{display:grid;justify-items:center;gap:6px;padding:18px 12px 10px;text-align:center}
-.cl-top small{opacity:.75;font-size:.78rem}
-.cl-top b{font-size:1.15rem;letter-spacing:.5px}
-.cl-av{display:grid;place-items:center;width:64px;height:64px;border-radius:50%;background:#3A4656;font-size:2rem}
-.cl-av.sm{width:30px;height:30px;font-size:1rem;flex:0 0 auto}
-.cl-tag{font-size:.78rem;opacity:.85}
-.cl-tag.warn{background:#E5402F;color:#fff;padding:2px 10px;border-radius:999px;opacity:1;font-weight:700}
-.cl-acts{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:8px 12px 14px}
-.cl-btn{display:grid;justify-items:center;gap:4px;background:none;border:0;color:#fff;font:inherit;font-size:.78rem;cursor:pointer}
-.cl-btn span{display:grid;place-items:center;width:52px;height:52px;border-radius:50%;font-size:1.3rem}
-.cl-btn.no span{background:#E5402F}.cl-btn.yes span{background:#2E9A6E}.cl-btn.blk span{background:#4A5566}
-.cl-btn:focus-visible span{outline:3px solid #FFC93C;outline-offset:2px}
-.cl-talk .cl-log{display:grid;gap:8px;max-height:46vh;overflow:auto;padding:4px 2px}
-.cl-line{display:flex;gap:8px;align-items:flex-start}
-.cl-line p{margin:0;padding:8px 12px;border:2px solid var(--ink);background:#fff;line-height:1.5}
-.cl-line.me{justify-content:flex-end}.cl-line.me p{background:#FFE7A0}
-.cl-sms{border:2px dashed var(--ink);background:#EAF6FF;padding:6px 10px;font-size:.9rem}
-.cl-q{font-weight:800;margin:12px 0 8px}
-.cl-opts{display:grid;gap:8px}
-.cl-res{display:grid;gap:4px;text-align:center;padding:12px;border:var(--bw) solid var(--ink);margin-bottom:10px}
-.cl-res.ok{background:#BFEBC9}.cl-res.bad{background:#F8C4B8}
-.cl-res b{font-size:1.1rem}
+/* ---------- scam calls: incoming-call screen and the in-call screen (flat dark, like a real phone) ---------- */
+.device.lockscr.callscr .scr,.device.incall .scr{background:#2E3140;color:#F2F3F7}
+.device.incall .scr{padding-bottom:18px}
+.device.incall .sbar,.callscr .sbar{color:#F2F3F7}
+.device.incall .homebar,.callscr .homebar{background:#F2F3F7}
+.cl-top{padding:26px 22px 8px;display:grid;gap:10px}
+.cl-head{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.cl-head b{display:block;font-size:1.35rem;font-weight:500;letter-spacing:.3px}
+.cl-head small{display:block;font-size:.78rem;opacity:.65;margin-top:2px}
+.cl-av{display:block;width:52px;height:52px;border-radius:50%;background:#C9CCD6;overflow:hidden;flex:0 0 auto}
+.cl-av svg{width:100%;height:100%;fill:#8C90A0;display:block}
+.cl-tag.warn{justify-self:start;background:#E5402F;color:#fff;padding:3px 10px;border-radius:999px;font-weight:700;font-size:.78rem}
+.cl-mini{display:flex;justify-content:space-between;padding:120px 40px 10px}
+.cl-sm{display:grid;justify-items:center;gap:4px;background:none;border:0;color:#C9CCD6;font:inherit;font-size:.72rem;cursor:pointer}
+.cl-sm span{font-size:1.2rem;line-height:1}
+.cl-acts2{display:flex;justify-content:space-between;padding:6px 30px 22px}
+.cl-btn{display:grid;justify-items:center;gap:6px;background:none;border:0;color:#F2F3F7;font:inherit;font-size:.78rem;cursor:pointer}
+.cl-btn span{display:grid;place-items:center;width:58px;height:58px;border-radius:50%;font-size:1.35rem}
+.cl-btn.no span{background:#E8443A;transform:rotate(135deg)}.cl-btn.yes span{background:#2EB65A}
+.cl-btn:focus-visible span,.cl-sm:focus-visible span{outline:3px solid #FFC93C;outline-offset:3px}
+.ic-head{display:grid;justify-items:center;gap:6px;padding:14px 12px 8px;text-align:center}
+.ic-head b{font-size:1.15rem;font-weight:500}
+.ic-head small{font-size:.8rem;opacity:.65;font-variant-numeric:tabular-nums}
+.device.incall .cl-log{display:grid;gap:8px;max-height:220px;overflow:auto;padding:6px 14px}
+.device.incall .cl-line p{margin:0;padding:8px 12px;border-radius:14px;background:#3E4254;line-height:1.5;font-size:.88rem;border:0}
+.device.incall .cl-line.me{display:flex;justify-content:flex-end}.device.incall .cl-line.me p{background:#2EB65A;color:#fff}
+.device.incall .cl-sms{background:#F2F3F7;color:#111;border-radius:12px;padding:8px 10px;font-size:.84rem;border:0}
+.device.incall .cl-q{font-weight:700;margin:10px 14px 6px;font-size:.88rem;opacity:.85}
+.cl-opts{display:grid;gap:8px;padding:0 14px}
+.cl-opt{font:inherit;font-size:.86rem;line-height:1.45;text-align:left;color:#F2F3F7;background:#454A5E;border:1.5px solid #5B6178;border-radius:14px;padding:10px 12px;cursor:pointer}
+.cl-opt:hover,.cl-opt:focus-visible{background:#525871;outline:none;border-color:#C9CCD6}
+.cl-opt.blk{background:#E8443A;border-color:#E8443A;text-align:center;font-weight:700}
+.ic-ctrl{display:grid;grid-template-columns:repeat(3,1fr);gap:12px 6px;padding:16px 26px 6px;opacity:.55}
+.ic-ctrl span{display:grid;justify-items:center;gap:3px;font-size:.66rem}
+.ic-ctrl i{font-style:normal;font-size:1.05rem}
+.ic-hang{justify-self:center;margin:8px auto 14px}
+.device.incall .cl-res{margin:8px 14px;border-radius:14px;border:0;padding:12px;display:grid;gap:4px;text-align:center;color:#111}
+.device.incall .cl-res.ok{background:#BFEBC9}.device.incall .cl-res.bad{background:#F8C4B8}
+.cl-lesson{margin:6px 14px;background:#3E4254;border-radius:14px;padding:10px 12px}
+.cl-lesson h4{margin:0 0 4px;font-size:.88rem}.cl-lesson ul{margin:0;padding-left:18px;font-size:.84rem;line-height:1.55}
+.cl-note{margin:6px 16px;font-size:.76rem;opacity:.65}
+.cl-end{display:grid;gap:8px;padding:4px 14px 14px}
+
+/* ---------- "Scam Alert" feed app ---------- */
+.fd{display:flex;flex-direction:column;background:#FFFFFF}
+.fd-tags{display:flex;gap:6px;overflow-x:auto;padding:4px 12px 10px;scrollbar-width:none}
+.fd-tag{flex:0 0 auto;font:inherit;font-size:.78rem;padding:5px 12px;border-radius:999px;border:1px solid #DBDBDB;background:#FFFFFF;color:#111;cursor:pointer}
+.fd-tag.on{background:#111;color:#FFFFFF;border-color:#111}
+.fd-post{border-top:1px solid #EFEFEF;padding:8px 0 10px}
+.fd-post header{display:flex;align-items:center;gap:8px;padding:2px 12px 8px;font-size:.84rem}
+.fd-post header small{color:#8E8E8E}
+.fd-av{display:grid;place-items:center;width:30px;height:30px;border-radius:50%;font-size:.95rem;box-shadow:0 0 0 2px #FFFFFF,0 0 0 3.5px #E1306C}
+.fd-new{margin-left:auto;font-style:normal;font-size:.68rem;font-weight:700;color:#FFFFFF;background:#E8443A;border-radius:999px;padding:1px 8px}
+.fd-open{display:block;width:100%;border:0;padding:0;background:none;cursor:pointer}
+.fd-pic{aspect-ratio:1/1;display:grid;place-items:center;align-content:center;gap:10px;padding:18px;text-align:center;background:linear-gradient(150deg,var(--fc),#1E1A16);color:#FFFFFF}
+.fd-one .fd-pic{aspect-ratio:16/10}
+.fd-emo{font-size:3.4rem;line-height:1}
+.fd-pic b{font-size:1.05rem;line-height:1.4;text-shadow:0 1px 2px rgba(0,0,0,.35)}
+.fd-acts{display:flex;gap:14px;padding:8px 12px 2px;font-size:1.15rem}
+.fd-save{margin-left:auto}
+.fd-likes{margin:2px 12px;font-weight:700;font-size:.8rem}
+.fd-cap,.fd-story{margin:2px 12px;font-size:.84rem;line-height:1.55}
+.fd-more{align-self:flex-start;margin:2px 12px;padding:0;border:0;background:none;color:#8E8E8E;font:inherit;font-size:.8rem;cursor:pointer}
+.fd-box{margin:10px 12px 0;border-radius:12px;padding:8px 12px}
+.fd-box h4{margin:0 0 4px;font-size:.86rem}.fd-box ul{margin:0;padding-left:18px;font-size:.82rem;line-height:1.55}
+.fd-box.warn{background:#FFF0EE}.fd-box.ok{background:#EAF7EE}
+.fd-coms{margin:10px 12px 0;font-size:.8rem;line-height:1.5}
+.fd-coms small{color:#8E8E8E}.fd-coms p{margin:2px 0}

@@ -74,6 +74,7 @@ const PH_APPS=()=>[
   {k:"wallet",i:"💵",n:L("กระเป๋าเงิน","Wallet"),bg:"linear-gradient(160deg,#FFD25A,#E89A1C)"},
   {k:"board",i:"🗂️",n:L("หลักฐาน","Evidence"),bg:"linear-gradient(160deg,#A98BE0,#6A45B0)",badge:S.evNew||0},
   {k:"dex",i:"📖",n:L("สมุดกลโกง","Handbook"),bg:"linear-gradient(160deg,#F08A5D,#B8481E)"},
+  {k:"feed",i:"📣",n:L("เตือนภัยกัน","Scam Alert"),bg:"linear-gradient(160deg,#F9CE34,#EE2A7B 55%,#6228D7)",badge:feedUnread()},
   {k:"map",i:"🗺️",n:L("แผนที่","Map"),bg:"linear-gradient(160deg,#6FD18B,#2E8B4A)"},
   {k:"set",i:"⚙️",n:L("ตั้งค่า","Settings"),bg:"linear-gradient(160deg,#B8BEC6,#6E7780)",badge:(()=>{const [a,b]=psScore();return b-a;})()}
 ];
@@ -108,6 +109,7 @@ function phoneApp(k){
   if(k==="dex") return openDex();
   if(k==="map") return openZones();
   if(k==="set") return openPhoneSettings();
+  if(k==="feed") return needNet(()=>openFeed());
 }
 /* the scan app is a plain virus scanner */
 let scanAt=-99;
