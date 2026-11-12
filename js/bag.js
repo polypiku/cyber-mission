@@ -1,7 +1,7 @@
 /* ---------- the bag: items you carry (use them by tapping) and the evidence you've collected ----------
    and the phone's own Settings app: real phone security settings, separate from the game's settings */
 if(S.umbOn===undefined) S.umbOn=false;
-const psInit=()=>{ if(!S.ps) S.ps={lock:false, bio:false, preview:true, airdrop:"all", unknown:true, twofa:false, updated:false, autoUpd:false, findMy:false}; return S.ps; };
+const psInit=()=>{ if(!S.ps) S.ps={lock:false, bio:false, preview:true, airdrop:"all", unknown:true, twofa:false, updated:false, autoUpd:false, findMy:false, spam:false}; return S.ps; };
 psInit();
 const umbOpen=()=>hasUmbrella() && !!S.umbOn;  /* S.umbOn is unset in a fresh save = folded */
 function toggleUmbrella(){
@@ -59,6 +59,7 @@ const PS_ROWS=()=>[
   {g:L("ความปลอดภัย","Security")},
   {k:"unknown", ic:"📦", bg:"#FF8A50", n:L("ติดตั้งแอปจากแหล่งที่ไม่รู้จัก","Install unknown apps"), want:false, why:L("แอปปลอมที่ส่งมาทางไลน์หรือ SMS (.apk) ลงเครื่องไม่ได้","Fake apps sent by LINE or SMS (.apk) can't get installed")},
   {k:"twofa", ic:"🔑", bg:"#7A5AA6", n:L("ยืนยันตัวตนสองขั้นตอน","Two-step verification"), want:true, why:L("ถึงรหัสผ่านหลุด คนร้ายก็ยังเข้าบัญชีไม่ได้","Even if your password leaks, nobody else can sign in")},
+  {k:"spam", ic:"📞", bg:"#C0392B", n:L("กรองสายสแปมและมิจฉาชีพ","Filter spam and scam calls"), want:true, why:L("สายต้องสงสัยจะขึ้นป้ายเตือน รู้ก่อนรับสาย","Suspicious calls get a warning label before you answer")},
   {k:"findMy", ic:"📍", bg:"#2E9A6E", n:L("ค้นหามือถือของฉัน","Find my phone"), want:true, why:L("มือถือหายก็ล็อกหรือลบข้อมูลจากเครื่องอื่นได้","If it's lost, lock or wipe it from another device")},
   {g:L("ทั่วไป","General")},
   {k:"updated", ic:"⬇️", bg:"#6E7780", n:L("อัปเดตซอฟต์แวร์","Software update"), upd:true, want:true, why:L("อัปเดตปิดช่องโหว่ที่คนร้ายใช้เจาะเครื่อง","Updates close the holes attackers use")},

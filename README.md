@@ -99,3 +99,13 @@ python3 tools/smoke_test.py
 - Only presence is shared: nickname, character, position and quiz score. Nothing is stored.
 - **Link:** Supabase Realtime when `SUPA.url` and `SUPA.key` are filled in at the top of `js/mp.js` (for the public website). Otherwise the Claude artifact room. Otherwise single-player.
 - **Testing on one computer:** open `index.html?mpdev` in two tabs.
+
+## Scam calls to your own phone
+
+- After the first case, unknown numbers call the player now and then.
+- **Decline or miss a call:** the same number calls back later.
+- **Block:** that number stops calling for good.
+- **Answer:** a talk scene with choices. A bad choice can cost money or leak your personal data.
+- **Leaked data:** brings a threat call, and paying it only makes them ask for more.
+- **Spam filter:** turning on "Filter spam and scam calls" in the in-game phone settings labels these calls as suspected scams.
+- **Scripts:** `data/scamcalls.js`.
