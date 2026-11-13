@@ -4,6 +4,7 @@ let feedTag="all";
 const feedUnread=()=>FEED.filter(p=>!(S.feedRead||{})[p.id]).length;
 const fmtK=n=>n>=1000?(n/1000).toFixed(1).replace(/\.0$/,"")+"k":String(n);
 function feedCard(p,li){
+  if(p.img) return `<div class="fd-pic img" style="--fc:${p.c};background-image:linear-gradient(180deg,rgba(0,0,0,0) 55%,rgba(0,0,0,.72)),url('${p.img}')"><b>${esc(p.pic[li])}</b></div>`;
   return `<div class="fd-pic" style="--fc:${p.c}"><span class="fd-emo" aria-hidden="true">${p.emo}</span><b>${esc(p.pic[li])}</b></div>`;
 }
 function openFeed(){

@@ -1285,3 +1285,7 @@ a.cl-opt.dl-real{display:block;margin:10px 14px 0;text-align:center;font-weight:
 .qt-seats li.rdy i{color:#1F7A3A}
 .qt-wait{text-align:center;font-weight:700;margin:6px 0}
 .qt-btn-ready.on{background:#BFEBC9}
+/* feed posts with a picture: the headline sits at the bottom over a dark fade */
+.fd-pic.img{background-size:cover;background-position:center;align-content:end;padding:14px 16px}
+.fd-pic.img b{font-size:1.1rem;text-shadow:0 1px 3px rgba(0,0,0,.6)}
+.fd-one .fd-pic.img{aspect-ratio:1/1}
