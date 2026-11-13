@@ -109,3 +109,8 @@ python3 tools/smoke_test.py
 - **Leaked data:** brings a threat call, and paying it only makes them ask for more.
 - **Spam filter:** turning on "Filter spam and scam calls" in the in-game phone settings labels these calls as suspected scams.
 - **Scripts:** `data/scamcalls.js`.
+
+## ลิขสิทธิ์ (Copyright)
+
+© 2569 (2026) ฑิตยา คูณศรี และ ปวริศ คงดี สงวนลิขสิทธิ์ · All rights reserved.
+ดูเงื่อนไขในไฟล์ [LICENSE](LICENSE) ห้ามคัดลอก ดัดแปลง หรือนำไปใช้โดยไม่ได้รับอนุญาต

@@ -1,0 +1,18 @@
+Copyright (c) 2026 Thittaya Koonsee and Pawarit Kongdee. All rights reserved.
+สงวนลิขสิทธิ์ © 2569 ฑิตยา คูณศรี และ ปวริศ คงดี
+
+This repository, including all source code, game content (stories, cases,
+questions, dialogue) and images, is the work of the copyright holders above.
+
+You may view this repository and play the game. No other rights are granted.
+Without prior written permission from the copyright holders, you may not
+copy, modify, distribute, publish, sublicense, sell, or use any part of it,
+in whole or in part, in another work, product, or competition entry.
+
+ผลงานนี้รวมถึงซอร์สโค้ด เนื้อหาในเกม (เนื้อเรื่อง เคส คำถาม บทสนทนา) และภาพ
+เป็นลิขสิทธิ์ของผู้ทรงสิทธิ์ข้างต้น อนุญาตให้ดูและเล่นเกมได้เท่านั้น
+ห้ามคัดลอก ดัดแปลง เผยแพร่ จำหน่าย หรือนำส่วนใดส่วนหนึ่งไปใช้ในงานอื่น
+ผลิตภัณฑ์ หรือการประกวด โดยไม่ได้รับอนุญาตเป็นลายลักษณ์อักษรจากผู้ทรงสิทธิ์
+
+Third-party components keep their own licenses: supabase-js (MIT),
+Google Fonts (SIL Open Font License / Apache License 2.0).

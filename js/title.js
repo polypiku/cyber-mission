@@ -32,7 +32,7 @@ function openTitle(){
         <button data-tset><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.8l1.6 2.3 2.7-.7.6 2.7 2.6 1-.8 2.7 1.9 2-1.9 2 .8 2.7-2.6 1-.6 2.7-2.7-.7L12 21.2l-1.6-2.3-2.7.7-.6-2.7-2.6-1 .8-2.7L3.4 11l1.9-2-.8-2.7 2.6-1 .6-2.7 2.7.7z" fill="#3B7FD0"/><circle cx="12" cy="12" r="3.4" fill="#FFF6E3"/></svg>${L("ตั้งค่า","Settings")}</button>
       </div>
     </main>
-    <footer class="t-foot"><button data-tcred>${L("ผู้จัดทำ","Credits")}</button><i>|</i><button data-tpriv>${L("ข้อมูลส่วนตัว","Privacy")}</button><i>|</i><button data-thow2>${L("วิธีเล่น","How to play")}</button><i>|</i><span>${L("ชื่อในเกมเป็นเรื่องสมมติ","All names are fictional")}</span></footer>`;
+    <footer class="t-foot"><button data-tcred>${L("ผู้จัดทำ","Credits")}</button><i>|</i><button data-tpriv>${L("ข้อมูลส่วนตัว","Privacy")}</button><i>|</i><button data-thow2>${L("วิธีเล่น","How to play")}</button><i>|</i><span>${L("ชื่อในเกมเป็นเรื่องสมมติ","All names are fictional")}</span><i>|</i><span>© 2569 ${L("ฑิตยา คูณศรี, ปวริศ คงดี · สงวนลิขสิทธิ์","Thittaya Koonsee, Pawarit Kongdee · All rights reserved")}</span></footer>`;
   el.hidden=false;
   const q=(s,f)=>{ const b=el.querySelector(s); if(b) b.onclick=f; };
   q("[data-tplay]",()=>{ sfx("good"); if(resume){ pickChar=S.char; beginGame("resume"); } else { hideTitle(); openStart(); } });
@@ -60,7 +60,7 @@ function titleSheet(k){
       <li>${L("ถนนหน้าร้านมีต้นไม้ สวนหย่อม และหลังคาทรงไทย","The main street now has trees, gardens and Thai-style roofs")}</li>
       <li>${L("เน็ตมือถือหมดได้ ต้องเติมหรือต่อ Wi-Fi","Mobile data can run out: top up or join Wi-Fi")}</li>
       <li>${L("ขั้นลงมือแก้ในมือถือทุกเคส และเบาะแส 36 ชิ้น","A hands-on fix step for every case, and 36 clues")}</li></ul>`],
-    cred:[L("ผู้จัดทำ","Credits"),`<p>${L("ออกแบบเกม เนื้อเรื่อง และกำกับ: ฑิตยา คูณศรี (พริ้ง) · วิทยาการคอมพิวเตอร์ มหาวิทยาลัยหัวเฉียวเฉลิมพระเกียรติ","Game design, story and direction: Thittaya Koonsee (Prink) · Computer Science, Huachiew Chalermprakiet University")}</p><p>${L("ตรวจสอบตรรกะและความถูกต้องของเกม: ปวริศ คงดี","Game logic and accuracy review: Pawarit Kongdee")}</p><p>${L("เขียนโค้ดร่วมกับ Claude (Anthropic)","Coded together with Claude (Anthropic)")}</p>`],
+    cred:[L("ผู้จัดทำ","Credits"),`<p>${L("ออกแบบเกม เนื้อเรื่อง และกำกับ: ฑิตยา คูณศรี (พริ้ง) · วิทยาการคอมพิวเตอร์ มหาวิทยาลัยหัวเฉียวเฉลิมพระเกียรติ","Game design, story and direction: Thittaya Koonsee (Prink) · Computer Science, Huachiew Chalermprakiet University")}</p><p>${L("ตรวจสอบตรรกะและความถูกต้องของเกม: ปวริศ คงดี","Game logic and accuracy review: Pawarit Kongdee")}</p><p>${L("เขียนโค้ดร่วมกับ Claude (Anthropic)","Coded together with Claude (Anthropic)")}</p><p><b>© 2569 (2026) ${L("ฑิตยา คูณศรี และ ปวริศ คงดี สงวนลิขสิทธิ์","Thittaya Koonsee and Pawarit Kongdee. All rights reserved.")}</b><br>${L("ห้ามคัดลอก ดัดแปลง หรือนำโค้ด เนื้อหา และภาพในเกมไปใช้หรือเผยแพร่ โดยไม่ได้รับอนุญาตเป็นลายลักษณ์อักษร","No part of the code, content or images may be copied, modified, used or published without written permission.")}</p>`],
     priv:[L("ข้อมูลส่วนตัว","Privacy"),`<p>${L("เกมนี้ไม่ส่งข้อมูลออกไปไหน ชื่อและความคืบหน้าเก็บไว้ในเบราว์เซอร์ของเครื่องนี้เท่านั้น","This game sends nothing anywhere. Your name and progress stay in this browser only.")}</p>`]
   }[k];
   openSheet("tinfo", `${top_(C2[0],false)}<div class="sh-body">${C2[1]}<div class="btns"><button class="btn y" data-tback><span>${L("กลับ","Back")}</span></button></div></div>`);
