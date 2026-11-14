@@ -29,7 +29,6 @@ function openFeedPost(id){
   S.feedRead=S.feedRead||{}; let first=false;
   if(!S.feedRead[id]){ S.feedRead[id]=1; first=true; addCoins(5); S.bars.privacy=Math.min(100,S.bars.privacy+1); save(); hudKey=""; }
   const inner=`<div class="fd fd-one">
-    <button class="ph-back" data-fdback>‹ ${L("ฟีด","Feed")}</button>
     <article class="fd-post">
       <header><span class="fd-av" style="background:${p.c}">${p.av}</span><b>${esc(p.u)}</b><small>· ${esc(FEED_TAGS[p.tag][li])}</small></header>
       ${feedCard(p,li)}
@@ -40,6 +39,7 @@ function openFeedPost(id){
       <div class="fd-coms"><small>${L(`ความคิดเห็น ${p.com.length} รายการ`,`${p.com.length} comments`)}</small>${p.com.map(c=>`<p><b>${esc(c[0])}</b> ${esc(c[1+li])}</p>`).join("")}</div>
     </article></div>`;
   phoneScreen(L("เตือนภัยกัน","Scam Alert"), inner);
-  $("sheet").querySelector("[data-fdback]").onclick=openFeed;
+  /* one back button: the phone's own top-left button goes back to the feed here, not to the home screen */
+  const bk=$("sheet").querySelector("[data-phhome]"); if(bk){ bk.removeAttribute("data-phhome"); bk.textContent="‹ "+L("ฟีด","Feed"); bk.onclick=openFeed; }
   if(first) toast(L(`📖 อ่านแล้วรู้ทัน +${BAHT(5)}`,`📖 Read and ready +${BAHT(5)}`));
 }

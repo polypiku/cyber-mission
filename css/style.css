@@ -1289,3 +1289,9 @@ a.cl-opt.dl-real{display:block;margin:10px 14px 0;text-align:center;font-weight:
 .fd-pic.img{background-size:cover;background-position:center;align-content:end;padding:14px 16px}
 .fd-pic.img b{font-size:1.1rem;text-shadow:0 1px 3px rgba(0,0,0,.6)}
 .fd-one .fd-pic.img{aspect-ratio:1/1}
+/* in-game phone: a solid band behind the clock and the island, so scrolled content slides under it, not through it */
+.sheet.asphone::after{content:"";position:absolute;top:12px;left:12px;right:12px;height:58px;border-radius:42px 42px 0 0;background:#FBF7EF;z-index:2;pointer-events:none}
+.sheet.asphone:has(.device.hacked)::after{background:#0A0B0F}
+.sheet.asphone:has(.ghack)::after{background:#1A0E0E}
+.sheet.asphone:has(.homescr)::after{background:none}
+@media (max-width:480px){.sheet.asphone::after{top:9px;left:9px;right:9px;border-radius:36px 36px 0 0}}

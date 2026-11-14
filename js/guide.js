@@ -98,7 +98,7 @@ function roomExits(){
   const out=[];
   if(S.zone===7 && !cbFloor()) out.push({k:"cells",x:RW-70,y:(PDOOR.y0+PDOOR.y1)/2,dir:"right",t:L("ห้องขัง","Cells")+" ➜"});
   if(S.zone===7 && cbFloor()) out.push({k:"station",x:70,y:(CB_TOP+CB_BOT)/2,dir:"left",t:"⬅ "+L("สถานีตำรวจ","Station")});
-  if(S.zone===8) out.push({k:"lift"+S.bld,x:(OFF_LIFT.x0+OFF_LIFT.x1)/2,y:150,dir:"up",t:"🛗 "+L("ลิฟต์","Lift")});
+  if(S.zone===8) out.push({k:"lift"+S.bld,x:(OFF_LIFT.x0+OFF_LIFT.x1)/2,y:150,dir:"up",t:"⬆️ "+L("ลิฟต์","Lift")});
   return out;
 }
 function drawExits(g,now){

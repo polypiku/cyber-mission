@@ -123,7 +123,7 @@ function askLift(){ markExitSeen("lift"+S.bld);
     return;
   }
   const btns=[1,2,3].map(k=>`<button class="btn ${k===f?"g":"y"}" data-lift="${k}" ${k===f?"disabled":""}><span>${L(`ชั้น ${k}`,`Floor ${k}`)} · ${esc(offFloorName(k))}${k===f?L(" (อยู่ที่นี่)"," (here)"):""}</span></button>`).join("");
-  openSheet("lift", `${top_(L("ลิฟต์","Lift"))}<div class="sh-body"><div class="wcomic" style="background:var(--paper);color:var(--ink)"><span class="wv" style="filter:none">🛗</span><p>${L(`ตอนนี้อยู่ชั้น ${f} จะไปชั้นไหน?`,`You're on floor ${f}. Which floor?`)}</p></div><div class="btns">${btns}<button class="btn g" data-close><span>${L("ยังไม่ไป","Stay here")}</span></button></div></div>`);
+  openSheet("lift", `${top_(L("ลิฟต์","Lift"))}<div class="sh-body"><div class="wcomic" style="background:var(--paper);color:var(--ink)"><span class="wv" style="filter:none">⬆️</span><p>${L(`ตอนนี้อยู่ชั้น ${f} จะไปชั้นไหน?`,`You're on floor ${f}. Which floor?`)}</p></div><div class="btns">${btns}<button class="btn g" data-close><span>${L("ยังไม่ไป","Stay here")}</span></button></div></div>`);
   $("sheet").querySelectorAll("[data-lift]").forEach(el=>el.onclick=()=>{ closeSheet(); goOffFloor(+el.dataset.lift); });
 }
 function goOffFloor(k){
@@ -206,7 +206,7 @@ function drawOfficeStatic(g){
   rr(g,OFF_LIFT.x0,14,OFF_LIFT.x1-OFF_LIFT.x0,94,3); g.fillStyle="#9AA3AC"; g.fill(); g.lineWidth=3; g.strokeStyle=INK; g.stroke();
   for(const dx of [0,1]){ rr(g,OFF_LIFT.x0+8+dx*44,30,40,76,2); g.fillStyle="#C9D1D8"; g.fill(); g.lineWidth=2; g.stroke(); }
   rr(g,OFF_LIFT.x0+18,16,64,12,3); g.fillStyle=INK; g.fill(); g.fillStyle="#FFC414"; g.font=`800 9px ${OFNT}`; g.textAlign="center"; g.textBaseline="middle"; g.fillText(`▲▼ ${f}`,OFF_LIFT.x0+50,22.5);
-  rr(g,OFF_LIFT.x0-4,112,108,24,12); g.fillStyle="#FFFFFF"; g.fill(); g.lineWidth=2; g.strokeStyle=INK; g.stroke(); g.fillStyle=INK; g.font=`800 11px ${OFNT}`; g.fillText(L("🛗 ลิฟต์ · ชั้น 1-3","🛗 Lift · floors 1-3"),OFF_LIFT.x0+50,124);
+  rr(g,OFF_LIFT.x0-4,112,108,24,12); g.fillStyle="#FFFFFF"; g.fill(); g.lineWidth=2; g.strokeStyle=INK; g.stroke(); g.fillStyle=INK; g.font=`800 11px ${OFNT}`; g.fillText(L("⬆️ ลิฟต์ · ชั้น 1-3","⬆️ Lift · floors 1-3"),OFF_LIFT.x0+50,124);
   // wall boards
   if(f===1){ rr(g,250,8,360,72,4); g.fillStyle="#2B3A3F"; g.fill(); g.lineWidth=3; g.stroke(); g.fillStyle="#FFC414"; g.font=`800 12px ${OFNT}`; g.textAlign="left"; g.fillText(L("ผังอาคาร","Directory"),264,22);
     g.fillStyle="#FFFFFF"; g.font=`600 12px ${OFNT}`; for(let k=3;k>=1;k--){ g.fillText(`${L("ชั้น","Fl.")} ${k}  ${tenantOf(S.bld,k)[S.lang]}`,264,40+(3-k)*16); } }

@@ -121,7 +121,7 @@ function raidScript(n){
       cinPlace(player,740,154,"down"); cinPlace(A.phop,700,166,"down"); DORM_ROOMS.slice(0,4).forEach((r,k)=>cinPlace(tr[k],r.cx-24,r.top?205:500,"down")); }});
     st.push({say:["police","ชั้นนี้ล็อกจากข้างนอกทุกห้อง เปิดเลย!","Every room here is locked from outside. Open them!"],em:()=>tr.map(a=>[a,"😢",2.4]),t:2.4});
     st.push({mv:[[player,DORM_ROOMS[1].cx,330],[A.phop,DORM_ROOMS[4].cx,360]]});
-    st.push({say:["me","ปลอดภัยแล้วนะ ทุกคนกลับบ้านได้แล้ว","You're safe now. You can all go home."],em:()=>tr.map(a=>[a,"🥹",2.6]),sfx:"good",t:2.6});
+    st.push({say:["me","ปลอดภัยแล้วนะ ทุกคนกลับบ้านได้แล้ว","You're safe now. You can all go home."],em:()=>tr.map(a=>[a,"🥺",2.6]),sfx:"good",t:2.6});
     // the cell block back at the station
     st.push({fade:()=>{ tr.forEach(cinHide); cinZone(7,{floor:2,clear:false}); npcs=npcs.filter(x=>x.role==="prisoner");
       cinPlace(player,70,323,"right"); cinPlace(A.phop,40,300,"right"); }, hold:500});

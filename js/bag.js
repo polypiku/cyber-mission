@@ -52,7 +52,7 @@ function openBag(tab){
 const PS_ROWS=()=>[
   {g:L("ล็อกหน้าจอ","Screen lock")},
   {k:"lock", ic:"🔒", bg:"#E5402F", n:L("รหัสล็อกหน้าจอ","Screen passcode"), want:true, why:L("มือถือหาย คนเก็บได้ก็เปิดแอปธนาคารและอ่าน OTP ไม่ได้","If the phone is lost, nobody can open your bank app or read OTPs")},
-  {k:"bio", ic:"🫆", bg:"#E77FA0", n:L("สแกนใบหน้า / ลายนิ้วมือ","Face / fingerprint unlock"), want:true, need:"lock", why:L("ปลดล็อกเร็วโดยไม่ต้องพิมพ์รหัสให้ใครแอบมอง","Unlock fast without typing a code someone can watch")},
+  {k:"bio", ic:"👆", bg:"#E77FA0", n:L("สแกนใบหน้า / ลายนิ้วมือ","Face / fingerprint unlock"), want:true, need:"lock", why:L("ปลดล็อกเร็วโดยไม่ต้องพิมพ์รหัสให้ใครแอบมอง","Unlock fast without typing a code someone can watch")},
   {k:"preview", ic:"💬", bg:"#4CD964", n:L("แสดงเนื้อหาข้อความบนหน้าจอล็อก","Show message text on lock screen"), want:false, why:L("OTP ที่เด้งบนหน้าจอล็อก ใครหยิบมือถือไปก็เห็น","OTPs popping up on the lock screen can be read by anyone holding the phone")},
   {g:L("การเชื่อมต่อ","Connections")},
   {k:"airdrop", ic:"📡", bg:"#2F6DB5", n:L("AirDrop / แชร์ใกล้เคียง","AirDrop / Nearby Share"), seg:[["off",L("ปิด","Off")],["contacts",L("ผู้ติดต่อ","Contacts")],["all",L("ทุกคน","Everyone")]], ok:v=>v!=="all", why:L("เปิดรับจากทุกคน คนแปลกหน้าส่งรูปหรือไฟล์อันตรายมาได้","Open to everyone lets strangers send you pictures or harmful files")},

@@ -134,7 +134,7 @@ function handIn(n){
     S.uc=true; save();
     ls.push(t(`เบาะแสพอแล้ว พี่ทำบัตรพนักงาน “${SCAM_TENANT.th}” ให้ บอกยามว่าเป็นพนักงานใหม่ ขึ้นไปดูชั้น 2 กับ 3 ได้เลย`,`That's enough. Here's a “${SCAM_TENANT.en}” staff pass. Tell the guard you're new and look around floors 2 and 3.`),
       t("ห้ามทำอะไรเสี่ยงนะ แค่ถ่ายรูปแล้วรีบออกมา","Nothing risky. Just take photos and get out."));
-    after=()=>setTimeout(()=>toast(L("🪪 ได้บัตรพนักงานปลอม ขึ้นลิฟต์ในตึกรังแก๊งได้แล้ว","🪪 Got a staff pass. You can take the lift in the gang's building now")),300);
+    after=()=>setTimeout(()=>toast(L("💳 ได้บัตรพนักงานปลอม ขึ้นลิฟต์ในตึกรังแก๊งได้แล้ว","💳 Got a staff pass. You can take the lift in the gang's building now")),300);
   } else ls.push(nextHint());
   say(n.id, lines(ls), {onEnd:()=>{ after&&after(); if(raidReady()) setTimeout(()=>talkPolice(n),200); }});
 }
