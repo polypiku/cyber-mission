@@ -4,13 +4,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="robots" content="noindex">
-<!-- The bait: what a chat app shows when the link is shared. The page itself is an anti-phishing lesson. -->
-<title>แจกโค้ดส่วนลดฟรี 100 บาท</title>
-<meta name="description" content="ใช้ได้ทุกร้าน เฉพาะ 50 คนแรกวันนี้ กดรับโค้ดเลย">
+<title>รู้ทันภัยไซเบอร์ · ก่อนทำแบบทดสอบ Cyber Mission</title>
+<meta name="description" content="แบบฝึกรู้ทันการกดลิงก์ ก่อนเริ่มทำแบบทดสอบ Cyber Mission">
 <meta property="og:type" content="website">
-<meta property="og:title" content="🎁 แจกโค้ดส่วนลดฟรี 100 บาท">
-<meta property="og:description" content="ใช้ได้ทุกร้าน เฉพาะ 50 คนแรกวันนี้ กดรับโค้ดเลย">
-<meta property="og:image" content="https://polypiku.github.io/cyber-mission/gift/og.png">
+<meta property="og:title" content="🛡️ รู้ทันภัยไซเบอร์ · ก่อนทำแบบทดสอบ">
+<meta property="og:description" content="แบบฝึกรู้ทันการกดลิงก์ ก่อนเริ่มทำแบบทดสอบ Cyber Mission">
+<meta property="og:image" content="https://polypiku.github.io/cyber-mission/cyber-mission-real/og.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
@@ -34,13 +33,12 @@ h1{font-family:Mitr,sans-serif;font-weight:600;font-size:1.75rem;line-height:1.3
 .sub{margin:0;color:var(--muted)}
 .count{margin:18px auto 0;display:inline-block;background:#FFE7A0;border:2.5px solid var(--ink);border-radius:14px;padding:10px 18px;font-weight:600}
 .count b{display:block;font-family:Mitr,sans-serif;font-size:2.4rem;line-height:1.1;color:var(--red)}
-.count[hidden]{display:none}
 h2{font-family:Mitr,sans-serif;font-weight:600;font-size:1.2rem;margin:0 0 10px}
 ul{margin:0;padding-left:1.2em}
 li{margin:6px 0}
 .safe{background:#E6F5EA;border-color:var(--ok)}
 .safe h2{color:var(--ok)}
-.cta{display:block;text-align:center;text-decoration:none;font-family:Mitr,sans-serif;font-weight:600;font-size:1.2rem;color:var(--ink);background:#FFD54A;border:3px solid var(--ink);border-radius:999px;box-shadow:0 5px 0 #000;padding:14px 18px;margin:22px 0 10px}
+.cta{display:block;text-align:center;text-decoration:none;font-family:Mitr,sans-serif;font-weight:600;font-size:1.25rem;color:var(--ink);background:#FFD54A;border:3px solid var(--ink);border-radius:999px;box-shadow:0 5px 0 #000;padding:16px 18px;margin:22px 0 10px}
 .cta:active{transform:translateY(3px);box-shadow:0 2px 0 #000}
 .cta:focus-visible{outline:4px solid var(--sky);outline-offset:3px}
 .foot{text-align:center;color:#CFE3FF;font-size:.85rem;margin-top:14px}
@@ -49,53 +47,50 @@ li{margin:6px 0}
 </head>
 <body>
 <div class="wrap">
-  <div class="load" id="load" aria-live="polite"><div><div class="spin" aria-hidden="true"></div>กำลังโหลดโค้ดส่วนลด…</div></div>
+  <div class="load" id="load" aria-live="polite"><div><div class="spin" aria-hidden="true"></div>กำลังเปิดหน้า…</div></div>
 
   <main id="main" hidden>
     <section class="card hero">
-      <p class="hook" aria-hidden="true">🎣</p>
-      <h1>คุณเพิ่งกดลิงก์ที่ไม่รู้ที่มา!</h1>
-      <p class="sub">ไม่ต้องตกใจ นี่เป็นแบบฝึกจำลองฟิชชิง ไม่มีโค้ดส่วนลดจริง และไม่มีอะไรเกิดขึ้นกับเครื่องของคุณ</p>
+      <p class="hook" aria-hidden="true">🛡️</p>
+      <h1>นี่เป็นแค่การแจ้งเตือน ไม่ใช่ของจริง</h1>
+      <p class="sub">คุณเพิ่งกดลิงก์ที่มีคนวางไว้ โดยไม่มีของรางวัลหรือคำล่อใด ๆ เลย แต่ก็ยังกดเข้ามา นี่คือสิ่งที่มิจฉาชีพอาศัย เพราะคนเราคุ้นเคยกับการกดลิงก์โดยไม่ทันคิด</p>
       <div class="count" id="count" hidden><span id="countLabel">คุณคือคนที่</span><b id="countNum">–</b><span id="countTail">ที่กดลิงก์นี้</span></div>
     </section>
 
     <section class="card">
-      <h2>🚩 สัญญาณเตือนที่ควรเห็นก่อนกด</h2>
-      <ul>
-        <li><b>ของฟรีเกินจริง</b> ส่วนลด 100 บาท ใช้ได้ทุกร้าน โดยไม่ต้องทำอะไรเลย</li>
-        <li><b>เร่งให้รีบ</b> "เฉพาะ 50 คนแรกวันนี้" ทำให้ไม่มีเวลาคิด</li>
-        <li><b>ไม่บอกว่าใครแจก</b> ไม่มีชื่อร้านหรือบริษัทที่ตรวจสอบได้</li>
-        <li><b>ลิงก์แปลก</b> ไม่ใช่เว็บไซต์ทางการของร้านไหนเลย</li>
-      </ul>
-    </section>
-
-    <section class="card">
-      <h2>⚠️ ถ้าเป็นลิงก์ของมิจฉาชีพจริง อาจเจอแบบนี้</h2>
+      <h2>🤔 ลิงก์นี้ปลอดภัย แต่ถ้าเป็นของมิจฉาชีพ…</h2>
+      <p style="margin:0 0 10px">ลิงก์หน้าตาธรรมดาแบบนี้ ถ้าเป็นของคนร้าย พอกดเข้าไปอาจเจอ</p>
       <ul>
         <li>หน้าเว็บปลอมให้กรอกเบอร์โทร รหัส OTP หรือรหัสผ่าน แล้วบัญชีถูกยึด</li>
-        <li>ให้ดาวน์โหลดแอปเพื่อ "รับโค้ด" ซึ่งเป็นแอปควบคุมเครื่องหรือดูดเงิน</li>
-        <li>ให้โอน "ค่าธรรมเนียม" ก่อนรับของรางวัลที่ไม่มีอยู่จริง</li>
+        <li>ให้ดาวน์โหลดแอปที่แอบควบคุมเครื่องหรือดูดเงิน</li>
+        <li>ลิงก์ที่เปิดแล้วแอบเก็บข้อมูลเครื่องของคุณทันที</li>
       </ul>
     </section>
 
     <section class="card safe">
-      <h2>🛡️ ครั้งหน้าทำแบบนี้</h2>
+      <h2>🛡️ เจอลิงก์แบบนี้ ทำยังไง</h2>
       <ul>
-        <li>หยุดก่อนกด ถามตัวเองว่าใครส่งมา และทำไมถึงให้ฟรี</li>
-        <li>ค้นหาโปรโมชันเองจากเว็บหรือแอปทางการของร้าน</li>
+        <li>หยุดก่อนกด ถามตัวเองว่าใครส่งมา และส่งมาทำไม</li>
+        <li>ไม่กดลิงก์ที่ส่งมากับข้อความเร่งรัดหรือของรางวัล</li>
         <li>ไม่กรอก OTP หรือรหัสผ่านในหน้าที่เปิดจากลิงก์ในแชต</li>
+        <li>ถ้าเป็นเรื่องของธนาคารหรือหน่วยงาน ให้เข้าผ่านแอปหรือเว็บทางการเอง</li>
         <li>สงสัยหรือพลาดไปแล้ว โทรสายด่วน 1441</li>
       </ul>
       <p style="margin:12px 0 0"><b>ข้อมูลของคุณ:</b> หน้านี้ไม่เก็บชื่อ เบอร์ หรือข้อมูลใด ๆ นับแค่จำนวนครั้งที่ลิงก์ถูกเปิด</p>
     </section>
 
-    <a class="cta" href="../">🎮 ฝึกไม่ให้โดนอีก · เล่น Cyber Mission</a>
-    <p class="foot">แบบฝึกจำลองฟิชชิงเพื่อการศึกษา โดยทีม Cyber Mission</p>
+    <section class="card">
+      <h2>🎮 ขั้นต่อไป</h2>
+      <p style="margin:0">พร้อมแล้ว กดปุ่มด้านล่างเพื่อเข้าเล่นเกมและทำแบบทดสอบ มาฝึกตัดสินใจกับสถานการณ์หลอกลวงจริง ๆ กัน</p>
+    </section>
+
+    <a class="cta" href="../">🎮 เข้าเล่นเกม · เริ่มทำแบบทดสอบ</a>
+    <p class="foot">แบบฝึกรู้ทันภัยไซเบอร์ โดยทีม Cyber Mission</p>
   </main>
 </div>
 
 <script>
-/* Counts opens of this link in Supabase (table bait_clicks via the bait_hit / bait_count functions).
+/* Counts opens of this link in Supabase (bait_hit / bait_count).
    Nothing about the visitor is sent: only the campaign code from ?c= (e.g. a class: ?c=sec1).
    A browser that already opened the link is counted once. */
 const SUPA_URL="https://mhxcivjgcobzrosgjupu.supabase.co";
@@ -115,19 +110,17 @@ async function rpc(fn){
   }catch(e){ return null; }finally{ clearTimeout(t); }
 }
 async function run(){
-  const wait=new Promise(r=>setTimeout(r,900));   /* a short "loading the code" moment, like the real thing */
+  const wait=new Promise(r=>setTimeout(r,700));
   const n=await rpc(seen?"bait_count":"bait_hit");
   if(!seen && n!==null){ try{ localStorage.setItem(seenKey,"1"); }catch(e){} }
   await wait;
   document.getElementById("load").hidden=true;
   document.getElementById("main").hidden=false;
   if(n!==null){
-    const box=document.getElementById("count");
     if(seen){ document.getElementById("countLabel").textContent="ลิงก์นี้ถูกกดไปแล้ว"; document.getElementById("countTail").textContent="ครั้ง"; }
     document.getElementById("countNum").textContent=n.toLocaleString("th-TH");
-    box.hidden=false;
+    document.getElementById("count").hidden=false;
   }
-  document.title="🎣 คุณเพิ่งกดลิงก์ที่ไม่รู้ที่มา · แบบฝึก Cyber Mission";
 }
 run();
 </script>
