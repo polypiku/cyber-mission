@@ -1,4 +1,4 @@
--- Cyber Mission · phishing drill counter (gift/index.html)
+-- Cyber Mission · phishing drill counter (real/index.html)
 -- Run once in Supabase → SQL Editor. Stores only a campaign code and a time per click; no visitor data.
 create table if not exists public.bait_clicks(
   id bigint generated always as identity primary key,
