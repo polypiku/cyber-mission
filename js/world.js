@@ -139,9 +139,9 @@ function drawLibStatic(g){
   // rug
   if(f===1){ rr(g,560,640,320,170,16); g.fillStyle="#7A2E2E"; g.fill(); g.lineWidth=3; g.strokeStyle=INK; g.stroke();
     rr(g,574,654,292,142,10); g.setLineDash([8,7]); g.strokeStyle="#F1D7A8"; g.lineWidth=2.5; g.stroke(); g.setLineDash([]);
-    g.fillStyle="#F1D7A8"; g.font="800 20px 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', Tahoma, sans-serif"; g.textAlign="center"; g.textBaseline="middle"; g.fillText(S.lang==="en"?"WELCOME · QUIET PLEASE":"ยินดีต้อนรับ · โปรดเงียบ",720,725); }
+    g.fillStyle="#F1D7A8"; g.font="800 20px system-ui, -apple-system, 'Segoe UI', 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', sans-serif"; g.textAlign="center"; g.textBaseline="middle"; g.fillText(S.lang==="en"?"WELCOME · QUIET PLEASE":"ยินดีต้อนรับ · โปรดเงียบ",720,725); }
   else { rr(g,580,600,520,140,16); g.fillStyle="#3E5C76"; g.fill(); g.lineWidth=3; g.strokeStyle=INK; g.stroke();
-    g.fillStyle="#DCE7F0"; g.font="800 20px 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', Tahoma, sans-serif"; g.textAlign="center"; g.textBaseline="middle"; g.fillText(S.lang==="en"?"QUIET STUDY ZONE":"โซนอ่านหนังสือเงียบ",840,670); }
+    g.fillStyle="#DCE7F0"; g.font="800 20px system-ui, -apple-system, 'Segoe UI', 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', sans-serif"; g.textAlign="center"; g.textBaseline="middle"; g.fillText(S.lang==="en"?"QUIET STUDY ZONE":"โซนอ่านหนังสือเงียบ",840,670); }
   // back wall: built-in bookcases, windows and the sign
   g.fillStyle=f===1?"#5B3A24":"#4A5B6A"; g.fillRect(0,0,W,120);
   g.fillStyle=f===1?"#7A5233":"#5E7182"; g.fillRect(0,104,W,16); g.strokeStyle=INK; g.lineWidth=3; g.beginPath(); g.moveTo(0,120); g.lineTo(W,120); g.stroke();
@@ -150,9 +150,9 @@ function drawLibStatic(g){
     rr(g,x,10,130,90,3); g.fillStyle="#3A2516"; g.fill(); g.lineWidth=2.5; g.strokeStyle=INK; g.stroke();
     for(let r=0;r<3;r++){ g.fillStyle="#2A1A0F"; g.fillRect(x+4,14+r*29+24,122,3); for(let b=0;b<13;b++){ const bh=16+((b*7+r*3+x)%7); g.fillStyle=BOOK[(b+r+x/150)%BOOK.length|0]; g.fillRect(x+6+b*9,14+r*29+24-bh,7,bh); } } }
   rr(g,500,14,440,80,6); g.fillStyle=f===1?"#173E3C":"#22344A"; g.fill(); g.lineWidth=3; g.strokeStyle=INK; g.stroke();
-  g.fillStyle="#F2C14E"; g.font="800 24px 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', Tahoma, sans-serif"; g.textAlign="center"; g.textBaseline="middle";
+  g.fillStyle="#F2C14E"; g.font="800 24px system-ui, -apple-system, 'Segoe UI', 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', sans-serif"; g.textAlign="center"; g.textBaseline="middle";
   g.fillText(S.lang==="en"?"CITY LIBRARY":"ห้องสมุดเมือง",720,42);
-  g.fillStyle="#E6ECEA"; g.font="600 13px 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', Tahoma, sans-serif"; g.fillText(f===1?(S.lang==="en"?"Floor 1 · Books · Computers · Loans":"ชั้น 1 · หนังสือ · คอมพิวเตอร์ · ยืม-คืน"):(S.lang==="en"?"Floor 2 · Study zone · Group rooms · Printing":"ชั้น 2 · โซนอ่าน · ห้องกลุ่ม · ปริ้นต์"),720,72);
+  g.fillStyle="#E6ECEA"; g.font="600 13px system-ui, -apple-system, 'Segoe UI', 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', sans-serif"; g.fillText(f===1?(S.lang==="en"?"Floor 1 · Books · Computers · Loans":"ชั้น 1 · หนังสือ · คอมพิวเตอร์ · ยืม-คืน"):(S.lang==="en"?"Floor 2 · Study zone · Group rooms · Printing":"ชั้น 2 · โซนอ่าน · ห้องกลุ่ม · ปริ้นต์"),720,72);
   // side + bottom walls
   g.fillStyle=f===1?"#A9805A":"#9AA8B5"; g.fillRect(0,120,44,H); g.fillRect(W-44,120,44,H);
   if(f===1){ g.fillRect(0,H-44,LIB_DOOR.x0,44); g.fillRect(LIB_DOOR.x1,H-44,W-LIB_DOOR.x1,44);
@@ -171,7 +171,7 @@ function drawLibStatic(g){
     for(const dx of [90,170,250]){ g.fillStyle="#2F7F7A"; g.beginPath(); g.arc(r.x+dx,r.y+50,12,0,7); g.fill(); g.stroke(); g.beginPath(); g.arc(r.x+dx,r.y+r.h-30,12,0,7); g.fill(); g.stroke(); }
     g.strokeStyle="rgba(255,255,255,.8)"; g.lineWidth=3; g.beginPath(); g.moveTo(r.x+14,r.y+40); g.lineTo(r.x+40,r.y+14); g.stroke();
     rr(g,r.x+r.w-96,r.y+8,86,24,4); g.fillStyle="#FFFFFF"; g.fill(); g.lineWidth=2; g.strokeStyle=INK; g.stroke();
-    g.fillStyle=INK; g.font="700 12px 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', Tahoma, sans-serif"; g.textAlign="center"; g.textBaseline="middle"; g.fillText(S.lang==="en"?`Group room ${r.n}`:`ห้องกลุ่ม ${r.n}`,r.x+r.w-53,r.y+21);
+    g.fillStyle=INK; g.font="700 12px system-ui, -apple-system, 'Segoe UI', 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', sans-serif"; g.textAlign="center"; g.textBaseline="middle"; g.fillText(S.lang==="en"?`Group room ${r.n}`:`ห้องกลุ่ม ${r.n}`,r.x+r.w-53,r.y+21);
   }
   // wall sockets
   for(const y of [300,520,760]){ rr(g,W-40,y,14,22,2); g.fillStyle="#FFFFFF"; g.fill(); g.lineWidth=2; g.strokeStyle=INK; g.stroke(); g.fillStyle=INK; g.fillRect(W-36,y+6,2,5); g.fillRect(W-31,y+6,2,5); }
@@ -184,7 +184,7 @@ function drawLibStairSign(g,now){
   if(S.zone!==2) return;
   const f=libFloor(), o=f===1?2:1, p=pendingOnFloor(o), st=LIB_STAIRS, b=RM?0:Math.sin(now/300)*2;
   const label=(S.lang==="en"?`Floor ${o} ${o>f?"↑":"↓"}`:`ชั้น ${o} ${o>f?"↑":"↓"}`)+(p?`  ❗${p}`:"");
-  g.font="800 14px 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', Tahoma, sans-serif"; g.textAlign="center"; g.textBaseline="middle";
+  g.font="800 14px system-ui, -apple-system, 'Segoe UI', 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', sans-serif"; g.textAlign="center"; g.textBaseline="middle";
   const tw=g.measureText(label).width+24, x=st.x+st.w/2, y=st.y+st.h+16+b;
   rr(g,x-tw/2,y-15,tw,30,15); g.fillStyle=p?"#FFC414":"#FFFFFF"; g.fill(); g.lineWidth=2.5; g.strokeStyle=INK; g.stroke();
   g.fillStyle=INK; g.fillText(label,x,y+1);
@@ -205,14 +205,14 @@ function drawLibProp(g,t,i){
     g.lineWidth=2.5; g.beginPath(); g.moveTo(x+86,y+8); g.lineTo(x+90,y-22); g.lineTo(x+78,y-30); g.stroke(); g.fillStyle="#2BB673"; g.beginPath(); g.arc(x+76,y-28,7,0,Math.PI); g.fill(); g.stroke(); return; }
   if(t.item==="pc"){ rr(g,x-w/2,y-h/2,w,h,3); g.fillStyle="#E6ECEA"; g.fill(); g.stroke();
     for(const dx of [-28,28]){ rr(g,x+dx-20,y-46,40,28,2); g.fillStyle="#2B3A3F"; g.fill(); g.lineWidth=2.5; g.stroke(); g.fillStyle="#7FB7E8"; g.fillRect(x+dx-16,y-42,32,20); g.fillStyle=INK; g.fillRect(x+dx-3,y-18,6,10); }
-    g.fillStyle="#2F6DB5"; g.font="800 9px 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', Tahoma, sans-serif"; g.textAlign="center"; g.fillText(S.lang==="en"?"PUBLIC PC":"คอมสาธารณะ",x,y+6); return; }
+    g.fillStyle="#2F6DB5"; g.font="800 9px system-ui, -apple-system, 'Segoe UI', 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', sans-serif"; g.textAlign="center"; g.fillText(S.lang==="en"?"PUBLIC PC":"คอมสาธารณะ",x,y+6); return; }
   if(t.item==="desk"){ rr(g,x-w/2,y-h/2,w,h,4); g.fillStyle="#173E3C"; g.fill(); g.stroke(); rr(g,x-w/2,y-h/2-16,w,22,4); g.fillStyle="#E6ECEA"; g.fill(); g.stroke();
-    g.fillStyle="#F2C14E"; g.font="800 15px 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', Tahoma, sans-serif"; g.textAlign="center"; g.textBaseline="middle"; g.fillText(S.lang==="en"?"LOANS · INFO · ASK HERE":"ยืม-คืน · สอบถาม · ถามที่นี่",x,y+10);
+    g.fillStyle="#F2C14E"; g.font="800 15px system-ui, -apple-system, 'Segoe UI', 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', sans-serif"; g.textAlign="center"; g.textBaseline="middle"; g.fillText(S.lang==="en"?"LOANS · INFO · ASK HERE":"ยืม-คืน · สอบถาม · ถามที่นี่",x,y+10);
     rr(g,x-120,y-40,52,30,3); g.fillStyle="#2B3A3F"; g.fill(); g.lineWidth=2.5; g.stroke(); g.fillStyle="#7CF0C8"; g.fillRect(x-115,y-35,42,18);
-    rr(g,x+40,y-42,92,30,3); g.fillStyle="#FFFFFF"; g.fill(); g.stroke(); g.fillStyle=INK; g.font="700 9px 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', Tahoma, sans-serif"; g.fillText("Wi-Fi: CityLib-Member",x+86,y-32); g.fillText(S.lang==="en"?"pw on library card":"รหัสบนบัตรห้องสมุด",x+86,y-20); return; }
+    rr(g,x+40,y-42,92,30,3); g.fillStyle="#FFFFFF"; g.fill(); g.stroke(); g.fillStyle=INK; g.font="700 9px system-ui, -apple-system, 'Segoe UI', 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', sans-serif"; g.fillText("Wi-Fi: CityLib-Member",x+86,y-32); g.fillText(S.lang==="en"?"pw on library card":"รหัสบนบัตรห้องสมุด",x+86,y-20); return; }
   if(t.item==="kiosk"){ rr(g,x-w/2,y-h/2-56,w,h+56,6); g.fillStyle="#F2F2F2"; g.fill(); g.stroke();
     rr(g,x-w/2+6,y-h/2-50,w-12,18,3); g.fillStyle="#FFC414"; g.fill(); g.lineWidth=2; g.stroke();
-    g.fillStyle=INK; g.font="800 9px 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', Tahoma, sans-serif"; g.textAlign="center"; g.textBaseline="middle"; g.fillText(S.lang==="en"?"FREE CHARGE":"ชาร์จฟรี",x,y-h/2-41);
+    g.fillStyle=INK; g.font="800 9px system-ui, -apple-system, 'Segoe UI', 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', sans-serif"; g.textAlign="center"; g.textBaseline="middle"; g.fillText(S.lang==="en"?"FREE CHARGE":"ชาร์จฟรี",x,y-h/2-41);
     for(let k=0;k<4;k++){ const cx=x-21+k*12; g.fillStyle="#3B3B3B"; g.fillRect(cx,y-h/2-24,6,8); g.strokeStyle="#3B3B3B"; g.lineWidth=2; g.beginPath(); g.moveTo(cx+3,y-h/2-16); g.quadraticCurveTo(cx+3+(k-1.5)*6,y,cx+1,y+h/2-2); g.stroke(); }
     g.fillStyle="#E5402F"; g.beginPath(); g.arc(x+w/2-8,y+h/2-8,3,0,7); g.fill(); return; }
   if(t.item==="carrel"){ rr(g,x-w/2,y-h/2,w,h,3); g.fillStyle="#E9D9BE"; g.fill(); g.stroke();
@@ -221,7 +221,7 @@ function drawLibProp(g,t,i){
     g.fillStyle="#FFE9A8"; g.beginPath(); g.arc(x+30,y-22,5,0,7); g.fill(); return; }
   if(t.item==="printer"){ rr(g,x-w/2,y-h/2-20,w,h+20,5); g.fillStyle="#E6ECEA"; g.fill(); g.stroke(); rr(g,x-w/2+8,y-h/2-12,w-16,12,2); g.fillStyle="#2B3A3F"; g.fill(); g.lineWidth=2; g.stroke();
     g.fillStyle="#FFFFFF"; g.fillRect(x-18,y-h/2-26,36,10); g.strokeRect(x-18,y-h/2-26,36,10);
-    g.fillStyle=INK; g.font="800 9px 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', Tahoma, sans-serif"; g.textAlign="center"; g.textBaseline="middle"; g.fillText(S.lang==="en"?"PRINT":"ปริ้นต์",x,y+6); return; }
+    g.fillStyle=INK; g.font="800 9px system-ui, -apple-system, 'Segoe UI', 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', sans-serif"; g.textAlign="center"; g.textBaseline="middle"; g.fillText(S.lang==="en"?"PRINT":"ปริ้นต์",x,y+6); return; }
   if(t.item==="sofa"){ rr(g,x-w/2,y-h/2-14,w,h+14,10); g.fillStyle="#C2552E"; g.fill(); g.stroke(); rr(g,x-w/2+10,y-h/2+4,w-20,h-10,6); g.fillStyle="#D9734B"; g.fill(); g.lineWidth=2; g.stroke(); return; }
 }
 function drawLibChair(g,c){

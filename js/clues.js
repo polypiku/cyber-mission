@@ -27,7 +27,6 @@ const CLUE_SRC = {
   hq:{th:"แฝงตัวในตึก",en:"Undercover in the building"}
 };
 const srcOf = (k)=>EVID[k].src||"case";
-const isCaseId = (k)=>!!(CASES.th[k]);
 const UC_MIN = 12;
 function clueWhere(k){
   const src=srcOf(k), zoneOf=(id)=>Object.keys(ZONES).find(z=>ZONES[z].cases.includes(id));
@@ -61,7 +60,6 @@ const spotsHere = ()=>SPOTS.filter(spotHere);
 const spotShown = (s)=>true;   /* hidden things are always marked with a ? now */
 function nearSpot(){ if(!S.char||busy()) return null; return spotsHere().find(s=>spotShown(s) && Math.hypot(player.x-s.x,player.y-s.y)<60) || null; }
 
-const LENS_R=[0,170,260,380];
 function gainClue(id, who){
   if(S.ev[id]) return;
   S.ev[id]=true; S.evNew=(S.evNew||0)+1; save(); hudKey=""; sfx("ev");
@@ -80,7 +78,7 @@ function drawSpots(g,now){
     const b=RM?0:Math.sin(now/200)*3;
     g.save(); g.globalAlpha=.9; g.beginPath(); g.ellipse(s.x,s.y,22,8,0,0,7); g.fillStyle="rgba(255,196,20,.35)"; g.fill(); g.restore();
     rr(g,s.x-15,s.y-46+b,30,30,15); g.fillStyle="#FFC414"; g.fill(); g.lineWidth=2.5; g.strokeStyle=INK; g.stroke();
-    g.fillStyle=INK; g.font="800 18px 'Noto Sans Thai', sans-serif"; g.textAlign="center"; g.textBaseline="middle"; g.fillText("?",s.x,s.y-30+b);
+    g.fillStyle=INK; g.font="800 18px system-ui, -apple-system, 'Segoe UI', 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', sans-serif"; g.textAlign="center"; g.textBaseline="middle"; g.fillText("?",s.x,s.y-30+b);
   }
 
 }

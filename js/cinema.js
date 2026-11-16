@@ -56,7 +56,7 @@ function drawCinFx(g,now){
   const c=CIN; if(!c) return;
   c.em=c.em.filter(e=>e.until>now);
   for(const e of c.em){ const a=e.a; if(!a||(a!==player&&!a.on)) continue; const h=CHAR_H*(SCALE[a.id]||1);
-    g.font="700 22px 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, sans-serif"; g.textAlign="center"; g.textBaseline="middle";
+    g.font="700 22px system-ui, -apple-system, 'Segoe UI', 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', sans-serif"; g.textAlign="center"; g.textBaseline="middle";
     const y=a.y-h-18-(RM?0:Math.abs(Math.sin(now/180))*4); rr(g,a.x-20,y-18,40,36,12); g.fillStyle="#FFFFFF"; g.fill(); g.lineWidth=2.5; g.strokeStyle=INK; g.stroke(); g.fillStyle=INK; g.fillText(e.txt,a.x,y+1); }
 }
 function endCinema(skipped){

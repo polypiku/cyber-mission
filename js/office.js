@@ -7,7 +7,7 @@ const OFFICES=[
 ];
 const SCAM_TENANT={th:"บจก. โกลบอล ดิจิทัล มาร์เก็ตติ้ง",en:"Global Digital Marketing Co."};
 const OFF_TOP=858, OFF_FH=118, OFF_LIFT={x0:690,x1:790};
-const OFNT="'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', Tahoma, sans-serif";
+const OFNT="system-ui, -apple-system, 'Segoe UI', 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', sans-serif";
 function hqB(){ if(!(S.hqB>=0&&S.hqB<3)){ S.hqB=Math.floor(Math.random()*3); save(); } return S.hqB; }
 const isScam=(i)=>i===hqB();
 const raided=()=>(S.bustTier||0)>=1;

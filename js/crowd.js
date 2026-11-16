@@ -93,7 +93,7 @@ function stepEscort(dt){
 function drawEscortTalk(g){
   if(!escort || escort.phase!=="talk") return;
   const e=escort, k=e.t;
-  const bub=(n,txt,col)=>{ const h=CHAR_H*(SCALE[n.id]||1); g.font="700 12px 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', Tahoma, sans-serif"; g.textAlign="center"; g.textBaseline="middle";
+  const bub=(n,txt,col)=>{ const h=CHAR_H*(SCALE[n.id]||1); g.font="700 12px system-ui, -apple-system, 'Segoe UI', 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', sans-serif"; g.textAlign="center"; g.textBaseline="middle";
     const tw=g.measureText(txt).width+18, x=n.x, y=n.y-h-22; rr(g,x-tw/2,y-12,tw,24,10); g.fillStyle=col; g.fill(); g.lineWidth=2; g.strokeStyle=INK; g.stroke(); g.fillStyle=INK; g.fillText(txt,x,y); };
   bub(e.pol, L("ตำรวจไซเบอร์ครับ ขอตรวจเครื่องหน่อย","Cyber police. I need to check your device."),"#DCE8FF");
   if(k>1.2) bub(e.sus, susLine(e.sus),"#FFFFFF");
@@ -135,37 +135,6 @@ function stepWifi(dt){
   const v=npcs.find(n=>n.vil), close=v&&Math.hypot(player.x-v.x,player.y-v.y)<120;
   if((close && wifiT>6) || wifiT>45){ wifiT=-999; sfx("ping"); toast(L("📶 มือถือเจอ Wi-Fi ฟรีหลายตัว…","📶 Your phone found several free Wi-Fi networks…")); setTimeout(()=>{ if(!busy()) openWifi(); else wifiT=20; },700); }
 }
-function drawVillain(g,now){
-  if(!vilOn()) return;
-  const {x,y}=VIL, k=RM?0:now;
-  g.save();
-  g.fillStyle="rgba(0,0,0,.28)"; g.beginPath(); g.ellipse(x,y+14,24,7,0,0,7); g.fill();
-  // body: hood + slumped shoulders, pure silhouette
-  g.fillStyle="#15161C"; g.strokeStyle="#000"; g.lineWidth=2.5;
-  g.beginPath(); g.moveTo(x-22,y+8); g.quadraticCurveTo(x-26,y-30,x-12,y-40); g.lineTo(x+12,y-40); g.quadraticCurveTo(x+26,y-30,x+22,y+8); g.closePath(); g.fill(); g.stroke();
-  g.beginPath(); g.ellipse(x,y-54,17,19,0,0,7); g.fill(); g.stroke();
-  g.fillStyle="#000"; g.beginPath(); g.ellipse(x+3,y-50,11,12,0,0,7); g.fill(); // face hidden in the hood
-  const blink=Math.floor(k/2600)%6===0 && (k%2600)<140;
-  if(!blink){ g.fillStyle="#FF3B3B"; g.shadowColor="#FF3B3B"; g.shadowBlur=8; g.fillRect(x-2,y-53,4,2.5); g.fillRect(x+6,y-53,4,2.5); g.shadowBlur=0; }
-  // laptop on lap with a green glow
-  g.fillStyle="#2A2E38"; g.beginPath(); g.moveTo(x-4,y-14); g.lineTo(x+26,y-14); g.lineTo(x+30,y-4); g.lineTo(x,y-4); g.closePath(); g.fill(); g.stroke();
-  g.fillStyle="rgba(127,255,170,"+(.35+.2*Math.sin(k/300))+")"; g.beginPath(); g.ellipse(x+14,y-22,18,10,0,0,7); g.fill();
-  // Wi-Fi arcs pulsing out of the laptop
-  if(!(S.wifi&&S.wifi[S.zone]==="ok")){
-    g.lineCap="round";
-    for(let i=0;i<3;i++){ const p=((k/700)+i/3)%1; g.strokeStyle=`rgba(255,59,59,${(1-p)*.8})`; g.lineWidth=3; g.beginPath(); g.arc(x+14,y-80,8+p*26,Math.PI*1.2,Math.PI*1.8); g.stroke(); }
-    g.fillStyle="#FF3B3B"; g.beginPath(); g.arc(x+14,y-80,3,0,7); g.fill();
-  }
-  // muttering bubble now and then
-  if(vilSay%9<3.2){
-    const s=S.phoneBroken?L("หึหึ… ได้ข้อมูลแล้ว","Heh… got your data"):L("Wi-Fi ฟรีนะ… ต่อเลย 😏","Free Wi-Fi… go on 😏");
-    g.font="700 12px 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', Tahoma, sans-serif"; g.textAlign="center"; g.textBaseline="middle";
-    const tw=g.measureText(s).width+18, by=y-112;
-    rr(g,x+14-tw/2,by-12,tw,24,8); g.fillStyle="#1B1E26"; g.fill(); g.lineWidth=2; g.strokeStyle="#000"; g.stroke();
-    g.fillStyle="#FFD3D3"; g.fillText(s,x+14,by);
-  }
-  g.restore();
-}
 function drawRepair(g,now){
   const {x,y}=REPAIR;
   g.fillStyle="rgba(0,0,0,.2)"; g.beginPath(); g.ellipse(x,y+16,46,9,0,0,7); g.fill();
@@ -176,12 +145,12 @@ function drawRepair(g,now){
   for(let i=0;i<6;i++){ g.fillStyle=i%2?"#FFFFFF":"#2F6DB5"; g.beginPath(); g.arc(x-36.5+i*15,y-80,7.5,0,Math.PI); g.fill(); g.stroke(); }
   // counter
   rr(g,x-40,y-28,80,40,4); g.fillStyle="#F2C14E"; g.fill(); g.lineWidth=3; g.stroke();
-  g.fillStyle=INK; g.font="800 11px 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', Tahoma, sans-serif"; g.textAlign="center"; g.textBaseline="middle";
-  g.fillText(S.lang==="en"?"PHONE DR.":"หมอโฟน",x,y-12); g.font="600 9px 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', Tahoma, sans-serif"; g.fillText(S.lang==="en"?"repairs":"ซ่อมมือถือ",x,y+2);
+  g.fillStyle=INK; g.font="800 11px system-ui, -apple-system, 'Segoe UI', 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', sans-serif"; g.textAlign="center"; g.textBaseline="middle";
+  g.fillText(S.lang==="en"?"PHONE DR.":"หมอโฟน",x,y-12); g.font="600 9px system-ui, -apple-system, 'Segoe UI', 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', sans-serif"; g.fillText(S.lang==="en"?"repairs":"ซ่อมมือถือ",x,y+2);
   // phones on the counter
   for(const dx of [-26,-10,20]){ rr(g,x+dx,y-42,10,16,2); g.fillStyle="#16181B"; g.fill(); g.lineWidth=1.5; g.stroke(); g.fillStyle="#7CC8F2"; g.fillRect(x+dx+2,y-40,6,10); }
   // a spinning wrench sign when your phone needs help
-  if(S.phoneBroken){ const b=RM?0:Math.sin(now/200)*3; rr(g,x-30,y-136+b,60,26,13); g.fillStyle="#E5402F"; g.fill(); g.lineWidth=2.5; g.strokeStyle=INK; g.stroke(); g.fillStyle="#FFFFFF"; g.font="800 12px 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', Tahoma, sans-serif"; g.fillText(L("🔧 ซ่อม","🔧 Fix"),x,y-122+b); }
+  if(S.phoneBroken){ const b=RM?0:Math.sin(now/200)*3; rr(g,x-30,y-136+b,60,26,13); g.fillStyle="#E5402F"; g.fill(); g.lineWidth=2.5; g.strokeStyle=INK; g.stroke(); g.fillStyle="#FFFFFF"; g.font="800 12px system-ui, -apple-system, 'Segoe UI', 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', sans-serif"; g.fillText(L("🔧 ซ่อม","🔧 Fix"),x,y-122+b); }
 }
 function wifiPhone(inner){
   return `<div class="device"><span class="island"></span><div class="scr">${sbar(nowClock())}${inner}<div class="homebar"></div></div></div>`;
@@ -344,7 +313,7 @@ function addCoins(n){
 function drawCoinFx(g,dt){
   coinFx=coinFx.filter(f=>(f.t+=dt)<1.6);
   coinFx.forEach((f,i)=>{ const a=1-f.t/1.6, y=player.y-CHAR_H-40-f.t*34-i*20;
-    g.save(); g.globalAlpha=a; g.font="800 16px 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', Tahoma, sans-serif"; g.textAlign="center"; g.textBaseline="middle"; g.lineWidth=4; g.strokeStyle="#FFFFFF";
+    g.save(); g.globalAlpha=a; g.font="800 16px system-ui, -apple-system, 'Segoe UI', 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', sans-serif"; g.textAlign="center"; g.textBaseline="middle"; g.lineWidth=4; g.strokeStyle="#FFFFFF";
     const s=(f.n>0?"+":"−")+BAHT(Math.abs(f.n)); g.strokeText(s,player.x,y); g.fillStyle=f.n>0?"#B5651D":"#E5402F"; g.fillText(s,player.x,y); g.restore(); });
 }
 const coinTag=(n)=>`<span class="delta ${n>0?"up":"down"}">💵 ${n>0?"+":"−"}${BAHT(Math.abs(n))}</span>`;

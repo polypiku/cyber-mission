@@ -106,7 +106,7 @@ function drawExits(g,now){
   for(const e of roomExits()){
     const fresh=!(S.doorSeen&&S.doorSeen[e.k]), b=RM?0:Math.sin(now/(fresh?160:320))*(fresh?6:3);
     const ax=e.dir==="right"?b:e.dir==="left"?-b:0, ay=e.dir==="up"?-b:0;
-    g.save(); g.font="800 15px 'Noto Sans Thai', sans-serif"; g.textAlign="center"; g.textBaseline="middle";
+    g.save(); g.font="800 15px system-ui, -apple-system, 'Segoe UI', 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', sans-serif"; g.textAlign="center"; g.textBaseline="middle";
     const tw=g.measureText(e.t).width+24, x=e.x+ax-(e.dir==="right"?tw/2-10:e.dir==="left"?-tw/2+10:0), y=e.y-60+ay;
     rr(g,x-tw/2,y-15,tw,30,15); g.fillStyle=fresh?"#FFC414":"#FFFFFF"; g.fill(); g.lineWidth=3; g.strokeStyle=INK; g.stroke();
     g.fillStyle=INK; g.fillText(e.t,x,y+1); g.restore();

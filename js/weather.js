@@ -49,7 +49,6 @@ function wxIcon(){ const n=nightAmt(); return WX.rainOn?(WX.heavy?"⛈️":"🌧
 
 /* ---------- umbrellas ---------- */
 const hasUmbrella=()=>!!(S.items&&S.items.umbrella);
-const caseZone=(k)=>+Object.keys(ZONES).find(z=>ZONES[z].cases.includes(k));
 /* when it starts raining and you have no umbrella, pick someone at random: help them and they give you theirs */
 /* pick (quietly) which street person will give you an umbrella; their ! and 🌂 show from the start */
 function pickUmbrellaCase(){

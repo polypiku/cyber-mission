@@ -16,7 +16,6 @@ function openCutscene(title, panels, onDone){
   };
   show();
 }
-const mentorId=()=>"volOat";
 /* the prologue panels use the author's pictures when they exist (PROLOGUE_ART in data/heroes.js), emoji otherwise */
 function PROLOGUE(){ return PROLOGUE0().map((p,i)=>{ const a=typeof PROLOGUE_ART!=="undefined"&&PROLOGUE_ART[i]; return a?Object.assign(p,{img:a[0],pos:a[1]}):p; }); }
 function PROLOGUE0(){ return [
@@ -58,7 +57,6 @@ const ENDINGS={
    P("#1a1a1a","🧠🔁",["ในใจคุณย้อนคิดทุกคนที่ยังไม่ได้ช่วยให้ดีพอ… ถ้าย้อนเวลาได้","You think back to everyone you could have helped better… if only you could go back."]),
    P("#E5402F","↩️⭐",["ฉากจบนี้ไม่ใช่ตอนจบจริง กลับไปเล่นเคสใหม่ เก็บดาวให้มากขึ้น แล้วไปหาพี่ภพอีกครั้ง","This isn't the real ending. Replay cases, earn more stars, and go back to Phop."],[["police","(ข้อความเสียงที่ส่งไม่ถึงคุณ) เราจะหาคุณให้เจอ","(a voice message that never reached you) We'll find you."]])]}
 };
-const RAID_OPEN=()=>[P("#22344A","👮🗂️🧩",["ที่สถานีตำรวจ พี่ภพกางหลักฐานทุกชิ้นบนโต๊ะ","At the station, Phop lays every piece of evidence on the table."],[["police","บัญชีม้า เซิร์ฟเวอร์ ซิมการ์ด ทุกสายชี้ไปที่ตึกเดียวกัน","Mule accounts, server, SIM cards: every thread points to one building."]])];
 function playEnding(){
   const n=endingNo(), E=ENDINGS[n];
   S.endStats={n, ms:S.playMs||0, stars:starTotal(), ev:evCount(), cases:ALLCASES().filter(k=>S.best[k]).length, safe:ALLCASES().filter(k=>S.best[k]==="safe").length};
@@ -102,7 +100,7 @@ function drawRoomShell(g,o){
   for(let x=0;x<W;x+=48) for(let y=108;y<590;y+=48){ g.fillStyle=((x+y)/48)%2?o.floor[0]:o.floor[1]; g.fillRect(x,y,48,48); }
   rr(g,296,300,300,172,18); g.fillStyle=o.rug[0]; g.fill(); g.lineWidth=3; g.strokeStyle=INK; g.stroke();
   rr(g,310,314,272,144,12); g.setLineDash([8,7]); g.strokeStyle=o.rug[2]; g.lineWidth=2.5; g.stroke(); g.setLineDash([]);
-  g.fillStyle=o.rug[2]; g.font="800 21px 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', Tahoma, sans-serif"; g.textAlign="center"; g.textBaseline="middle"; g.fillText(o.rug[1],446,388);
+  g.fillStyle=o.rug[2]; g.font="800 21px system-ui, -apple-system, 'Segoe UI', 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', sans-serif"; g.textAlign="center"; g.textBaseline="middle"; g.fillText(o.rug[1],446,388);
   g.fillStyle=o.wall; g.fillRect(0,0,W,108); g.fillStyle=o.trim; g.fillRect(0,86,W,22);
   g.strokeStyle=INK; g.lineWidth=3; g.beginPath(); g.moveTo(0,86); g.lineTo(W,86); g.moveTo(0,108); g.lineTo(W,108); g.stroke();
   g.fillStyle=o.side; g.fillRect(0,108,44,H); g.fillRect(W-44,108,44,H); g.fillRect(0,580,384,44); g.fillRect(480,580,W-480,44);
@@ -113,10 +111,10 @@ function drawUniStatic(g){
   drawRoomShell(g,{floor:["#E9E4DA","#DFD9CD"],rug:["#8E1B2B",S.lang==="en"?"STUDENT LOUNGE":"ลานกิจกรรมนักศึกษา","#F7D7A8"],wall:"#F4EFE6",trim:"#8E1B2B",side:"#D9D0C2"});
   rr(g,40,12,300,64,4); g.fillStyle="#C9A76A"; g.fill(); g.lineWidth=3; g.strokeStyle=INK; g.stroke();
   const notes=[["#FFFFFF",S.lang==="en"?"Scholarships":"ทุนการศึกษา"],["#FFE9A8",S.lang==="en"?"Part-time!":"รับพาร์ทไทม์!"],["#D6F0FF",S.lang==="en"?"Exam timetable":"ตารางสอบ"],["#FFD3D3",S.lang==="en"?"Club fair":"รับสมัครชมรม"]];
-  notes.forEach(([c,tx],k)=>{ const x=52+k*72, y=20+(k%2)*6; g.save(); g.translate(x+30,y+22); g.rotate((k%2?.05:-.04)); rr(g,-30,-20,60,40,2); g.fillStyle=c; g.fill(); g.lineWidth=2; g.strokeStyle=INK; g.stroke(); g.fillStyle=INK; g.font="700 9px 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', Tahoma, sans-serif"; g.textAlign="center"; g.textBaseline="middle"; g.fillText(tx,0,0); g.fillStyle="#E5402F"; g.beginPath(); g.arc(0,-16,3,0,7); g.fill(); g.restore(); });
+  notes.forEach(([c,tx],k)=>{ const x=52+k*72, y=20+(k%2)*6; g.save(); g.translate(x+30,y+22); g.rotate((k%2?.05:-.04)); rr(g,-30,-20,60,40,2); g.fillStyle=c; g.fill(); g.lineWidth=2; g.strokeStyle=INK; g.stroke(); g.fillStyle=INK; g.font="700 9px system-ui, -apple-system, 'Segoe UI', 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', sans-serif"; g.textAlign="center"; g.textBaseline="middle"; g.fillText(tx,0,0); g.fillStyle="#E5402F"; g.beginPath(); g.arc(0,-16,3,0,7); g.fill(); g.restore(); });
   rr(g,400,10,420,66,4); g.fillStyle="#8E1B2B"; g.fill(); g.lineWidth=3; g.strokeStyle=INK; g.stroke();
-  g.fillStyle="#F7D7A8"; g.font="800 16px 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', Tahoma, sans-serif"; g.textAlign="center"; g.textBaseline="middle"; g.fillText(S.lang==="en"?"Red Brick University":"มหาวิทยาลัยอิฐแดง",610,34);
-  g.fillStyle="#FFFFFF"; g.font="600 11px 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', Tahoma, sans-serif"; g.fillText(S.lang==="en"?"Student services building":"อาคารบริการนักศึกษา",610,58);
+  g.fillStyle="#F7D7A8"; g.font="800 16px system-ui, -apple-system, 'Segoe UI', 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', sans-serif"; g.textAlign="center"; g.textBaseline="middle"; g.fillText(S.lang==="en"?"Red Brick University":"มหาวิทยาลัยอิฐแดง",610,34);
+  g.fillStyle="#FFFFFF"; g.font="600 11px system-ui, -apple-system, 'Segoe UI', 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', sans-serif"; g.fillText(S.lang==="en"?"Student services building":"อาคารบริการนักศึกษา",610,58);
 }
 function drawCellDoor(g){
   const x=RW-44, y0=PDOOR.y0, y1=PDOOR.y1;
@@ -124,7 +122,7 @@ function drawCellDoor(g){
   g.strokeStyle="#3B3F44"; g.lineWidth=4; for(let y=y0+10;y<y1;y+=14){ g.beginPath(); g.moveTo(x+8,y); g.lineTo(x+40,y); g.stroke(); }
   g.strokeStyle=INK; g.lineWidth=3; g.strokeRect(x,y0,44,y1-y0);
   rr(g,x-112,y0-40,112,28,6); g.fillStyle="#22344A"; g.fill(); g.lineWidth=2.5; g.stroke();
-  g.fillStyle="#F2C14E"; g.font="800 13px 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', Tahoma, sans-serif"; g.textAlign="center"; g.textBaseline="middle"; g.fillText(S.lang==="en"?"CELLS →":"ห้องขัง →",x-56,y0-26);
+  g.fillStyle="#F2C14E"; g.font="800 13px system-ui, -apple-system, 'Segoe UI', 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', sans-serif"; g.textAlign="center"; g.textBaseline="middle"; g.fillText(S.lang==="en"?"CELLS →":"ห้องขัง →",x-56,y0-26);
 }
 function drawCellBlockStatic(g){
   g.fillStyle="#9AA1A8"; g.fillRect(0,0,CB_W,CB_H);
@@ -136,7 +134,7 @@ function drawCellBlockStatic(g){
   g.fillStyle="#5E666E"; g.fillRect(0,0,CB_W,70); g.fillStyle="#22344A"; g.fillRect(0,54,CB_W,16);
   g.strokeStyle=INK; g.lineWidth=3; g.beginPath(); g.moveTo(0,70); g.lineTo(CB_W,70); g.stroke();
   rr(g,CB_X0+5*CB_CW/2-170,8,340,38,6); g.fillStyle="#22344A"; g.fill(); g.lineWidth=3; g.stroke();
-  g.fillStyle="#F2C14E"; g.font="800 17px 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', Tahoma, sans-serif"; g.textAlign="center"; g.textBaseline="middle"; g.fillText(S.lang==="en"?"CYBER CRIME HOLDING CELLS":"ห้องขังผู้ต้องหาคดีไซเบอร์",CB_X0+5*CB_CW/2,27);
+  g.fillStyle="#F2C14E"; g.font="800 17px system-ui, -apple-system, 'Segoe UI', 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', sans-serif"; g.textAlign="center"; g.textBaseline="middle"; g.fillText(S.lang==="en"?"CYBER CRIME HOLDING CELLS":"ห้องขังผู้ต้องหาคดีไซเบอร์",CB_X0+5*CB_CW/2,27);
   // left end: way back to the station
   g.fillStyle="#AEB4BA"; g.fillRect(0,70,CB_X0,CB_TOP-70); g.fillRect(0,CB_BOT,CB_X0,CB_H-CB_BOT);
   rr(g,20,96,104,60,5); g.fillStyle="#6E5A48"; g.fill(); g.lineWidth=2.5; g.strokeStyle=INK; g.stroke();
@@ -144,7 +142,7 @@ function drawCellBlockStatic(g){
   for(let k=0;k<4;k++){ g.fillStyle="#C9A76A"; g.beginPath(); g.arc(30+k*22,190,6,0,7); g.fill(); g.lineWidth=1.5; g.stroke(); g.strokeStyle="#3B3F44"; g.beginPath(); g.moveTo(30+k*22,196); g.lineTo(30+k*22,206); g.stroke(); g.strokeStyle=INK; }
   g.fillStyle="#22344A"; g.fillRect(0,CB_TOP+14,10,CB_BOT-CB_TOP-28);
   rr(g,30,CB_BOT+18,104,28,6); g.fillStyle="#FFFFFF"; g.fill(); g.lineWidth=2.5; g.strokeStyle=INK; g.stroke();
-  g.fillStyle=INK; g.font="800 12px 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', Tahoma, sans-serif"; g.fillText(S.lang==="en"?"← STATION":"← กลับสถานี",82,CB_BOT+32);
+  g.fillStyle=INK; g.font="800 12px system-ui, -apple-system, 'Segoe UI', 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', sans-serif"; g.fillText(S.lang==="en"?"← STATION":"← กลับสถานี",82,CB_BOT+32);
   // right end wall
   g.fillStyle="#5E666E"; g.fillRect(CB_X0+5*CB_CW,70,CB_W,CB_H); g.strokeStyle=INK; g.lineWidth=3; g.strokeRect(CB_X0+5*CB_CW,70,CB_W,CB_H);
   // bottom wall
@@ -163,7 +161,7 @@ function drawCellBlockStatic(g){
     // number plate
     const py=c.top?CB_TOP+20:CB_BOT-20;
     rr(g,c.cx-30,py-11,60,22,5); g.fillStyle=full?"#E5402F":"#FFFFFF"; g.fill(); g.lineWidth=2; g.strokeStyle=INK; g.stroke();
-    g.fillStyle=full?"#FFFFFF":INK; g.font="800 11px 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', Tahoma, sans-serif"; g.textAlign="center"; g.textBaseline="middle"; g.fillText((S.lang==="en"?"CELL ":"ห้อง ")+(i+1),c.cx,py+1);
+    g.fillStyle=full?"#FFFFFF":INK; g.font="800 11px system-ui, -apple-system, 'Segoe UI', 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', sans-serif"; g.textAlign="center"; g.textBaseline="middle"; g.fillText((S.lang==="en"?"CELL ":"ห้อง ")+(i+1),c.cx,py+1);
   }
 }
 function drawCellBlockBars(g,top){
@@ -180,11 +178,11 @@ function drawPoliceStatic(g){
   drawRoomShell(g,{floor:["#DCE3EA","#D2DAE2"],rug:["#22344A",S.lang==="en"?"REPORT · 1441":"แจ้งความ · สายด่วน 1441","#DCE7F0"],wall:"#EEF2F6",trim:"#22344A",side:"#C5CED8"});
   rr(g,40,12,240,64,4); g.fillStyle="#22344A"; g.fill(); g.lineWidth=3; g.strokeStyle=INK; g.stroke();
   g.fillStyle="#F2C14E"; g.beginPath(); for(let k=0;k<10;k++){ const a=-Math.PI/2+k*Math.PI/5, r=k%2?8:18; g.lineTo(76+Math.cos(a)*r,44+Math.sin(a)*r); } g.closePath(); g.fill(); g.lineWidth=2; g.stroke();
-  g.fillStyle="#FFFFFF"; g.font="800 15px 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', Tahoma, sans-serif"; g.textAlign="left"; g.textBaseline="middle"; g.fillText(S.lang==="en"?"POLICE STATION":"สถานีตำรวจ",104,34);
-  g.font="600 10px 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', Tahoma, sans-serif"; g.fillText(S.lang==="en"?"Cyber crime desk":"โต๊ะคดีไซเบอร์",104,56);
+  g.fillStyle="#FFFFFF"; g.font="800 15px system-ui, -apple-system, 'Segoe UI', 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', sans-serif"; g.textAlign="left"; g.textBaseline="middle"; g.fillText(S.lang==="en"?"POLICE STATION":"สถานีตำรวจ",104,34);
+  g.font="600 10px system-ui, -apple-system, 'Segoe UI', 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', sans-serif"; g.fillText(S.lang==="en"?"Cyber crime desk":"โต๊ะคดีไซเบอร์",104,56);
   rr(g,560,12,250,64,4); g.fillStyle="#FFFFFF"; g.fill(); g.lineWidth=3; g.strokeStyle=INK; g.stroke();
-  g.fillStyle=INK; g.font="800 12px 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', Tahoma, sans-serif"; g.textAlign="center"; g.fillText(S.lang==="en"?"Scammed? Act fast:":"โดนหลอก? ทำทันที:",685,28);
-  g.font="600 11px 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', Tahoma, sans-serif"; g.fillText(S.lang==="en"?"Call 1441 · thaipoliceonline.go.th":"โทร 1441 · thaipoliceonline.go.th",685,48); g.fillText(S.lang==="en"?"Keep slips, account no., chats":"เก็บสลิป เลขบัญชี แชต",685,64);
+  g.fillStyle=INK; g.font="800 12px system-ui, -apple-system, 'Segoe UI', 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', sans-serif"; g.textAlign="center"; g.fillText(S.lang==="en"?"Scammed? Act fast:":"โดนหลอก? ทำทันที:",685,28);
+  g.font="600 11px system-ui, -apple-system, 'Segoe UI', 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', sans-serif"; g.fillText(S.lang==="en"?"Call 1441 · thaipoliceonline.go.th":"โทร 1441 · thaipoliceonline.go.th",685,48); g.fillText(S.lang==="en"?"Keep slips, account no., chats":"เก็บสลิป เลขบัญชี แชต",685,64);
   drawCellDoor(g);
   rr(g,300,16,220,58,3); g.fillStyle="#C9A76A"; g.fill(); g.lineWidth=3; g.strokeStyle=INK; g.stroke();
   const pins=[[330,30],[400,52],[470,28],[440,62],[350,60]]; g.strokeStyle="#E5402F"; g.lineWidth=2; g.beginPath(); pins.forEach(([x,y],k)=>k?g.lineTo(x,y):g.moveTo(x,y)); g.stroke();
@@ -193,14 +191,14 @@ function drawPoliceStatic(g){
 function drawUniCounter(g){
   rr(g,528,96,288,44,3); g.fillStyle="#F4EFE6"; g.fill(); g.lineWidth=3; g.strokeStyle=INK; g.stroke();
   rr(g,528,136,288,50,3); g.fillStyle="#8E1B2B"; g.fill(); g.stroke();
-  g.fillStyle="#F7D7A8"; g.font="800 16px 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', Tahoma, sans-serif"; g.textAlign="center"; g.textBaseline="middle"; g.fillText(S.lang==="en"?"STUDENT AFFAIRS":"กองกิจการนักศึกษา",672,162);
+  g.fillStyle="#F7D7A8"; g.font="800 16px system-ui, -apple-system, 'Segoe UI', 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', sans-serif"; g.textAlign="center"; g.textBaseline="middle"; g.fillText(S.lang==="en"?"STUDENT AFFAIRS":"กองกิจการนักศึกษา",672,162);
   rr(g,560,80,52,36,3); g.fillStyle="#2B3A3F"; g.fill(); g.lineWidth=3; g.stroke(); g.fillStyle="#9FD3E6"; g.fillRect(566,86,40,22);
   for(let k=0;k<3;k++){ rr(g,700+k*14,98-k*3,40,10,2); g.fillStyle=["#FFFFFF","#FFE9A8","#D6F0FF"][k]; g.fill(); g.lineWidth=1.8; g.stroke(); }
 }
 function drawPoliceCounter(g){
   rr(g,528,96,288,44,3); g.fillStyle="#EEF2F6"; g.fill(); g.lineWidth=3; g.strokeStyle=INK; g.stroke();
   rr(g,528,136,288,50,3); g.fillStyle="#22344A"; g.fill(); g.stroke();
-  g.fillStyle="#F2C14E"; g.font="800 16px 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', Tahoma, sans-serif"; g.textAlign="center"; g.textBaseline="middle"; g.fillText(S.lang==="en"?"REPORTS · ASK HERE":"รับแจ้งความ · สอบถาม",672,162);
+  g.fillStyle="#F2C14E"; g.font="800 16px system-ui, -apple-system, 'Segoe UI', 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', sans-serif"; g.textAlign="center"; g.textBaseline="middle"; g.fillText(S.lang==="en"?"REPORTS · ASK HERE":"รับแจ้งความ · สอบถาม",672,162);
   rr(g,560,80,52,36,3); g.fillStyle="#2B3A3F"; g.fill(); g.lineWidth=3; g.stroke(); g.fillStyle="#9FD3E6"; g.fillRect(566,86,40,22);
   rr(g,740,90,48,20,3); g.fillStyle="#C9A76A"; g.fill(); g.lineWidth=2; g.stroke(); g.fillStyle="#FFFFFF"; g.fillRect(746,94,36,4);
 }
@@ -210,10 +208,10 @@ function drawKiosk(g,now){
   rr(g,x-26,y-74,52,86,6); g.fillStyle="#6A4C93"; g.fill(); g.lineWidth=3; g.strokeStyle=INK; g.stroke();
   rr(g,x-20,y-66,40,30,3); g.fillStyle="#13221C"; g.fill(); g.lineWidth=2; g.stroke();
   const k=RM?0:Math.floor(now/400)%3;
-  g.fillStyle=["#FFC414","#FF5A1F","#2BB673"][k]; g.font="800 9px 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', Tahoma, sans-serif"; g.textAlign="center"; g.textBaseline="middle"; g.fillText(S.lang==="en"?"TRAIN":"ฝึกสมอง",x,y-51);
+  g.fillStyle=["#FFC414","#FF5A1F","#2BB673"][k]; g.font="800 9px system-ui, -apple-system, 'Segoe UI', 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', sans-serif"; g.textAlign="center"; g.textBaseline="middle"; g.fillText(S.lang==="en"?"TRAIN":"ฝึกสมอง",x,y-51);
   g.fillStyle="#FFC414"; g.beginPath(); g.arc(x-8,y-20,5,0,7); g.fill(); g.stroke(); g.fillStyle="#E5402F"; g.beginPath(); g.arc(x+8,y-20,5,0,7); g.fill(); g.stroke();
   rr(g,x-30,y-90,60,18,4); g.fillStyle="#FFC414"; g.fill(); g.lineWidth=2.5; g.stroke();
-  g.fillStyle=INK; g.font="800 10px 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', Tahoma, sans-serif"; g.fillText(S.lang==="en"?"MINI-GAMES":"มินิเกม",x,y-81);
+  g.fillStyle=INK; g.font="800 10px system-ui, -apple-system, 'Segoe UI', 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', sans-serif"; g.fillText(S.lang==="en"?"MINI-GAMES":"มินิเกม",x,y-81);
 }
 function drawFountain(g,now){
   const cx=720, cy=440;
@@ -292,7 +290,7 @@ function drawCrossroads(g){
   g.fillRect(IC.x0+2,494,53,6);
   // signpost at the top
   rr(g,858,6,174,26,6); g.fillStyle="#2F6D3A"; g.fill(); g.lineWidth=2.5; g.strokeStyle=INK; g.stroke();
-  g.fillStyle="#FFFFFF"; g.font="800 12px 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', Tahoma, sans-serif"; g.textAlign="center"; g.textBaseline="middle"; g.fillText(S.lang==="en"?"↑ Red Brick University":"↑ ม.อิฐแดง",945,19);
+  g.fillStyle="#FFFFFF"; g.font="800 12px system-ui, -apple-system, 'Segoe UI', 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', sans-serif"; g.textAlign="center"; g.textBaseline="middle"; g.fillText(S.lang==="en"?"↑ Red Brick University":"↑ ม.อิฐแดง",945,19);
 }
 function drawSouthRoad(g){
   g.fillStyle="#4A4D52"; g.fillRect(IC.x0,760,IC.x1-IC.x0,OH-760);
@@ -354,7 +352,7 @@ function drawDoorBadges(g,now){
   for(const b of BUILDINGS){
     if(b.alley){ drawAlleyBadge(g,b,now); continue; }
     const open=!b.soon && zoneOpen(b.zone), y=40+(RM?0:Math.sin(now/300+b.zone)*3);
-    g.font="800 13px 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', Tahoma, sans-serif"; g.textAlign="center"; g.textBaseline="middle";
+    g.font="800 13px system-ui, -apple-system, 'Segoe UI', 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', sans-serif"; g.textAlign="center"; g.textBaseline="middle";
     let label;
     if(b.closed){ label=L("🚧 ปิดปรับปรุง","🚧 Closed for renovation"); const tw=g.measureText(label).width+22, by=y+108; rr(g,b.door-tw/2,by-14,tw,28,14); g.fillStyle="#FFFFFF"; g.fill(); g.lineWidth=2.5; g.strokeStyle=INK; g.stroke(); g.fillStyle=INK; g.fillText(label,b.door,by+1);
       g.fillStyle="#8C8578"; g.fillRect(b.door-34,160,68,90); g.strokeStyle="#6E685E"; g.lineWidth=2; for(let yy=168;yy<250;yy+=9){ g.beginPath(); g.moveTo(b.door-34,yy); g.lineTo(b.door+34,yy); g.stroke(); } continue; }
@@ -373,13 +371,13 @@ function drawAlleyBadge(g,b,now){
   if(b.hide) return;
   if(b.road){ b={...b, door:(IC.x0+IC.x1)/2}; }
   if(b.road){   /* the university sign is bigger, and sits a little lower so the top bar never covers it */
-    g.font="800 19px 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', Tahoma, sans-serif"; g.textAlign="center"; g.textBaseline="middle";
+    g.font="800 19px system-ui, -apple-system, 'Segoe UI', 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', sans-serif"; g.textAlign="center"; g.textBaseline="middle";
     const label=`${b.icon} ${b.name[S.lang]}`, tw=g.measureText(label).width+30, by=104+(RM?0:Math.sin(now/300+b.door)*3);
     rr(g,b.door-tw/2,by-19,tw,38,19); g.fillStyle=b.col; g.fill(); g.lineWidth=3; g.strokeStyle=INK; g.stroke(); g.fillStyle=INK; g.fillText(label,b.door,by+1);
     return;
   }
   if(b.soi){
-    g.font="800 12px 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', Tahoma, sans-serif"; g.textAlign="center"; g.textBaseline="middle";
+    g.font="800 12px system-ui, -apple-system, 'Segoe UI', 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', sans-serif"; g.textAlign="center"; g.textBaseline="middle";
     const label=`${b.icon} ${b.name[S.lang]}`, tw=g.measureText(label).width+20, by=26+(RM?0:Math.sin(now/300+b.door)*3);
     rr(g,b.door-tw/2,by-12,tw,24,12); g.fillStyle=b.col; g.fill(); g.lineWidth=2.5; g.strokeStyle=INK; g.stroke(); g.fillStyle=INK; g.fillText(label,b.door,by+1);
     return;
@@ -391,7 +389,7 @@ function drawAlleyBadge(g,b,now){
     g.save(); g.globalAlpha=.35+.25*Math.sin(now/400); g.fillStyle="#9B7BE0"; g.beginPath(); g.ellipse(498,170,40,70,0,0,7); g.fill(); g.restore();
     for(let i=0;i<3;i++){ const p=((now/2400)+i/3)%1; g.fillStyle=`rgba(230,220,255,${.6*(1-p)})`; g.beginPath(); g.arc(486+i*12,230-p*150,4,0,7); g.fill(); }
   }
-  g.font="800 12px 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', Tahoma, sans-serif"; g.textAlign="center"; g.textBaseline="middle";
+  g.font="800 12px system-ui, -apple-system, 'Segoe UI', 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', sans-serif"; g.textAlign="center"; g.textBaseline="middle";
   const label=open?L("👻 ตรอกมืด","👻 Dark alley"):L("🔒 ช่วยครบทุกคนก่อน","🔒 Help everyone first");
   const tw=g.measureText(label).width+20, by=26+(RM?0:Math.sin(now/300)*3);
   rr(g,b.door-tw/2,by-12,tw,24,12); g.fillStyle=open?"#C9B8F0":"#FFFFFF"; g.fill(); g.lineWidth=2.5; g.strokeStyle=INK; g.stroke();
@@ -404,7 +402,7 @@ function drawHauntStatic(g){
   for(let y=108,r=0;y<590;y+=24,r++){ g.beginPath(); g.moveTo(0,y); g.lineTo(W,y); g.stroke(); for(let x=(r%2?48:0);x<W;x+=96){ g.beginPath(); g.moveTo(x,y); g.lineTo(x,y+24); g.stroke(); } }
   rr(g,296,300,300,172,20); g.fillStyle="#4A2E3A"; g.fill(); g.lineWidth=3; g.strokeStyle=INK; g.stroke();
   rr(g,310,314,272,144,14); g.setLineDash([8,7]); g.strokeStyle="#C9B8F0"; g.lineWidth=2.5; g.stroke(); g.setLineDash([]);
-  g.fillStyle="#C9B8F0"; g.font="800 24px 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', Tahoma, sans-serif"; g.textAlign="center"; g.textBaseline="middle"; g.fillText(S.lang==="en"?"STOP · THINK · CHECK":"หยุด · คิด · ตรวจสอบ",446,388);
+  g.fillStyle="#C9B8F0"; g.font="800 24px system-ui, -apple-system, 'Segoe UI', 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', sans-serif"; g.textAlign="center"; g.textBaseline="middle"; g.fillText(S.lang==="en"?"STOP · THINK · CHECK":"หยุด · คิด · ตรวจสอบ",446,388);
   g.fillStyle="#3A3146"; g.fillRect(0,0,W,108); g.fillStyle="#5A3E52"; g.fillRect(0,86,W,22);
   g.strokeStyle=INK; g.lineWidth=3; g.beginPath(); g.moveTo(0,86); g.lineTo(W,86); g.moveTo(0,108); g.lineTo(W,108); g.stroke();
   for(let i=0;i<3;i++){ const x=64+i*124; rr(g,x,14,108,62,4); g.fillStyle="#1C2233"; g.fill(); g.lineWidth=3; g.strokeStyle=INK; g.stroke();
@@ -413,8 +411,8 @@ function drawHauntStatic(g){
     g.fillStyle="#E8E4C9"; g.beginPath(); g.arc(x+26,32,9,0,7); g.fill(); }
   // portrait frame
   rr(g,566,8,214,64,4); g.fillStyle="#4A3A2A"; g.fill(); g.lineWidth=3; g.strokeStyle=INK; g.stroke();
-  g.fillStyle="#C9B8F0"; g.font="800 17px 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', Tahoma, sans-serif"; g.textAlign="left"; g.textBaseline="middle"; g.fillText(S.lang==="en"?"THE OLD HOUSE":"บ้านเก่าในตรอก",580,28);
-  g.fillStyle="#E8E4C9"; g.font="600 11px 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', Tahoma, sans-serif"; g.fillText(S.lang==="en"?"spirits waiting to move on":"วิญญาณที่ยังไปไหนไม่ได้",580,52);
+  g.fillStyle="#C9B8F0"; g.font="800 17px system-ui, -apple-system, 'Segoe UI', 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', sans-serif"; g.textAlign="left"; g.textBaseline="middle"; g.fillText(S.lang==="en"?"THE OLD HOUSE":"บ้านเก่าในตรอก",580,28);
+  g.fillStyle="#E8E4C9"; g.font="600 11px system-ui, -apple-system, 'Segoe UI', 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', sans-serif"; g.fillText(S.lang==="en"?"spirits waiting to move on":"วิญญาณที่ยังไปไหนไม่ได้",580,52);
   // cobwebs
   g.strokeStyle="rgba(230,225,240,.5)"; g.lineWidth=1.2;
   for(const [cx,cy,s] of [[44,108,1],[W-44,108,-1]]) for(let k=1;k<=4;k++){ g.beginPath(); g.arc(cx,cy,k*12,s>0?0:Math.PI/2,s>0?Math.PI/2:Math.PI); g.stroke(); }
@@ -426,7 +424,7 @@ function drawHauntStatic(g){
 function drawHauntCounter(g,now){
   rr(g,528,96,288,44,3); g.fillStyle="#5A4632"; g.fill(); g.lineWidth=3; g.strokeStyle=INK; g.stroke();
   rr(g,528,136,288,50,3); g.fillStyle="#3E3024"; g.fill(); g.stroke();
-  g.fillStyle="#C9B8F0"; g.font="800 16px 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', Tahoma, sans-serif"; g.textAlign="center"; g.textBaseline="middle"; g.fillText(S.lang==="en"?"ALTAR":"โต๊ะหมู่บูชา",672,162);
+  g.fillStyle="#C9B8F0"; g.font="800 16px system-ui, -apple-system, 'Segoe UI', 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', sans-serif"; g.textAlign="center"; g.textBaseline="middle"; g.fillText(S.lang==="en"?"ALTAR":"โต๊ะหมู่บูชา",672,162);
   for(const x of [570,620,724,774]){ g.fillStyle="#F2EEDC"; g.fillRect(x-4,92,8,22); g.strokeStyle=INK; g.lineWidth=1.5; g.strokeRect(x-4,92,8,22); drawFlame(g,x,90,now); }
   rr(g,652,70,40,40,4); g.fillStyle="#2B2433"; g.fill(); g.lineWidth=2.5; g.stroke(); g.fillStyle="#E8E4C9"; g.beginPath(); g.arc(672,88,10,0,7); g.fill();
 }
@@ -446,18 +444,18 @@ function drawNetStatic(g){
   for(let y=108;y<=580;y+=48){ g.beginPath(); g.moveTo(0,y); g.lineTo(W,y); g.stroke(); }
   rr(g,296,300,300,172,20); g.fillStyle="#1C3B47"; g.fill(); g.lineWidth=3; g.strokeStyle=INK; g.stroke();
   rr(g,310,314,272,144,14); g.setLineDash([8,7]); g.strokeStyle="#5EE6D0"; g.lineWidth=2.5; g.stroke(); g.setLineDash([]);
-  g.fillStyle="#5EE6D0"; g.font="800 24px 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', Tahoma, sans-serif"; g.textAlign="center"; g.textBaseline="middle"; g.fillText(S.lang==="en"?"STOP · THINK · CHECK":"หยุด · คิด · ตรวจสอบ",446,388);
+  g.fillStyle="#5EE6D0"; g.font="800 24px system-ui, -apple-system, 'Segoe UI', 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', sans-serif"; g.textAlign="center"; g.textBaseline="middle"; g.fillText(S.lang==="en"?"STOP · THINK · CHECK":"หยุด · คิด · ตรวจสอบ",446,388);
   g.fillStyle="#1D2033"; g.fillRect(0,0,W,108);
   g.fillStyle="#7A5AA6"; g.fillRect(0,86,W,22); g.fillStyle="#5EE6D0"; g.fillRect(0,82,W,4);
   g.strokeStyle=INK; g.lineWidth=3; g.beginPath(); g.moveTo(0,82); g.lineTo(W,82); g.moveTo(0,108); g.lineTo(W,108); g.stroke();
   // game posters
   const posters=[["#E4553B","LEVEL UP"],["#3A5A94","GG"],["#2BB673","QUEST"]];
   posters.forEach((p,i)=>{ const x=70+i*124; rr(g,x,12,96,64,4); g.fillStyle=p[0]; g.fill(); g.lineWidth=3; g.strokeStyle=INK; g.stroke();
-    g.fillStyle="#FFF4E0"; g.font="800 15px 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', Tahoma, sans-serif"; g.textAlign="center"; g.fillText(p[1],x+48,46); });
+    g.fillStyle="#FFF4E0"; g.font="800 15px system-ui, -apple-system, 'Segoe UI', 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', sans-serif"; g.textAlign="center"; g.fillText(p[1],x+48,46); });
   // neon sign
   rr(g,566,8,214,64,6); g.fillStyle="#13162A"; g.fill(); g.lineWidth=3; g.strokeStyle=INK; g.stroke();
-  g.fillStyle="#5EE6D0"; g.font="800 22px 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', Tahoma, sans-serif"; g.textAlign="left"; g.textBaseline="middle"; g.fillText("NET ZONE",580,30);
-  g.fillStyle="#F2C14E"; g.font="600 11px 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', Tahoma, sans-serif"; g.fillText(S.lang==="en"?"1 HR 20 BAHT · TOP-UP HERE":"ชม.ละ 20 บาท · เติมเกมได้",580,54);
+  g.fillStyle="#5EE6D0"; g.font="800 22px system-ui, -apple-system, 'Segoe UI', 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', sans-serif"; g.textAlign="left"; g.textBaseline="middle"; g.fillText("NET ZONE",580,30);
+  g.fillStyle="#F2C14E"; g.font="600 11px system-ui, -apple-system, 'Segoe UI', 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', sans-serif"; g.fillText(S.lang==="en"?"1 HR 20 BAHT · TOP-UP HERE":"ชม.ละ 20 บาท · เติมเกมได้",580,54);
   g.fillStyle="#3B3F58"; g.fillRect(0,108,44,H); g.fillRect(W-44,108,44,H); g.fillRect(0,580,384,44); g.fillRect(480,580,W-480,44);
   g.strokeStyle=INK; g.lineWidth=3; g.beginPath(); g.moveTo(44,108); g.lineTo(44,580); g.lineTo(384,580); g.moveTo(480,580); g.lineTo(W-44,580); g.lineTo(W-44,108); g.stroke();
   g.fillStyle="#2A2F45"; g.fillRect(384,580,96,44);
@@ -468,7 +466,7 @@ function drawNetStatic(g){
 function drawNetCounter(g){
   rr(g,528,96,288,44,3); g.fillStyle="#3B3F58"; g.fill(); g.lineWidth=3; g.strokeStyle=INK; g.stroke();
   rr(g,528,136,288,50,3); g.fillStyle="#7A5AA6"; g.fill(); g.stroke();
-  g.fillStyle="#5EE6D0"; g.font="800 17px 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', Tahoma, sans-serif"; g.textAlign="center"; g.textBaseline="middle"; g.fillText(S.lang==="en"?"CASHIER · TOP-UP":"แคชเชียร์ · เติมเกม",672,162);
+  g.fillStyle="#5EE6D0"; g.font="800 17px system-ui, -apple-system, 'Segoe UI', 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', sans-serif"; g.textAlign="center"; g.textBaseline="middle"; g.fillText(S.lang==="en"?"CASHIER · TOP-UP":"แคชเชียร์ · เติมเกม",672,162);
   rr(g,552,76,52,38,4); g.fillStyle="#1B1E22"; g.fill(); g.stroke(); g.fillStyle="#5EE6D0"; g.fillRect(558,82,40,20);
   for(let i=0;i<4;i++){ rr(g,700+i*24,84,18,26,3); g.fillStyle=["#E4553B","#F2C14E","#2BB673","#5EE6D0"][i]; g.fill(); g.lineWidth=2; g.stroke(); }
 }
@@ -491,7 +489,7 @@ function drawBankStatic(g){
   // queue lane rope
   rr(g,296,300,300,172,20); g.fillStyle="#0F5E46"; g.fill(); g.lineWidth=3; g.strokeStyle=INK; g.stroke();
   rr(g,310,314,272,144,14); g.setLineDash([8,7]); g.strokeStyle="#F2C14E"; g.lineWidth=2.5; g.stroke(); g.setLineDash([]);
-  g.fillStyle="#F2C14E"; g.font="800 24px 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', Tahoma, sans-serif"; g.textAlign="center"; g.textBaseline="middle"; g.fillText(S.lang==="en"?"STOP · THINK · CHECK":"หยุด · คิด · ตรวจสอบ",446,388);
+  g.fillStyle="#F2C14E"; g.font="800 24px system-ui, -apple-system, 'Segoe UI', 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', sans-serif"; g.textAlign="center"; g.textBaseline="middle"; g.fillText(S.lang==="en"?"STOP · THINK · CHECK":"หยุด · คิด · ตรวจสอบ",446,388);
   // back wall
   g.fillStyle="#F6F2EA"; g.fillRect(0,0,W,108);
   g.fillStyle="#0F5E46"; g.fillRect(0,86,W,22); g.fillStyle="#F2C14E"; g.fillRect(0,82,W,5);
@@ -500,11 +498,11 @@ function drawBankStatic(g){
   for(let i=0;i<3;i++){ const x=76+i*124;
     rr(g,x,10,84,74,5); g.fillStyle="#C9CED4"; g.fill(); g.lineWidth=3; g.strokeStyle=INK; g.stroke();
     rr(g,x+12,18,60,30,3); g.fillStyle="#2E8B6A"; g.fill(); g.lineWidth=2; g.stroke();
-    g.fillStyle="#E8F5EE"; g.font="700 9px 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', Tahoma, sans-serif"; g.textAlign="center"; g.fillText("ATM",x+42,33);
+    g.fillStyle="#E8F5EE"; g.font="700 9px system-ui, -apple-system, 'Segoe UI', 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', sans-serif"; g.textAlign="center"; g.fillText("ATM",x+42,33);
     g.fillStyle="#3B3B3B"; g.fillRect(x+16,56,26,4); for(let k=0;k<3;k++) for(let j=0;j<3;j++){ g.fillStyle="#F6F2EA"; g.fillRect(x+48+j*8,52+k*7,6,5); } }
   // queue display
   rr(g,566,8,214,64,4); g.fillStyle="#13221C"; g.fill(); g.lineWidth=3; g.strokeStyle=INK; g.stroke();
-  g.fillStyle="#F2C14E"; g.font="800 15px 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', Tahoma, sans-serif"; g.textAlign="left"; g.textBaseline="middle"; g.fillText(S.lang==="en"?"NKT BANK":"ธนาคารนครทอง",580,24);
+  g.fillStyle="#F2C14E"; g.font="800 15px system-ui, -apple-system, 'Segoe UI', 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', sans-serif"; g.textAlign="left"; g.textBaseline="middle"; g.fillText(S.lang==="en"?"NKT BANK":"ธนาคารนครทอง",580,24);
   g.fillStyle="#7FE0A8"; g.font="600 13px 'IBM Plex Mono', monospace"; g.fillText("A047 → 2   B112 → 3",580,50);
   // walls
   g.fillStyle="#D9D1C2"; g.fillRect(0,108,44,H); g.fillRect(W-44,108,44,H); g.fillRect(0,580,384,44); g.fillRect(480,580,W-480,44);
@@ -513,7 +511,7 @@ function drawBankStatic(g){
   rr(g,388,584,42,34,2); g.fillStyle="#D4ECF6"; g.fill(); g.lineWidth=2.5; g.strokeStyle=INK; g.stroke(); rr(g,434,584,42,34,2); g.fill(); g.stroke();
   // security notice on the wall
   rr(g,6,300,32,70,3); g.fillStyle="#FFE9A8"; g.fill(); g.lineWidth=2; g.strokeStyle=INK; g.stroke();
-  g.fillStyle=INK; g.font="800 9px 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', Tahoma, sans-serif"; g.textAlign="center"; g.save(); g.translate(22,335); g.rotate(-Math.PI/2); g.fillText(S.lang==="en"?"CALL 1441":"สายด่วน 1441",0,0); g.restore();
+  g.fillStyle=INK; g.font="800 9px system-ui, -apple-system, 'Segoe UI', 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', sans-serif"; g.textAlign="center"; g.save(); g.translate(22,335); g.rotate(-Math.PI/2); g.fillText(S.lang==="en"?"CALL 1441":"สายด่วน 1441",0,0); g.restore();
 }
 function drawBankCounter(g){
   rr(g,528,96,288,44,3); g.fillStyle="#E9E1CF"; g.fill(); g.lineWidth=3; g.strokeStyle=INK; g.stroke();
@@ -521,7 +519,7 @@ function drawBankCounter(g){
   for(let i=0;i<3;i++){ const x=552+i*92;
     g.fillStyle="rgba(203,230,241,.7)"; g.fillRect(x,70,70,40); g.lineWidth=2; g.strokeStyle=INK; g.strokeRect(x,70,70,40);
     rr(g,x+22,146,26,26,13); g.fillStyle="#F2C14E"; g.fill(); g.lineWidth=2.5; g.stroke();
-    g.fillStyle=INK; g.font="800 14px 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', Tahoma, sans-serif"; g.textAlign="center"; g.textBaseline="middle"; g.fillText(String(i+1),x+35,160); }
+    g.fillStyle=INK; g.font="800 14px system-ui, -apple-system, 'Segoe UI', 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', sans-serif"; g.textAlign="center"; g.textBaseline="middle"; g.fillText(String(i+1),x+35,160); }
 }
 function drawBankTable(g,t,i){
   if(t.item==="qr"){ // queue ticket machine
@@ -536,71 +534,7 @@ function drawBankTable(g,t,i){
   for(let k=0;k<3;k++){ rr(g,t.x-36+k*25,t.y-6,22,18,4); g.fillStyle="#3BA17C"; g.fill(); g.stroke(); }
 }
 /* zone 2: QuickMart convenience store + parcel point */
-function drawMartStatic(g){
-  /* zone 2: CO-WORK HUB — carpet tiles, glass wall, neon Wi-Fi sign */
-  g.fillStyle="#D9DEDC"; g.fillRect(0,0,W,H);
-  for(let x=0;x<W;x+=64) for(let y=108;y<580;y+=64){ g.fillStyle=((x+y)/64)%2?"#D1D7D4":"#DCE1DF"; g.fillRect(x,y,64,64); }
-  // walkway rug
-  rr(g,296,300,300,172,14); g.fillStyle="#1F5E5B"; g.fill(); g.lineWidth=3; g.strokeStyle=INK; g.stroke();
-  rr(g,310,314,272,144,10); g.setLineDash([8,7]); g.strokeStyle="#7CF0C8"; g.lineWidth=2.5; g.stroke(); g.setLineDash([]);
-  g.fillStyle="#BFF5E3"; g.font="800 22px 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', Tahoma, sans-serif"; g.textAlign="center"; g.textBaseline="middle";
-  g.fillText(S.lang==="en"?"ASK BEFORE YOU CONNECT":"ถามก่อนต่อ · ก่อนเสียบ",446,386);
-  // back wall: dark slate with big windows
-  g.fillStyle="#2B3A3F"; g.fillRect(0,0,W,108);
-  g.fillStyle="#1F5E5B"; g.fillRect(0,96,W,12); g.strokeStyle=INK; g.lineWidth=3; g.beginPath(); g.moveTo(0,108); g.lineTo(W,108); g.stroke();
-  for(let i=0;i<3;i++){ const x=40+i*130; rr(g,x,12,116,70,3); g.fillStyle="#9FD3E6"; g.fill(); g.lineWidth=3; g.strokeStyle=INK; g.stroke();
-    g.beginPath(); g.moveTo(x+58,12); g.lineTo(x+58,82); g.stroke(); g.strokeStyle="rgba(255,255,255,.8)"; g.lineWidth=3; g.beginPath(); g.moveTo(x+12,46); g.lineTo(x+32,26); g.moveTo(x+70,46); g.lineTo(x+90,26); g.stroke(); }
-  // neon sign
-  rr(g,560,10,232,62,6); g.fillStyle="#173E3C"; g.fill(); g.lineWidth=3; g.strokeStyle=INK; g.stroke();
-  g.save(); g.shadowColor="#7CF0C8"; g.shadowBlur=10; g.fillStyle="#7CF0C8"; g.font="800 19px 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', Tahoma, sans-serif"; g.textAlign="left"; g.fillText("CO-WORK HUB 24",576,32); g.restore();
-  g.fillStyle="#E6ECEA"; g.font="600 11px 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', Tahoma, sans-serif"; g.textAlign="left"; g.fillText(S.lang==="en"?"FREE Wi-Fi · OPEN 24H":"Wi-Fi ฟรี · เปิด 24 ชม.",578,56);
-  // wifi glyph on the sign
-  g.strokeStyle="#7CF0C8"; g.lineWidth=2.5; g.lineCap="round"; for(const r of [6,11,16]){ g.beginPath(); g.arc(768,52,r,Math.PI*1.25,Math.PI*1.75); g.stroke(); } g.fillStyle="#7CF0C8"; g.beginPath(); g.arc(768,52,2.5,0,7); g.fill();
-  // the suspicious free charging station against the wall
-  rr(g,232,26,58,92,6); g.fillStyle="#F2F2F2"; g.fill(); g.lineWidth=3; g.strokeStyle=INK; g.stroke();
-  rr(g,238,32,46,20,3); g.fillStyle="#FFC414"; g.fill(); g.lineWidth=2; g.stroke();
-  g.fillStyle=INK; g.font="800 9px 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', Tahoma, sans-serif"; g.textAlign="center"; g.fillText(S.lang==="en"?"FREE CHARGE":"ชาร์จฟรี",261,43);
-  for(let k=0;k<4;k++){ const cx=242+k*12; g.fillStyle="#3B3B3B"; g.fillRect(cx,60,6,8); g.strokeStyle="#3B3B3B"; g.lineWidth=2; g.beginPath(); g.moveTo(cx+3,68); g.quadraticCurveTo(cx+3+(k-1.5)*6,98,cx+1,112); g.stroke(); }
-  g.fillStyle="#E5402F"; g.beginPath(); g.arc(282,108,3,0,7); g.fill();
-  // side + bottom walls
-  g.fillStyle="#BCC6C3"; g.fillRect(0,108,44,H); g.fillRect(W-44,108,44,H); g.fillRect(0,580,384,44); g.fillRect(480,580,W-480,44);
-  g.strokeStyle=INK; g.lineWidth=3; g.beginPath(); g.moveTo(44,108); g.lineTo(44,580); g.lineTo(384,580); g.moveTo(480,580); g.lineTo(W-44,580); g.lineTo(W-44,108); g.stroke();
-  g.fillStyle="#D9DEDC"; g.fillRect(384,580,96,44);
-  rr(g,388,584,42,34,2); g.fillStyle="#9FD3E6"; g.fill(); g.lineWidth=2.5; g.strokeStyle=INK; g.stroke(); rr(g,434,584,42,34,2); g.fill(); g.stroke();
-  // wall sockets for honest charging
-  for(const y of [300,460]){ rr(g,W-40,y,14,22,2); g.fillStyle="#FFFFFF"; g.fill(); g.lineWidth=2; g.strokeStyle=INK; g.stroke(); g.fillStyle=INK; g.fillRect(W-36,y+6,2,5); g.fillRect(W-31,y+6,2,5); }
-  // router
-  rr(g,10,408,26,18,3); g.fillStyle="#F5F1EA"; g.fill(); g.strokeStyle=INK; g.lineWidth=2.5; g.stroke();
-  g.beginPath(); g.moveTo(15,408); g.lineTo(12,394); g.moveTo(31,408); g.lineTo(34,394); g.stroke();
-  g.fillStyle="#2BB673"; g.beginPath(); g.arc(18,417,2.4,0,7); g.fill(); g.fillStyle="#FFC414"; g.beginPath(); g.arc(26,417,2.4,0,7); g.fill();
-}
-function drawCoDesk(g,t,i){
-  g.fillStyle="rgba(0,0,0,.16)"; g.beginPath(); g.ellipse(t.x,t.y+18,44,9,0,0,7); g.fill();
-  g.fillStyle="#3B3B3B"; g.fillRect(t.x-36,t.y,4,18); g.fillRect(t.x+32,t.y,4,18);
-  rr(g,t.x-42,t.y-16,84,22,3); g.fillStyle="#E9D9BE"; g.fill(); g.lineWidth=3; g.strokeStyle=INK; g.stroke();
-  // laptop
-  rr(g,t.x-26,t.y-34,30,20,2); g.fillStyle="#C7CDD3"; g.fill(); g.lineWidth=2; g.stroke(); g.fillStyle=i%2?"#7FB7E8":"#9FE3C7"; g.fillRect(t.x-22,t.y-31,22,14);
-  rr(g,t.x-30,t.y-14,38,5,1.5); g.fillStyle="#AEB5BC"; g.fill(); g.stroke();
-  // lamp or plant + coffee
-  if(i%2){ g.strokeStyle=INK; g.lineWidth=2.5; g.beginPath(); g.moveTo(t.x+26,t.y-12); g.lineTo(t.x+30,t.y-34); g.lineTo(t.x+20,t.y-40); g.stroke(); g.fillStyle="#FFC414"; g.beginPath(); g.arc(t.x+19,t.y-38,6,0,Math.PI); g.fill(); g.stroke(); }
-  else { rr(g,t.x+18,t.y-26,12,12,2); g.fillStyle="#C98A5B"; g.fill(); g.lineWidth=2; g.stroke(); g.fillStyle="#3BA17C"; g.beginPath(); g.arc(t.x+24,t.y-30,8,0,7); g.fill(); g.stroke(); }
-  g.beginPath(); g.arc(t.x+10,t.y-8,5,0,7); g.fillStyle="#FFFFFF"; g.fill(); g.lineWidth=1.8; g.strokeStyle=INK; g.stroke();
-}
 function parcel(g,x,y,w,h){ rr(g,x,y,w,h,2); g.fillStyle="#C99A5B"; g.fill(); g.lineWidth=2; g.strokeStyle=INK; g.stroke(); g.fillStyle="#E9C98F"; g.fillRect(x+w/2-3,y+1,6,h-2); g.fillStyle="#FFFFFF"; g.fillRect(x+4,y+h-9,10,6); }
-const SHELF_COLS=["#FF5A1F","#2BB673","#FFC414","#2F6DB5","#E05C8A","#7A5AC8"];
-function drawShelf(g,t,i){
-  g.fillStyle="rgba(0,0,0,.16)"; g.beginPath(); g.ellipse(t.x,t.y+20,40,9,0,0,7); g.fill();
-  rr(g,t.x-38,t.y-24,76,42,3); g.fillStyle="#F4F6F8"; g.fill(); g.lineWidth=3; g.strokeStyle=INK; g.stroke();
-  g.lineWidth=2; g.beginPath(); g.moveTo(t.x-38,t.y-3); g.lineTo(t.x+38,t.y-3); g.stroke();
-  if(t.item==="laptop"){ // parcel lockers
-    for(let r=0;r<2;r++) for(let c=0;c<4;c++){ rr(g,t.x-34+c*17,t.y-21+r*21,15,17,1.5); g.fillStyle=(r+c)%3===0?"#FFC414":"#DDE4EC"; g.fill(); g.lineWidth=1.5; g.stroke(); }
-    return;
-  }
-  for(let r=0;r<2;r++) for(let c=0;c<6;c++){
-    const col=SHELF_COLS[(c+r*2+i)%SHELF_COLS.length];
-    rr(g,t.x-34+c*11.5,t.y-20+r*21,9,15,1.5); g.fillStyle=col; g.fill(); g.lineWidth=1.4; g.strokeStyle=INK; g.stroke();
-  }
-}
 /* sortable props */
 function drawCounter(g){
   if(S.zone===3) return drawBankCounter(g);
@@ -611,16 +545,16 @@ function drawCounter(g){
   if(S.zone===2){ // reception desk
     rr(g,528,96,288,44,3); g.fillStyle="#E6ECEA"; g.fill(); g.lineWidth=3; g.strokeStyle=INK; g.stroke();
     rr(g,528,136,288,50,3); g.fillStyle="#1F5E5B"; g.fill(); g.stroke();
-    g.fillStyle="#BFF5E3"; g.font="800 17px 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', Tahoma, sans-serif"; g.textAlign="center"; g.textBaseline="middle"; g.fillText(S.lang==="en"?"RECEPTION · ASK HERE":"เคาน์เตอร์ · ถามที่นี่",672,162);
+    g.fillStyle="#BFF5E3"; g.font="800 17px system-ui, -apple-system, 'Segoe UI', 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', sans-serif"; g.textAlign="center"; g.textBaseline="middle"; g.fillText(S.lang==="en"?"RECEPTION · ASK HERE":"เคาน์เตอร์ · ถามที่นี่",672,162);
     rr(g,556,80,52,36,3); g.fillStyle="#2B3A3F"; g.fill(); g.lineWidth=3; g.stroke(); g.fillStyle="#7CF0C8"; g.fillRect(562,86,40,22);
     rr(g,700,92,64,30,3); g.fillStyle="#FFFFFF"; g.fill(); g.lineWidth=2.5; g.stroke();
-    g.fillStyle=INK; g.font="700 9px 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', Tahoma, sans-serif"; g.fillText("Wi-Fi: CityLib-Member",732,102); g.fillText(S.lang==="en"?"pw on member card":"รหัสบนบัตรสมาชิก",732,114);
+    g.fillStyle=INK; g.font="700 9px system-ui, -apple-system, 'Segoe UI', 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', sans-serif"; g.fillText("Wi-Fi: CityLib-Member",732,102); g.fillText(S.lang==="en"?"pw on member card":"รหัสบนบัตรสมาชิก",732,114);
     g.beginPath(); g.arc(790,112,9,0,7); g.fillStyle="#FFFFFF"; g.fill(); g.lineWidth=2; g.stroke(); g.fillStyle="#3BA17C"; g.beginPath(); g.arc(790,100,8,0,7); g.fill(); g.stroke();
     return;
   }
   rr(g,528,96,288,44,3); g.fillStyle="#C9935D"; g.fill(); g.lineWidth=3; g.strokeStyle=INK; g.stroke();
   rr(g,528,136,288,50,3); g.fillStyle="#8A5A33"; g.fill(); g.stroke();
-  g.fillStyle="#F5ECDD"; g.font="800 18px 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', Tahoma, sans-serif"; g.textAlign="center"; g.textBaseline="middle"; g.fillText("BEAN HOUSE",672,162);
+  g.fillStyle="#F5ECDD"; g.font="800 18px system-ui, -apple-system, 'Segoe UI', 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', sans-serif"; g.textAlign="center"; g.textBaseline="middle"; g.fillText("BEAN HOUSE",672,162);
   rr(g,552,74,50,48,4); g.fillStyle="#9AA3AA"; g.fill(); g.stroke();
   rr(g,560,82,34,14,2); g.fillStyle="#2E3B33"; g.fill();
   g.fillStyle="#FFFFFF"; rr(g,568,104,18,14,3); g.fill(); g.stroke();
@@ -716,14 +650,14 @@ function drawChatter(g,now){
     const cyc=(now/1000+i*2.3)%8; if(cyc>2.8) return;
     const line=arr[Math.floor((now/8000+i))%arr.length][S.lang==="en"?1:0];
     const a=Math.min(1,cyc*4,(2.8-cyc)*4), y=n.y-CHAR_H-44;
-    g.save(); g.globalAlpha=a; g.font="600 12px 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', Tahoma, sans-serif"; const tw=g.measureText(line).width+16;
+    g.save(); g.globalAlpha=a; g.font="600 12px system-ui, -apple-system, 'Segoe UI', 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', sans-serif"; const tw=g.measureText(line).width+16;
     rr(g,n.x-tw/2,y-12,tw,22,11); g.fillStyle="#FFFFFF"; g.fill(); g.lineWidth=2; g.strokeStyle=INK; g.stroke();
     g.fillStyle=INK; g.textAlign="center"; g.textBaseline="middle"; g.fillText(line,n.x,y-1); g.restore();
   });
 }
 function drawPanic(g,n,now){
   const y=n.y-CHAR_H-26;
-  g.save(); g.font="800 14px 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', Tahoma, sans-serif"; const t=L("แย่แล้วๆ!","Oh no!"); const tw=g.measureText(t).width+18;
+  g.save(); g.font="800 14px system-ui, -apple-system, 'Segoe UI', 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', sans-serif"; const t=L("แย่แล้วๆ!","Oh no!"); const tw=g.measureText(t).width+18;
   g.translate(n.x,y); g.rotate(RM?0:Math.sin(now/90)*0.06);
   rr(g,-tw/2,-13,tw,26,6); g.fillStyle="#FF5A1F"; g.fill(); g.lineWidth=2.5; g.strokeStyle=INK; g.stroke();
   g.fillStyle=INK; g.textAlign="center"; g.textBaseline="middle"; g.fillText(t,0,1); g.restore();
@@ -760,7 +694,7 @@ function drawMarker(g,n,now){
   const k=marker(n); if(!k) return;
   if(k==="cry"){
     const y=n.y-CHAR_H-18+(RM?0:Math.sin(now/300)*2), t=EN()?"sob…":"ฮือ…";
-    g.font="700 13px 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', Tahoma, sans-serif"; const tw=g.measureText(t).width+16;
+    g.font="700 13px system-ui, -apple-system, 'Segoe UI', 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', sans-serif"; const tw=g.measureText(t).width+16;
     g.fillStyle="#DCE6F5"; g.strokeStyle=INK; g.lineWidth=2.5;
     g.beginPath(); g.roundRect(n.x-tw/2,y-12,tw,24,12); g.fill(); g.stroke();
     g.beginPath(); g.moveTo(n.x-5,y+11); g.lineTo(n.x,y+18); g.lineTo(n.x+5,y+11); g.fill(); g.stroke();
@@ -772,7 +706,7 @@ function drawMarker(g,n,now){
   g.beginPath(); g.arc(n.x,y,12,0,7); g.fillStyle=k==="done"?"#2BB673":k==="tip"?"#FFFFFF":"#FFC414"; g.fill(); g.lineWidth=2.5; g.strokeStyle=INK; g.stroke();
   g.beginPath(); g.moveTo(n.x-5,y+10); g.lineTo(n.x,y+17); g.lineTo(n.x+5,y+10); g.fill(); g.stroke();
   g.beginPath(); g.arc(n.x,y,10.6,0,7); g.fill();
-  g.fillStyle=k==="done"?"#FFFFFF":INK; g.font="800 15px 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', Tahoma, sans-serif"; g.textAlign="center"; g.textBaseline="middle";
+  g.fillStyle=k==="done"?"#FFFFFF":INK; g.font="800 15px system-ui, -apple-system, 'Segoe UI', 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', sans-serif"; g.textAlign="center"; g.textBaseline="middle";
   g.fillText(k==="done"?"✓":k==="tip"?"…":"!",n.x,y+1);
 }
 function marker(n){

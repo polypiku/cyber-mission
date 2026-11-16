@@ -94,7 +94,7 @@ function mpDrawOne(g,o,s,now){
   g.save(); g.fillStyle="rgba(0,0,0,.18)"; g.beginPath(); g.ellipse(s.x,s.y,17,6,0,0,7); g.fill();
   g.globalAlpha=.92; g.translate(s.x,s.y+bob); g.scale(flip?-1:1,1); g.drawImage(im,-w/2,-h,w,h); g.restore();
   const name=String(p.nm||"").slice(0,16)||"?";
-  g.save(); g.font="700 12px 'Noto Sans Thai', Tahoma, sans-serif"; const tw=g.measureText(name).width+18, ty=s.y-h-14;
+  g.save(); g.font="700 12px system-ui, -apple-system, 'Segoe UI', 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', sans-serif"; const tw=g.measureText(name).width+18, ty=s.y-h-14;
   rr(g,s.x-tw/2,ty-11,tw,20,10); g.fillStyle=p.qt?"#FFC93C":"#1E1A16"; g.fill(); g.lineWidth=2; g.strokeStyle="#1E1A16"; g.stroke();
   g.fillStyle=p.qt?"#1E1A16":"#FFF4E0"; g.textAlign="center"; g.textBaseline="middle"; g.fillText(name,s.x,ty); g.restore();
 }
@@ -104,7 +104,7 @@ const nearQuizTable=()=>S.zone===6 && S.char && Math.hypot(player.x-QT_SPOT.x,pl
 function mpDrawTableSign(g,now){
   const n=1+mpOthers().filter(o=>o.p.qt).length*(MP.on?1:0), x=QT_SPOT.x, y=QT_SPOT.y-74+(RM?0:Math.sin(now/400)*2);
   const t=L("🏆 แข่งตอบปัญหา","🏆 Quiz race")+(n>1?` · ${n}`:"");
-  g.save(); g.font="800 13px 'Noto Sans Thai', Tahoma, sans-serif"; const tw=g.measureText(t).width+20;
+  g.save(); g.font="800 13px system-ui, -apple-system, 'Segoe UI', 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', sans-serif"; const tw=g.measureText(t).width+20;
   rr(g,x-tw/2,y-13,tw,26,6); g.fillStyle="#FFC93C"; g.fill(); g.lineWidth=2.5; g.strokeStyle="#1E1A16"; g.stroke();
   g.fillStyle="#1E1A16"; g.textAlign="center"; g.textBaseline="middle"; g.fillText(t,x,y+1); g.restore();
 }

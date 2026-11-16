@@ -139,19 +139,6 @@ function briefing(){
     t("เริ่มที่ห้องสมุดเมืองก่อนเลย ออกประตูด้านล่างแล้วเดินลงไปที่สี่แยก ห้องสมุดอยู่ทางซ้าย","Start with the City Library. Go out the bottom door, walk down to the crossroads, and the library is on the left.")]),
     {onEnd:()=>{ S.briefed=true; save(); hudKey=""; buildCast(); startTour(); }});
 }
-function mentorIntro(){
-  const n=npcs.find(x=>x.role==="mentor");
-  return lines([
-    t(`สวัสดี! พี่ชื่อ${nm(n.id)} จากทีมการ์ดไซเบอร์`,`Hi! I'm ${nm(n.id)} from the Cyber Guard team.`),
-    t("วันนี้ที่ร้าน Bean House มีหลายคนเจอเรื่องแปลกๆ เกี่ยวกับมือถือกับอินเทอร์เน็ต ช่วยพี่ดูแลหน่อยนะ","Today at Bean House, several people have run into strange things on their phones and the internet. Help me look after them."),
-    TOUCH?t("ใช้จอยสติ๊กซ้ายล่างเพื่อเดิน หรือแตะที่พื้น พอเข้าใกล้ใครให้กดปุ่ม \"คุย\"","Use the joystick at the bottom left or tap the floor to walk. When you're close to someone, press \"Talk\".")
-         :t("ใช้ WASD หรือปุ่มลูกศรเพื่อเดิน หรือคลิกที่พื้น พอเข้าใกล้ใครให้กด E","Walk with WASD or the arrow keys, or click the floor. When you're close to someone, press E."),
-    t("คนที่มีเครื่องหมาย ! ต้องการความช่วยเหลือ ทุกการตัดสินใจมีผลกับหลอดด้านบน: เงิน ความเป็นส่วนตัว และความไว้ใจ","People with a ! need help. Every decision affects the bars at the top: money, privacy and trust."),
-    t("ประตูด้านล่างพาออกไปที่ถนน ข้างนอกมีร้านอื่นเปิดรออยู่ ไปช่วยที่ไหนก่อนก็ได้ แต่ต้องช่วยให้ครบทุกที่ถึงจะได้ฉากจบ","The door at the bottom leads to the street. Other shops are open; help in any order, but finish everywhere to reach the ending."),
-    t("ช่วงนี้มีแก๊งมิจฉาชีพแก๊งหนึ่งออกอาละวาดทั้งเมือง พี่เรียกมันว่า \"แก๊งเงา\" ทุกครั้งที่ช่วยคนได้ จะได้หลักฐานไปติดบอร์ดสืบสวน","A scam gang is working this whole town. I call them the \"Shadow gang\". Every time you help someone, you'll get evidence for the investigation board."),
-    t("จำไว้สามคำ: หยุด คิด ตรวจสอบ ไปลุยกันเลย!","Remember three words: stop, think, check. Let's go!")
-  ]);
-}
 
 /* ---------- talking ---------- */
 function interact(){ const n=nearest(); const sp=nearSpot(); if(sp && (!n || Math.hypot(sp.x-player.x,sp.y-player.y)<Math.hypot(n.x-player.x,n.y-player.y))){ collectSpot(sp); return; } if(n){ face(player,n); talkTo(n); return; } if(nearKiosk()){ openArcade(); return; } if(nearQuizTable()){ openQuizTable(); return; } if(nearCat()){ feedCat(); return; } if(nearBirds()){ feedBirds(); return; } if(nearHQ()){ hqT=0; tryHQ(); return; } if(nearRepair()){ openRepair(); return; } if(nearVillain()){ talkVillain(); return; } const d=nearDoor(); if(d) tryEnter(d); }
@@ -168,62 +155,6 @@ function tryEnter(b){
 }
 /* the university front: a picture by the author (the old SVG scene below is kept as a fallback) */
 /* the university front, drawn as an SVG scene (no image files) */
-function hcuSVG(){
-  const ink="#3A2A22", br="#E8906F", brD="#CF7457", brL="#F2A688", win="#5F7C8C", winL="#BFE0EE";
-  const cloud=(x,y,s,cls)=>`<g class="${cls}" transform="translate(${x} ${y}) scale(${s})"><path d="M0 60 Q0 20 45 22 Q60 -8 105 6 Q140 -6 160 26 Q205 22 205 60 Z" fill="#fff" stroke="${ink}" stroke-width="0" opacity=".97"/></g>`;
-  const tree=(x,y,s)=>`<g class="tree" transform="translate(${x} ${y}) scale(${s})"><rect x="-5" y="0" width="10" height="34" fill="#8A5A33" stroke="${ink}" stroke-width="3"/><ellipse cx="0" cy="40" rx="26" ry="6" fill="rgba(0,0,0,.12)"/><g class="leaf"><circle cx="0" cy="-22" r="26" fill="#3FA85A" stroke="${ink}" stroke-width="4"/><circle cx="-16" cy="-6" r="17" fill="#3FA85A" stroke="${ink}" stroke-width="4"/><circle cx="16" cy="-6" r="17" fill="#3FA85A" stroke="${ink}" stroke-width="4"/><circle cx="0" cy="-12" r="20" fill="#3FA85A"/><circle cx="-8" cy="-28" r="7" fill="#6CC77F"/></g></g>`;
-  const rowWins=(x,y,w,n,h)=>{ let s=""; const gap=w/n; for(let i=0;i<n;i++) s+=`<rect x="${x+i*gap+5}" y="${y}" width="${gap-10}" height="${h}" rx="2" fill="${win}" stroke="${ink}" stroke-width="3"/><rect x="${x+i*gap+9}" y="${y+4}" width="${(gap-18)*.35}" height="${h-8}" fill="${winL}" opacity=".55"/>`; return s; };
-  const band=(x,y,w,h)=>`<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="3" fill="${win}" stroke="${ink}" stroke-width="3"/><rect x="${x+6}" y="${y+4}" width="${w*.25}" height="${h-8}" fill="${winL}" opacity=".45"/>`;
-  const student=(cls,c1,c2,hair)=>`<g class="${cls}"><ellipse cx="0" cy="46" rx="10" ry="3" fill="rgba(0,0,0,.18)"/><rect x="-7" y="22" width="5" height="22" rx="2" fill="${ink}"/><rect x="2" y="22" width="5" height="22" rx="2" fill="${ink}" class="legb"/><path d="M-10 4 h20 v20 h-20z" fill="${c1}" stroke="${ink}" stroke-width="2.5"/><path d="M-10 18 h20 v8 h-20z" fill="${c2}" stroke="${ink}" stroke-width="2.5"/><circle cx="0" cy="-6" r="10" fill="#F6D6B8" stroke="${ink}" stroke-width="2.5"/><path d="M-10 -8 Q-9 -18 0 -17 Q10 -18 10 -8 Q4 -12 -10 -8Z" fill="${hair}" stroke="${ink}" stroke-width="2"/></g>`;
-  return `<svg class="hcu-svg" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Red Brick University">
-  <defs><linearGradient id="hsky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7EC3F2"/><stop offset="1" stop-color="#CDEBFF"/></linearGradient>
-  <linearGradient id="hlawn" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#9CD46B"/><stop offset="1" stop-color="#7DBE52"/></linearGradient></defs>
-  <rect width="1600" height="900" fill="url(#hsky)"/>
-  <circle cx="1380" cy="120" r="54" fill="#FFE27A" opacity=".9"/>
-  ${cloud(70,90,1.2,"cl c1")}${cloud(520,250,.65,"cl c2")}${cloud(1240,150,1.05,"cl c3")}
-  <!-- far left wing (perspective) -->
-  <path d="M0 355 L170 375 L170 640 L0 700 Z" fill="${br}" stroke="${ink}" stroke-width="5"/>
-  <path d="M0 430 L170 440 L170 470 L0 465Z" fill="${win}" stroke="${ink}" stroke-width="4"/><path d="M0 535 L170 530 L170 560 L0 570Z" fill="${win}" stroke="${ink}" stroke-width="4"/>
-  <!-- left block -->
-  <path d="M170 380 L275 385 L275 372 L390 392 L390 610 L170 640 Z" fill="${br}" stroke="${ink}" stroke-width="5"/>
-  ${band(185,445,85,30)}${band(185,515,85,30)}<rect x="315" y="440" width="58" height="26" fill="${winL}" stroke="${ink}" stroke-width="3"/><rect x="315" y="505" width="58" height="26" fill="${winL}" stroke="${ink}" stroke-width="3"/><rect x="315" y="570" width="58" height="24" fill="${win}" stroke="${ink}" stroke-width="3"/>
-  <!-- connector left -->
-  <rect x="390" y="415" width="140" height="185" fill="${brD}" stroke="${ink}" stroke-width="5"/>${band(398,445,124,26)}${band(398,500,124,26)}${band(398,555,124,26)}
-  <!-- main block -->
-  <rect x="530" y="405" width="540" height="195" fill="${br}" stroke="${ink}" stroke-width="5"/>
-  ${rowWins(620,430,130,1,26)}${rowWins(620,480,130,1,26)}${rowWins(620,530,130,1,26)}${rowWins(850,430,130,1,26)}${rowWins(850,480,130,1,26)}${rowWins(850,530,130,1,26)}
-  <!-- small towers -->
-  <path d="M550 400 L550 600 L615 600 L615 400 L582 378 Z" fill="${brL}" stroke="${ink}" stroke-width="5"/><rect x="574" y="408" width="14" height="28" rx="6" fill="${ink}"/><rect x="570" y="460" width="22" height="22" fill="${ink}"/><rect x="570" y="515" width="22" height="22" fill="${ink}"/>
-  <path d="M985 400 L985 600 L1050 600 L1050 400 L1017 378 Z" fill="${brL}" stroke="${ink}" stroke-width="5"/><rect x="1010" y="408" width="14" height="28" rx="6" fill="${ink}"/><rect x="1006" y="460" width="22" height="22" fill="${ink}"/><rect x="1006" y="515" width="22" height="22" fill="${ink}"/>
-  <!-- central tower -->
-  <path d="M705 600 L705 235 L800 168 L895 235 L895 600 Z" fill="${br}" stroke="${ink}" stroke-width="6"/>
-  <path d="M785 200 L800 212 L815 200" fill="none" stroke="${brD}" stroke-width="5" stroke-linecap="round"/>
-  <text x="800" y="262" text-anchor="middle" font-family="'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', Tahoma, sans-serif" font-weight="800" font-size="30" fill="${ink}">มหาวิทยาลัย</text>
-  <text x="800" y="298" text-anchor="middle" font-family="'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', Tahoma, sans-serif" font-weight="800" font-size="24" fill="${ink}">อิฐแดง</text>
-  <rect x="740" y="318" width="120" height="104" fill="${brD}" stroke="${ink}" stroke-width="5"/><rect x="750" y="328" width="100" height="34" fill="${winL}" stroke="${ink}" stroke-width="3"/><rect x="750" y="378" width="100" height="34" fill="${winL}" stroke="${ink}" stroke-width="3"/>
-  ${band(735,440,130,26)}${band(735,490,130,26)}
-  <path d="M760 600 Q800 556 840 600 Z" fill="#3FA85A" stroke="${ink}" stroke-width="4"/>
-  <!-- connector right -->
-  <rect x="1070" y="415" width="140" height="185" fill="${brD}" stroke="${ink}" stroke-width="5"/>${band(1078,445,124,26)}${band(1078,500,124,26)}${band(1078,555,124,26)}
-  <!-- right blocks -->
-  <path d="M1210 405 L1330 400 L1330 600 L1210 600 Z" fill="${br}" stroke="${ink}" stroke-width="5"/>${band(1225,440,90,24)}${band(1225,495,90,24)}${band(1225,550,90,24)}
-  <path d="M1330 395 L1510 388 L1510 600 L1330 600 Z" fill="${br}" stroke="${ink}" stroke-width="5"/>${band(1345,440,150,24)}${band(1345,495,90,24)}
-  <path d="M1510 375 L1600 368 L1600 600 L1510 600 Z" fill="${brD}" stroke="${ink}" stroke-width="5"/>
-  <!-- lawn + walkway -->
-  <path d="M0 700 L170 640 L390 610 L1600 600 L1600 900 L0 900 Z" fill="url(#hlawn)" stroke="${ink}" stroke-width="5"/>
-  <path d="M760 600 L840 600 L1010 900 L590 900 Z" fill="#E9DDC7" stroke="${ink}" stroke-width="4"/>
-  <path d="M800 610 L800 900" stroke="#FFFFFF" stroke-width="5" stroke-dasharray="22 18" opacity=".8"/>
-  <!-- glass building, right foreground -->
-  <path d="M1440 520 L1600 498 L1600 690 L1440 650 Z" fill="${br}" stroke="${ink}" stroke-width="5"/>
-  <path d="M1460 528 L1600 510 L1600 640 L1460 620 Z" fill="#D9F0FA" stroke="${ink}" stroke-width="4"/>
-  <path d="M1495 524 L1495 625 M1530 519 L1530 630 M1565 514 L1565 635 M1460 560 L1600 548" stroke="${ink}" stroke-width="3"/>
-  <path d="M1462 600 Q1530 585 1598 600 L1598 640 L1462 620Z" fill="#6CC77F" opacity=".6"/>
-  ${tree(190,650,1.25)}${tree(530,560,.95)}${tree(1150,565,.95)}${tree(1420,640,1.15)}${tree(80,780,.9)}
-  ${[[300,740],[640,690],[1050,700],[1300,800],[120,860],[1500,860]].map(([x,y])=>`<path d="M${x} ${y} l-6 -14 M${x+10} ${y} l0 -16 M${x+20} ${y} l6 -14" stroke="#4E9A3A" stroke-width="5" stroke-linecap="round"/>`).join("")}
-  <g transform="translate(700 760)">${student("st s1","#FFFFFF","#22344A","#3B2A20")}</g>
-  <g transform="translate(905 700) scale(.85)">${student("st s2","#FFFFFF","#3B3B3B","#2A1A12")}</g>
-  </svg>`;
-}
 let arriving=false;
 function enterZone(z){ if(z===6) return showArrive(()=>goZone(6)); goZone(z); }
 /* the university's front gate, shown before you walk in */
@@ -272,12 +203,12 @@ function drawUrgent(g,now){
   const n=urgent.n, f=Math.max(0,urgent.t/urgent.total), y=n.y-CHAR_H-30;
   g.save();
   // speech + countdown bar
-  g.font="700 12px 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', Tahoma, sans-serif"; const s=urgent.u.say[S.lang]; const tw=Math.max(84,g.measureText(s).width+18);
+  g.font="700 12px system-ui, -apple-system, 'Segoe UI', 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', sans-serif"; const s=urgent.u.say[S.lang]; const tw=Math.max(84,g.measureText(s).width+18);
   rr(g,n.x-tw/2,y-20,tw,24,6); g.fillStyle="#FFFFFF"; g.fill(); g.lineWidth=2.5; g.strokeStyle=INK; g.stroke();
   g.fillStyle=INK; g.textAlign="center"; g.textBaseline="middle"; g.fillText(s,n.x,y-8);
   rr(g,n.x-tw/2,y+8,tw,9,4); g.fillStyle="#FFFFFF"; g.fill(); g.stroke();
   g.fillStyle=f<.3?"#E5402F":f<.6?"#FF5A1F":"#FFC414"; rr(g,n.x-tw/2+2,y+10,(tw-4)*f,5,2); g.fill();
-  g.font="800 11px 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', Tahoma, sans-serif"; g.fillStyle=f<.3?"#E5402F":INK; g.fillText(Math.ceil(urgent.t)+"s",n.x+tw/2+14,y+12);
+  g.font="800 11px system-ui, -apple-system, 'Segoe UI', 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', sans-serif"; g.fillStyle=f<.3?"#E5402F":INK; g.fillText(Math.ceil(urgent.t)+"s",n.x+tw/2+14,y+12);
   // ring on the floor pulses
   if(!RM){ g.globalAlpha=.5+.5*Math.sin(now/120); g.beginPath(); g.ellipse(n.x,n.y,26,9,0,0,7); g.strokeStyle="#E5402F"; g.lineWidth=3; g.stroke(); }
   g.restore();

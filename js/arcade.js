@@ -163,19 +163,6 @@ function openBoard(){
       : `<div class="btns">${btn(S.zone===7?L("🗂️ คุยกับพี่ภพ","🗂️ Talk to Phop"):L("🚓 ไปส่งเบาะแสที่สถานีตำรวจ (ซอย 2)","🚓 Take clues to the police station (Soi 2)"),"data-bust","y")}</div>`}
   </div>`);
 }
-function openFinale(){
-  const tier=bustTier(); S.bustTier=Math.max(S.bustTier||0,tier); save();
-  const T={3:[L("จับได้ทั้งแก๊ง!","The whole gang is caught!"),L("หลักฐานแน่นทุกจุด ตำรวจจับได้ทั้งหัวหน้า คนโทร คนทำเว็บ และคนจ้างเปิดบัญชีม้า","Every link held. Police caught the boss, the callers, the site builders and the mule recruiters.")],
-           2:[L("จับได้เกือบหมด แต่หัวหน้าหนี","Most caught, but the boss escaped"),L("ลูกน้องถูกจับหลายคน แต่หลักฐานบางจุดไม่แน่นพอ หัวหน้าแก๊งหนีไปได้ เล่นเคสซ้ำเพื่อเก็บดาวเพิ่ม แล้วส่งหลักฐานใหม่ได้","Many were arrested, but some links were weak and the boss slipped away. Replay cases for more stars, then hand the evidence in again.")],
-           1:[L("จับได้แค่ลูกน้อง","Only the small fry"),L("หลักฐานยังไม่พอ ตำรวจจับได้แค่คนรับจ้างระดับล่าง แก๊งยังทำงานต่อ ลองกลับไปช่วยคนให้รอดมากขึ้นเพื่อเก็บดาว","Not enough evidence: only low-level helpers were arrested and the gang carries on. Go back and save more people to collect stars.")]}[tier];
-  openSheet("unlock", `<div class="unlockhero"><span class="eyebrow">${L("ฉากจบ · ภาค 1","Ending · chapter 1")} · ${"★".repeat(tier)}${"☆".repeat(3-tier)}</span><div class="ubig">${T[0]}</div><p>${L("ผลขึ้นกับดาวที่คุณเก็บได้","Decided by the stars you collected")}</p></div>
-    <div class="sh-body"><p>${T[1]}</p><div class="box sumbars">
-      <div class="bar-row"><span>★</span><span>${L("ดาวทั้งหมด","All stars")}</span><div class="meter"><i style="width:${starTotal()/starMax()*100}%"></i></div><b>${starTotal()}</b></div>
-      <div class="bar-row"><span>🧩</span><span>${L("หลักฐาน","Evidence")}</span><div class="meter"><i style="width:${evCount()/Object.keys(EVID).length*100}%"></i></div><b>${evCount()}</b></div>
-      <div class="bar-row"><span>✓</span><span>${L("เคสที่ได้ ★★★","★★★ cases")}</span><div class="meter"><i style="width:${ALLCASES().filter(k=>S.best[k]==="safe").length/ALLCASES().length*100}%"></i></div><b>${ALLCASES().filter(k=>S.best[k]==="safe").length}</b></div></div>
-    <p>${L("ทุกเคสในเกมมาจากกลโกงที่เกิดขึ้นจริงในไทย สิ่งที่ช่วยได้มากที่สุดคือหยุด คิด ตรวจสอบ และไม่ปล่อยให้ใครอยู่คนเดียวกับปัญหา","Every case here is based on real scams in Thailand. What helps most: stop, think, check, and never leave someone alone with the problem.")}</p>
-    <div class="btns">${btn(L("เดินเล่นต่อ","Keep exploring"),"data-close","y")}</div></div>`);
-}
 /* mission map: all zones, scores, locks */
 const LOCK_I='<svg viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="10" rx="1"/><path d="M8 10V7a4 4 0 018 0v3"/></svg>';
 function openZones(){

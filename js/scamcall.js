@@ -4,6 +4,7 @@
    setting labels these calls as suspected scams. */
 const SC_FIRST=60e3, SC_AGAIN=[45e3,75e3], SC_RING=15e3;
 let scRing=null;
+const SC_AV=`<span class="cl-av" aria-hidden="true"><svg viewBox="0 0 40 40"><circle cx="20" cy="15" r="7"/><path d="M6 37c2-8 8-11 14-11s12 3 14 11z"/></svg></span>`;   /* the unknown caller's blank avatar */
 const scState=()=>{ S.sc=S.sc||{blocked:{}, next:0, i:0, leaked:false, lost:0, calls:0}; return S.sc; };
 const scReady=()=>S.char && !titleOn && S.prologue && S.briefed && Object.keys(S.best||{}).length>=1;
 const scWait=()=>{ const [a,b]=SC_AGAIN; return a+Math.random()*(b-a); };
@@ -27,7 +28,7 @@ function scIncoming(k){
   st.calls++; scRing={k, t:setTimeout(()=>scEnd("missed"),SC_RING)};
   const el=$("peek");
   el.innerHTML=`<div class="device lockscr callscr"><span class="island"></span><div class="scr">${sbar(nowClock())}
-    <div class="cl-top"><div class="cl-head"><div><b>${esc(C.num)}</b><small>${L("มือถือ","Mobile")} · ${esc(C.tag[li])}</small></div><span class="cl-av" aria-hidden="true"><svg viewBox="0 0 40 40"><circle cx="20" cy="15" r="7"/><path d="M6 37c2-8 8-11 14-11s12 3 14 11z"/></svg></span></div>
+    <div class="cl-top"><div class="cl-head"><div><b>${esc(C.num)}</b><small>${L("มือถือ","Mobile")} · ${esc(C.tag[li])}</small></div>${SC_AV}</div>
     ${flag?`<span class="cl-tag warn">${L("⚠️ ต้องสงสัยว่าเป็นมิจฉาชีพ","⚠️ Suspected scam")}</span>`:""}</div>
     <div class="cl-mini"><button class="cl-sm" id="clBlock"><span>⊘</span>${L("บล็อก","Block")}</button><button class="cl-sm" id="clMsg" tabindex="-1" aria-hidden="true"><span>✉</span>${L("ข้อความ","Message")}</button></div>
     <div class="cl-acts2"><button class="cl-btn no" id="clNo"><span>📞</span>${L("ปฏิเสธ","Decline")}</button><button class="cl-btn yes" id="clYes"><span>📞</span>${L("รับสาย","Accept")}</button></div>
@@ -63,7 +64,7 @@ function scTalk(k){
   const log=[], res={lost:0, leak:false, bad:0}, t0=Date.now(); let over=false;
   const ctrls=[["🎙️",L("ปิดเสียง","Mute")],["👥",L("รายชื่อ","Contacts")],["🔊",L("ลำโพง","Speaker")],["📹",L("วิดีโอ","Video")],["⌨️",L("แป้นกด","Keypad")],["＋",L("เพิ่มสาย","Add call")]];
   const screen=(body)=>openSheet("phone",`${top_("📞 "+esc(C.num))}<div class="sh-body"><div class="device incall"><span class="island"></span><div class="scr">${sbar(nowClock())}
-    <div class="ic-head"><span class="cl-av" aria-hidden="true"><svg viewBox="0 0 40 40"><circle cx="20" cy="15" r="7"/><path d="M6 37c2-8 8-11 14-11s12 3 14 11z"/></svg></span><b>${esc(C.num)}</b><small id="clTimer">${mmss(Date.now()-t0)}</small></div>${body}<div class="homebar"></div></div></div></div>`);
+    <div class="ic-head">${SC_AV}<b>${esc(C.num)}</b><small id="clTimer">${mmss(Date.now()-t0)}</small></div>${body}<div class="homebar"></div></div></div></div>`);
   clearInterval(scTimer); scTimer=setInterval(()=>{ const el=$("clTimer"); if(!el||over){ clearInterval(scTimer); return; } el.textContent=mmss(Date.now()-t0); },1000);
   const step=(i)=>{
     const s=C.steps[i]; log.push(`<div class="cl-line them"><p>${esc(s.say[li])}</p></div>`);
@@ -89,7 +90,7 @@ function scTalk(k){
     const verdict=!res.bad?L("รอดปลอดภัย! ไม่เสียอะไรเลย","Safe! You lost nothing")
       :L(`เสียเงิน ${BAHT(res.lost)}${res.leak?" · ข้อมูลส่วนตัวหลุดไปแล้ว":""}`,`You lost ${BAHT(res.lost)}${res.leak?" · your personal data leaked":""}`);
     openSheet("phone",`${top_("📞 "+L("วางสายแล้ว","Call ended"))}<div class="sh-body"><div class="device incall"><span class="island"></span><div class="scr">${sbar(nowClock())}
-      <div class="ic-head"><span class="cl-av" aria-hidden="true"><svg viewBox="0 0 40 40"><circle cx="20" cy="15" r="7"/><path d="M6 37c2-8 8-11 14-11s12 3 14 11z"/></svg></span><b>${esc(C.num)}</b><small>${L("สายสิ้นสุด","Call ended")} · ${mmss(Date.now()-t0)}</small></div>
+      <div class="ic-head">${SC_AV}<b>${esc(C.num)}</b><small>${L("สายสิ้นสุด","Call ended")} · ${mmss(Date.now()-t0)}</small></div>
       <div class="cl-res ${res.bad?"bad":"ok"}"><b>${verdict}</b>${!res.bad?`<small>+${BAHT(20)}</small>`:""}${res.leak?`<small>${L("ระวัง: แก๊งอาจโทรมาข่มขู่ด้วยข้อมูลนี้","Careful: the gang may call back to threaten you with it")}</small>`:""}</div>
       <div class="cl-lesson"><h4>${L("จำไว้","Remember")}</h4><ul>${C.lesson.map(x=>`<li>${esc(x[li])}</li>`).join("")}</ul></div>
       <p class="cl-note">${L("เบอร์นี้จะโทรมาอีกจนกว่าคุณจะบล็อก","This number will keep calling until you block it")}</p>

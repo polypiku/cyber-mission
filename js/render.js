@@ -33,7 +33,7 @@ function drawStatic(){
   // rug
   rr(g,296,300,300,172,20); g.fillStyle="#D9573A"; g.fill(); g.lineWidth=3; g.strokeStyle=INK; g.stroke();
   rr(g,310,314,272,144,14); g.setLineDash([8,7]); g.strokeStyle="#F6C9A6"; g.lineWidth=2.5; g.stroke(); g.setLineDash([]);
-  g.fillStyle="#F6C9A6"; g.font="800 24px 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', Tahoma, sans-serif"; g.textAlign="center"; g.textBaseline="middle"; g.fillText(S.lang==="en"?"STOP · THINK · CHECK":"หยุด · คิด · ตรวจสอบ",446,388);
+  g.fillStyle="#F6C9A6"; g.font="800 24px system-ui, -apple-system, 'Segoe UI', 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', sans-serif"; g.textAlign="center"; g.textBaseline="middle"; g.fillText(S.lang==="en"?"STOP · THINK · CHECK":"หยุด · คิด · ตรวจสอบ",446,388);
   // back wall
   g.fillStyle="#F5ECDD"; g.fillRect(0,0,W,108);
   g.fillStyle="#C78C57"; g.fillRect(0,86,W,22);
@@ -44,7 +44,7 @@ function drawStatic(){
     g.strokeStyle="rgba(255,255,255,.85)"; g.lineWidth=3; g.beginPath(); g.moveTo(x+12,36); g.lineTo(x+28,20); g.moveTo(x+66,36); g.lineTo(x+82,20); g.stroke(); }
   // menu board
   rr(g,566,10,214,62,4); g.fillStyle="#2E3B33"; g.fill(); g.lineWidth=3; g.strokeStyle=INK; g.stroke();
-  g.fillStyle="#FFC414"; g.font="800 17px 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', Tahoma, sans-serif"; g.textAlign="left"; g.fillText("BEAN HOUSE",580,28);
+  g.fillStyle="#FFC414"; g.font="800 17px system-ui, -apple-system, 'Segoe UI', 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', sans-serif"; g.textAlign="left"; g.fillText("BEAN HOUSE",580,28);
   g.fillStyle="#F5ECDD"; g.font="500 11px 'IBM Plex Mono', monospace"; g.fillText("LATTE 65   MOCHA 70",580,48); g.fillText("COCOA 55   TEA   45",580,62);
   // side + bottom walls
   g.fillStyle="#D7C3A6"; g.fillRect(0,108,44,H); g.fillRect(W-44,108,44,H); g.fillRect(0,580,384,44); g.fillRect(480,580,W-480,44);
@@ -101,8 +101,8 @@ function drawStreetStatic(g){
     g.fillStyle="rgba(255,255,255,.35)"; for(let x=b.x;x<b.x+b.w;x+=40) g.fillRect(x+4,y0-14,16,22);
     // sign
     rr(g,b.door-110,y0+22,220,46,4); g.fillStyle=b.sign; g.fill(); g.lineWidth=3; g.strokeStyle=INK; g.stroke();
-    g.fillStyle=b.signFg; g.font="800 20px 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', Tahoma, sans-serif"; g.textAlign="center"; g.textBaseline="middle"; g.fillText(b.name[S.lang],b.door,y0+40);
-    g.fillStyle="#FFFFFF"; g.font="600 10.5px 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', Tahoma, sans-serif"; g.fillText(b.sub[S.lang],b.door,y0+59);
+    g.fillStyle=b.signFg; g.font="800 20px system-ui, -apple-system, 'Segoe UI', 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', sans-serif"; g.textAlign="center"; g.textBaseline="middle"; g.fillText(b.name[S.lang],b.door,y0+40);
+    g.fillStyle="#FFFFFF"; g.font="600 10.5px system-ui, -apple-system, 'Segoe UI', 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', sans-serif"; g.fillText(b.sub[S.lang],b.door,y0+59);
     // windows
     for(const wx of [b.x+22, b.x+b.w-112]){ rr(g,wx,y0+88,90,66,4); g.fillStyle="#CBE6F1"; g.fill(); g.lineWidth=3; g.strokeStyle=INK; g.stroke();
       g.beginPath(); g.moveTo(wx+45,y0+88); g.lineTo(wx+45,y0+154); g.lineWidth=2; g.stroke();
@@ -136,12 +136,12 @@ const NEWS={th:["ด่วน! แก๊งคอลเซ็นเตอร์�
 function drawTV(g,x,y,now){
   rr(g,x,y,104,60,4); g.fillStyle="#1B1E22"; g.fill(); g.lineWidth=3; g.strokeStyle=INK; g.stroke();
   g.fillStyle="#2D5A9B"; g.fillRect(x+6,y+6,92,34);
-  g.fillStyle="#FFFFFF"; g.font="800 9px 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', Tahoma, sans-serif"; g.textAlign="left"; g.textBaseline="middle"; g.fillText("NEWS",x+10,y+14);
+  g.fillStyle="#FFFFFF"; g.font="800 9px system-ui, -apple-system, 'Segoe UI', 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', sans-serif"; g.textAlign="left"; g.textBaseline="middle"; g.fillText("NEWS",x+10,y+14);
   g.fillStyle="#E5402F"; g.beginPath(); g.arc(x+92,y+13,3,0,7); g.fill();
   g.fillStyle="rgba(255,255,255,.7)"; g.fillRect(x+12,y+22,40,3); g.fillRect(x+12,y+28,62,3);
   g.fillStyle="#FFC414"; g.fillRect(x+6,y+42,92,12);
   g.save(); g.beginPath(); g.rect(x+6,y+42,92,12); g.clip();
-  const list=NEWS[S.lang], txt=list.join("   •   ")+"   •   "; g.font="700 8.5px 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', Tahoma, sans-serif"; g.fillStyle=INK;
+  const list=NEWS[S.lang], txt=list.join("   •   ")+"   •   "; g.font="700 8.5px system-ui, -apple-system, 'Segoe UI', 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', sans-serif"; g.fillStyle=INK;
   const w=g.measureText(txt).width, off=RM?0:(now/40)%w; g.fillText(txt,x+98-off,y+48.5); g.fillText(txt,x+98-off+w,y+48.5); g.restore();
 }
 function drawAmbientBack(g,now){
@@ -180,7 +180,7 @@ function drawCat(g,now){
   g.fillStyle=INK; g.fillRect(13,-19,1.8,2.4); g.fillRect(16,-19,1.8,2.4);
   g.fillRect(-8,-3+walk,3,5); g.fillRect(6,-3-walk,3,5);
   g.restore();
-  if(CAT.meow>0){ g.save(); g.font="700 12px 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', Tahoma, sans-serif"; g.textAlign="center"; g.textBaseline="middle"; const tx=CAT.follow>0?L("เมี้ยว~ ♥","meow~ ♥"):L("เมี้ยว~","meow~"), tw=g.measureText(tx).width+14; rr(g,x-tw/2,y-56,tw,20,10); g.fillStyle="#FFFFFF"; g.fill(); g.lineWidth=2; g.strokeStyle=INK; g.stroke(); g.fillStyle=INK; g.fillText(tx,x,y-46); g.restore(); }
+  if(CAT.meow>0){ g.save(); g.font="700 12px system-ui, -apple-system, 'Segoe UI', 'Noto Sans Thai', 'Sukhumvit Set', Thonburi, 'Leelawadee UI', sans-serif"; g.textAlign="center"; g.textBaseline="middle"; const tx=CAT.follow>0?L("เมี้ยว~ ♥","meow~ ♥"):L("เมี้ยว~","meow~"), tw=g.measureText(tx).width+14; rr(g,x-tw/2,y-56,tw,20,10); g.fillStyle="#FFFFFF"; g.fill(); g.lineWidth=2; g.strokeStyle=INK; g.stroke(); g.fillStyle=INK; g.fillText(tx,x,y-46); g.restore(); }
 }
 function stepAmbient(dt){
   if(CRUMBS){ CRUMBS.t-=dt; if(CRUMBS.t<=0) CRUMBS=null; }

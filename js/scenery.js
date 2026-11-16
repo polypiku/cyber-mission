@@ -38,20 +38,7 @@ function brickPave(g,x,y,w,h,seed){
   g.strokeStyle="rgba(120,80,40,.25)"; g.lineWidth=1; g.strokeRect(x+.5,y+.5,w-1,h-1);
 }
 /* packed-earth plaza with pebbles */
-function dirtArea(g,x,y,w,h,seed){
-  g.fillStyle="#CFA572"; g.fillRect(x,y,w,h);
-  const r=seeded(seed||5), n=Math.floor(w*h/500);
-  for(let i=0;i<n;i++){ g.fillStyle=r()<.5?"rgba(120,80,40,.18)":"rgba(255,240,210,.25)"; g.beginPath(); g.ellipse(x+r()*w,y+r()*h,1.5+r()*2.5,1+r()*1.5,0,0,7); g.fill(); }
-}
 /* a soft-edged grass island */
-function grassIsland(g,cx,cy,rx,ry,seed){
-  const r=seeded(seed);
-  g.save(); g.beginPath();
-  for(let i=0;i<14;i++){ const a=i/14*Math.PI*2, k=.85+r()*.25; g.ellipse(cx+Math.cos(a)*rx*.55,cy+Math.sin(a)*ry*.55,rx*.5*k,ry*.5*k,0,0,7); }
-  g.fillStyle="#7DB85A"; g.fill(); g.clip();
-  grassArea(g,cx-rx,cy-ry,rx*2,ry*2,seed+1);
-  g.restore();
-}
 function bush(g,x,y,rad,c){
   g.fillStyle="rgba(0,0,0,.16)"; g.beginPath(); g.ellipse(x,y+rad*.6,rad*1.2,rad*.35,0,0,7); g.fill();
   for(const [dx,dy,k] of [[-rad*.6,0,.75],[rad*.6,0,.75],[0,-rad*.35,.9]]){ g.beginPath(); g.arc(x+dx,y+dy,rad*k,0,7); g.fillStyle=c||"#4E9A3F"; g.fill(); g.lineWidth=2; g.strokeStyle="#24502A"; g.stroke(); }
@@ -88,12 +75,6 @@ function thaiRoof(g,b,y0){
   for(const [fx,s] of [[x+inset-4,-1],[x+w-inset+4,1]]){ g.beginPath(); g.moveTo(fx,top); g.quadraticCurveTo(fx+s*8,top-4,fx+s*6,top-14); g.lineWidth=4; g.strokeStyle=INK; g.stroke(); g.lineWidth=2; g.strokeStyle="#F2C14E"; g.stroke(); }
 }
 /* string of party lights between two points */
-function stringLights(g,x1,y1,x2,y2,sag){
-  g.strokeStyle="#3A2516"; g.lineWidth=1.5; g.beginPath(); g.moveTo(x1,y1); g.quadraticCurveTo((x1+x2)/2,(y1+y2)/2+sag,x2,y2); g.stroke();
-  const cols=["#FFD84D","#FF8A50","#7FD3F7","#F48FB1"];
-  for(let i=1;i<12;i++){ const t=i/12, mx=(x1+x2)/2, my=(y1+y2)/2+sag, px=(1-t)*(1-t)*x1+2*(1-t)*t*mx+t*t*x2, py=(1-t)*(1-t)*y1+2*(1-t)*t*my+t*t*y2;
-    g.fillStyle=cols[i%4]; g.beginPath(); g.arc(px,py+3,3,0,7); g.fill(); g.lineWidth=1; g.strokeStyle=INK; g.stroke(); }
-}
 
 /* the whole street backdrop, replacing the old flat grass and grey paving */
 function drawStreetGround(g){
