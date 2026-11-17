@@ -1295,3 +1295,12 @@ a.cl-opt.dl-real{display:block;margin:10px 14px 0;text-align:center;font-weight:
 .sheet.asphone:has(.ghack)::after{background:#1A0E0E}
 .sheet.asphone:has(.homescr)::after{background:none}
 @media (max-width:480px){.sheet.asphone::after{top:9px;left:9px;right:9px;border-radius:36px 36px 0 0}}
+/* in-game phone: a clear close button, top-right just under the status bar (on a small screen the phone fills it) */
+.sheet.asphone .sh-top{display:block;position:absolute;top:64px;right:24px;z-index:6;padding:0;margin:0;border:0;background:none;width:auto;height:auto}
+.sheet.asphone .sh-top h2{display:none}
+.sheet.asphone .sh-top .x{width:38px;height:38px;min-width:0;min-height:0;padding:0;display:grid;place-items:center;border-radius:50%;border:2px solid #1E1A16;background:#FFFFFF;color:#1E1A16;box-shadow:0 3px 0 #1E1A16;cursor:pointer}
+.sheet.asphone .sh-top .x svg{width:16px;height:16px}
+.sheet.asphone .sh-top .x:active{transform:translateY(2px);box-shadow:0 1px 0 #1E1A16}
+.sheet.asphone .sh-top .x:focus-visible{outline:3px solid #49C8FF;outline-offset:2px}
+.sheet.asphone .apptitle{padding-right:46px}
+@media (max-width:480px){.sheet.asphone .sh-top{top:58px;right:20px}}
