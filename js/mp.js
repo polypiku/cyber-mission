@@ -1,6 +1,6 @@
 /* Play together: other players walk around the same town, and everyone can race at the cyber quiz table.
    Each player's cases stay on their own device. Only a small state is shared (name, character, position,
-   quiz score), it lives only while the game is open, and nothing is stored on a server.
+   quiz score, the last chat line), it lives only while the game is open, and nothing is stored on a server.
    The link: Supabase Realtime when SUPA has a url and key (for the public website), otherwise the Claude
    artifact room, otherwise single-player. */
 const SUPA={url:"https://mhxcivjgcobzrosgjupu.supabase.co", key:"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1oeGNpdmpnY29ienJvc2dqdXB1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTQ0OTI1NjEsImV4cCI6MjExMDA2ODU2MX0.poafJhGL6zQxCEZaC7FihrScjNpY0OekDEI1zTX2mP4"};   /* Supabase → Project Settings → API: Project URL and the anon public key */
@@ -36,6 +36,7 @@ async function mpSupa(){
 addEventListener("pagehide",()=>{ if(MP.kind==="supa"&&MP.ch) try{ MP.ch.send({type:"broadcast", event:"bye", payload:{id:mpId}}); }catch(e){} });
 /* switch room: "" = shared town, or a 4-digit code */
 async function mpJoin(code){
+  chatReset();
   mpRoom=code||""; try{ localStorage.setItem(MP_ROOM_KEY,mpRoom); }catch(e){}
   if(MP.ch) try{ MP.ch.send({type:"broadcast", event:"bye", payload:{id:mpId}}); }catch(e){}
   if(SUPA.url && SUPA.key){ try{ await mpSupa(); }catch(e){ MP.err=e instanceof Event?L("โหลดตัวเชื่อมต่อไม่ได้","couldn't load the connector"):String(e&&e.message||e); } }
@@ -73,7 +74,7 @@ function mpFlush(){
 const mpZone=()=>S.zone+"."+(S.zone===2?libFloor():S.zone===8?(S.bld||0)+"-"+offFloor():S.zone===7?(S.floor||1):0);
 function stepMp(){
   if(S.char) mpSet({v:1, pid:mpId, nm:mpName(), ch:S.char, zk:mpZone(), x:Math.round(player.x), y:Math.round(player.y), d:player.dir, mv:player.moving?1:0});
-  mpFlush(); mpPill();
+  chatTick(); mpFlush(); mpPill();
 }
 
 /* ---------- drawing the other players ---------- */
@@ -86,6 +87,7 @@ function mpDrawItems(items, now){
     items.push({y:s.y, d:g=>mpDrawOne(g,o,s,now)});
   }
   if(S.zone===6 && QT_SPOT) items.push({y:QT_SPOT.y-40, d:g=>mpDrawTableSign(g,now)});
+  chatDrawItems(items);
 }
 function mpDrawOne(g,o,s,now){
   const p=o.p, c={id:p.ch, dir:p.d||"down", moving:!!p.mv, t:now/1000+s.x*.01};
