@@ -253,7 +253,6 @@ $("phoneBtn").onclick=()=>{ if(!D) openPhone(); };
 $("menuBtn").onclick=()=>{ if(!D) openMenu(); };
 $("mapBtn").onclick=()=>{ if(!D&&!busy()) openBigMap(); };
 $("goal").onclick=()=>{ if(!D&&!busy()) openZones(); };
-$("setBtn").onclick=()=>{ if(!D) openSettings(false); };
 $("prog").onclick=()=>{ if(!D && $("peek").hidden) openZones(); };
 $("boardBtn").onclick=()=>{ if(!D && $("peek").hidden) openBoard(); };
 $("bagBtn").onclick=()=>{ if(!D && $("peek").hidden && !busy()) openBag(); };

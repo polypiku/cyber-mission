@@ -84,10 +84,9 @@ function chatDrawItems(items){
 /* ---------- the chat button and panel ---------- */
 function chatDock(){
   const show=MP.on && !!S.char && sheetMode!=="start";
-  let btn=$("chatBtn");
-  if(!btn){ if(!show) return;
-    btn=document.createElement("button"); btn.id="chatBtn"; btn.type="button";
-    btn.onclick=()=>chatToggle(); document.body.appendChild(btn);
+  const btn=$("chatBtn"); if(!btn) return;
+  if(!$("chatPanel")){ if(!show) return;
+    btn.onclick=()=>chatToggle();
     const p=document.createElement("div"); p.id="chatPanel"; p.hidden=true; p.setAttribute("role","dialog"); p.setAttribute("aria-label",L("แชตในห้อง","Room chat"));
     p.innerHTML=`<div class="cp-head"><b>${L("💬 แชตในห้อง","💬 Room chat")}</b><small>${L("ไม่ถูกบันทึก ปิดเกมแล้วหายหมด","Not saved: gone when you close the game")}</small><button type="button" class="cp-x" aria-label="${L("ปิดแชต","Close chat")}">✕</button></div>
       <div class="cp-log" id="chatLog" aria-live="polite"></div>
@@ -100,8 +99,8 @@ function chatDock(){
     $("chatForm").onsubmit=e=>{ e.preventDefault(); if(chatSend(inp.value)) inp.value=""; inp.focus(); };
   }
   btn.hidden=!show; if(!show){ chatToggle(false); return; }
-  const t=`💬${CHAT.unread?` <i>${CHAT.unread>9?"9+":CHAT.unread}</i>`:""}`;
-  if(btn.dataset.t!==t){ btn.innerHTML=t; btn.dataset.t=t; btn.setAttribute("aria-label",L(`แชต${CHAT.unread?` ข้อความใหม่ ${CHAT.unread}`:""}`,`Chat${CHAT.unread?`, ${CHAT.unread} new`:""}`)); }
+  let badge=btn.querySelector("i"); const t=CHAT.unread?(CHAT.unread>9?"9+":String(CHAT.unread)):"";
+  if(btn.dataset.t!==t){ if(!badge){ badge=document.createElement("i"); btn.appendChild(badge); } badge.textContent=t; badge.hidden=!t; btn.dataset.t=t; btn.classList.toggle("on",CHAT.open); btn.setAttribute("aria-label",L(`แชต${CHAT.unread?` ข้อความใหม่ ${CHAT.unread}`:""}`,`Chat${CHAT.unread?`, ${CHAT.unread} new`:""}`)); }
 }
 function chatToggle(open){
   const p=$("chatPanel"); if(!p) return;

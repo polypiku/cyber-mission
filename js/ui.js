@@ -200,16 +200,13 @@ function showCoach(){
   else if(tg && tg.scrollIntoView) tg.scrollIntoView({block:"center",behavior:"instant"});
   requestAnimationFrame(()=>{ if(!coach) return;
     const W=innerWidth, H=innerHeight;
-    if(!tg){ hole.style.cssText=`left:${W/2}px;top:${H/2}px;width:0;height:0`; tip.style.left=Math.max(12,(W-tip.offsetWidth)/2)+"px"; tip.style.top=Math.max(12,(H-tip.offsetHeight)/2)+"px"; return; }
+    if(!tg){ hole.style.cssText=`left:${W/2}px;top:${H/2}px;width:0;height:0`; tip.style.left=Math.max(12,(W-tip.offsetWidth)/2)+"px"; tip.style.top="auto"; tip.style.bottom="16px"; return; }
     const r=tg.getBoundingClientRect(), pad=8, x=Math.max(4,r.left-pad), y=Math.max(4,r.top-pad), w=Math.min(W-8,r.width+pad*2), h=Math.min(H-8,r.height+pad*2);
     hole.style.cssText=`left:${x}px;top:${y}px;width:${w}px;height:${h}px`;
-    const tw=tip.offsetWidth, th=tip.offsetHeight; let tx, ty;
-    if(x+w+16+tw<=W){ tx=x+w+16; ty=y+h/2-th/2; }            // right of it
-    else if(x-16-tw>=0){ tx=x-16-tw; ty=y+h/2-th/2; }         // left of it
-    else if(y+h+12+th<=H){ tx=x+w/2-tw/2; ty=y+h+12; }        // below
-    else if(y-12-th>=0){ tx=x+w/2-tw/2; ty=y-12-th; }         // above
-    else { tx=(W-tw)/2; ty=H-th-12; }
-    tip.style.left=Math.max(12,Math.min(W-tw-12,tx))+"px"; tip.style.top=Math.max(12,Math.min(H-th-12,ty))+"px";
+    /* the tip box stays in one place (bottom centre, or top centre when the highlight sits low) so it doesn't chase the highlight */
+    const tw=tip.offsetWidth, th=tip.offsetHeight, low=y+h>H-th-28;   /* bottom, unless the highlight is down there */
+    tip.style.left=Math.max(12,(W-tw)/2)+"px";
+    if(low){ tip.style.top="16px"; tip.style.bottom="auto"; } else { tip.style.top="auto"; tip.style.bottom="16px"; }
   });
 }
 function endCoach(finished){ camFocus=null; if(!coach) return; const d=coach.done; coach.el.remove(); coach=null; if(finished&&d) d(); }

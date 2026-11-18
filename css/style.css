@@ -676,8 +676,8 @@ body.desk .peek.in{transform:translateY(0)}
 @media (prefers-reduced-motion:reduce){.pager .pg.next.pulse{animation:none}}
 
 .coach{position:fixed;inset:0;z-index:40}
-.co-hole{position:fixed;border-radius:12px;box-shadow:0 0 0 9999px rgba(20,14,8,.68);border:3px dashed #FFC414;transition:all .28s ease;pointer-events:none}
-.co-tip{position:fixed;width:min(320px,calc(100vw - 24px));background:var(--paper);color:var(--ink);border:var(--bw) solid var(--ink);box-shadow:6px 6px 0 #000;padding:14px 16px 12px;transition:left .28s ease,top .28s ease}
+.co-hole{position:fixed;border-radius:12px;box-shadow:0 0 0 9999px rgba(20,14,8,.68);border:3px dashed #FFC414;pointer-events:none}
+.co-tip{position:fixed;width:min(320px,calc(100vw - 24px));background:var(--paper);color:var(--ink);border:var(--bw) solid var(--ink);box-shadow:6px 6px 0 #000;padding:14px 16px 12px}
 .co-h{display:flex;align-items:center;gap:8px}.co-i{font-size:1.5rem}.co-t{font-family:var(--f-display);font-size:1.1rem;flex:1}.co-n{font-weight:700;opacity:.55}
 .co-d{margin:.5em 0 .8em;line-height:1.5;font-size:.95rem}
 .co-b{display:flex;justify-content:space-between;gap:8px}
@@ -689,7 +689,8 @@ body.desk .peek.in{transform:translateY(0)}
 
 /* tutorial: plain, roomy text that's easy to read */
 .coach,.coach button{font-family:var(--f-body)!important;letter-spacing:0}
-.co-tip{width:min(350px,calc(100vw - 24px));padding:16px 18px 14px}
+.co-tip{width:min(350px,calc(100vw - 24px));padding:16px 18px 14px;min-height:178px;display:flex;flex-direction:column}
+.co-tip .co-b{margin-top:auto}
 .co-t{font-family:inherit!important;font-weight:700;font-size:1.12rem;line-height:1.35}
 .co-n{font-size:.85rem;font-weight:600}
 .co-d{font-size:1.06rem;line-height:1.7;font-weight:400;color:#2A2420;margin:.55em 0 .9em}
@@ -1305,12 +1306,11 @@ a.cl-opt.dl-real{display:block;margin:10px 14px 0;text-align:center;font-weight:
 .sheet.asphone .apptitle{padding-right:46px}
 @media (max-width:480px){.sheet.asphone .sh-top{top:58px;right:20px}}
 /* play-together chat: a round button and a small panel; bubbles are drawn on the canvas */
-#chatBtn{position:fixed;left:16px;bottom:58px;z-index:7;width:48px;height:48px;border-radius:50%;border:2.5px solid #1E1A16;background:#FFC93C;font-size:1.35rem;line-height:1;box-shadow:0 4px 0 #1E1A16;cursor:pointer;display:grid;place-items:center;padding:0}
-#chatBtn[hidden]{display:none}
-#chatBtn i{position:absolute;top:-6px;right:-6px;min-width:20px;height:20px;padding:0 5px;border-radius:999px;background:#E2462B;color:#fff;font-style:normal;font-size:.72rem;font-weight:800;line-height:20px;border:2px solid #1E1A16}
-#chatBtn:active{transform:translateY(2px);box-shadow:0 2px 0 #1E1A16}
-#chatBtn:focus-visible{outline:3px solid #49C8FF;outline-offset:2px}
-#chatPanel{position:fixed;left:16px;bottom:116px;z-index:7;width:min(340px,calc(100vw - 32px));background:#FFF8EC;border:2.5px solid #1E1A16;border-radius:16px;box-shadow:5px 5px 0 #1E1A16;display:flex;flex-direction:column;overflow:hidden}
+.hbtn[hidden]{display:none}
+.chatbtn{position:relative}
+.chatbtn i{position:absolute;top:-7px;right:-7px;min-width:20px;height:20px;padding:0 5px;border-radius:999px;background:#E2462B;color:#fff;font-style:normal;font-size:.72rem;font-weight:800;line-height:16px;border:2px solid #1E1A16;text-align:center}
+.chatbtn i[hidden]{display:none}
+#chatPanel{position:fixed;right:16px;top:72px;z-index:7;width:min(340px,calc(100vw - 32px));background:#FFF8EC;border:2.5px solid #1E1A16;border-radius:16px;box-shadow:5px 5px 0 #1E1A16;display:flex;flex-direction:column;overflow:hidden}
 #chatPanel[hidden]{display:none}
 #chatPanel .cp-head{display:grid;grid-template-columns:1fr auto;align-items:center;gap:0 8px;padding:8px 10px 6px 12px;border-bottom:2px solid #1E1A16;background:#FFE7A0}
 #chatPanel .cp-head small{grid-column:1;font-size:.72rem;color:#5B5048}
@@ -1323,4 +1323,4 @@ a.cl-opt.dl-real{display:block;margin:10px 14px 0;text-align:center;font-weight:
 #chatPanel .cp-form{display:flex;gap:6px;padding:8px;border-top:2px solid #1E1A16;background:#fff}
 #chatPanel .cp-form input{flex:1;min-width:0;font:inherit;font-size:16px;border:2px solid #1E1A16;border-radius:10px;padding:6px 10px}
 #chatPanel .cp-form button{font:inherit;font-weight:800;border:2px solid #1E1A16;border-radius:10px;background:#FFC93C;padding:0 14px;cursor:pointer}
-@media (max-width:600px){ #chatBtn{left:auto;right:12px;bottom:auto;top:132px;width:44px;height:44px} #chatPanel{left:12px;right:12px;width:auto;bottom:auto;top:184px} }
+@media (max-width:600px){ #chatPanel{left:10px;right:10px;width:auto;top:66px} }
