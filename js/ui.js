@@ -179,7 +179,7 @@ const COACH_END=[
 ];
 function startCoach(steps, done){
   endCoach(); const el=document.createElement("div"); el.id="coach"; el.className="coach";
-  el.innerHTML=`<div class="co-hole"></div><div class="co-tip" role="dialog" aria-live="polite"><div class="co-h"><span class="co-i"></span><b class="co-t"></b><small class="co-n"></small></div><p class="co-d"></p><div class="co-b"><button class="co-skip">${L("ข้าม","Skip")}</button><button class="co-next"></button></div></div>`;
+  el.innerHTML=`<div class="co-tip" role="dialog" aria-live="polite"><div class="co-pic" aria-hidden="true"></div><div class="co-main"><div class="co-h"><span class="co-i"></span><b class="co-t"></b><small class="co-n"></small></div><p class="co-d"></p><div class="co-b"><button class="co-skip">${L("ข้าม","Skip")}</button><button class="co-next"></button></div></div></div>`;
   document.body.appendChild(el);
   coach={el, steps:steps.filter(st=>!st.sel||(()=>{ const q=document.querySelector(st.sel); return q && q.getClientRects().length>0; })()), i:0, done};
   el.querySelector(".co-skip").onclick=()=>endCoach(true);
@@ -187,27 +187,39 @@ function startCoach(steps, done){
   showCoach();
 }
 function showCoach(){
-  if(!coach) return; const st=coach.steps[coach.i], el=coach.el, tip=el.querySelector(".co-tip"), hole=el.querySelector(".co-hole");
+  if(!coach) return; const st=coach.steps[coach.i], el=coach.el, tip=el.querySelector(".co-tip");
   const coI=el.querySelector(".co-i");
   if(st.who && SPRITES[st.who]){ coI.innerHTML=`<img src="${SPRITES[st.who].face.src}" alt="">`; coI.classList.add("face"); } else { coI.textContent=st.i; coI.classList.remove("face"); }
   el.querySelector(".co-t").textContent=st.who?`${nm(st.who)} · ${st.t[EN()?1:0]}`:st.t[EN()?1:0]; el.querySelector(".co-d").textContent=st.d[EN()?1:0];
   el.querySelector(".co-n").textContent=`${coach.i+1}/${coach.steps.length}`;
   el.querySelector(".co-next").textContent=coach.i===coach.steps.length-1?L("เข้าใจแล้ว!","Got it!"):L("ต่อไป ›","Next ›");
   camFocus=st.focus?st.focus():null; if(camFocus) updateCam();
-  let tg=st.sel&&document.querySelector(st.sel);
-  if(st.world){ const w=typeof st.world==="function"?st.world():st.world, cr=$("cv").getBoundingClientRect();
-    if(w){ const L_=cr.left+(w.x-camX)*Z, T_=cr.top+(w.y-camY)*Z; tg={getBoundingClientRect:()=>({left:L_,top:T_,width:w.w*Z,height:w.h*Z})}; } }
-  else if(tg && tg.scrollIntoView) tg.scrollIntoView({block:"center",behavior:"instant"});
-  requestAnimationFrame(()=>{ if(!coach) return;
-    const W=innerWidth, H=innerHeight;
-    if(!tg){ hole.style.cssText=`left:${W/2}px;top:${H/2}px;width:0;height:0`; tip.style.left=Math.max(12,(W-tip.offsetWidth)/2)+"px"; tip.style.top="auto"; tip.style.bottom="16px"; return; }
-    const r=tg.getBoundingClientRect(), pad=8, x=Math.max(4,r.left-pad), y=Math.max(4,r.top-pad), w=Math.min(W-8,r.width+pad*2), h=Math.min(H-8,r.height+pad*2);
-    hole.style.cssText=`left:${x}px;top:${y}px;width:${w}px;height:${h}px`;
-    /* the tip box stays in one place (bottom centre, or top centre when the highlight sits low) so it doesn't chase the highlight */
-    const tw=tip.offsetWidth, th=tip.offsetHeight, low=y+h>H-th-28;   /* bottom, unless the highlight is down there */
-    tip.style.left=Math.max(12,(W-tw)/2)+"px";
-    if(low){ tip.style.top="16px"; tip.style.bottom="auto"; } else { tip.style.top="auto"; tip.style.bottom="16px"; }
-  });
+  let tg=st.sel&&document.querySelector(st.sel), crop=null;
+  if(st.world){ const w=typeof st.world==="function"?st.world():st.world; if(w) crop=w; }
+  /* the box sits still in the middle of the screen; a picture of what it's about sits beside it */
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{ if(!coach) return;
+    const pic=el.querySelector(".co-pic"); pic.innerHTML=""; pic.hidden=true;
+    if(crop){ updateCam&&updateCam(); const cv=$("cv"), cr=cv.getBoundingClientRect(), k=cv.width/cr.width;
+      const sx=(crop.x-camX)*Z*k, sy=(crop.y-camY)*Z*k, sw=crop.w*Z*k, sh=crop.h*Z*k;
+      const c=document.createElement("canvas"), sc=Math.min(170/ (crop.w*Z), 170/(crop.h*Z), 1.8);
+      c.width=Math.round(crop.w*Z*sc*2); c.height=Math.round(crop.h*Z*sc*2); c.style.width=c.width/2+"px"; c.style.height=c.height/2+"px";
+      try{ c.getContext("2d").drawImage(cv,sx,sy,sw,sh,0,0,c.width,c.height); pic.appendChild(c); pic.hidden=false; }catch(e){}
+    } else if(tg && tg.getBoundingClientRect){
+      const r=tg.getBoundingClientRect(); if(r.width&&r.height){
+        const box=document.createElement("div"), cl=tg.cloneNode(true), sc=Math.min(170/r.width, 150/r.height, 1.8);
+        cl.setAttribute("aria-hidden","true"); cl.inert=true;
+        cl.style.cssText+=`;position:relative!important;inset:auto!important;left:auto!important;top:auto!important;right:auto!important;bottom:auto!important;margin:0!important;transform:none!important;width:${r.width}px!important;height:${r.height}px!important;pointer-events:none;animation:none!important`;
+        box.className="co-clone"; box.style.width=r.width*sc+"px"; box.style.height=r.height*sc+"px";
+        cl.style.transformOrigin="0 0"; cl.style.setProperty("transform",`scale(${sc})`,"important");
+        /* keep the look that depends on where it lives: copy the computed colours/fonts of the original */
+        const cs=getComputedStyle(tg); ["background","color","font","border","border-radius","box-shadow","padding","display","flex-direction","align-items","justify-content","gap"].forEach(k=>{ try{ cl.style.setProperty(k,cs.getPropertyValue(k)); }catch(e){} });
+        box.appendChild(cl); pic.appendChild(box); pic.hidden=false;
+      }
+    }
+    if(pic.hidden && st.who && SPRITES[st.who] && SPRITES[st.who].down){   /* nothing to point at: show who is talking */
+      const im=document.createElement("img"); im.src=SPRITES[st.who].down.src; im.alt=""; im.className="co-who"; pic.appendChild(im); pic.hidden=false;
+    }
+  }));
 }
 function endCoach(finished){ camFocus=null; if(!coach) return; const d=coach.done; coach.el.remove(); coach=null; if(finished&&d) d(); }
 addEventListener("resize",()=>{ if(coach) showCoach(); });

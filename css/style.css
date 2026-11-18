@@ -1324,3 +1324,18 @@ a.cl-opt.dl-real{display:block;margin:10px 14px 0;text-align:center;font-weight:
 #chatPanel .cp-form input{flex:1;min-width:0;font:inherit;font-size:16px;border:2px solid #1E1A16;border-radius:10px;padding:6px 10px}
 #chatPanel .cp-form button{font:inherit;font-weight:800;border:2px solid #1E1A16;border-radius:10px;background:#FFC93C;padding:0 14px;cursor:pointer}
 @media (max-width:600px){ #chatPanel{left:10px;right:10px;width:auto;top:66px} }
+/* tutorial v2: the box stays in the middle of the screen; a picture of what it explains sits beside it */
+.coach{background:rgba(20,14,8,.62)}
+.coach .co-tip{left:50%!important;top:50%!important;bottom:auto!important;transform:translate(-50%,-50%);width:min(560px,calc(100vw - 24px));min-height:0;display:flex;flex-direction:row;align-items:center;gap:16px}
+.coach .co-main{flex:1;min-width:0;display:flex;flex-direction:column}
+.coach .co-main .co-b{margin-top:auto}
+.co-pic{flex:0 0 auto;min-width:120px;max-width:190px;min-height:110px;display:grid;place-items:center;background:#EFE6D4;border:2.5px solid var(--ink);border-radius:14px;padding:10px;overflow:hidden}
+.co-pic[hidden]{display:none}
+.co-pic canvas{display:block;border-radius:8px}
+.co-clone{position:relative;overflow:visible;pointer-events:none}
+@media (max-width:560px){
+  .coach .co-tip{flex-direction:column;align-items:stretch;gap:10px}
+  .co-pic{max-width:none;min-height:0;min-width:0}
+}
+.co-pic .co-who{height:150px;width:auto;display:block}
+@media (max-width:560px){ .co-pic .co-who{height:120px} }
